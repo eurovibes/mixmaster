@@ -6,7 +6,7 @@
    details.
 
    Remailer statistics
-   $Id: stats.c,v 1.22 2003/06/27 10:52:11 weaselp Exp $ */
+   $Id: stats.c,v 1.23 2003/06/29 22:35:01 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -210,7 +210,7 @@ int stats(BUFFER *b)
     for ((i = (today - havestats) / SECONDSPERDAY) > 79 ? 79 : i;
 	 i >= 1; i--) {
       t = now - i * SECONDSPERDAY;
-      gt = localtime(&t);
+      gt = gmtime(&t);
       strftime(line, LINELEN, "%d %b: ", gt);
       buf_appends(b, line);
 
@@ -223,8 +223,6 @@ int stats(BUFFER *b)
 	buf_appendf(b, "     PGP: %4d", msg[1][i]);
       if (UNENCRYPTED)
 	buf_appendf(b, "     Unencrypted:%4d", msg[0][i]);
-      if (pool[0][i] > 0)
-	buf_appendf(b, "  [Pool size:%4d]", pool[1][i] / pool[0][i]);
       if (STATSDETAILS) {
 	buf_appendf(b, "  Intermediate:%4d", msg[3][i]);
 	buf_appendf(b, "  Mail:%4d", msg[4][i]);
@@ -232,6 +230,8 @@ int stats(BUFFER *b)
 	if (MIDDLEMAN)
 	  buf_appendf(b, "  Randhopped:%4d", msg[6][i]);
       }
+      if (pool[0][i] > 0)
+	buf_appendf(b, "  [Pool size:%4d]", pool[1][i] / pool[0][i]);
 #if 0
       else
 	buf_appends(b, "  [ no remailing ]");
