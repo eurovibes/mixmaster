@@ -29,11 +29,9 @@ MIXOBJ = rndseed.o menu.o menusend.o menunym.o menuutil.o
 NOMENUOBJ = rndseed.o dummy.o
 WINOBJ = winmain.o winutil.o
 
-all:	mix
+all:	mixmaster
 
-mixmaster:	mix
-
-mix:	$(OBJ) $(MIXOBJ) main.o $(LIBS)
+mixmaster: $(OBJ) $(MIXOBJ) main.o $(LIBS)
 	$(CC) $(OBJ) $(MIXOBJ) main.o $(LIBS) $(LDFLAGS) -o mixmaster
 
 libmix.a: $(OBJ) $(MIXOBJ) dllmain.o
