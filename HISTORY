@@ -137,3 +137,7 @@
 
 2001-xx-xx      2.9beta33  Support for Mixmaster as a service on Windows
                              platforms added (by Disastry).
+                           Problem transparently remixing to Type I remailers 
+                             debugged and corrected (by Andy Dustman, 
+                             Disastry, Senshi-Admin).
+                           Help files re-written (by Lucky Green).
