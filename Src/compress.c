@@ -6,7 +6,7 @@
    details.
 
    Buffer compression (interface to zlib)
-   $Id: compress.c,v 1.3 2003/10/14 05:31:09 weaselp Exp $ */
+   $Id: compress.c,v 1.4 2003/10/14 05:39:35 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -115,6 +115,7 @@ int buf_zip(BUFFER *out, BUFFER *in, int bits)
     goto end;
 
   outstart = out->length;
+  /* 12 is overhead, 1.01 is maximum expansion, and 1 is there to force a round-up */
   buf_append(out, NULL, (int)13+in->length*1.01); /* fit it in one chunk */
 
   s.next_in = in->data;
