@@ -21,10 +21,14 @@ Mandatory todo items before 3.0 release:
     expires/due to expire
   - for later: do not encrypt to expired keys, do not
     decrypt to keys that expired longer than graceperiod ago
+* saner usage of /dev/[u]random is required
+* create internally-generated dummy messages
+
 
 Items for 3.0 or 3.0.1
 
-* create internally-generated dummy messages
+* expire ancient e* and t* files
+  + find bug that is causing t* file to linger
 * support a list of remailers not to be selected as *.
 * allow for verification of clearsigned OpenPGP messages
 * AES support -- requires OpenSSL 0.9.7
