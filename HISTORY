@@ -142,5 +142,6 @@
                              Disastry, Senshi-Admin).
                            Fixed an error in chain.c that was causing
                              segfaults with chains greater than 20 remailers.
+                           Non-multipart MIME message errors fixed.
                            Fixed an error in rfc822.c (by Scott Renfro).
                            Help files re-written (by Lucky Green).
