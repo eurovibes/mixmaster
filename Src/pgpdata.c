@@ -6,7 +6,7 @@
    details.
 
    OpenPGP data
-   $Id: pgpdata.c,v 1.17 2002/09/12 17:36:43 disastry Exp $ */
+   $Id: pgpdata.c,v 1.18 2002/09/18 05:55:10 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -897,7 +897,7 @@ int pgp_makepkpacket(int type, BUFFER *p, BUFFER *outtxt, BUFFER *out,
      default:
       algoid = '?';
     }
-    buf_appendf(outtxt, "%s %4d%c/%02X%02X%02X%02X ",
+    buf_appendf(outtxt, "%s %5d%c/%02X%02X%02X%02X ",
 		type == PGP_PUBSUBKEY ?  "sub" : 
 		type == PGP_PUBKEY ? "pub" :
 		type == PGP_SECKEY ? "sec" : 
@@ -905,7 +905,7 @@ int pgp_makepkpacket(int type, BUFFER *p, BUFFER *outtxt, BUFFER *out,
 		"???", len, algoid,
 		id->data[4], id->data[5], id->data[6], id->data[7]);
     tc = localtime(created);
-    strftime(txt, LINELEN, "%Y/%m/%d ", tc);
+    strftime(txt, LINELEN, "%Y-%m-%d ", tc);
     buf_appends(outtxt, txt);
   }
  end:
