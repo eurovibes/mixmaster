@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.6 2002/07/22 17:54:48 rabbi Exp $ */
+   $Id: config.h,v 1.7 2002/07/24 07:48:50 rabbi Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -249,7 +249,7 @@ extern int RELFINAL;
 extern long MAXLAT;
 extern char PGPPUBRING[];
 extern char PGPSECRING[];
-extern char PASS_PHRASE[];
+extern char PASSPHRASE[];
 extern long POP3TIME;
 extern int POP3DEL;
 extern int POP3SIZELIMIT;

@@ -6,7 +6,7 @@
    details.
 
    Key management
-   $Id: keymgt.c,v 1.4 2002/07/10 01:58:49 rabbi Exp $ */
+   $Id: keymgt.c,v 1.5 2002/07/24 07:48:50 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -97,7 +97,7 @@ static int getv2seckey(byte keyid[], BUFFER *key)
   }
   if (err == -1)
     goto end;
-  buf_sets(pass, PASS_PHRASE);
+  buf_sets(pass, PASSPHRASE);
   digest_md5(pass, pass);
   buf_crypt(key, pass, iv, DECRYPT);
 
@@ -297,7 +297,7 @@ int v2keymgt(force)
 	}
 	if (decode(b, b) == -1)
 	  break;
-	buf_sets(temp, PASS_PHRASE);
+	buf_sets(temp, PASSPHRASE);
 	digest_md5(temp, pass);
 	buf_crypt(b, pass, iv, DECRYPT);
 	if (seckeytopub(pk, b, k1) == 0)

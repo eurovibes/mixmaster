@@ -5,11 +5,11 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Makefile.in,v 1.3 2002/07/21 16:34:42 weaselp Exp $
+# $Id: Makefile.in,v 1.4 2002/07/24 07:48:50 rabbi Exp $
 
 # Edit according to the libraries you want to use:
 INC = %INC
-DEF = %DEF -DUSE_SOCK %MIXDIR -DPASSPHRASE='"$(PASS)"'
+DEF = %DEF -DUSE_SOCK %MIXDIR -DCOMPILEDPASS='"$(PASS)"'
 LIBS = %LIBS
 LDFLAGS = %LDFLAGS
 
