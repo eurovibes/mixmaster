@@ -7,3 +7,26 @@ Todo items before 3.0 release:
 * Windows build instructions/files
 * documentation issues resolved
 * futher debugging
+* set an expiration date on OpenPGP keys
+* check and enforce expiration date
+* Apply --store|queue|get-mail patch
+* Implement mbox/Maildir mail input (597043)
+
+Further wishlist:
+* Allow sending with middlemen remailers last
+  in chain in interactive mixmaster (481244)
+* Have supported cpunks/mixes in -conf reply
+  (480330)
+* investigate whether and how it is feasible to
+  add expiration/creation dates to mixmaster keys
+  if feasible, implement setting and checking
+* Add FOOTER setting (490117)
+* Automatic key handling:
+  + create new PGP keys automatically if
+    current keys are about to expire 
+  + requires implementing key signing, key deletion
+  + create new mixmaster keys automatically
+    if necessary 
+  + Automatically announce new keys?
+    - implement remailer-key signing?
+    - if yes, which key?
