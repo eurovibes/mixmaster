@@ -562,6 +562,15 @@ then
  elif [ "$version" = "90700f" ]
  then
   echo "Compiling with OpenSSL 0.9.7."
+ elif [ "$version" = "90701f" ]
+ then
+  echo "Compiling with OpenSSL 0.9.7a."
+ elif [ "$version" = "90702f" ]
+ then
+  echo "Compiling with OpenSSL 0.9.7b."
+ elif [ "$version" = "90703f" ]
+ then
+  echo "Compiling with OpenSSL 0.9.7c."
  elif [ "$version" -lt "920" ]
  then
   echo "This version: ${version} of SSLeay is not supported."
@@ -572,8 +581,8 @@ then
   echo "This version: ${version} of OpenSSL is not supported."
   echo $opensslinfo
   exit 1
- elif [ "$version" -gt "906000" ]
- then
+ #elif [ "$version" -gt "906000" ]
+ else
   echo "Warning: This version: ${version} of OpenSSL is untested."
   readln "Continue anyway?" y
   if [ "$ans" = "n" ]
@@ -688,14 +697,14 @@ int main() {
   exit(0);
 }
 END
-   if gcc $LDFLAGS $INC tmptst.c -o tmptst $OPENSSLLIB
+   if gcc $LDFLAGS $INC tmptst.c -o tmptst $OPENSSLLIB 2>/dev/null
    then
      echo ok
      DEF="$DEF -DUSE_IDEA"
    else
      ideawarn
    fi
-   rm -f tmptst.c
+   rm -f tmptst.c tmptst
  fi
 
 
@@ -950,6 +959,7 @@ A larger pool is more secure, but also causes higher latency.
   fi
  fi
 
+ # This fails badly on me.  Did I say that this Install script needs to die?  - PP
  if [ "$mbox" = "" ]
  then
   mbox=${MAIL:-/usr/spool/mail/$NAME}
@@ -1023,6 +1033,7 @@ fi # not yet installed
 REPLACE="s/%RMN/$RMN/g;s/%RMA/$RMA/g;s/%CA/$CA/g;s/%RAA/$RAA/g"
 if [ "$installed" = "n" ]
 then
+ echo $MIXCFG
  cd $MIXCFG
  if [ ! -f $MIXDEST/help.txt ]
  then
@@ -1055,7 +1066,7 @@ then
  for i in *.txt.in
  do
   j=`echo $i | sed 's/\.in$//'`
-  if [ ! -f $MIXDEST/$j ]
+  if [ ! -f "$MIXDEST/$j" ]
   then
     sed "$REPLACE" < $i >$MIXDEST/$j
   fi
