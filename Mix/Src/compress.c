@@ -6,7 +6,7 @@
    details.
 
    Buffer compression (interface to zlib)
-   $Id: compress.c,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: compress.c,v 1.2 2002/09/18 23:26:16 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -139,7 +139,7 @@ end:
   return (err);
 }
 
-#else
+#else /* end of USE_ZLIB */
 int buf_zip(BUFFER *out, BUFFER *in, int bits)
 {
   return (-1);
@@ -150,7 +150,7 @@ int buf_unzip(BUFFER *b, int type)
   errlog(ERRORMSG, "Can't uncompress: no zlib\n");
   return (-1);
 }
-#endif
+#endif /* else not USE_ZLIB */
 
 int compressed(BUFFER *b)
 {

@@ -6,7 +6,7 @@
    details.
 
    Menu-based user interface - nym management
-   $Id: menunym.c,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: menunym.c,v 1.2 2002/09/18 23:26:16 rabbi Exp $ */
 
 
 #include "menu.h"
@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #ifdef POSIX
 #include <unistd.h>
-#endif
+#endif /* POSIX */
 
 #ifdef USE_NCURSES
 void menu_nym(char *nnym)
@@ -65,7 +65,7 @@ nymselect:
     printw("c)reate new nym\ne)dit nym\nd)elete nym\n\n");
   else
     printw("[nym passphrase is invalid]\n\n");
-#endif
+#endif /* USE_PGP */
   for (i = 0; i < num; i++)
     printw("%d) %s\n", i, nym[i]);
   if (numpending > 0) {
@@ -460,11 +460,11 @@ select:
 	buf_free(opt);
 	return;
       }
-#endif
+#endif /* USE_PGP */
     default:
       beep();
       goto select;
     }
 }
 
-#endif
+#endif /* USE_NCURSES */

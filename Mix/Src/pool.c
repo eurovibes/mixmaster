@@ -6,7 +6,7 @@
    details.
 
    Send messages from pool
-   $Id: pool.c,v 1.17 2002/09/06 22:45:06 rabbi Exp $ */
+   $Id: pool.c,v 1.18 2002/09/18 23:26:16 rabbi Exp $ */
 
 #include "mix3.h"
 #include <stdlib.h>
@@ -16,17 +16,17 @@
 #include <time.h>
 #ifdef POSIX
 #include <unistd.h>
-#else
+#else /* end of POSIX */
 #include <io.h>
-#endif
+#endif /* else if not POSIX */
 #ifndef _MSC
 #include <dirent.h>
-#endif
+#endif /* not _MSC */
 #include <assert.h>
 
 #ifdef USE_PCRE
 #include "pcre.h"
-#endif
+#endif /* USE_PCRE */
 
 int msg_send(char *name);
 
@@ -56,9 +56,9 @@ static int is(char *path, char *type)
   if (s <= 4)
     return 0;
   return (path[s - 4] == '.' && streq(path + s - 3, type));
-#else
+#else /* end of SHORTNAMES */
   return (path[0] == type[0]);
-#endif
+#endif /* else if not SHORTNAMES */
 }
 
 static void mv(char *name, char *newtype)
@@ -69,9 +69,9 @@ static void mv(char *name, char *newtype)
 #ifdef SHORTNAMES
   assert(strlen(name) > 4);
   strcpy(name + strlen(name) - 3, newtype);
-#else
+#else /* end of SHORTNAMES */
   name[0] = newtype[0];
-#endif
+#endif /* else if not SHORTNAMES */
   sprintf(new, "%s%c%s", POOLDIR, DIRSEP, name);
   rename(old, new);
 }
@@ -253,7 +253,7 @@ int mailin_mbox(char *path)
 	  if (strleft(line, "From ")) {
 #if 0
 	    buf_appends(msg, line);
-#endif
+#endif /* 0 */
 	    state = 2;
 	    break;
 	  };
@@ -279,9 +279,9 @@ end_state:
 #ifndef WIN32
     rewind(f);
     ftruncate(fileno(f), 0);
-#else
+#else /* end of not WIN32 */
     chsize(fileno(f), 0);
-#endif
+#endif /* else if WIN32 */
     unlock(f);
     fclose(f);
   }
@@ -339,13 +339,13 @@ FILE *pool_new(char *type, char *tmpname, char *path)
 	  rnd_byte(), rnd_byte());
   strcpy(path, tmpname);
   memcpy(path + strlen(path) - 3, type, 3);
-#else
+#else /* end of SHORTNAMES */
   sprintf(tmpname, "%s%ct%02x%02x%02x%02x%02x%02x%01x", POOLDIR, DIRSEP, rnd_byte(),
 	  rnd_byte(), rnd_byte(), rnd_byte(), rnd_byte(),
 	  rnd_byte(), rnd_byte() & 15);
   strcpy(path, tmpname);
   strrchr(path, DIRSEP)[1] = type[0];
-#endif
+#endif /* else if not SHORTNAMES */
   f = fopen(tmpname, "wb");
   if (f == NULL)
     errlog(ERRORMSG, "Error creating temporary file %s\n", tmpname);
@@ -717,7 +717,7 @@ int filtermsg(BUFFER *in)
 
 #if 0
   buf_append(out, in->data + in->ptr, in->length - in->ptr);
-#endif
+#endif /* 0 */
   while (buf_getline(in, line) != -1) {
       if (boundary(line, mboundary)) {
       buf_cat(out, line);
@@ -827,7 +827,7 @@ int doblock(BUFFER *line, BUFFER *filter, int logandreset)
   pcre *compiled;
   int ovector[21];
   char *newstr;
-#endif
+#endif /* USE_PCRE */
 
   pattern = buf_new();
   result = buf_new();
@@ -844,17 +844,17 @@ int doblock(BUFFER *line, BUFFER *filter, int logandreset)
 				&error, &errptr
 #ifndef USE_PCRE_OLD
 				,NULL
-#endif
+#endif /* not USE_PCRE_OLD */
 	  );
 	if (compiled) {
 	  match = pcre_exec(compiled, NULL, line->data,
 			    line->length,
 #if (PCRE_MAJOR == 2 && PCRE_MINOR >= 06)
 			    0,
-#endif
+#endif /* (PCRE_MAJOR == 2 && PCRE_MINOR >= 06) */
 #if (PCRE_MAJOR >= 3)
 			    0,
-#endif
+#endif /* (PCRE_MAJOR >= 3) */
 			    0, ovector, sizeof(ovector) / sizeof(int));
 	  free(compiled);
 
@@ -906,9 +906,9 @@ int doblock(BUFFER *line, BUFFER *filter, int logandreset)
 	  *t = '/';
 	  errlog(ERRORMSG, "Bad regexp %b\n", pattern);
 	}
-#else
+#else /* end of USE_PCRE */
 	errlog(ERRORMSG, "No regexp support! Ignoring %b\n", pattern);
-#endif
+#endif /* else if not USE_PCRE */
       } else if (bufifind(line, pattern->data)) {
 	if (logandreset )
 	  errlog(NOTICE, "Blocked header line: %b matches %b.\n",

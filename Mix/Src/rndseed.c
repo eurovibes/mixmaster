@@ -6,7 +6,7 @@
    details.
 
    Get randomness from device or user
-   $Id: rndseed.c,v 1.3 2002/09/07 11:16:37 disastry Exp $ */
+   $Id: rndseed.c,v 1.4 2002/09/18 23:26:17 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -18,22 +18,22 @@
 #ifdef POSIX
 #include <unistd.h>
 #include <termios.h>
-#else
+#else /* end of POSIX */
 #include <io.h>
 #include <process.h>
-#endif
+#endif /* else if not POSIX */
 #if defined(WIN32) || defined(MSDOS)
 #include <conio.h>
-#endif
+#endif /* defined(WIN32) || defined(MSDOS) */
 #ifdef WIN32
 #include <windows.h>
-#endif
+#endif /* WIN32 */
 
 #define NEEDED 128
 
 #ifndef O_NDELAY
 #define O_NDELAY 0
-#endif
+#endif /* not O_NDELAY */
 
 int kbd_noecho(void)
 {
@@ -48,7 +48,7 @@ int kbd_noecho(void)
   attr.c_lflag &= ~(ECHO | ICANON);
   if (tcsetattr(fd, TCSAFLUSH, &attr) != 0)
     return (-1);
-#endif
+#endif /* HAVE_TERMIOS */
   return (0);
 }
 
@@ -65,7 +65,7 @@ int kbd_echo(void)
   attr.c_lflag |= ECHO | ICANON;
   if (tcsetattr(fd, TCSAFLUSH, &attr) != 0)
     return (-1);
-#endif
+#endif /* HAVE_TERMIOS */
   return (0);
 }
 
@@ -88,25 +88,25 @@ int rnd_seed(void)
 
 #ifdef DEV_RANDOM
   fd = open(DEV_RANDOM, O_RDONLY | O_NDELAY);
-#endif
+#endif /* DEV_RANDOM */
   if (fd == -1) {
 #if 1
     if (rnd_state == RND_WILLSEED)
       return(-1);
     if (!isatty(fileno(stdin)))
       rnd_error();
-#else
+#else /* end of 1 */
 #error "should initialize the prng from system ressources"
-#endif
+#endif /* else if not 1 */
     fprintf(stderr, "Please enter some random characters.\n");
     kbd_noecho();
     while (bytes < NEEDED) {
       fprintf(stderr, "  %d     \r", NEEDED - bytes);
 #ifdef HAVE_GETKEY
       if (kbhit(), *b = getkey())
-#else
+#else /* end of HAVE_GETKEY */
       if (read(fileno(stdin), b, 1) > 0)
-#endif
+#endif /* else if not HAVE_GETKEY */
 	{
 	  rnd_add(b, 1);
 	  rnd_time();
@@ -118,9 +118,9 @@ int rnd_seed(void)
     fprintf(stderr, "Thanks.\n");
 #ifdef WIN32
     Sleep(1000);
-#else
+#else /* end of WIN32 */
     sleep(1);
-#endif
+#endif /* else if not WIN32 */
     kbd_echo();
   }
 #ifdef DEV_RANDOM
@@ -151,15 +151,15 @@ int rnd_seed(void)
 	fprintf(stderr, "Thanks.\n");
 #ifdef WIN32
 	Sleep(1000);
-#else
+#else /* end of WIN32 */
 	sleep(1);
-#endif
+#endif /* else if not WIN32 */
 	kbd_echo();
       }
       close(fd);
     }
   }
-#endif
+#endif /* DEV_RANDOM */
   rnd_state = RND_SEEDED;
   return (0);
 }
