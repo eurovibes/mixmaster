@@ -219,6 +219,9 @@ findlib()
  fi
 }
 
+# Global installation.
+
+
 ##########################################################################
 umask 077
 
@@ -758,8 +761,8 @@ END
      -e "s#%LDFLAGS#$LDFLAGS#" \
      -e "s#%INC#$INC#" \
      -e "s#%DEF#$DEF#" < Makefile.in >> Makefile
- echo "$ZLIB" >>Makefile
- echo "$PCRE" >>Makefile
+# echo "$ZLIB" >>Makefile
+# echo "$PCRE" >>Makefile
  echo "$IDEALIB" >>Makefile
  echo "$NCURSES" >>Makefile
  echo "$OPENSSL" >>Makefile
@@ -775,8 +778,8 @@ make=$found
 
 if [ "$system" = win32 ]
 then
- (cd zlib*; make libz.a)
- (cd pcre*; make libpcre.a)
+# (cd zlib*; make libz.a)
+# (cd pcre*; make libpcre.a)
  if [ "$PASS" != "" ]
  then
   $make "$PASS" dllmix
