@@ -6,7 +6,7 @@
    details.
 
    OpenPGP data
-   $Id: pgpdata.c,v 1.8 2002/08/03 17:08:02 weaselp Exp $ */
+   $Id: pgpdata.c,v 1.9 2002/08/13 14:33:23 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -458,7 +458,7 @@ int pgp_getkey(int mode, int algo, int *psym, BUFFER *keypacket, BUFFER *key,
 	      len = buf_getl(p1);
 	    type = buf_getc(p1);
 	    if (len)
-	      buf_get(p1, i, len);
+	      buf_get(p1, i, len-1); /* len-1 - exclude type */
 	    else
 	      buf_clear(i);
 	    if (type == PGP_SUB_PSYMMETRIC)
