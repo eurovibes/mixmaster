@@ -315,10 +315,8 @@
 2002-12-25      2.9.0      Release version. Minor documentation changes
                              and version number change only.
 
-
-
-                           Several changes for the windows build
-                           Some Install script fixes
-                           Fix a problem in blockrequest() where a buffer
-                             could have been used after it was free()d which
+2003-06-01      2.9.0.1    Several changes for the Windows build.
+                           Some Install script fixes.
+                           Fixed a problem in blockrequest() where a buffer
+                             could have been used after it was free()'d which
                              resulted in segfaults.
