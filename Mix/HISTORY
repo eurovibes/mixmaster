@@ -358,3 +358,6 @@
 2003-02-15                 Add max capability for Type I.
                            Make sure DH/DSA param file is actually opened before
                              writing to it.  Fixes a segfault in case it is not.
+                           Fix a problem in destinationblock() where a buffer
+                             could have been used after it was free()d which
+                             resulted in segfaults.
