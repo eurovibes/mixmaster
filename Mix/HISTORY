@@ -195,7 +195,7 @@
                            Fix public remailer keys getting re-signed
                              every time keys are requested (Closes: #478383).
                            Make smtp sending similar to local /usr/lib/sendmail
-                             sending (wrt header/body seperation;
+                             sending (wrt header/body separation;
                              Closes: #482052).
                            Add X-Loop header on mailbox forwarded messages.
                            Several small fixes by Sami Farin et al.
@@ -218,7 +218,7 @@
 
 2002-09-11      2.9b38     Install script deals with lack of patented IDEA
                              algorithm in a sane way (closes: #479020).
-                           Compiled-in passphrase is now depricated.
+                           Compiled-in passphrase is now deprecated.
                            When expiring packet ids from id.log also expire
                              packets that are dated more than half a year in
                              the future.  That way we get rid of invalid
@@ -267,4 +267,6 @@
                            Mixmaster now keeps no stats in client mode.
                            The pool is autmatically checked for waiting
                              messages in the client configuration.
+                           Mixmaster now bears a DFSG-compliant license.
+                           Fixed permissions on tarball release.
                            Documentation updates.
