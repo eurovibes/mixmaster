@@ -1,5 +1,5 @@
 #!/bin/sh
-# Mixmaster version 3  --  (C) 1999 Anonymizer Inc.
+# Mixmaster version 3.0  --  (C) 1999-2003 Anonymizer Inc. and others.
 
 # Mixmaster may be redistributed and modified under certain conditions.
 # This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
@@ -453,15 +453,25 @@ then
   fi
  fi
 
- opensslinfo="Please get OpenSSL 0.9.6f or greater from http://www.openssl.org/"
- opensslwarning="WARNING: This version of OpenSSL contains known vulnerabilities. Please upgrade to OpenSSL 0.9.6f or greater!"
+ opensslinfo="Please get OpenSSL 0.9.6l or greater from http://www.openssl.org/"
+ opensslwarning6="WARNING: This version of OpenSSL contains known vulnerabilities. Please upgrade to OpenSSL 0.9.6l or greater!"
+ opensslwarning7="WARNING: This version of OpenSSL contains known vulnerabilities. Please upgrade to OpenSSL 0.9.7c or greater!"
+ opensslwarning0=$opensslwarning7
  LIBDIR=/usr/local/ssl/lib
  INCDIR="/usr/include /usr/include/ssl /usr/lib/ssl/include /usr/local/ssl/include"
  SRCDIR="openssl*"
 
  opensslwarn()
  {
- echo $opensslwarning
+ if [ "$1" = "6" ]
+ then
+  echo $opensslwarning6
+ elif [ "$1" = "7" ]
+ then
+  echo $opensslwarning7
+ else 
+  echo $opensslwarning0
+ fi
   readln "Continue anyway?" y
   if [ "$ans" = "n" ]
   then
@@ -525,36 +535,69 @@ then
  elif [ "$version" = "90581f" ]
  then
   echo "Compiling with OpenSSL 0.9.5a."
-  opensslwarn
+  opensslwarn 6
  elif [ "$version" = "90601f" ]
  then
   echo "Compiling with OpenSSL 0.9.6a."
-  opensslwarn
+  opensslwarn 6
  elif [ "$version" = "90602f" ]
  then
   echo "Compiling with OpenSSL 0.9.6b."
-  opensslwarn
+  opensslwarn 6
  elif [ "$version" = "90603f" ]
  then
   echo "Compiling with OpenSSL 0.9.6c."
-  opensslwarn
+  opensslwarn 6
  elif [ "$version" = "90604f" ]
  then
   echo "Compiling with OpenSSL 0.9.6d."
-  opensslwarn
+  opensslwarn 6
  elif [ "$version" = "90605f" ]
  then
   echo "Compiling with OpenSSL 0.9.6e."
-  opensslwarn
+  opensslwarn 6
  elif [ "$version" = "90606f" ]
  then
   echo "Compiling with OpenSSL 0.9.6f."
+  opensslwarn 6
  elif [ "$version" = "90607f" ]
  then
   echo "Compiling with OpenSSL 0.9.6g."
+  opensslwarn 6
+ elif [ "$version" = "90608f" ]
+ then
+  echo "Compiling with OpenSSL 0.9.6h."
+  opensslwarn 6
+elif [ "$version" = "90609f" ]
+ then
+  echo "Compiling with OpenSSL 0.9.6i."
+  opensslwarn 6
+ elif [ "$version" = "9060a0" ]
+ then
+  echo "Compiling with OpenSSL 0.9.6j."
+  opensslwarn 6
+ elif [ "$version" = "9060b0" ]
+ then
+  echo "Compiling with OpenSSL 0.9.6k."
+  opensslwarn 6
+ elif [ "$version" = "9060c0" ]
+ then
+  echo "Compiling with OpenSSL 0.9.6l."
  elif [ "$version" = "90700f" ]
  then
   echo "Compiling with OpenSSL 0.9.7."
+  opensslwarn 7
+ elif [ "$version" = "90701f" ]
+ then
+  echo "Compiling with OpenSSL 0.9.7a."
+  opensslwarn 7
+ elif [ "$version" = "90702f" ]
+ then
+  echo "Compiling with OpenSSL 0.9.7b."
+  opensslwarn 7
+ elif [ "$version" = "90703f" ]
+ then
+  echo "Compiling with OpenSSL 0.9.7c."
  elif [ "$version" -lt "920" ]
  then
   echo "This version: ${version} of SSLeay is not supported."
@@ -606,8 +649,7 @@ then
    readln "Do you want to use Mixmaster's menu-based user interface?" y
    if [ "$ans" = "y" ]
    then
-    echo "Please install ncurses now. It is available from
-http://www.clark.net/pub/dickey/ncurses/ncurses.tar.gz"
+    echo "Please install ncurses now. It is available from http://www.clark.net/pub/dickey/ncurses/ncurses.tar.gz"
     exit 1
    fi
   fi
@@ -704,7 +746,7 @@ END
      -e "s#%LIBS#$LIBS#" \
      -e "s#%LDFLAGS#$LDFLAGS#" \
      -e "s#%INC#$INC#" \
-     -e "s#%DEF#$DEF#" < Makefile-sh.in >> Makefile
+     -e "s#%DEF#$DEF#" < Makefile.in >> Makefile
  echo "$ZLIB" >>Makefile
  echo "$PCRE" >>Makefile
  echo "$IDEALIB" >>Makefile

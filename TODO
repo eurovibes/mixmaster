@@ -14,13 +14,6 @@ o drop messages with future timestamp  (weasel)
 - delete secret keys securely after keygraceperiod expires
 - implement time-skew sanity checks so that the timestamp, 
   key rotation and key deletion features don't cause havok.
-- autoconf installation script is needed
-  - mostly done -- a few bugs still need fixing  (dybbuk)
-- post-install scripts need to be reworked
-  - follows item above  (dybbuk)
-- libraries (pcre, zlib) were removed from the Src directory.
-  auto* needs to be updated (dybbuk)
-- fix configure bug with global config file: .../${prefix}/... (dybbuk)
 
 Packaging:
 - Modify release tarball generation script to build the .tab.c file from
