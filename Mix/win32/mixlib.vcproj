@@ -22,7 +22,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="&quot;../src/pcre-2.08&quot;;../Src/openssl/inc32;&quot;../src/zlib-1.1.4&quot;"
+				AdditionalIncludeDirectories="&quot;../src/pcre-2.08&quot;;../Src/openssl/inc32;&quot;../src/zlib-1.1.4&quot;;../src/pdcurses"
 				PreprocessorDefinitions="_USRDLL;MIXLIB_EXPORTS;WIN32;NDEBUG;_WINDOWS;_WIN32;IBMPC_SYSTEM;_MSC;MSC"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
@@ -38,7 +38,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wsock32.lib ../src/openssl/out32dll/libeay32.lib"
+				AdditionalDependencies="wsock32.lib ../src/openssl/out32dll/libeay32.lib release/pdcurses.lib"
 				OutputFile=".\Release/mixlib.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -274,7 +274,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="parsedate.tab.c">
+				RelativePath="..\Src\parsedate.tab.c">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool

@@ -6,8 +6,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mix", "mix.vcproj", "{075AD
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mixlib", "mixlib.vcproj", "{BE1E2A5D-7460-4F06-AEEB-9443B1EE1844}"
 	ProjectSection(ProjectDependencies) = postProject
-		{6A9ECAB3-1CA6-4E2A-8A15-F8AE459BB174} = {6A9ECAB3-1CA6-4E2A-8A15-F8AE459BB174}
 		{FC9B2030-6750-4272-87C9-6E46AB029F69} = {FC9B2030-6750-4272-87C9-6E46AB029F69}
+		{F587947F-949D-4AD6-A527-3A34918741B5} = {F587947F-949D-4AD6-A527-3A34918741B5}
+		{6A9ECAB3-1CA6-4E2A-8A15-F8AE459BB174} = {6A9ECAB3-1CA6-4E2A-8A15-F8AE459BB174}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pcre", "Pcre.vcproj", "{FC9B2030-6750-4272-87C9-6E46AB029F69}"
@@ -20,6 +21,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pcre_chartables", "Pcre_Cha
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlib", "zlib.vcproj", "{6A9ECAB3-1CA6-4E2A-8A15-F8AE459BB174}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pdcurses", "pdcurses.vcproj", "{F587947F-949D-4AD6-A527-3A34918741B5}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -49,6 +54,10 @@ Global
 		{6A9ECAB3-1CA6-4E2A-8A15-F8AE459BB174}.Release.Build.0 = Release|Win32
 		{6A9ECAB3-1CA6-4E2A-8A15-F8AE459BB174}.Release Static.ActiveCfg = Release|Win32
 		{6A9ECAB3-1CA6-4E2A-8A15-F8AE459BB174}.Release Static.Build.0 = Release|Win32
+		{F587947F-949D-4AD6-A527-3A34918741B5}.Release.ActiveCfg = Release|Win32
+		{F587947F-949D-4AD6-A527-3A34918741B5}.Release.Build.0 = Release|Win32
+		{F587947F-949D-4AD6-A527-3A34918741B5}.Release Static.ActiveCfg = Release|Win32
+		{F587947F-949D-4AD6-A527-3A34918741B5}.Release Static.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
