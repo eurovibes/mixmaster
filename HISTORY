@@ -135,7 +135,7 @@
                            OpenSSL and OpenBSD Install script issues 
                              addressed.
 
-2001-xx-xx      2.9beta33  Support for Mixmaster as a service on Windows
+2001-12-16      2.9b33     Support for Mixmaster as a service on Windows
                              platforms added (by Disastry).
                            Problem transparently remixing to Type I remailers 
                              debugged and corrected (by Andy Dustman, 
@@ -144,4 +144,9 @@
                              segfaults with chains greater than 20 remailers.
                            Non-multipart MIME message errors fixed.
                            Fixed an error in rfc822.c (by Scott Renfro).
+                           Fixed pgpget.c errors. (by Ulf Möller).
+                           No longer permits automatic blocking of entire
+                             domains or newsgroups.
                            Help files re-written (by Lucky Green).
+                           Fixed inconsistencies between software name and
+                             package name.
