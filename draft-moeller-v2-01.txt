@@ -79,6 +79,7 @@ Table of Contents
    4.4 Mail Transport Encoding
    5. Key Format
    5.1 Key Rotation
+   6. Administrative Commands
    6. Delivery of Anonymous Messages
    7. Security Considerations
    8. Acknowledgements
@@ -523,6 +524,44 @@ key when queried, effectively giving each key a 12 month service period.
 Remailers continue to decrypt and process mail encrypted to expired keys
 for one week past the expiration date on the key. One week after
 expiration, an expired remailer key should be securely destroyed.
+
+6. Administrative Commands
+
+The remailer software understands a number of specific administrative
+commands. These commands are sent via the Subject: line of an email to the
+email address of the remailer:
+
+ remailer-help:     returns information on using the remailer
+ remailer-key:      returns the remailer's public key
+ remailer-stats:    returns information on the number of messages processed
+ remailer-conf:     returns local configuration information
+ remailer-adminkey: returns the public key of the remailer operator
+
+Upon receiving an administrative request, the remailer returns its reply
+to the email address specified in the Reply-To: or From: header of the
+request.
+
+The remailer-help request should return basic information on using the
+remailer. Remailers may also accept remailer-help requests with an ISO 639
+two-letter language code appended following a hyphen. For example,
+remailer-help-ar will return a help file in Arabic, if available.
+Supported languages should be listed at the beginning of the remailer-help
+response.
+
+The remailer-key request returns the remailer key as described above. It
+may also return keys and capability information for other remailer
+protocols supported by the remailer.
+
+The remailer-stats request returns statistics on the number of messages
+processed per day by the remailer.
+
+The remailer-conf request returns local configuration information, such as
+the version of the remailer software, the supported remailer protocols,
+filtered headers, blocked newsgroups and domains, and the attribute
+strings for other remailers the remailer knows about.
+
+The remailer-adminkey request returns a public OpenPGP key for use in
+communication with the remailer operator.
 
 6. Delivery of Anonymous Messages
 
