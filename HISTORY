@@ -372,3 +372,6 @@
                              now sends the file requests/remailer-<something> to
                              remailer-<something> requests.  remailer-{help,key,
                              stats,conf,adminkey} still are special cases tho.
+                           In the curses interface chain selection it was not
+                             possible to select a random last hop with a usenet
+                             post message.  Fixed (closes: #719165).

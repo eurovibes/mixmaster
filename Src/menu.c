@@ -6,7 +6,7 @@
    details.
 
    Menu-based user interface
-   $Id: menu.c,v 1.13 2002/10/09 20:53:29 weaselp Exp $ */
+   $Id: menu.c,v 1.14 2003/04/10 17:37:34 weaselp Exp $ */
 
 
 #include "menu.h"
@@ -909,7 +909,7 @@ void menu_chain(char *chainstr, int chaintype, int post)
     if (chainlen > 0) {
       ok = 1;
       middlemanlast = remailer[chain[chainlen - 1]].flags.middle;
-      if (post && !remailer[chain[chainlen - 1]].flags.post)
+      if (post && !remailer[chain[chainlen - 1]].flags.post && !(chain[chainlen - 1] == 0 /*randhop*/))
 	ok = 0;
     } else
       ok = 1;
