@@ -9,8 +9,6 @@ Items that need to be completed before the next HEAD release:
 
 * keylifetime and key{grace,overlap}period needs to be documented once
   it's finished.
-* support a list of remailers not to be selected as *.
-  - Done. Documentation for Colin's patch is needed.
 * Recreate pgpkey.txt regularily with only the latest non-expired keys.
   - prehaps seperate public pgp keyring and pgp key reply file
 
