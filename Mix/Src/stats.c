@@ -6,7 +6,7 @@
    details.
 
    Remailer statistics
-   $Id: stats.c,v 1.14 2002/09/18 23:26:17 rabbi Exp $ */
+   $Id: stats.c,v 1.15 2002/10/05 19:09:12 ulfm Exp $ */
 
 
 #include "mix3.h"
@@ -36,6 +36,9 @@ int stats_log(int t)
 int stats_out(int pool)
 {
   FILE *f;
+
+  if (REMAIL == 0)
+    return (0); /* don't keep statistics for the client */
 
   f = mix_openfile(STATS, "a");
   if (f == NULL) {
