@@ -15,7 +15,7 @@
           <input type="hidden" name="no_note" value="1">
           <input type="hidden" name="currency_code" value="USD">
           <input type="hidden" name="tax" value="0">
-          <input type="image" src="https://www.paypal.com/images/x-click-but04.gif" border="0" name="submit" alt="Please help support Mixmaster development!">
+          <input type="image" align="right" src="https://www.paypal.com/images/x-click-but04.gif" border="0" name="submit" alt="Please help support Mixmaster development!">
       </form>
       <!--<a href="mailto:web@palfrader.org">Peter Palfrader</a>--><a href="mailto:mixmaster-devel@lists.sourceforge.net">mixmaster-devel@lists.sourceforge.net</a></address>
     <!-- vim:set syntax=html: -->
