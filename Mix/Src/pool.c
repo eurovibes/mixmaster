@@ -6,7 +6,7 @@
    details.
 
    Send messages from pool
-   $Id: pool.c,v 1.9 2002/08/03 17:08:02 weaselp Exp $ */
+   $Id: pool.c,v 1.10 2002/08/03 17:53:47 weaselp Exp $ */
 
 #include "mix3.h"
 #include <stdlib.h>
@@ -404,7 +404,7 @@ int allowmessage(BUFFER *in)
   buf_free(line);
   buf_free(line2);
   return (err);
-};
+}
 
 int doallow(BUFFER *line, BUFFER *filter)
 /* line is a To, CC or BCC line.
