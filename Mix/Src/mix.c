@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.11.2.8 2002/10/11 01:19:16 weaselp Exp $ */
+   $Id: mix.c,v 1.11.2.9 2002/10/18 20:36:07 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -135,7 +135,7 @@ int BINFILTER = 0;		/* filter binary attachments? */
 int LISTSUPPORTED = 1;                /* list supported remailers in remailer-conf reply? */
 long PACKETEXP = 7 * SECONDSPERDAY;	/* Expiration time for old packets */
 long IDEXP = 7 * SECONDSPERDAY;	/* 0 = no ID log !! */
-long SENDPOOLTIME = 60 * 60;	/* frequency for sending pool messages */
+long SENDPOOLTIME = 0;          /* frequency for sending pool messages */
 long MAILINTIME = 5 * 60;	/* frequency for processing MAILIN mail */
 
 char ERRLOG[LINELEN];

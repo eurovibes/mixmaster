@@ -1,5 +1,5 @@
 .TH MIX 1 "Mixmaster Version 3.0 beta"
-.\" $Id: mix.1,v 1.6.2.5 2002/10/10 13:18:42 weaselp Exp $
+.\" $Id: mix.1,v 1.6.2.6 2002/10/18 20:36:07 rabbi Exp $
 .SH NAME
 mix \- anonymous remailer software
 .SH SYNOPSIS
@@ -585,8 +585,8 @@ minutes.
 .TP
 .B SENDPOOLTIME
 How often Mixmaster should check the pool for messages
-to be sent. Default:
-.BR 1h .
+to be sent. 0 means send immediately. Default:
+.BR 0h .
 .TP
 .B POP3TIME
 How often Mixmaster should check the POP3 accounts
