@@ -6,7 +6,7 @@
    details.
 
    Socket-based mail transport services
-   $Id: mail.c,v 1.2 2001/11/06 23:41:58 rabbi Exp $ */
+   $Id: mail.c,v 1.3 2001/12/11 20:56:07 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -345,12 +345,22 @@ int smtp_send(SOCKET relay, BUFFER *head, BUFFER *message, char *from)
 
   while (buf_getheader(head, field, content) == 0)
     if (bufieq(field, "to"))
-      rfc822_addr(content, rcpt);
+#ifdef BROKEN_MTA
+      if (!bufifind(rcpt, content->data)) 
+      /* Do not add the same recipient twice. 
+         Needed for brain-dead MTAs.      */
+#endif //BROKEN_MTA
+	rfc822_addr(content, rcpt);
   buf_rewind(head);
 
   while (buf_getheader(message, field, content) == 0) {
     if (bufieq(field, "to") || bufieq(field, "cc") || bufieq(field, "bcc")) {
-      rfc822_addr(content, rcpt);
+#ifdef BROKEN_MTA
+      if (!bufifind(rcpt, content->data)) 
+      /* Do not add the same recipient twice. 
+         Needed for brain-dead MTAs.      */
+#endif //BROKEN_MTA
+	rfc822_addr(content, rcpt);
     }
     if (!bufieq(field, "bcc"))
       buf_appendheader(head, field, content);
