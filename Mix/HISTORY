@@ -271,7 +271,7 @@
                            Fixed permissions on tarball release.
                            Documentation updates.
 
-2002-10-10      2.0b40pre1 New option MAILIN that can be set to either a mbox
+2002-10-16      2.0b40     New option MAILIN that can be set to either a mbox
                              or Maildir folder. New mail will be read from it
                              and the folder cleared every time Mixmaster
                              processes its pool, or at MAILINTIME intervals
@@ -280,3 +280,5 @@
                            Mixmaster in daemon mode now catches SIGTERM and
                              SIGINT and finishes its current queue run and then
                              exits successfully.
+                           Minor code formating cleanup and Install script
+                             fixes.
