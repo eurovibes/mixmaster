@@ -202,5 +202,7 @@
                            Detach correctly in daemon mode.
                            Minor Install script fixes.
 
-2002-??-??      N/A yet    Fix a small bug in pgpdata.c that stopped mixmaster from reading
-                            cipher preferences.
+2002-??-??      N/A yet    Fix a small bug in pgpdata.c that stopped mixmaster
+                             from reading cipher preferences.
+                           Fixed Passphrase reading in mpgp (the test program)
+                             on Windows platform.
