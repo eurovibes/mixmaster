@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.22 2002/09/20 19:01:33 disastry Exp $ */
+   $Id: main.c,v 1.23 2002/10/05 18:53:25 ulfm Exp $ */
 
 
 #include "mix3.h"
@@ -573,6 +573,8 @@ WinNT service:\n\
     check_get_pass(1);
     mix_regular(0);
   }
+  if (REMAIL == 0)
+    mix_regular(0); /* check client pool */
 
 end:
   buf_free(field);
