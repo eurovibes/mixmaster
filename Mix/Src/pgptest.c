@@ -6,7 +6,7 @@
    details.
 
    PGP module test 
-*/
+$Id: pgptest.c,v 1.2.2.4 2002/12/16 22:48:57 rabbi Exp $ */
 
 
 #include "mix3.h"

@@ -6,7 +6,7 @@
    details.
 
    Dummy function for programs that don't use menuutil.c 
-*/
+$Id: dummy.c,v 1.1.1.1.2.2 2002/12/16 22:48:57 rabbi Exp $ */
 
 
 #include "mix3.h"

@@ -6,7 +6,7 @@
    details.
 
    WIN32 Service support.
-*/
+$Id: service.c,v 1.3.2.5 2002/12/16 22:48:57 rabbi Exp $ */
 
 
 #ifdef WIN32SERVICE
