@@ -261,3 +261,18 @@
                            The files created with "SENDMAIL outfile" have
                              different names now to scale beyond 10k files
                              (closes: #587593).
+                           Mixmaster keys now have creation and expiration date.
+                             It is not secured by any crypto voodoo, it's only
+                             informational for clients to decide which keys to
+                             use should they have more.
+                             - on the client side we do not show remailers (and
+                               therefore not use them) if their key is expired.
+                             - the remailer refuses to decrypt messages to keys
+                               that expired one month ago or earlier.
+                             - the remailer automatically creates new mixmaster
+                               keys if the current one are about to expire or
+                               already are expired.
+                             - the latest key from secring.mix is written to
+                               key.txt. It used to be the first one. Since
+                               creation of new mix key appends the key, this
+                               seemed sensible.

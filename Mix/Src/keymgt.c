@@ -6,11 +6,12 @@
    details.
 
    Key management
-   $Id: keymgt.c,v 1.11 2002/08/28 08:13:59 weaselp Exp $ */
+   $Id: keymgt.c,v 1.12 2002/09/05 01:21:54 weaselp Exp $ */
 
 
 #include "mix3.h"
 #include <string.h>
+#include <time.h>
 #include <assert.h>
 
 int getv2seckey(byte keyid[], BUFFER *key);
@@ -54,6 +55,8 @@ int getv2seckey(byte keyid[], BUFFER *key)
   char idstr[33];
   char line[LINELEN];
   int err = -1;
+  char *res;
+  time_t created, expires;
 
   pass = buf_new();
   iv = buf_new();
@@ -71,10 +74,33 @@ int getv2seckey(byte keyid[], BUFFER *key)
       if (fgets(line, sizeof(line), keyring) == NULL)
 	break;
       if (strleft(line, begin_key)) {
-	if (fgets(line, sizeof(line), keyring) == NULL)
+	expires = 0;
+	created = 0;
+	do {
+	  res = fgets(line, sizeof(line), keyring);
+	  if (strileft(line, "created:")) {
+	    created = parse_yearmonthday(strchr(line, ':')+1);
+	    if (created == -1)
+	      created = 0;
+	  } else if (strileft(line, "expires:")) {
+	    expires = parse_yearmonthday(strchr(line, ':')+1);
+	    if (expires == -1)
+	      expires = 0;
+	  }
+	  /* Fetch lines until we fail or get a non-header line */
+	} while ( res != NULL && strchr(line, ':') != NULL );
+	if (res == NULL)
 	  break;
 	if (keyid && !streq(line, idstr))
 	  continue;
+	if (created != 0 && (created > time(NULL))) {
+	  errlog(ERRORMSG, "Key is not valid yet (create date in the future): %s", idstr);
+	  break;
+	}
+	if (expires != 0 && (expires + KEYGRACEPERIOD < time(NULL))) {
+	  errlog(ERRORMSG, "Key is expired: %s", idstr);
+	  break;
+	}
 	fgets(line, sizeof(line), keyring);
 	fgets(line, sizeof(line), keyring);
 	buf_sets(iv, line);
@@ -245,93 +271,157 @@ int adminkey(BUFFER *out)
 
 #ifdef USE_RSA
 int v2keymgt(int force)
+/*
+ * Mixmaster v2 Key Management
+ * 
+ * This function triggers creation of mix keys (see parameter force) which are
+ * stored in secring.mix. One public mix key is also written to key.txt. This
+ * is the key with the latest expire date (keys with no expiration date are
+ * always considered newer if they appear later in the secret mix file - key
+ * creation appends keys).
+ *
+ * force:
+ *   0, 1: create key when necessary:
+ *          - no key exists as of yet
+ *          - old keys are due to expire/already expired
+ *   2: always create a new mix key.
+ *
+ *   (force = 0 is used in mix_daily, and before remailer-key replies)
+ *   (force = 1 is used by mixmaster -K)
+ *   (force = 2 is used by mixmaster -G)
+ */
 {
-  /* scan secring, write the pubkey. function will be rewritten
-     for advanced key management in v3 */
-
   FILE *keyring, *f;
   char line[LINELEN];
-  byte k1[16];
-  BUFFER *b, *temp, *iv, *pass, *pk;
+  byte k1[16], k1_found[16];
+  BUFFER *b, *temp, *iv, *pass, *pk, *pk_found;
   int err = 0;
-  int found = 0;
+  int found, foundnonexpiring;
+  time_t created, expires, created_found, expires_found;
+  char *res;
 
   b = buf_new();
   temp = buf_new();
   iv = buf_new();
   pass = buf_new();
   pk = buf_new();
+  pk_found = buf_new();
 
-  if (force == 2)
-    v2createkey();
-  else {
-    if ((f = mix_openfile(SECRING, "r")) == NULL)
-      v2createkey();
-    else
-      fclose(f);
-  }
+  foundnonexpiring = 0;
+  for (;;) {
+    found = 0;
+    created_found = 0;
+    expires_found = 0;
 
-  if (force == 0 && (f = mix_openfile(KEYFILE, "r")) != NULL) {
-    fclose(f);
-    goto end;
-  }
-  keyring = mix_openfile(SECRING, "r");
-  if (keyring != NULL) {
-    for (;;) {
-      if (fgets(line, sizeof(line), keyring) == NULL)
-	break;
-      if (strleft(line, begin_key)) {
+    keyring = mix_openfile(SECRING, "r");
+    if (keyring != NULL) {
+      for (;;) {
 	if (fgets(line, sizeof(line), keyring) == NULL)
 	  break;
-	id_decode(line, k1);
-	fgets(line, sizeof(line), keyring);
-	if (fgets(line, sizeof(line), keyring) == NULL)
-	  break;
-	buf_sets(iv, line);
-	decode(iv, iv);
-	buf_reset(b);
-	for (;;) {
+	if (strleft(line, begin_key)) {
+	  expires = 0;
+	  created = 0;
+	  do {
+	    res = fgets(line, sizeof(line), keyring);
+	    if (strileft(line, "created:")) {
+	      created = parse_yearmonthday(strchr(line, ':')+1);
+	      if (created == -1)
+		created = 0;
+	    } else if (strileft(line, "expires:")) {
+	      expires = parse_yearmonthday(strchr(line, ':')+1);
+	      if (expires == -1)
+		expires = 0;
+	    }
+	    /* Fetch lines until we fail or get a non-header line */
+	  } while ( res != NULL && strchr(line, ':') != NULL );
+	  if (res == NULL)
+	    break;
+	  if (((created != 0) && (created > time(NULL))) ||
+	      ((expires != 0) && (expires < time(NULL)))) {
+	    /* Key already is expired or has creation date in the future */
+	    continue;
+	  }
+	  id_decode(line, k1);
+	  fgets(line, sizeof(line), keyring);
 	  if (fgets(line, sizeof(line), keyring) == NULL)
 	    break;
-	  if (strleft(line, end_key))
+	  buf_sets(iv, line);
+	  decode(iv, iv);
+	  buf_reset(b);
+	  for (;;) {
+	    if (fgets(line, sizeof(line), keyring) == NULL)
+	      break;
+	    if (strleft(line, end_key))
+	      break;
+	    buf_append(b, line, strlen(line) - 1);
+	  }
+	  if (decode(b, b) == -1)
 	    break;
-	  buf_append(b, line, strlen(line) - 1);
+	  buf_sets(temp, PASSPHRASE);
+	  digest_md5(temp, pass);
+	  buf_crypt(b, pass, iv, DECRYPT);
+	  buf_clear(pk);
+	  if (seckeytopub(pk, b, k1) == 0) {
+	    found = 1;
+	    if (expires == 0 || (expires - KEYOVERLAPPERIOD >= time(NULL)))
+	      foundnonexpiring = 1;
+	    if (expires == 0 || (expires_found < expires)) {
+	      buf_clear(pk_found);
+	      buf_cat(pk_found, pk);
+	      memcpy(&k1_found, &k1, sizeof(k1));
+	      expires_found = expires;
+	      created_found = created;
+	    }
+	  }
 	}
-	if (decode(b, b) == -1)
-	  break;
-	buf_sets(temp, PASSPHRASE);
-	digest_md5(temp, pass);
-	buf_crypt(b, pass, iv, DECRYPT);
-	if (seckeytopub(pk, b, k1) == 0)
-	  found = 1;
-	break;
       }
+      fclose(keyring);
     }
-    fclose(keyring);
-  }
+    
+    if (!foundnonexpiring || (force == 2)) {
+      v2createkey();
+      foundnonexpiring = 1;
+      force = 1;
+    } else 
+      break;
+  };
+
   if (found) {
-    id_encode(k1, line);
     if ((f = mix_openfile(KEYFILE, "w")) != NULL) {
-      fprintf(f, "%s %s %s %s %s%s\n", SHORTNAME,
+      id_encode(k1_found, line);
+      fprintf(f, "%s %s %s %s %s%s", SHORTNAME,
 	      REMAILERADDR, line, VERSION,
 	      MIDDLEMAN ? "M" : "",
 	      NEWS[0] == '\0' ? "C" : (strchr(NEWS, '@') ? "CNm" : "CNp"));
-      fprintf(f, "\n%s\n", begin_key);
+      if (created_found) {
+	struct tm *gt;
+	gt = gmtime(&created_found);
+	strftime(line, LINELEN, "%Y-%m-%d", gt);
+	fprintf(f, " %s", line);
+	if (expires_found) {
+	  struct tm *gt;
+	  gt = gmtime(&expires_found);
+	  strftime(line, LINELEN, "%Y-%m-%d", gt);
+	  fprintf(f, " %s", line);
+	}
+      }
+      fprintf(f, "\n\n%s\n", begin_key);
+      id_encode(k1_found, line);
       fprintf(f, "%s\n258\n", line);
-      encode(pk, 40);
-      buf_write(pk, f);
+      encode(pk_found, 40);
+      buf_write(pk_found, f);
       fprintf(f, "%s\n\n", end_key);
       fclose(f);
     }
   } else
     err = -1;
 
-end:
   buf_free(b);
   buf_free(temp);
   buf_free(iv);
   buf_free(pass);
   buf_free(pk);
+  buf_free(pk_found);
 
   return (err);
 }
