@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.22 2002/12/05 04:59:09 weaselp Exp $
+# $Id: Install,v 1.23 2002/12/08 20:29:25 dybbuk Exp $
 
 #whereis program default-path
 whereis()
@@ -229,13 +229,13 @@ user id.  Installing Mixmaster as root is not recommended."
  fi
 fi
 
-MIXDIR=$PWD
+MIXDIR="$PWD"
 if [ "$MIXDIR" = "" ]
 then
  MIXDIR=`pwd`
 fi
-MIXCFG=$MIXDIR/conf
-MIXSRC=$MIXDIR/Src
+MIXCFG="$MIXDIR/conf"
+MIXSRC="$MIXDIR/Src"
 MIXDEST0=${MIXPATH:-$HOME/Mix}
 
 system=`uname`
@@ -259,7 +259,7 @@ then
  MIXDEST0=${MIXPATH:-C:/Mix}
 fi
 
-if [ -f $MIXSRC/Makefile ]
+if [ -f "$MIXSRC/Makefile" ]
 then
  if grep "#Makefile generated.*$HOSTNAME" $MIXSRC/Makefile
  then
@@ -267,18 +267,18 @@ then
   readln "Use this Makefile?" y
   if [ "$ans" = n ]
   then
-   rm -f $MIXSRC/Makefile
+   rm -f "$MIXSRC/Makefile"
   fi
  else
   readln "Remove old Makefile?" y
   if [ "$ans" = y ]
   then
-   rm -f $MIXSRC/Makefile
+   rm -f "$MIXSRC/Makefile"
   fi
  fi
 fi
 
-if [ -f $MIXSRC/Makefile ]
+if [ -f "$MIXSRC/Makefile" ]
 then
  MIXDEST=`grep "DSPOOL=" $MIXSRC/Makefile | sed 's/.*DSPOOL=..//;s/\".*//'`
  if [ "$MIXDEST" = "" ]
@@ -289,30 +289,30 @@ fi
 
 if [ "$MIXDEST" = "" ]
 then
- readln "Mixmaster directory?" $MIXDEST0
+ readln "Mixmaster directory?" "$MIXDEST0"
  MIXDEST=$ans
 else
  echo "Mixmaster directory: $MIXDEST"
 fi
 
-if [ ! -d $MIXDEST ]
+if [ ! -d "$MIXDEST" ]
 then
   echo "Creating directory $MIXDEST"
-  mkdir $MIXDEST
+  mkdir "$MIXDEST"
 fi
 
-if [ ! -d $MIXDEST ]
+if [ ! -d "$MIXDEST" ]
 then
   echo "Cannot not create $MIXDEST"
   exit 1
 fi
 
-if [ -f $MIXDEST/mix.cfg ]
+if [ -f "$MIXDEST/mix.cfg" ]
 then
-  if [ -f $MIXDEST/secring.mix ]
+  if [ -f "$MIXDEST/secring.mix" ]
   then
     remailer=y
-    if grep PASSPHRASE $MIXDEST/mix.cfg >/dev/null
+    if grep PASSPHRASE "$MIXDEST/mix.cfg" >/dev/null
     then
       PASSINCONFIG=1
     fi
@@ -320,7 +320,7 @@ then
     readln "Do you want to set up a remailer?" n
     remailer=$ans
   fi
-elif [ -f $MIXDEST/mixmaster.conf ]
+elif [ -f "$MIXDEST/mixmaster.conf" ]
 then
   echo "Upgrading from Mixmaster 2.0.*"
   remailer=n
@@ -383,7 +383,7 @@ stored in mix.cfg in clear)."
 fi
 
 
-cd $MIXSRC
+cd "$MIXSRC"
 if [ ! -f Makefile ]
 then
  LIBS=
@@ -501,10 +501,10 @@ then
  fi
 
  # Find the OpenSSL version header
- if [ -f $INCDIR/openssl/opensslv.h ]
+ if [ -f "$INCDIR/openssl/opensslv.h" ]
  then
   version=`grep 'SSL.*_VERSION_NUMBER.*0x' $INCDIR/openssl/opensslv.h | sed 's/.*0x0*//;s/[ 	].*//;s/L$//'`
- elif [ -f $INCDIR/opensslv.h ]
+ elif [ -f "$INCDIR/opensslv.h" ]
  then
   version=`grep 'SSL.*_VERSION_NUMBER.*0x' $INCDIR/opensslv.h | sed 's/.*0x0*//;s/[ 	].*//;s/L$//'`
  fi
@@ -739,50 +739,50 @@ else
  exit 1
 fi
 
-if [ -f $MIXDEST/mixmaster.conf -a ! -f $MIXDEST/mix.cfg ]
+if [ -f "$MIXDEST/mixmaster.conf" -a ! -f "$MIXDEST/mix.cfg" ]
 then
  export MIXDEST
  export MIXDIR
  export MIXSRC
- ${MIXDIR}/upgrade
+ "${MIXDIR}/upgrade"
  exit 0
 fi
 
 if [ -f mix.exe ]
 then
- cp mix.exe $MIXDEST
+ cp mix.exe "$MIXDEST"
 else
- cp mix $MIXDEST
+ cp mix "$MIXDEST"
 fi
 
-cd $MIXCFG
+cd "$MIXCFG"
 for i in mlist.txt pubring.mix rlist.txt pubring.asc type2.list
 do
- if [ ! -f $MIXDEST/$i ]
+ if [ ! -f "$MIXDEST/$i" ]
  then
-  cp $i $MIXDEST
+  cp "$i" "$MIXDEST"
  fi
 done
 
 if [ "$remailer" = "y" ]
 then
- cd $MIXCFG
+ cd "$MIXCFG"
  for i in adminkey.txt dest.alw
  do
-  if [ ! -f $MIXDEST/$i ]
+  if [ ! -f "$MIXDEST/$i" ]
   then
-   cp $i $MIXDEST
+   cp "$i" "$MIXDEST"
   fi
  done
 fi
 
 if [ "$remailer" = "n" ]
 then
- if [ ! -f $MIXDEST/mix.cfg ]
+ if [ ! -f "$MIXDEST/mix.cfg" ]
  then
   whereis sendmail /usr/lib/sendmail /usr/sbin/sendmail
-  echo "SENDMAIL	$found -t" >$MIXDEST/mix.cfg
-  cat mix.cfg >>$MIXDEST/mix.cfg
+  echo "SENDMAIL	$found -t" >"$MIXDEST/mix.cfg"
+  cat mix.cfg >>"$MIXDEST/mix.cfg"
  fi
  echo "Client installation complete."
  exit
@@ -790,13 +790,13 @@ fi
 
 for i in *.blk
 do
- if [ ! -f $MIXDEST/$i ]
+ if [ ! -f "$MIXDEST/$i" ]
  then
-  cp $i $MIXDEST
+  cp "$i" "$MIXDEST"
  fi
 done
 
-cd $MIXDEST
+cd "$MIXDEST"
 
 installed=n
 if [ -f mix.cfg ]
@@ -935,7 +935,7 @@ A larger pool is more secure, but also causes higher latency.
   if [ ! -w "$mbox" ]
   then
    echo "$mbox is not writeable."
-   readln "Mailbox for non-remailer messages:" ${MIXDEST}/mbox
+   readln "Mailbox for non-remailer messages:" "${MIXDEST}/mbox"
    mbox=$ans
   fi
  fi
@@ -1003,44 +1003,44 @@ fi # not yet installed
 REPLACE="s/%RMN/$RMN/g;s/%RMA/$RMA/g;s/%CA/$CA/g;s/%RAA/$RAA/g"
 if [ "$installed" = "n" ]
 then
- cd $MIXCFG
- if [ ! -f $MIXDEST/help.txt ]
+ cd "$MIXCFG"
+ if [ ! -f "$MIXDEST/help.txt" ]
  then
-  sed "$REPLACE" < intro.hlp >$MIXDEST/help.txt
+  sed "$REPLACE" < intro.hlp >"$MIXDEST/help.txt"
   if [ "$mix" = y ]
   then
-   sed "$REPLACE" < mix.hlp >>$MIXDEST/help.txt
+   sed "$REPLACE" < mix.hlp >>"$MIXDEST/help.txt"
   fi
   if [ "$unencrypted" = y ]
   then
-   sed "$REPLACE" < type1.hlp >>$MIXDEST/help.txt
+   sed "$REPLACE" < type1.hlp >>"$MIXDEST/help.txt"
    if [ "$pgp" = y ]
    then
-    sed "$REPLACE" < pgp.hlp >>$MIXDEST/help.txt
+    sed "$REPLACE" < pgp.hlp >>"$MIXDEST/help.txt"
    fi
   elif [ "$pgp" = y ]
   then
-   sed "$REPLACE" < pgponly.hlp >>$MIXDEST/help.txt
+   sed "$REPLACE" < pgponly.hlp >>"$MIXDEST/help.txt"
   fi
   if [ "$post" = y ]
   then
    if [ "$pgp" = y -o "$unencrypted" = y ]
    then
-    sed "$REPLACE" < news.hlp >>$MIXDEST/help.txt
+    sed "$REPLACE" < news.hlp >>"$MIXDEST/help.txt"
    fi
   fi
-  sed "$REPLACE" < end.hlp >>$MIXDEST/help.txt
+  sed "$REPLACE" < end.hlp >>"$MIXDEST/help.txt"
  fi
 
  for i in *.txt.in
  do
   j=`echo $i | sed 's/\.in$//'`
-  if [ ! -f $MIXDEST/$j ]
+  if [ ! -f "$MIXDEST/$j" ]
   then
-    sed "$REPLACE" < $i >$MIXDEST/$j
+    sed "$REPLACE" < "$i" >"$MIXDEST/$j"
   fi
  done
- cd $MIXDEST
+ cd "$MIXDEST"
 fi
 
 echo
