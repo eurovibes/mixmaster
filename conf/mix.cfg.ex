@@ -80,8 +80,8 @@ POOLSIZE            20
 RATE                95
 
 ## Dummy generation probabilities
-INDUMMYP            20
-OUTDUMMYP           67
+INDUMMYP            10 
+OUTDUMMYP           30 
 
 ## How long to store packet IDs and incomplete message parts
 IDEXP               7d
