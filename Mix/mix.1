@@ -1,5 +1,5 @@
 .TH MIX 1 "Mixmaster Version 3.0 beta"
-.\" $Id: mix.1,v 1.24 2002/10/18 20:42:35 rabbi Exp $
+.\" $Id: mix.1,v 1.25 2002/12/08 00:56:22 weaselp Exp $
 .SH NAME
 mix \- anonymous remailer software
 .SH SYNOPSIS
@@ -533,6 +533,11 @@ Allow users to add their address to the
 .B dest.blk
 file by sending the remailer a message containing the line
 .BR destination-block .
+Default:
+.BR y .
+.TP
+.B STATSDETAILS
+List statistics on intermediate vs. final delivery in remailer-stats.
 Default:
 .BR y .
 .PP

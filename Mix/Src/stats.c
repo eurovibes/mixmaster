@@ -6,7 +6,7 @@
    details.
 
    Remailer statistics
-   $Id: stats.c,v 1.16 2002/10/09 20:53:32 weaselp Exp $ */
+   $Id: stats.c,v 1.17 2002/12/08 00:56:23 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -59,7 +59,16 @@ int stats(BUFFER *b)
   long now, today, then;
   time_t t;
   long updated = 0, havestats = 0;
-  int msgd[3][24], msg[3][80];
+  int msgd[7][24], msg[7][80];
+  /* 0 .. Unencrypted
+   * 1 .. Type I PGP
+   * 2 .. Mix
+   *
+   * 3 .. intermediate
+   * 4 .. final hop mail
+   * 5 .. final hop news
+   * 6 .. randhopped (will get counted in intermediate again)
+   */
   int poold[2][24], pool[2][80];
   int i, num, type, assigned, daysum;
   char c;
@@ -69,9 +78,9 @@ int stats(BUFFER *b)
   today = (now / SECONDSPERDAY) * SECONDSPERDAY;
 
   for (i = 0; i < 24; i++)
-    msgd[0][i] = msgd[1][i] = msgd[2][i] = poold[0][i] = poold[1][i] = 0;
+    msgd[0][i] = msgd[1][i] = msgd[2][i] = msgd[3][i] = msgd[4][i] = msgd[5][i] = msgd[6][i]= poold[0][i] = poold[1][i] = 0;
   for (i = 0; i < 80; i++)
-    msg[0][i] = msg[1][i] = msg[2][i] = pool[0][i] = pool[1][i] = 0;
+    msg[0][i] = msg[1][i] = msg[2][i] = msg[3][i] = msg[4][i] = msg[5][i] = msg[6][i] = pool[0][i] = pool[1][i] = 0;
 
   s = mix_openfile(STATS, "r");
   if (s != NULL) {
@@ -82,6 +91,10 @@ int stats(BUFFER *b)
       case '0':
       case '1':
       case '2':
+      case '3':
+      case '4':
+      case '5':
+      case '6':
 	c = '\0';
 	assigned = sscanf(line, "%d %d %ld %c", &type, &num, &then, &c);
 	daysum = (assigned == 4 && c == 'd');
@@ -146,14 +159,14 @@ int stats(BUFFER *b)
   lock(s);
   fprintf(s, "%ld\n", (long) time(NULL));	/* time of stats.log update */
   for (i = 0; i < 24; i++) {
-    for (type = 0; type < 3; type++)
+    for (type = 0; type < 7; type++)
       if (msgd[type][i] > 0)
 	fprintf(s, "%d %d %ld\n", type, msgd[type][i], now - i * 60 * 60);
     if (poold[0][i] > 0)
       fprintf(s, "p %d %d %ld\n", poold[0][i], poold[1][i], now - i * 60 * 60);
   }
   for (i = 0; i < 80; i++) {
-    for (type = 0; type < 3; type++)
+    for (type = 0; type < 7; type++)
       if (msg[type][i] > 0)
 	fprintf(s, "%d %d %ld d\n", type, msg[type][i],
 		today - i * 24 * 60 * 60);
@@ -212,6 +225,13 @@ int stats(BUFFER *b)
 	buf_appendf(b, "     Unencrypted:%4d", msg[0][i]);
       if (pool[0][i] > 0)
 	buf_appendf(b, "  [Pool size:%4d]", pool[1][i] / pool[0][i]);
+      if (STATSDETAILS) {
+	buf_appendf(b, "  Intermediate:%4d", msg[3][i]);
+	buf_appendf(b, "  Mail:%4d", msg[4][i]);
+	buf_appendf(b, "  Postings:%4d", msg[5][i]);
+	if (MIDDLEMAN)
+	  buf_appendf(b, "  Randhopped:%4d", msg[6][i]);
+      }
 #if 0
       else
 	buf_appends(b, "  [ no remailing ]");

@@ -333,3 +333,5 @@
 2002-xx-xx      3.0a2      New Star-Exclude feature by Colin Tuckley: 
                              User-selected remailers can be excluded from 
                              being chosen as random hops.
+                           Have stats on intermediate vs. final hop count
+                             (closes: #649900).
