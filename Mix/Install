@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.8.2.1 2002/09/11 20:44:49 rabbi Exp $
+# $Id: Install,v 1.8.2.2 2002/09/11 20:52:57 rabbi Exp $
 
 #whereis program default-path
 whereis()
@@ -986,8 +986,6 @@ MID		$mid
 SENDPOOLTIME    1h
 POOLSIZE        $poolsize
 RATE            95
-INDUMMYP        20
-OUTDUMMYP       67
 IDEXP           7d
 PACKETEXP       7d
 
