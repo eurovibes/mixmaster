@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.17 2002/07/09 08:02:02 rabbi Exp $ */
+   $Id: rem.c,v 1.18 2002/07/25 08:49:03 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -119,7 +119,7 @@ int mix_decrypt(BUFFER *message)
 	       bufieq(field, "remail-to") || bufieq(field, "anon-post-to") ||
 	       bufieq(field, "post-to") || bufieq(field, "anon-send-to") ||
 	       bufieq(field, "send-to") || bufieq(field, "remix-to") ||
-           bufieq(field, "encrypt-to"))
+	       bufieq(field, "encrypt-to"))
       type = CPUNKMSG;
     else if (bufieq(field, "content-transfer-encoding")
              && bufieq(content, "quoted-printable")) {
