@@ -6,7 +6,7 @@
    details.
 
    Get randomness from device or user
-   $Id: rndseed.c,v 1.2 2002/08/03 17:08:02 weaselp Exp $ */
+   $Id: rndseed.c,v 1.3 2002/09/07 11:16:37 disastry Exp $ */
 
 
 #include "mix3.h"
@@ -150,7 +150,7 @@ int rnd_seed(void)
       if (isatty(fileno(stdin))) {
 	fprintf(stderr, "Thanks.\n");
 #ifdef WIN32
-	sleep(1000);
+	Sleep(1000);
 #else
 	sleep(1);
 #endif
