@@ -6,7 +6,7 @@
    details.
 
    Encrypt message for Cypherpunk remailer chain
-   $Id: chain1.c,v 1.8 2003/09/29 01:06:54 weaselp Exp $ */
+   $Id$ */
 
 
 #include "mix3.h"

@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.28 2003/03/31 18:19:13 weaselp Exp $
+# $Id$
 
 #whereis program default-path
 whereis()

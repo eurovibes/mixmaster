@@ -1,6 +1,6 @@
 dnl Macros automatically included in aclocal.m4.
 dnl
-dnl $Id: acinclude.m4,v 1.2 2003/10/14 15:10:45 dybbuk Exp $
+dnl $Id$
 
 dnl Zlib versions before 1.1.4 had a nasty bug.
 AC_DEFUN(AM_ZLIB_CHECK, [

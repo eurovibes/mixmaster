@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.37 2003/06/29 19:13:15 weaselp Exp $ */
+   $Id$ */
 
 
 #include "mix3.h"

@@ -6,7 +6,7 @@
    details.
 
    Interface to cryptographic library
-   $Id: crypto.h,v 1.5 2003/08/24 20:39:26 weaselp Exp $ */
+   $Id$ */
 
 
 #ifndef _CRYPTO_H

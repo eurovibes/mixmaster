@@ -6,7 +6,7 @@
    details.
 
    Parse RFC 822 headers
-   $Id: rfc822.c,v 1.4 2002/10/09 20:53:31 weaselp Exp $ */
+   $Id$ */
 
 
 #include "mix3.h"

@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.35 2003/08/20 20:33:00 weaselp Exp $ */
+   $Id$ */
 
 
 #include "mix3.h"

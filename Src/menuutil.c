@@ -6,7 +6,7 @@
    details.
 
    Menu-based user interface - utility functions
-   $Id: menuutil.c,v 1.2 2002/09/18 23:26:16 rabbi Exp $ */
+   $Id$ */
 
 
 #include "menu.h"

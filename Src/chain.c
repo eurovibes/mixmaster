@@ -6,7 +6,7 @@
    details.
 
    Prepare messages for remailer chain
-   $Id: chain.c,v 1.16 2003/09/29 01:06:54 weaselp Exp $ */
+   $Id$ */
 
 
 #include "mix3.h"

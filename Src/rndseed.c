@@ -6,7 +6,7 @@
    details.
 
    Get randomness from device or user
-   $Id: rndseed.c,v 1.4 2002/09/18 23:26:17 rabbi Exp $ */
+   $Id$ */
 
 
 #include "mix3.h"

@@ -6,7 +6,7 @@
    details.
 
    Remailer statistics
-   $Id: stats.c,v 1.25 2003/08/20 20:33:00 weaselp Exp $ */
+   $Id$ */
 
 
 #include "mix3.h"

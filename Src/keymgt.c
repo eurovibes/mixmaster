@@ -6,7 +6,7 @@
    details.
 
    Key management
-   $Id: keymgt.c,v 1.24 2003/08/24 20:39:26 weaselp Exp $ */
+   $Id$ */
 
 
 #include "mix3.h"

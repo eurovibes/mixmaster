@@ -6,7 +6,7 @@
    details.
 
    Socket-based mail transport services
-   $Id: mail.c,v 1.21 2003/09/26 21:00:45 weaselp Exp $ */
+   $Id$ */
 
 
 #include "mix3.h"

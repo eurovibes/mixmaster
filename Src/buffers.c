@@ -6,7 +6,7 @@
    details.
 
    Dynamically allocated buffers
-   $Id: buffers.c,v 1.5 2002/09/29 10:09:05 ulfm Exp $ */
+   $Id$ */
 
 
 #include "mix3.h"
