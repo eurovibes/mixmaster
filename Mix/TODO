@@ -4,6 +4,13 @@ Things that really get done before the next release
 
 Items that need to be completed before the next MAIN release:
 
+- check if this applies to mixmaster:
+  | If you use *,*,*,frell it should be like this:
+  | *,*,*,frell ; copies=5
+  | the semi-colon and spaces being exactly where they are
+  | is important. * selects a random remailer.
+  <5dpo70tp50d0b89hm1a45sighmp0v0cn7l@4ax.com>
+
 - delete secret keys securely after keygraceperiod expires
   (Should this just be a call to an external program? I.e., 
   "/bin/rm -P" or "/usr/bin/shred -fz -n3")? Does this even
