@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.11.2.5 2002/10/09 21:40:56 weaselp Exp $ */
+   $Id: mix.c,v 1.11.2.6 2002/10/10 10:43:18 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -761,7 +761,7 @@ int mix_daemon(void)
 {
   long t;
   t = SENDPOOLTIME;
-  if (MAILINTIME < t && (MAILIN != NULL && (strcmp(MAILIN, "") != 0)))
+  if (MAILINTIME < t && (MAILIN != NULL && MAILIN[0] != '\0'))
     t = MAILINTIME;
 #ifdef USE_SOCK
   if (POP3TIME < t)
