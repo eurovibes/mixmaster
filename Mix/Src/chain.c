@@ -6,7 +6,7 @@
    details.
 
    Prepare messages for remailer chain
-   $Id: chain.c,v 1.2.2.1 2002/10/09 20:29:43 weaselp Exp $ */
+   $Id: chain.c,v 1.2.2.2 2002/10/09 20:50:59 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -181,7 +181,7 @@ int mix_encrypt(int type, BUFFER *message, char *chainstr, int numcopies,
 }
 
 /* float chain_reliablity(char *chain, int chaintype,
-                          char *reliability_string);
+	                  char *reliability_string);
  *
  * Compute reliablity of a chain.
  *
@@ -203,7 +203,7 @@ int mix_encrypt(int type, BUFFER *message, char *chainstr, int numcopies,
 
 float chain_reliability(char *chain, int chaintype,
 			char *reliability_string){
-  
+
   float acc_reliability = 1; /* Accumulated reliablity */
   char *name_start, *name_end; /* temporary pointers used
 				 in string scanning */
@@ -252,7 +252,7 @@ float chain_reliability(char *chain, int chaintype,
       *(reliability_string+6*sizeof(char)) = '%';
     }
   }
-  
+
   return acc_reliability;
 }
-  
+

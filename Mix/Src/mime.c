@@ -6,7 +6,7 @@
    details.
 
    MIME functions
-   $Id: mime.c,v 1.3 2002/08/03 17:08:02 weaselp Exp $ */
+   $Id: mime.c,v 1.3.2.1 2002/10/09 20:51:03 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -104,7 +104,7 @@ void body_encode(BUFFER *in, int transport, BUFFER *hdr)
 	    l++;
 	  }
 	} else {
-          buf_appendc(out, c);
+	  buf_appendc(out, c);
 	  l++;
 	}
       }
@@ -247,7 +247,7 @@ int decode_line(BUFFER *line)
 	addprintable(out, c);
       } else if (line->data[i + 1] == '\0') {
 	softbreak = 1;
-        break;
+	break;
       }
     } else
       addprintable(out, line->data[i]);
@@ -365,7 +365,7 @@ int qp_decode_message(BUFFER *msg)
   /* copy over headers without decoding */
   while (buf_getheader(msg, field, content) == 0) {
     if (bufieq(field, "content-transfer-encoding")
-        && bufieq(content, "quoted-printable")) {
+	&& bufieq(content, "quoted-printable")) {
       continue;                 /* no longer quoted-printable */
     } else {
       buf_appendheader(out, field, content);
@@ -421,7 +421,7 @@ int entity_decode(BUFFER *msg, int message, int mptype, BUFFER *data)
     if (bufieq(field, "content-type")) {
       get_type(content, type, subtype);
       if (bufieq(type, "multipart"))
-        get_parameter(content, "boundary", mboundary);
+	get_parameter(content, "boundary", mboundary);
       if (bufieq(type, "multipart") && bufieq(subtype, "encrypted")) {
 	get_parameter(content, "protocol", line);
 	if (bufieq(line, "application/pgp-encrypted"))
@@ -615,7 +615,7 @@ int mime_attach(BUFFER *message, BUFFER *attachment, BUFFER *attachtype)
       get_type(content, type, subtype);
       if (bufieq(type, "multipart") && bufieq(subtype, "mixed")) {
 	multipart = 1;
-        get_parameter(content, "boundary", mboundary);
+	get_parameter(content, "boundary", mboundary);
       }
     }
     if (bufileft(field, "content-"))
@@ -717,7 +717,7 @@ static int entity_encode(BUFFER *message, BUFFER *out, BUFFER *messagehdr,
     if (bufieq(field, "content-type")) {
       get_type(content, line, tmp);
       if (bufieq(line, "multipart"))
-        get_parameter(content, "boundary", mboundary);
+	get_parameter(content, "boundary", mboundary);
     }
   }
 

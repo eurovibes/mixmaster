@@ -6,7 +6,7 @@
    details.
 
    Send messages from pool
-   $Id: pool.c,v 1.10.2.2 2002/10/09 20:29:44 weaselp Exp $ */
+   $Id: pool.c,v 1.10.2.3 2002/10/09 20:51:08 weaselp Exp $ */
 
 #include "mix3.h"
 #include <stdlib.h>
@@ -388,7 +388,7 @@ int allowmessage(BUFFER *in)
 
     if (line->length > 0) {
       if (!buffind(line, ":"))
-         buf_appends(out, "X-Invalid: ");
+	 buf_appends(out, "X-Invalid: ");
       buf_cat(out, line);
       buf_nl(out);
     }
@@ -413,7 +413,7 @@ int doallow(BUFFER *line, BUFFER *filter)
  *
  * So to not send direct if we do not want, we _never_ send
  * direct if there is more than one address: This is
- * assumed to be the case when there is a 
+ * assumed to be the case when there is a
  * comma in the header line.
  *
  * this should probably be rewritten somehwhen. therefore: FIXME
@@ -490,7 +490,7 @@ int filtermsg(BUFFER *in)
 
     if (line->length > 0) {
       if (!buffind(line, ":"))
-         buf_appends(out, "X-Invalid: ");
+	 buf_appends(out, "X-Invalid: ");
        buf_cat(out, line);
       buf_nl(out);
     }
@@ -606,15 +606,15 @@ BUFFER *readdestblk( )
 
        while ( (destblk = strtok( destblk ? NULL : destblklst, " " )) )
        {
-               if ( (f = mix_openfile( destblk, "r" )) )
-               {
-                       if ( !buf_read( temp, f ) )
-                       {
-                               buf_cat( addresses, temp );
-                               err = 0;
-                       }
-                       fclose( f );
-               }
+	       if ( (f = mix_openfile( destblk, "r" )) )
+	       {
+	               if ( !buf_read( temp, f ) )
+	               {
+	                       buf_cat( addresses, temp );
+	                       err = 0;
+	               }
+	               fclose( f );
+	       }
        }
 
        free( destblklst );
@@ -747,7 +747,7 @@ int mix_armor(BUFFER *in)
 
   if (in->length != 20480)
     return (-1);
-    
+
   buf_sets(out, "\n::\n");
   buf_appends(out, remailer_type);
   buf_appends(out, VERSION);

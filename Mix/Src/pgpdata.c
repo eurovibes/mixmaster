@@ -6,7 +6,7 @@
    details.
 
    OpenPGP data
-   $Id: pgpdata.c,v 1.11.2.3 2002/10/09 20:29:44 weaselp Exp $ */
+   $Id: pgpdata.c,v 1.11.2.4 2002/10/09 20:51:07 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -1126,7 +1126,7 @@ int pgp_dosign(int algo, BUFFER *data, BUFFER *key)
 {
   int err;
   BUFFER *out, *r, *s;
-  
+
   out = buf_new();
   r = buf_new();
   s = buf_new();
@@ -1158,14 +1158,14 @@ int pgp_dosign(int algo, BUFFER *data, BUFFER *key)
 int pgp_elgdecrypt(BUFFER *in, BUFFER *key)
 {
   BIGNUM *a = NULL, *b = NULL, *c = NULL,
-         *p = NULL, *g = NULL, *x = NULL;
+	 *p = NULL, *g = NULL, *x = NULL;
   BN_CTX *ctx;
   BUFFER *i;
   int err = -1;
 
   i = buf_new();
   ctx = BN_CTX_new();
-  if (ctx == NULL) goto end;  
+  if (ctx == NULL) goto end;
   mpi_get(key, i);
   p = BN_bin2bn(i->data, i->length, NULL);
   mpi_get(key, i);
@@ -1215,10 +1215,10 @@ int pgp_elgencrypt(BUFFER *in, BUFFER *key)
   BN_CTX *ctx;
   BUFFER *i;
   int err = -1;
-  
+
   i = buf_new();
   ctx = BN_CTX_new();
-  if (ctx == NULL) goto end;  
+  if (ctx == NULL) goto end;
   mpi_get(key, i);
   p = BN_bin2bn(i->data, i->length, NULL);
   mpi_get(key, i);
@@ -1249,7 +1249,7 @@ int pgp_elgencrypt(BUFFER *in, BUFFER *key)
   mpi_put(in, i);
   i->length = BN_bn2bin(b, i->data);
   mpi_put(in, i);
-  
+
   err = 0;
 
   BN_free(a);

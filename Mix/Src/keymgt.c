@@ -6,7 +6,7 @@
    details.
 
    Key management
-   $Id: keymgt.c,v 1.9.2.2 2002/10/09 20:29:44 weaselp Exp $ */
+   $Id: keymgt.c,v 1.9.2.3 2002/10/09 20:51:00 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -135,9 +135,9 @@ static int getv2pubkey(byte keyid[], BUFFER *key)
       if (fgets(line, sizeof(line), keyring) == NULL)
 	break;
       if ((strlen(line) > 0) && (line[strlen(line)-1] == '\n'))
-        line[strlen(line)-1] = '\0';
+	line[strlen(line)-1] = '\0';
       if ((strlen(line) > 0) && (line[strlen(line)-1] == '\r'))
-        line[strlen(line)-1] = '\0';
+	line[strlen(line)-1] = '\0';
       if (!streq(line, idstr))
 	continue;
       fgets(line, sizeof(line), keyring);	/* ignore length */
@@ -228,24 +228,24 @@ int key(BUFFER *out)
 
 int adminkey(BUFFER *out)
 {
-        int err = -1;
-        FILE *f;
+	int err = -1;
+	FILE *f;
 
-        buf_sets( out, "Subject: Admin key for the " );
-        buf_appends( out, SHORTNAME );
-        buf_appends( out, " remailer\n\n" );
+	buf_sets( out, "Subject: Admin key for the " );
+	buf_appends( out, SHORTNAME );
+	buf_appends( out, " remailer\n\n" );
 
-        if ( (f = mix_openfile( ADMKEYFILE, "r" )) != NULL ) {
-                buf_read( out, f );
-                buf_nl( out );
-                fclose( f );
-                err = 0;
-        }
+	if ( (f = mix_openfile( ADMKEYFILE, "r" )) != NULL ) {
+	        buf_read( out, f );
+	        buf_nl( out );
+	        fclose( f );
+	        err = 0;
+	}
 
-        if ( err == -1 )
-                errlog( ERRORMSG, "Can not read admin key file!\n" );
+	if ( err == -1 )
+	        errlog( ERRORMSG, "Can not read admin key file!\n" );
 
-        return err;
+	return err;
 }
 
 #ifdef USE_RSA

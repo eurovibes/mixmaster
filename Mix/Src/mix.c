@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.11.2.3 2002/10/09 20:29:44 weaselp Exp $ */
+   $Id: mix.c,v 1.11.2.4 2002/10/09 20:51:04 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -346,7 +346,7 @@ int mix_configline(char *line)
 	  read_conf(ANONADDR) || read_conf(REMAILERNAME) ||
 	  read_conf(ANONNAME) || read_conf(COMPLAINTS) ||
 	  read_conf_i(AUTOREPLY) || read_conf(SMTPRELAY) ||
-          read_conf(SMTPUSERNAME) || read_conf(SMTPPASSWORD) ||
+	  read_conf(SMTPUSERNAME) || read_conf(SMTPPASSWORD) ||
 #ifdef USE_SOCK
 	  read_conf(HELONAME) || read_conf(ENVFROM) ||
 #endif /* USE_SOCK */
@@ -363,7 +363,7 @@ int mix_configline(char *line)
 	  read_conf_i(SIZELIMIT) || read_conf_i(INFLATEMAX) ||
 	  read_conf_i(MAXRANDHOPS) || read_conf_i(BINFILTER) ||
 	  read_conf_t(PACKETEXP) || read_conf_t(IDEXP) ||
-        read_conf_i(LISTSUPPORTED) ||
+	read_conf_i(LISTSUPPORTED) ||
 	  read_conf_t(SENDPOOLTIME) || read_conf_i(NUMCOPIES) ||
 	  read_conf(CHAIN) || read_conf_i(VERBOSE) ||
 	  read_conf_i(DISTANCE) || read_conf_i(MINREL) ||
@@ -381,7 +381,7 @@ int mix_configline(char *line)
 
 	  read_conf(DISCLAIMFILE) || read_conf(FROMDSCLFILE) ||
 	  read_conf(POP3CONF) || read_conf(HELPFILE) ||
-        read_conf(MSGFOOTERFILE) ||
+	read_conf(MSGFOOTERFILE) ||
 	  read_conf(ABUSEFILE) || read_conf(REPLYFILE) ||
 	  read_conf(USAGEFILE) || read_conf(USAGELOG) ||
 	  read_conf(BLOCKFILE) || read_conf(ADMKEYFILE) ||
@@ -547,7 +547,7 @@ int mix_config(void)
 #endif /* not USE_RSA */
 
 #ifdef WIN32
-  if (RegOpenKeyEx(regsw, "PGP", 0, KEY_ALL_ACCESS, &regpgp) == 0) 
+  if (RegOpenKeyEx(regsw, "PGP", 0, KEY_ALL_ACCESS, &regpgp) == 0)
     rkey++;
   if (rkey && RegOpenKeyEx(regpgp, "PGPlib", 0, KEY_QUERY_VALUE, &reg) == 0)
     rkey++;
@@ -714,10 +714,10 @@ int mix_daily(void)
 
 
 #ifdef WIN32
-/* Try to detect if we are the service or not... 
+/* Try to detect if we are the service or not...
    seems there is no easy reliable way        */
 int is_nt_service(void)
-{ 
+{
     static int issvc = -1;
 #ifdef WIN32SERVICE
     STARTUPINFO StartupInfo;
@@ -725,16 +725,16 @@ int is_nt_service(void)
     DWORD dwsize;
 
     if (issvc != -1)    /* do it only once */
-        return issvc;
+	return issvc;
 
     VersionInfo.dwOSVersionInfoSize = sizeof(VersionInfo);
     if (GetVersionEx(&VersionInfo))
-        if (VersionInfo.dwPlatformId != VER_PLATFORM_WIN32_NT)
-            return issvc = 0; /* not NT - not the service */
+	if (VersionInfo.dwPlatformId != VER_PLATFORM_WIN32_NT)
+	    return issvc = 0; /* not NT - not the service */
 
     GetStartupInfo(&StartupInfo);
     if (StartupInfo.lpDesktop[0] == 0)
-        return issvc = 1; /* have no desktop - we are the service probably */
+	return issvc = 1; /* have no desktop - we are the service probably */
 #endif /* WIN32SERVICE */
 
     return issvc = 0; /* assume not the service */
@@ -763,8 +763,8 @@ int mix_daemon(void)
 #ifdef WIN32SERVICE
     if (hMustTerminate) {
       if (WaitForSingleObject(hMustTerminate, t * 1000) == WAIT_OBJECT_0) {
-        CloseHandle(hMustTerminate);
-        return 0;
+	CloseHandle(hMustTerminate);
+	return 0;
       }
     } else
 #endif /* WIN32SERVICE */

@@ -6,7 +6,7 @@
    details.
 
    OpenPGP key database
-   $Id: pgpdb.c,v 1.6.2.3 2002/10/09 20:29:44 weaselp Exp $ */
+   $Id: pgpdb.c,v 1.6.2.4 2002/10/09 20:51:08 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -153,7 +153,7 @@ int pgpdb_getnext(KEYRING *keydb, BUFFER *key, BUFFER *keyid, BUFFER *userid)
   p = buf_new();
   i = buf_new();
   thisid = buf_new();
-  
+
   if (key == NULL) {
     tempbuf = 1;
     key = buf_new();
@@ -292,7 +292,7 @@ end:
 	errlog(NOTICE, "Key %b not found!\n", userid);
       else if (keyid && keyid->length > 7)
 	errlog(NOTICE, "Key %02X%02X%02X%02X not found!\n", keyid->data[4],
-               keyid->data[5], keyid->data[6], keyid->data[7]);
+	       keyid->data[5], keyid->data[6], keyid->data[7]);
     }
   }
   if (found > 1) {
@@ -365,7 +365,7 @@ int pgp_keymgt(int force)
       buf_clear(outtxt);
       if (pgp_makepubkey(key, outtxt, outkey, pass,
 			 type == 0 ? PGP_ES_RSA : PGP_S_DSA) == 0) {
-        err = 0;
+	err = 0;
 	buf_appends(out, "Type Bits/KeyID    Date       User ID\n");
 	buf_cat(out, outtxt);
 	pgp_armor(outkey, PGP_ARMOR_KEY);
@@ -426,7 +426,7 @@ int pgp_rkeylist(REMAILER remailer[], int keyid[], int n)
 
   userid = buf_new();
   id = buf_new();
-  
+
   for (i = 1; i < n; i++) {
     buf_clear(userid);
     buf_setf(userid, "<%s>", remailer[i].addr);
@@ -437,9 +437,9 @@ int pgp_rkeylist(REMAILER remailer[], int keyid[], int n)
       buf_clear(id);
       err = pgpdb_getkey(PK_VERIFY, PGP_ANY, &sym, &mdc, NULL, userid, NULL, id, NULL, NULL);
       if (id->length == 8) {
-        /* printf("%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x %s\n",
-         id->data[0], id->data[1], id->data[2], id->data[3], id->data[4], id->data[5], id->data[6], id->data[7], id->data[8], remailer[i].addr); */
-        keyid[i] = (((((id->data[4] << 8) + id->data[5]) << 8) + id->data[6]) << 8) + id->data[7];
+	/* printf("%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x %s\n",
+	 id->data[0], id->data[1], id->data[2], id->data[3], id->data[4], id->data[5], id->data[6], id->data[7], id->data[8], remailer[i].addr); */
+	keyid[i] = (((((id->data[4] << 8) + id->data[5]) << 8) + id->data[6]) << 8) + id->data[7];
       }
     }
   }

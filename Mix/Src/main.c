@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.10.2.4 2002/10/09 20:29:44 weaselp Exp $ */
+   $Id: main.c,v 1.10.2.5 2002/10/09 20:51:02 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -88,8 +88,8 @@ int main(int argc, char *argv[])
 	  help = 1, deflt = 0;
 	else if (streq(p, "verbose"))
 	  verbose = 1;
-        else if (streq(p, "type-list"))
-          type_list = 1;
+	else if (streq(p, "type-list"))
+	  type_list = 1;
 	else if (streq(p, "dummy"))
 	  send = MSG_NULL, deflt = 0;
 	else if (streq(p, "remailer"))
@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
 	else if (streq(p, "read-mail"))
 	  readmail = 1, deflt = 0;
       else if (streq(p, "store-mail"))
-        readmail = 2, deflt = 0;
+	readmail = 2, deflt = 0;
 #ifdef USE_SOCK
 	else if (streq(p, "pop-mail"))
 	  pop3 = 1, deflt = 0;
@@ -151,10 +151,10 @@ int main(int argc, char *argv[])
 #endif /* USE_PGP */
 	else if ((q = largopt(p, "copies", argv[0], &error)) != NULL) {
 	  sscanf(q, "%d", &numcopies);
-        } else if ((q = largopt(p, "config", argv[0], &error)) != NULL) {
-          strncpy(MIXCONF, q, PATHMAX);
-          MIXCONF[PATHMAX-1] = 0;
-          mix_config(); /* configuration file changed - reread it */
+	} else if ((q = largopt(p, "config", argv[0], &error)) != NULL) {
+	  strncpy(MIXCONF, q, PATHMAX);
+	  MIXCONF[PATHMAX-1] = 0;
+	  mix_config(); /* configuration file changed - reread it */
 	} else if (error == 0 && mix_configline(p) == 0) {
 	  fprintf(stderr, "%s: Invalid option %s\n", argv[0], argv[i]);
 	  error = 1;
@@ -168,9 +168,9 @@ int main(int argc, char *argv[])
 	  case 'R':
 	    readmail = 1, deflt = 0;
 	    break;
-        case 'I':
-          readmail = 2, deflt = 0;
-          break;
+	case 'I':
+	  readmail = 2, deflt = 0;
+	  break;
 	  case 'S':
 	    sendpool = 1, deflt = 0;
 	    break;
@@ -594,8 +594,8 @@ end:
       exit(0);
     if (chdir(MIXDIR) < 0) {
       if (chdir("/") < 0) {
-        fprintf(stderr, "Cannot chdir to mixdir or /.\n");
-        exit(1);
+	fprintf(stderr, "Cannot chdir to mixdir or /.\n");
+	exit(1);
       };
     };
     freopen ("/dev/null", "r", stdin);

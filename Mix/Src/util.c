@@ -6,7 +6,7 @@
    details.
 
    Utility functions
-   $Id: util.c,v 1.2.2.2 2002/10/09 20:29:44 weaselp Exp $ */
+   $Id: util.c,v 1.2.2.3 2002/10/09 20:51:09 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -258,7 +258,7 @@ int encode(BUFFER *in, int linelen)
   e = out->data;
   m = in->length - 2;
   for (i = 0, l = 0; i < m; i += 3) {
-    u = ((unsigned long) b[i] << 16) | ((unsigned long) b[i + 1] << 8) | 
+    u = ((unsigned long) b[i] << 16) | ((unsigned long) b[i + 1] << 8) |
 	b[i + 2];
     *e++ = bintoasc[(u >> 18) & 0x3f];
     *e++ = bintoasc[(u >> 12) & 0x3f];

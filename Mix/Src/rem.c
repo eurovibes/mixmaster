@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.20.2.4 2002/10/09 20:29:44 weaselp Exp $ */
+   $Id: rem.c,v 1.20.2.5 2002/10/09 20:51:08 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -102,7 +102,7 @@ int mix_decrypt(BUFFER *message)
       else if (bufieq(content, "remailer-key"))
 	type = REQUESTKEY;
       else if (bufieq(content, "remailer-adminkey"))
-        type = REQUESTOPKEY;
+	type = REQUESTOPKEY;
       else if (bufieq(content, "remailer-conf"))
 	type = REQUESTCONF;
       else if (bufileft(content, "destination-block"))
@@ -122,10 +122,10 @@ int mix_decrypt(BUFFER *message)
 	       bufieq(field, "encrypt-to"))
       type = CPUNKMSG;
     else if (bufieq(field, "content-transfer-encoding")
-             && bufieq(content, "quoted-printable")) {
+	     && bufieq(content, "quoted-printable")) {
       quoted_printable = 1;
     }
-      
+
   }
 hdrend:
   if (quoted_printable)
@@ -294,27 +294,27 @@ void pool_packetexp(void)
       if (e == NULL)
 	break;
       if (e->d_name[0] == 'p' || e->d_name[0] == 'e' || e->d_name[0] == 't') {
-        path=malloc(strlen(POOLDIR)+strlen(e->d_name)+strlen(DIRSEPSTR)+1);
-        if (path) {
-         strcpy(path, POOLDIR);
-          strcat(path, DIRSEPSTR);
-          strcat(path, e->d_name);
-          if (stat(path, &sb) == 0 && time(NULL) - sb.st_mtime > PACKETEXP) {
-             if (e->d_name[0] == 'p') {
-                errlog(NOTICE, "Expiring incomplete partial message %s.\n",
-                e->d_name);
-             }
-             else if (e->d_name[0] == 'e') {
-                errlog(NOTICE, "Expiring old error message %s.\n",    
-                e->d_name);     
-             }
-             else if (e->d_name[0] == 't') {
-                errlog(NOTICE, "Expiring moldy temporary message %s.\n",
-                e->d_name);
-             }
-             unlink(path);
-          }
-        free(path);
+	path=malloc(strlen(POOLDIR)+strlen(e->d_name)+strlen(DIRSEPSTR)+1);
+	if (path) {
+	 strcpy(path, POOLDIR);
+	  strcat(path, DIRSEPSTR);
+	  strcat(path, e->d_name);
+	  if (stat(path, &sb) == 0 && time(NULL) - sb.st_mtime > PACKETEXP) {
+	     if (e->d_name[0] == 'p') {
+	        errlog(NOTICE, "Expiring incomplete partial message %s.\n",
+	        e->d_name);
+	     }
+	     else if (e->d_name[0] == 'e') {
+	        errlog(NOTICE, "Expiring old error message %s.\n",
+	        e->d_name);
+	     }
+	     else if (e->d_name[0] == 't') {
+	        errlog(NOTICE, "Expiring moldy temporary message %s.\n",
+	        e->d_name);
+	     }
+	     unlink(path);
+	  }
+	free(path);
 	}
       }
     }
@@ -398,8 +398,8 @@ int blockrequest(BUFFER *message)
     if (bufieq(field, "from"))
       buf_set(from, content);
     else if (bufieq(field, "subject"))
-      buf_cat(message, content); 
-   /* Append the subject to the message body so destination block requests 
+      buf_cat(message, content);
+   /* Append the subject to the message body so destination block requests
       in the subject line work too (we process the body a few lines down) */
   while (buf_getline(message, line) != -1)
     if (bufifind(line, "destination-block")) {
@@ -442,10 +442,10 @@ int blockrequest(BUFFER *message)
 	    errlog(LOG, "Ignoring blocking request: %b is a regex.\n", addr);
 	  } else {
 	    if (strchr(line->data, '@') && strchr(strchr(line->data, '@'), '.')) {
-              strcpy( destblklst, DESTBLOCK );
-              destblk = strtok( destblklst, " " );
-              f = mix_openfile( destblk, "a" );
-              free( destblklst );
+	      strcpy( destblklst, DESTBLOCK );
+	      destblk = strtok( destblklst, " " );
+	      f = mix_openfile( destblk, "a" );
+	      free( destblklst );
 	      if (f != NULL) {
 		lock(f);
 

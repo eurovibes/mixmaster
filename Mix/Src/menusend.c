@@ -6,7 +6,7 @@
    details.
 
    Menu-based user interface -- send message
-   $Id: menusend.c,v 1.2.2.2 2002/10/09 20:29:44 weaselp Exp $ */
+   $Id: menusend.c,v 1.2.2.3 2002/10/09 20:51:03 weaselp Exp $ */
 
 
 #include "menu.h"
@@ -206,7 +206,7 @@ redraw:
 	printw("no");
       cl(12, 0);
       if (key == 0)
-        printw("attach pgp k)ey: no");
+	printw("attach pgp k)ey: no");
     }
 #endif /* USE_PGP */
 
@@ -308,7 +308,7 @@ redraw:
 	    beep();
 #endif /* USE_NCURSES */
 	  } else {
-	    
+
 	    if (!cursorpos && txt->length == 0 && (type == 'm' || type == 'p'))
 	      showhdr = 0;
 
@@ -535,7 +535,7 @@ redraw:
       case 'k':
 	if (!streq(thisnym, ANON)) {
 	  BUFFER *p, *keytxt, *uid;
-	    
+
 	  key = 1;
 	  p = buf_new();
 	  keytxt = buf_new();

@@ -6,7 +6,7 @@
    details.
 
    Create OpenPGP packets
-   $Id: pgpcreat.c,v 1.5.2.3 2002/10/09 20:39:33 weaselp Exp $ */
+   $Id: pgpcreat.c,v 1.5.2.4 2002/10/09 20:51:07 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -409,7 +409,7 @@ int pgp_literal(BUFFER *b, char *filename, int text)
   if (b->length > 0) {
     if (text)
       while (buf_getline(b, line) != -1) {
-        buf_cat(out, line);
+	buf_cat(out, line);
 	buf_appends(out, "\r\n");
       } else
 	buf_cat(out, b);
@@ -544,7 +544,7 @@ int pgp_digest(int hashalgo, BUFFER *in, BUFFER *d)
    default:
     return (-1);
   }
-}    
+}
 
 int asnprefix(BUFFER *b, int hashalgo)
 {
@@ -715,7 +715,7 @@ int pgp_sign(BUFFER *msg, BUFFER *msg2, BUFFER *sig, BUFFER *userid,
      buf_appendc(msg, 0x99);
      buf_appendi(msg, d->length);
      buf_cat(msg, d);
-     
+
      type1 = pgp_getpacket(msg2, d) == PGP_PUBSUBKEY;
      assert (type1);
      buf_appendc(msg, 0x99);
@@ -765,7 +765,7 @@ int pgp_sign(BUFFER *msg, BUFFER *msg2, BUFFER *sig, BUFFER *userid,
 
     if (self) {
       buf_setc(d, PGP_K_CAST5);
-#ifdef USE_AES 
+#ifdef USE_AES
       buf_appendc(d, PGP_K_AES128);
 #endif /* USE_AES */
       buf_appendc(d, PGP_K_3DES);
@@ -800,7 +800,7 @@ int pgp_sign(BUFFER *msg, BUFFER *msg2, BUFFER *sig, BUFFER *userid,
     err = pgp_dosign(algo, enc, key);
     buf_cat(sig, enc);
     break;
-  } 
+  }
   pgp_packet(sig, PGP_SIG);
 
 end:

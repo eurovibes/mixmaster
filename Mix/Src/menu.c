@@ -6,7 +6,7 @@
    details.
 
    Menu-based user interface
-   $Id: menu.c,v 1.1.1.1.2.3 2002/10/09 20:33:58 weaselp Exp $ */
+   $Id: menu.c,v 1.1.1.1.2.4 2002/10/09 20:51:02 weaselp Exp $ */
 
 
 #include "menu.h"
@@ -98,7 +98,7 @@ void read_folder(char command, char *foldername, char *nym)
 	  || strileft(l, "xref:") || strileft(l, "return-path"))
 	mailfolder = 0;
       else
-        break;
+	break;
     }
     if (eof || (mailfolder && strleft(l, "From ")) ||
 	(mailfolder == 0 && from != -1 &&
@@ -915,10 +915,10 @@ void menu_chain(char *chainstr, int chaintype, int post)
       ok = 1;
 
     mvprintw(LINES - 4, 40,
-      middlemanlast ? 
+      middlemanlast ?
 	"MIDDLEMAN   " :
 	(ok ?
-	  "            " : 
+	  "            " :
 	  "NO POSTING  "));
     cl(LINES - 3, 0);
     cl(LINES - 2, 0);
@@ -933,7 +933,7 @@ void menu_chain(char *chainstr, int chaintype, int post)
     c = getch();
     if (c == '\n' || c == '\r') {
     /* beep and sleep in case the user made a mistake */
-      if (middlemanlast) { 
+      if (middlemanlast) {
 	beep();
 	sleep(2);
       }
