@@ -12,7 +12,6 @@ dismix mix@disastry.dhs.org 1a945fbd5387f6a414e5630eb4f8feab 2.9b33 MC
 dizum remailer@dizum.com d0c04d1b7539af602c68182a59d885b9 2.9beta22 CNm
 farout farout@nuther-planet.net 5d156ffd383ae1d0aeb30fe5a338dcfd 2.0.4b45 CN
 freedom remailer@freedom.gmsociety.org 92ab68330fbab6aa8517d751e1ae44fe 2.9b34pre CNm
-frog3 frog3remailer@frogadmin.yi.org 62b5653dd25397682d86debbec3d1784 2.0.4b45 CN
 harmless harmless@minder.net a4b4963fd61c6a02c284b8f57326b4b5 2.9beta23 MC
 havenco mix@remailer.havenco.com dcd835a6ecfc412ba8535949ff30be44 2.9beta32 CNm
 holodeck holodeck@usenet-nomads.com ecac53b818d514a47b02e5ade054abb9 2.0.4b45 MCN
@@ -26,11 +25,13 @@ notatla mixclient@notatla.demon.co.uk df0d1ae4aeebe37f3d9886b691ecede2 2.9b33 MC
 orange mix@arancio.net 37007072e18807c9903fed9668e5fd97 2.9beta23 C
 paranoia anon@paranoici.org 3aaf2ca2a4b0a5207a1523dd5a4fb11d 2.9b33 CNm
 passthru2 mixer@immd1.informatik.uni-erlangen.de c07b204924a69939651ec445fd5b2404 2.0.4b40 MC
-randseed randseed@melontraffickers.com b5f2983c8877b2ea0b31f42b2b8a0ef2 2.9b33 CNm
+randseed randseed@melontraffickers.com b5f2983c8877b2ea0b31f42b2b8a0ef2 2.9b35pre2 CNm
 riot anon@riot.eu.org 6bb850dc8eee3a5b2e5847acf5e187be 2.9b33 MC
 rot26 rot26@mix.uucico.de 7f6d997678b19ccac110f6e669143126 2.9b33 MC
+shark sharkmail@arcor.de 291f4f7c342dffcb6e98dc315fed3fcb 2.0.4b45 MC
+sushi remailer@socialistsushi.com bde9e580f6042e87abece5dd52dad931 2.9b33 MC
 tonga remailer@cypherpunks.to 70d5742c277080317d4161f8c41b6592 2.9b33 CNm
-xganon remailer@xganon.com 5503fb0a122eee47fdc4ae4b1bacd55e 2.9beta23 CNm
+xganon remailer@xganon.com 10141e147fec6c5878999e0baa7354e3 2.9b33 CNm
 xganon2 remailer@remailer.xganon.com 1011a2efbb88714734da336e9ef246ce 2.9beta22 CNm
 xmailer remailer@xmailer.ods.org fe8c27d2a0eb1609a5ec0215d442b967 2.9b33 CNm
 znar ka5tkn@cox-internet.com 9273887e3ee193bb79617ef7b728219f 2.0.4b45 CN

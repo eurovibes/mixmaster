@@ -6,7 +6,27 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: upgrade,v 1.1 2001/10/31 08:19:52 rabbi Exp $
+# $Id: upgrade,v 1.2 2002/07/11 02:39:33 rabbi Exp $
+
+# readln text default
+readln()
+{   
+  echo $echo1 "$1 [$2] $echo2"
+  read ans 
+  if [ -z "$ans" ]
+  then
+    ans="$2"
+  fi
+}
+
+echo "This script will upgrade an installation of Mixmaster 2.0."
+echo "Do not use this script to upgrade an installation of Mixmaster 2.9."
+echo "Use the Install script instead."
+readln "Continue with upgrade?" n
+ if [ "$ans" = n ]
+ then
+  exit 1
+ fi  
 
 NEW=~/tmp.$$
 mkdir $NEW

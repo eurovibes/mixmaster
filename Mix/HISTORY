@@ -158,9 +158,13 @@
                              the last version (Peter Palfrader).
                            Various command line bug fixes.
 
-2002-07-10                 Updated zlib due to security reasons.
+2002-07-10      2.9b35     Updated zlib due to security reasons.
                            Does not generate keys in client mode.
                            Uses binary format for id.log.
                            Assorted mpgp fixes (by Disastry).
                            Added support for storing the key passphrase
                              in the mix.cfg file. (by Disastry).
+                           Now reports the contents of dest.alw for
+                             middleman remailers (by Kat).
+                           Reworked the OpenSSL version check in the
+                             Install script.
