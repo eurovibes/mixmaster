@@ -6,7 +6,7 @@
    details.
 
    OpenPGP data
-   $Id: pgpdata.c,v 1.26 2002/10/09 20:53:30 weaselp Exp $ */
+   $Id: pgpdata.c,v 1.27 2003/02/15 08:06:44 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -1217,10 +1217,13 @@ static void *params(int dsa, int bits)
       buf_append(p, b, l);
       encode(p, 64);
       f = mix_openfile(DSAPARAMS, "a");
-      fprintf(f, "%s\n%d\n", begin_param, bits);
-      buf_write(p, f);
-      fprintf(f, "%s\n", end_param);
-      fclose(f);
+      if (f != NULL) {
+	fprintf(f, "%s\n%d\n", begin_param, bits);
+	buf_write(p, f);
+	fprintf(f, "%s\n", end_param);
+	fclose(f);
+      } else
+	errlog(ERRORMSG, "Cannot open %s!\n", DSAPARAMS);
       buf_free(p);
     }
     return (k);
@@ -1237,10 +1240,13 @@ static void *params(int dsa, int bits)
       buf_append(p, b, l);
       encode(p, 64);
       f = mix_openfile(DHPARAMS, "a");
-      fprintf(f, "%s\n%d\n", begin_param, bits);
-      buf_write(p, f);
-      fprintf(f, "%s\n", end_param);
-      fclose(f);
+      if (f != NULL) {
+	fprintf(f, "%s\n%d\n", begin_param, bits);
+	buf_write(p, f);
+	fprintf(f, "%s\n", end_param);
+	fclose(f);
+      } else
+	errlog(ERRORMSG, "Cannot open %s!\n", DHPARAMS);
       buf_free(p);
     }
     return (d);

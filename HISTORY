@@ -356,3 +356,5 @@
                              print a warning in that case now.
 
 2003-02-15                 Add max capability for Type I.
+                           Make sure DH/DSA param file is actually opened before
+                             writing to it.  Fixes a segfault in case it is not.
