@@ -200,11 +200,12 @@ Mixmaster protocol. If the remailer knows the Mixmaster public key for the next
 hop, it should process the message normally, but instead of sending the message
 to its next hop, treat the processed message as opaque data which will comprise
 the body of a Mixmaster message. The remailer should then create a Mixmaster
-message to be delivered to the next hop remailer.
+message with this body to be delivered to the next hop remailer.
 
 If the remailer receives a Mixmaster message that, when decrypted, reveals a
 message of another protocol which the remailer speaks, it should process the
-message as though it had been delivered in the other protocol format.
+message as though it had been delivered in the other protocol format initially.
+
 
 3. Pool Behavior
 
