@@ -6,7 +6,7 @@
    details.
 
    Function prototypes
-   $Id: mix3.h,v 1.24 2003/05/08 18:07:08 weaselp Exp $ */
+   $Id: mix3.h,v 1.25 2003/09/29 01:06:54 weaselp Exp $ */
 
 
 #ifndef _MIX3_H
@@ -343,14 +343,15 @@ void parse_badchains(int badchains[MAXREM][MAXREM], char *file, char *startindic
 int chain_select(int hop[], char *chainstr, int maxrem, REMAILER *remailer,
 		 int type, BUFFER *feedback);
 int chain_rand(REMAILER *remailer, int badchains[MAXREM][MAXREM], int maxrem,
-	       int thischain[], int chainlen, int t);
-int chain_randfinal(int type, REMAILER *remailer, int badchains[MAXREM][MAXREM], int maxrem, int rtype, int chain[], int chainlen);
+	       int thischain[], int chainlen, int t, int ignore_constraints_if_necessary);
+int chain_randfinal(int type, REMAILER *remailer, int badchains[MAXREM][MAXREM],
+	       int maxrem, int rtype, int chain[], int chainlen, int ignore_constraints_if_necessary);
 
 float chain_reliability(char *chain, int chaintype,
 			char *reliability_string);
 int redirect_message(BUFFER *sendmsg, char *chain, int numcopies, BUFFER *chainlist);
 int mix2_encrypt(int type, BUFFER *message, char *chainstr, int numcopies,
-		 BUFFER *feedback);
+		int ignore_constraints_if_necessary, BUFFER *feedback);
 int t1_encrypt(int type, BUFFER *message, char *chainstr, int latency,
 	       BUFFER *ek, BUFFER *feedback);
 

@@ -430,3 +430,6 @@
                             Precedence: header on all outgoing mail.
                             (Hauke Lampe)
                           Nym support is not compiled in by default anymore.
+                          Ignore 'No reliable remailers' problems when
+                            randhopping messages in middleman mode.
+                            That is better than dropping them.

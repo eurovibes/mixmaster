@@ -6,7 +6,7 @@
    details.
 
    Encrypt message for Mixmaster chain
-   $Id: chain2.c,v 1.13 2003/08/24 20:39:26 weaselp Exp $ */
+   $Id: chain2.c,v 1.14 2003/09/29 01:06:54 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -202,7 +202,8 @@ int mix2_rlist(REMAILER remailer[], int badchains[MAXREM][MAXREM])
 static int send_packet(int numcopies, BUFFER *packet, int chain[],
 		       int chainlen, int packetnum, int numpackets,
 		       BUFFER *mid, REMAILER remailer[], int badchains[MAXREM][MAXREM],
-		       int maxrem, char *redirect_to, BUFFER *feedback)
+		       int maxrem, char *redirect_to, int ignore_constraints_if_necessary,
+		       BUFFER *feedback)
 /*
  * Puts a mix packet in the pool.
  *
@@ -226,6 +227,9 @@ static int send_packet(int numcopies, BUFFER *packet, int chain[],
  *                 This is useful if you want to reroute an existing mixmaster message
  *                 that has foo as the next hop via a chain so that the packet will
  *                 actually flow hop1,hop2,hop3,foo,....
+ * ignore_constraints_if_necessary .. to be used when randhopping messages.
+ *                 if a chain can not be constructed otherwhise, maxlat and
+ *                 minrel are ignored.
  * feedback    ... a buffer to write feedback to
  */
 {
@@ -268,7 +272,7 @@ static int send_packet(int numcopies, BUFFER *packet, int chain[],
     for (hop = 0; hop < chainlen; hop++)
       thischain[hop] = chain[hop];
 
-    israndom = chain_rand(remailer, badchains, maxrem, thischain, chainlen, 0);
+    israndom = chain_rand(remailer, badchains, maxrem, thischain, chainlen, 0, ignore_constraints_if_necessary);
     if (israndom == -1) {
       err = -1;
       clienterr(feedback, "No reliable remailers!");
@@ -502,7 +506,7 @@ int redirect_message(BUFFER *sendmsg, char *chainstr, int numcopies, BUFFER *fee
 	  thischain[hop+1] = thischain[hop];
 	thischain[0] = tempchain[0];
 
-	israndom = chain_rand(remailer, badchains, maxrem, thischain, chainlen + 1, 0);
+	israndom = chain_rand(remailer, badchains, maxrem, thischain, chainlen + 1, 0, 0);
 	if (israndom == -1) {
 	  err = -1;
 	  clienterr(feedback, "No reliable remailers!");
@@ -518,7 +522,7 @@ int redirect_message(BUFFER *sendmsg, char *chainstr, int numcopies, BUFFER *fee
     /* queue the packet */
     if (send_packet(1, sendmsg, thischain, chainlen,
 	    -1, -1, NULL,
-	    remailer, badchains, maxrem, recipient, feedback) == -1)
+	    remailer, badchains, maxrem, recipient, 0, feedback) == -1)
       err = -1;
   };
 
@@ -530,10 +534,16 @@ end:
 }
 
 int mix2_encrypt(int type, BUFFER *message, char *chainstr, int numcopies,
+		 int ignore_constraints_if_necessary,
 		 BUFFER *feedback)
 {
   /* returns 0 on success, -1 on error. feedback contains the selected
-     remailer chain or an error message */
+     remailer chain or an error message
+
+   ignore_constraints_if_necessary .. to be used when randhopping messages.
+                                   if a chain can not be constructed otherwhise,
+                                   maxlat and minrel are ignored.
+     */
 
   REMAILER remailer[MAXREM];
   int badchains[MAXREM][MAXREM];
@@ -583,7 +593,7 @@ int mix2_encrypt(int type, BUFFER *message, char *chainstr, int numcopies,
     goto end;
   }
   if (chain[0] == 0)
-    chain[0] = chain_randfinal(type, remailer, badchains, maxrem, 0, chain, chainlen);
+    chain[0] = chain_randfinal(type, remailer, badchains, maxrem, 0, chain, chainlen, ignore_constraints_if_necessary);
 
   if (chain[0] == -1) {
     clienterr(feedback, "No reliable remailers!");
@@ -648,7 +658,7 @@ int mix2_encrypt(int type, BUFFER *message, char *chainstr, int numcopies,
       buf_pad(packet, 10240);
       if (send_packet(numcopies, packet, chain, chainlen,
 		      i + 1, body->length / 10236 + 1,
-		      mid, remailer, badchains, maxrem, NULL, feedback) == -1)
+		      mid, remailer, badchains, maxrem, NULL, ignore_constraints_if_necessary, feedback) == -1)
 	err = -1;
     }
     break;

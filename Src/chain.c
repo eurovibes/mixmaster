@@ -6,7 +6,7 @@
    details.
 
    Prepare messages for remailer chain
-   $Id: chain.c,v 1.15 2003/05/22 14:44:55 weaselp Exp $ */
+   $Id: chain.c,v 1.16 2003/09/29 01:06:54 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -178,26 +178,29 @@ end:
   return len;
 }
 
-int chain_randfinal(int type, REMAILER *remailer, int badchains[MAXREM][MAXREM], int maxrem, int rtype, int chain[], int chainlen)
+int chain_randfinal(int type, REMAILER *remailer, int badchains[MAXREM][MAXREM], int maxrem, int rtype, int chain[], int chainlen, int ignore_constraints_if_necessary)
 {
-  int randavail = 0;
+  int randavail;
   int i;
   int t;
   int select[MAXREM];
   int secondtolasthop = (chainlen <= 1 ? -1 : chain[1]);
+  int constraints_ignored = 0;
 
   t = rtype;
   if (rtype == 2)
     t = 1;
 
+start:
+  randavail = 0;
   /* select a random final hop */
   for (i = 1; i < maxrem; i++) {
     select[i] = 
        ((remailer[i].flags.mix && rtype == 0) ||             /* remailer supports type */
 	 (remailer[i].flags.pgp && remailer[i].flags.ek && rtype == 1) ||
 	 (remailer[i].flags.newnym && rtype == 2)) &&
-	remailer[i].info[t].reliability >= 100 * RELFINAL && /* remailer has sufficient reliability */
-	remailer[i].info[t].latency <= MAXLAT &&             /* remailer has small enough latency */
+	(remailer[i].info[t].reliability >= 100 * RELFINAL || constraints_ignored ) && /* remailer has sufficient reliability */
+	(remailer[i].info[t].latency <= MAXLAT || constraints_ignored ) &&             /* remailer has small enough latency */
 	(type == MSG_NULL || !remailer[i].flags.middle) &&   /* remailer is not middleman */
 	!remailer[i].flags.star_ex &&                        /* remailer is not excluded from random selection */
 	(remailer[i].flags.post || type != MSG_POST) &&      /* remailer supports post when this is a post */
@@ -213,9 +216,14 @@ int chain_randfinal(int type, REMAILER *remailer, int badchains[MAXREM][MAXREM],
     }
 
   assert(randavail >= 0);
-  if (randavail == 0)
+  if (randavail == 0) {
+    if (ignore_constraints_if_necessary && !constraints_ignored) {
+      errlog(WARNING, "No reliable remailers. Ignoring for randhop\n");
+      constraints_ignored = 1;
+      goto start;
+    };
     i = -1;
-  else {
+  } else {
     do
       i = rnd_number(maxrem - 1) + 1;
     while (!select[i]);
@@ -224,7 +232,7 @@ int chain_randfinal(int type, REMAILER *remailer, int badchains[MAXREM][MAXREM],
 }
 
 int chain_rand(REMAILER *remailer, int badchains[MAXREM][MAXREM], int maxrem,
-	       int thischain[], int chainlen, int t)
+	       int thischain[], int chainlen, int t, int ignore_constraints_if_necessary)
      /* set random chain. returns 0 if not random, 1 if random, -1 on error */
 /* t... 0 for mixmaster Type II
  *      1 for cypherpunk Type I
@@ -232,9 +240,11 @@ int chain_rand(REMAILER *remailer, int badchains[MAXREM][MAXREM], int maxrem,
 {
   int hop;
   int err = 0;
+  int constraints_ignored = 0;
 
   assert(t == 0 || t == 1);
 
+start:
   for (hop = 0; hop < chainlen; hop++)
     if (thischain[hop] == 0) {
       int select[MAXREM];
@@ -246,10 +256,10 @@ int chain_rand(REMAILER *remailer, int badchains[MAXREM][MAXREM], int maxrem,
 	assert(thischain[hop-1]); /* we already should have chosen a remailer after this one */
       for (i = 1; i < maxrem; i++) {
 	select[i] = ((remailer[i].flags.mix && t == 0) ||        /* remailer supports type */
-		     (remailer[i].flags.pgp && remailer[i].flags.ek && t == 1))
-	  && remailer[i].info[t].reliability >= 100 * MINREL &&  /* remailer has sufficient reliability */
+		     (remailer[i].flags.pgp && remailer[i].flags.ek && t == 1)) &&
+	  (remailer[i].info[t].reliability >= 100 * MINREL || constraints_ignored ) &&  /* remailer has sufficient reliability */
+	  (remailer[i].info[t].latency <= MAXLAT || constraints_ignored ) &&            /* remailer has small enough latency */
 	  !remailer[i].flags.star_ex &&                          /* remailer is not excluded from random selection */
-	  remailer[i].info[t].latency <= MAXLAT &&               /* remailer has small enough latency */
 	  !badchains[i][0] && !badchains[i][thischain[hop-1]] && /* remailer can send to the next one */
 	  (hop == chainlen-1 || !badchains[thischain[hop+1]][i]);
 	                           /* we are at the first hop or the previous one can send to this (may be random) */
@@ -265,6 +275,11 @@ int chain_rand(REMAILER *remailer, int badchains[MAXREM][MAXREM], int maxrem,
 
       assert(randavail >= 0);
       if (randavail < 1) {
+	if (ignore_constraints_if_necessary && !constraints_ignored) {
+	  errlog(WARNING, "No reliable remailers. Ignoring for randhop\n");
+	  constraints_ignored = 1;
+	  goto start;
+	};
 	err = -1;
 	goto end;
       }
@@ -279,7 +294,7 @@ end:
 int mix_encrypt(int type, BUFFER *message, char *chainstr, int numcopies,
 		BUFFER *chainlist)
 {
-  return (mix2_encrypt(type, message, chainstr, numcopies, chainlist));
+  return (mix2_encrypt(type, message, chainstr, numcopies, 0, chainlist));
 }
 
 /* float chain_reliablity(char *chain, int chaintype,
