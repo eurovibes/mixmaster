@@ -1,5 +1,5 @@
 .TH MIX 1 "Mixmaster Version 3.0 beta"
-.\" $Id: mix.1,v 1.33 2003/07/07 11:32:45 weaselp Exp $
+.\" $Id: mix.1,v 1.34 2003/10/15 05:06:09 rabbi Exp $
 .SH NAME
 mix \- anonymous remailer software
 .SH SYNOPSIS
@@ -9,7 +9,6 @@ mix \- anonymous remailer software
 [\fB\-g \fInewsgroup\fR]
 [\fB\-s \fIsubject\fR]
 [\fB\-a \fIfilename\fR]
-[\fB\-n \fInym\fR]
 [\fB\-l \fImix1,mix2,mix3,...\fR]
 [\fB\-c \fInum\fR]
 [\fIuser@host\fR]
@@ -17,10 +16,6 @@ mix \- anonymous remailer software
 .PP
 .B mix
 [\fB\-f\fR[\fBrfg\fR] \fIfilename\fR]
-.PP
-.B mix \-\-nym\-config=\fIyournym \fR[\fBname=\fIPseudonym\fR]
-[\fBopt=\fInymserver options\fR] [\fB\-\-latency=\fIhours\fR]
-[\fB\-\-reply\-chain=\fIrem1,rem2,...\fR]
 .PP
 .B mix \fR[\fB\-RGKSP\fR]
 .SH DESCRIPTION
@@ -32,11 +27,7 @@ In the non-interactive mode, Mixmaster reads a message from its
 standard input or from a file.  Destination address and input file can
 be specified in the command line.  If no address is given in the
 command line, the input file is expected to contain a message complete
-with mail headers.  Messages to be sent under a pseudonym must contain
-a
-.I Nym:
-header rather than
-.IR From: .
+with mail headers.
 .SH OPTIONS
 .TP
 .B "\-h, \-\-help"
@@ -73,9 +64,6 @@ Add the header line to the message header.
 Attach
 .I file
 to the message.
-.TP
-.B "\-n, \-\-nym=\fIyournym"
-Use the given pseudonym to send the message.
 .TP
 .B \-\-encrypt
 Encrypt the message using the OpenPGP format.
@@ -120,28 +108,6 @@ Post a follow-up to a message.
 .TP
 .B "\-fg\fR [\fIfile\fR]"
 Send a group reply to a message.
-.TP
-.B "\-\-nym\-config=\fInym \fR[\fBname=\fIPseudonym\fR] [\fBopt=\fInymserver options\fR]"
-Generate a pseudonym.
-
-For example, to set up a pseudonym with two mail reply blocks and nym
-server acknowledgment for successfully remailed messages:
-.PP
-mix --nym-config=yournym@nym.alias.net opt=+acksend --to=user@domain
---reply-chain=privacy,hr13,hyper --to=user@domain
---reply-chain=replay,squirrel,mix
-
-To use a message pool:
-.PP
-mix --nym-config=yournym@nym.alias.net
---post-to=alt.anonymous.messages
---subject="secret message" --reply-chain=base
-.TP
-.B "\-\-latency=\fIhours"
-Reply chain latency.
-.TP
-.B "\-\-reply\-chain=\fIrem1,rem2,..."
-Reply chain for the pseudonym.
 .SS Remailer options:
 .TP
 .B "\-\-config=\fIfilename"
@@ -949,12 +915,6 @@ Mixmaster uses the following files internally:
 .TP
 .B mixrand.bin
 Random seed file (\fBMIXRAND\fP).
-.TP
-.B secrets.mix
-List of your nyms with configuration data (encrypted) (\fBNYMDB\fP).
-.TP
-.B nymsec.pgp
-Your nyms' secret PGP keys (encrypted) (\fBNYMSECRING\fP).
 .TP
 .B secring.pgp
 Remailer type 1 secret keys (\fBPGPREMSECRING\fP).
