@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.10 2002/07/29 12:42:56 weaselp Exp $ */
+   $Id: mix.c,v 1.11 2002/08/19 19:55:58 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -111,7 +111,7 @@ long POP3TIME = 60 * 60;
 char SHORTNAME[LINELEN];
 
 /* remailer configuration */
-int REMAIL = 1;
+int REMAIL = 0;
 int MIX = 1;
 int PGP = 1;
 int UNENCRYPTED = 0;
