@@ -725,7 +725,7 @@ int bufifind(BUFFER *b, char *k) {
 
 int bufiright(BUFFER *b, char *k) {
   int l = strlen(k);
-  if (l >= b->length)
+  if (l <= b->length)
     return (strieq(b->data + b->length - l, k));
   return(0);
 }
