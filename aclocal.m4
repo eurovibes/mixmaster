@@ -13,7 +13,7 @@
 
 dnl Macros automatically included in aclocal.m4.
 dnl
-dnl $Id: aclocal.m4,v 1.7 2003/10/14 03:42:05 dybbuk Exp $
+dnl $Id: aclocal.m4,v 1.8 2003/10/14 14:58:51 dybbuk Exp $
 
 dnl Zlib versions before 1.1.4 had a nasty bug.
 AC_DEFUN(AM_ZLIB_CHECK, [
@@ -41,20 +41,7 @@ else
     LIBS="-lz ${LIBS}"
     AC_DEFINE(USE_ZLIB)
   ],
-  [
-    AC_MSG_RESULT([no ... use the included Zlib.])
-    AC_MSG_CHECKING(for included zlib)
-    if test -d "Src/zlib-1.1.4"
-    then
-       AC_MSG_RESULT(ok)
-    else
-       AC_MSG_ERROR([Library not found.])
-    fi
-    AC_DEFINE(USE_ZLIB)
-    CPPFLAGS="-Izlib-1.1.4 ${CPPFLAGS}"
-    TOPDIRS="Src/zlib-1.1.4 ${TOPDIRS}"
-    XLIBS="zlib-1.1.4/libz.a ${XLIBS}"
-  ], [])
+  [ AC_MSG_ERROR(zlib not found or library to old -- 1.1.4 required!) ], [])
 ])
 
 AC_DEFUN(AM_PASSPHRASE, [
@@ -293,6 +280,10 @@ AC_ARG_WITH(homemixdir,
 ])
 
 dnl Is the global mixmaster config working yet?
+AH_TEMPLATE(
+ [GLOBALMIXCONF],
+ [Define as a string pointing to the location of the global config file.]
+)
 AC_DEFUN(AM_MIXMASTER_CONF, [
 GLOBALMIXCONF="${sysconfdir}/mix.cfg" 
 AC_MSG_CHECKING(for global configuration file)
@@ -320,7 +311,7 @@ AC_SUBST(GLOBALMIXCONF)
 
 
 # We require 2.13 because we rely on SHELL being computed by configure.
-AC_PREREQ([2.13])
+AC_PREREQ([2.53])
 
 # AC_PROVIDE_IFELSE(MACRO-NAME, IF-PROVIDED, IF-NOT-PROVIDED)
 # -----------------------------------------------------------

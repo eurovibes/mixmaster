@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-# $Id: configure.ac,v 1.1 2003/10/14 03:42:05 dybbuk Exp $
+# $Id: configure.ac,v 1.2 2003/10/14 14:58:51 dybbuk Exp $
 AC_INIT(Src/version.h)
 AC_CONFIG_AUX_DIR(etc)
 AM_INIT_AUTOMAKE(mixmaster, [3.08+cvs], mixmaster-devel@lists.sourceforge.net)
@@ -59,27 +59,39 @@ AC_CHECK_FUNCS([stat mktime fork atexit dup2 ftruncate getcwd gethostbyaddr \
         	uname utime setenv getdomainname])
 
 # ncurses?
+AH_TEMPLATE(
+ [USE_NCURSES],
+ [Define to 1 if you want ncurses support and have the ncurses library.]
+)
 AC_CHECK_LIB([ncurses], [getstr],
- [ XDEFS="-DUSE_NCURSES ${XDEFS}"
-   LIBS="-lncurses ${LIBS}" ])
-AC_CHECK_HEADER(ncurses.h,
- [ XDEFS="-DHAVE_NCURSES_H ${XDEFS}" ])
+ [ LIBS="-lncurses ${LIBS}"
+   AC_DEFINE(USE_NCURSES) ])
+AC_CHECK_HEADERS(ncurses.h)
 
 # Zlib check.  If the system version is older than 1.1.4, we want to
 # use the included version.  1.1.4 fixed that nasty double-free bug.
-AM_ZLIB_CHECK
+dnl AM_ZLIB_CHECK
+AH_TEMPLATE(
+ [USE_ZLIB],
+ [Define to 1 if you have ZLib.]
+)
+AC_CHECK_LIB([z], [gzopen],
+ [ LIBS="-lz ${LIBS}"
+   AC_DEFINE(USE_ZLIB) ],
+ [ AC_MSG_ERROR([could not find a working zlib]) ]
+)
 
 # If PCRE isn't installed on the system, we luckily have included a
 # version.
+AH_TEMPLATE(
+ [USE_PCRE],
+ [Define to 1 if you have libpcre installed.]
+)
 AC_CHECK_LIB([pcre], [pcre_compile],
- [ XDEFS="-DUSE_PCRE ${XDEFS}"
-   LIBS="-lpcre ${LIBS}" ],
- [ AC_MSG_RESULT([   Using included PCRE library])
-   TOPDIRS="Src/pcre-2.08 ${TOPDIRS}"
-   XDEFS="-DUSE_PCRE ${XDEFS}"
-   CPPFLAGS="-Ipcre-2.08 ${CPPFLAGS}"
-   XLIBS="pcre-2.08/libpcre.a ${XLIBS}"
- ])
+ [ LIBS="-lpcre ${LIBS}"
+   AC_DEFINE(USE_PCRE) ],
+ [ AC_MSG_ERROR([could not find a working libpcre]) ]
+)
 
 for dir in /usr/include /usr/local/include
 do
