@@ -195,7 +195,7 @@
                            Fix public remailer keys getting re-signed
                              every time keys are requested (Closes: #478383).
                            Make smtp sending similar to local /usr/lib/sendmail
-                             sending (wrt header/body seperation;
+                             sending (wrt header/body separation;
                              Closes: #482052).
                            Add X-Loop header on mailbox forwarded messages.
                            Several small fixes by Sami Farin et al.
@@ -216,11 +216,29 @@
                            Now displays Mixmaster version in the PGP version
                              header for non remailer/nym messages.
 
-2002-??-??	2.9b38     Applied Maildir feature patch by drt@un.bewaff.net,
+2002-09-11      2.9b38     Install script deals with lack of patented IDEA
+                             algorithm in a sane way (closes: #479020).
+                           Compiled-in passphrase is now deprecated.
+                           When expiring packet ids from id.log also expire
+                             packets that are dated more than half a year in 
+                             the future.  That way we get rid of invalid 
+                             packets introduced by the switch to a binary file.
+                           The stats in remailer-stats replies always had a 
+                             peak at 00:00 GMT which was wrong. Fixed. 
+                             (closes: #597688).
+                           Fixed a bug with reading armored keyrings consisting
+                             of more than one armored block or having comments
+                              in front of the one armored block.
+                           In RSA PGP keys, we now set e=0x11.
+                           Mixmaster now deletes error and temporary files
+                             older than PACKETEXP time along with expired 
+                             partial packets.
+                           Linux PPC fixes (and all other archs where char is
+                             unsigned).
+
+2002-??-??      2.9b39     Applied Maildir feature patch by drt@un.bewaff.net,
                              with some changes by PP:
                              MAILBOX can now be a Maildir (closes: #586223).
-                           Install script deals with lack of patented IDEA
-                             algorithm in a sane way (closes: #479020).
                            New option MAILIN that can be set to either a mbox
                              or Maildir folder. New mail will be read from it
                              and the folder cleared every time Mixmaster
@@ -232,28 +250,18 @@
                            If a footer.txt file exists its content will be
                              appended to outgoing messages leaving the remailer
                              network at this hop (closes: #490117).
-                           List known mixmasters/cpunks in remailer-conf reply
+                           List known Mixmasters/cpunks in remailer-conf reply
                              (closes: #480330).
-                           When expiring packet ids from id.log also expire
-                             packets that are dated more than half a year in 
-                             the future.  That way we get rid of invalid 
-                             packets introduced by the switch to a binary file.
-                           The stats in remailer-stats replies always had a 
-                             peak at 00:00 GMT which was wrong. Fixed. 
-                             (closes: #597688).
                            Mixmaster in daemon mode reloads configuration on 
                              SIGHUP. Upon receiving SIGTERM or SIGINT it will 
                              finish its current queue run and then exit
                              successfully.
-                           Fixed a bug with reading armored keyrings consisting
-                             of more than one armored block or having comments
-                              in front of the one armored block.
                            The secret pgp keyring is now stored ASCII armored 
                              with one key per ascii armor.
                            NB: Due to the bug with reading armored keyrings and
-                             secring beeing stored armored now, it is not 
-                             adviseable to downgrade mixmaster unless special 
-                             action is taked to preserve the secret pgp 
+                             secring being stored armored now, it is not 
+                             advisable to downgrade Mixmaster unless special 
+                             action is taken to preserve the secret pgp 
                              keyring.
                            Mixmaster now prompts for secret key passphrase when
                              started in daemon mode.
@@ -269,18 +277,12 @@
                                therefore not use them) if their key is expired.
                              - the remailer refuses to decrypt messages to keys
                                that expired one month ago or earlier.
-                             - the remailer automatically creates new mixmaster
+                             - the remailer automatically creates new Mixmaster
                                keys if the current ones are about to expire or
                                already are expired.
                              - the latest key from secring.mix is written to
                                key.txt. It used to be the first one. Since
                                creation of new mix key appends the key, this
                                seemed sensible.
-                           In RSA PGP keys, we now set e=0x11.
-                           Mixmaster now deletes error and temporary files
-                             older than PACKETEXP time along with expired 
-                             partial packets.
                            Mixmaster now generates dummy messages automatically
                              as mail enters and exits the pool.
-                           Linux PPC fixes (and all other archs where char is
-                             unsigned).
