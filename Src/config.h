@@ -81,7 +81,7 @@
 #ifdef UNIX
 #define DEV_URANDOM "/dev/urandom"
 #ifdef __OpenBSD__
-#define DEV_RANDOM "/dev/srandom"
+#define DEV_RANDOM "/dev/arandom"
 #else
 #define DEV_RANDOM "/dev/random"
 #endif
