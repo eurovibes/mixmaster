@@ -1,4 +1,4 @@
-Mixmaster 2.9 -- anonymous remailer software -- (C) 1999 - 2002 Anonymizer Inc.
+Mixmaster 2.9 -- anonymous remailer software -- (C) 1999 - 2003 Anonymizer Inc.
 -------------------------------------------------------------------------------
 
 PREVIEW VERSION  --  WARNING: THIS SOFTWARE IS UNDER DEVELOPMENT!
@@ -59,7 +59,9 @@ finger from nym.alias.net:
 
 If you wish to participate in the Remailer Abuse Blocklist, you will need
 to obtain the blocklist file from http://www.paracrypt.com/remailerabuse/
-and place it in your Mix directory. This may be automated with cron.
+and place it in your Mix directory. This may be automated with cron. Note 
+that the paracrypt.com site seems to be defunct, so this functionality 
+will not work unless an equivalent service takes its place.
 
 For support for multiple RAB services, edit the file Src/config.h manually,
 and add additional block files to the existing line, such as:
