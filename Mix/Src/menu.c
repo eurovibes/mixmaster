@@ -509,9 +509,7 @@ menu_redraw:
     mvprintw(y++, x, "d)ummy message");
     mvprintw(y++, x, "s)end messages from pool");
     mvprintw(y++, x, "e)dit configuration file");
-#ifdef WIN32
     mvprintw(y++, x, "u)pdate stats");
-#endif /* WIN32 */
     mvprintw(y++, x, "q)uit");
 
     pool = pool_read(NULL);
@@ -587,11 +585,9 @@ menu_redraw:
 	  mix_config();
 	} while (0);
 	break;
-#ifdef WIN32
       case 'u':
 	update_stats();
 	break;
-#endif /* WIN32 */
       case 'q':
       case 'Q':
 	goto quit;

@@ -474,3 +474,6 @@
                            Added stats downloading support. Currently 
                              works under Win32 only (by goblin).
                            Fixed bug in buffers.c.
+
+2004-?????      3.0???
+                           Prefer pubring.asc over secring.pgp.

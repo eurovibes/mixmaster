@@ -40,9 +40,10 @@ int main(int argc, char *argv[])
 #endif /* WIN32SERVICE */
 {
   int error = 0, deflt = 1, help = 0, readmail = 0, send = -1, sendpool = 0,
-  header = 1, maint = 0, keygen = 0, verbose = 2, sign = 0, encrypt = 0,
+  header = 1, maint = 0, keygen = 0, verbose = 0, sign = 0, encrypt = 0,
   redirect_mail = 0, about=0, version=0;
   int daemon = 0, type_list = 0, nodetach = 0;
+  int update_stats = 0, update_pingerlist = 0;
 
 #ifdef USE_SOCK
   int pop3 = 0;
@@ -54,10 +55,11 @@ int main(int argc, char *argv[])
   char *p, *q;
   char chain[1024] = "";
   char nym[LINELEN] = "";
-  BUFFER *nymopt, *pseudonym, *attachments;
+  BUFFER *nymopt, *pseudonym, *attachments, *statssrc;
   int numcopies = 0;		/* default value set in mix.cfg */
   BUFFER *msg, *chainlist, *field, *content;
   FILE *f;
+  char pingpath[PATHMAX];
 
   /* Check if parse_yearmonthday works */
   assert(parse_yearmonthday("2003-04-01") == 1049155200);
@@ -71,6 +73,7 @@ int main(int argc, char *argv[])
   attachments = buf_new();
   field = buf_new();
   content = buf_new();
+  statssrc = buf_new();
 
 #ifdef USE_NCURSES
   if (argc == 1) {
@@ -82,8 +85,7 @@ int main(int argc, char *argv[])
   }
 #endif /* USE_NCURSES */
   if (argc > 1 && strleft(argv[1], "-f")) {
-    menu_folder(strlen(argv[1]) > 2 ? argv[1][2] : 0,
-		argc < 3 ? NULL : argv[2]);
+    menu_folder(strlen(argv[1]) > 2 ? argv[1][2] : 0, argc < 3 ? NULL : argv[2]);
     goto clientpool;
   }
   for (i = 1; i < argc; i++) {
@@ -93,10 +95,10 @@ int main(int argc, char *argv[])
 	p += 2;
 	if (strieq(p, "help"))
 	  help = 1, deflt = 0;
-        else if (streq(p, "version"))
-          version = 1, deflt = 0;
-        else if (streq(p, "about"))
-          about = 1, deflt = 0;
+	else if (streq(p, "version"))
+	  version = 1, deflt = 0;
+	else if (streq(p, "about"))
+	  about = 1, deflt = 0;
 	else if (streq(p, "verbose"))
 	  verbose = 1;
 	else if (streq(p, "type-list"))
@@ -133,7 +135,30 @@ int main(int argc, char *argv[])
 	  sign = 1;
 	else if (streq(p, "encrypt"))
 	  encrypt = 1;
-	else if ((q = largopt(p, "to", argv[0], &error)) != NULL) {
+	else if (streq(p, "update-pinger-list"))
+	  update_pingerlist = 1;
+	else if (streq(p, "update-stats")) {
+	  buf_clear(statssrc);
+	  f = mix_openfile(STATSSRC, "r");
+	  if (f != NULL) {
+	    buf_read(statssrc, f);
+	    fclose(f);
+	  }
+	  if (statssrc->length > 0) {
+	    update_stats = 1;
+	  } else {
+	    deflt = 0;
+	    fprintf(stderr, "%s: No current stats source --%s\n", argv[0], p);
+	  }
+	} else if (strleft(p, "update-stats") && p[strlen("update-stats")] == '=') {
+	  buf_clear(statssrc);
+	  buf_appendf(statssrc, "%s", (p + strlen("update-stats") + 1));
+	  if (statssrc->length > 0) {
+	    update_stats = 1;
+	  } else {
+	    fprintf(stderr, "%s: No stats source specified --%s\n", argv[0], p);
+	  }
+	} else if ((q = largopt(p, "to", argv[0], &error)) != NULL) {
 	  header = 0;
 	  buf_appendf(msg, "To: %s\n", q);
 	} else if ((q = largopt(p, "post-to", argv[0], &error)) != NULL) {
@@ -219,9 +244,9 @@ int main(int argc, char *argv[])
 	  case 'T':
 	    type_list = 1;
 	    break;
-          case 'V':
-            version = 1, deflt = 0;
-            break;
+	  case 'V':
+	    version = 1, deflt = 0;
+	    break;
 	  case 't':
 	    if (*(p + 1) == 'o')
 	      p++;
@@ -229,8 +254,7 @@ int main(int argc, char *argv[])
 	    if (i < argc - 1)
 	      buf_appendf(msg, "To: %s\n", argv[++i]);
 	    else {
-	      fprintf(stderr, "%s: Missing argument for option -to\n",
-		      argv[0]);
+	      fprintf(stderr, "%s: Missing argument for option -to\n", argv[0]);
 	      error = 1;
 	    }
 	    break;
@@ -339,7 +363,43 @@ int main(int argc, char *argv[])
   }
   if (version) {
     printf("Mixmaster %s\n", VERSION);
-    ret = 0;  
+    ret = 0;
+    goto end;
+  }
+  if (update_pingerlist) {
+    mixfile(pingpath, ALLPINGERSFILE);
+    if (verbose) printf ("downloading %s...\n", ALLPINGERSURL);
+    if (url_download(ALLPINGERSURL, pingpath) < 0) {
+      printf("    Download failed... Try again later.\n");
+      errlog(ERRORMSG, "All Pingers File Download failed.\n");
+    } else {
+      if (verbose) printf("    Done.\n");
+      errlog(LOG, "All Pingers File Downloaded OK.\n");
+    }
+    ret = 0;
+    goto end;
+  }
+  if (update_stats) {
+    BUFFER *inifile;
+    inifile = buf_new();
+    read_allpingers(inifile);
+    if (good_stats_source(inifile, statssrc->data) == 1) {
+      if (stats_download(inifile, statssrc->data, 0) == 0) {
+	f = mix_openfile(STATSSRC, "w+");
+	if (f != NULL) {
+	  fprintf(f, "%s", statssrc->data);
+	  fclose(f);
+	} else {
+	  fprintf(stderr, "Could not open stats source file for writing\n");
+	  errlog(ERRORMSG, "Could not open stats source file for writing.\n");
+	}
+      }
+    } else {
+      fprintf(stderr, "Stats source does not include all required files.\n");
+      errlog(ERRORMSG, "Stats source does not include all required files.\n");
+    }
+    ret = 0;
+    buf_free(inifile);
     goto end;
   }
   if (help ||about ||(isatty(fileno(stdin)) && isatty(fileno(stdout))))
@@ -357,7 +417,7 @@ int main(int argc, char *argv[])
     printf("\nand others. For full information on copyright and license issues,\n");
     printf("read the bundled file COPYRIGHT.\n\n");
     ret = 0;
-    goto end;  
+    goto end;
   }
   if (help) {
     printf("Usage: %s [options] [user@host] [filename]\n\n", argv[0]);
@@ -393,7 +453,10 @@ int main(int argc, char *argv[])
 #endif /* NYMSUPPORT */
 #endif /* USE_PGP */
 	   "-v, --verbose                     output informational messages\n\
--f [file]                         read a mail folder\n"
+-f [file]                         read a mail folder\n\
+    --update-pinger-list          Download an updated all pingers list file\n\
+    --update-stats[=source]       Download updated stats\n"
+
 #ifndef USE_NCURSES
 	   "\n-fr, -ff, -fg [file]              send reply/followup/group reply to a message\n"
 #endif /* USE_NCURSES */
@@ -568,12 +631,12 @@ WinNT service:\n\
     if (mix_encrypt(MSG_NULL, NULL, chain, numcopies, chainlist) == -1) {
       ret = 2;
       if (chainlist->length)
-	fprintf(stderr, "%s\n", chainlist->data);
+	printf("%s\n", chainlist->data);
       else
 	fprintf(stderr, "Failed!\n");
     } else if (verbose) {
-      fprintf(stderr, "Chain: ");
-      buf_write(chainlist, stderr);
+      printf("Chain: ");
+      buf_write(chainlist, stdout);
     }
   }
 #ifdef USE_PGP
@@ -640,6 +703,7 @@ end:
   buf_free(nymopt);
   buf_free(pseudonym);
   buf_free(attachments);
+  buf_free(statssrc);
 
   if (daemon) {
     check_get_pass(1);
@@ -679,7 +743,7 @@ end:
 #endif /* UNIX */
     mix_daemon();
 #ifdef UNIX
-/* ifdef this one to, so that we do not need to export it from windows dll */
+/* ifdef this one too, so that we do not need to export it from windows dll */
     clear_pidfile(PIDFILE);
 #endif /* UNIX */
   }

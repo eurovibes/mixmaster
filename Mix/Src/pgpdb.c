@@ -259,10 +259,10 @@ int pgpdb_getkey(int mode, int algo, int *sym, int *mdc, long *expires, BUFFER *
       break;
     case PK_ENCRYPT:
     case PK_VERIFY:
-      r = pgpdb_open(PGPREMPUBRING, NULL, 0, PGP_TYPE_PUBLIC);
+      r = pgpdb_open(PGPREMPUBASC, NULL, 0, PGP_TYPE_PUBLIC);
       if (r != NULL && r->filetype == -1) {
 	pgpdb_close(r);
-	r = pgpdb_open(PGPREMPUBASC, NULL, 0, PGP_TYPE_PUBLIC);
+	r = pgpdb_open(PGPREMPUBRING, NULL, 0, PGP_TYPE_PUBLIC);
       }
       break;
     default:
@@ -536,8 +536,8 @@ int pgp_rlist(REMAILER remailer[], int n)
   p = buf_new();
   for (i = 1; i < n; i++)
     pgpkey[i] = 0;
-  if (pgp_readkeyring(keyring, PGPREMPUBRING) == -1)
-    pgp_readkeyring(keyring, PGPREMPUBASC);
+  if (pgp_readkeyring(keyring, PGPREMPUBASC) == -1)
+    pgp_readkeyring(keyring, PGPREMPUBRING);
   while ((type = pgp_getpacket(keyring, p)) != -1)
     if (type == PGP_USERID)
       for (i = 1; i < n; i++)

@@ -1,3 +1,10 @@
+stats stuff:
+ - move things out of main into their own functions
+ - let it use the logging functions
+ - allow the daemon to update stats at regular intervals
+ - let wget download to temporary files, and only move them over the existing
+   stats when all downloads succeeded (and perhaps passed basic sanity checks)
+
 Items that need to be completed before the next MAIN release:
 
 - Full functionality / regression testing around chain operations
@@ -7,10 +14,6 @@ Items that need to be completed before the next MAIN release:
   - rename pop3.cfg to pop3.cfg.txt
   - different editor handling?  if so, provide suggestions.
   - Sane randomness handling
-- stats stuff:
-  - port it to unix
-  - use proper configured filenames
-  - make the allpingers filename and url configureable
 - Add equivalent features to -V and --about to mpgp and document in mpgp.1
 - Remove OpenSSL version checks. Maybe print a message stating the 
   supported versions, and leave it up to the user?
