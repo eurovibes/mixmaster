@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.8 2002/07/24 07:48:50 rabbi Exp $ */
+   $Id: mix.c,v 1.9 2002/07/24 09:00:11 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -33,6 +33,46 @@
 #include "menu.h"
 
 int buf_vappendf(BUFFER *b, char *fmt, va_list args);
+
+/** filenames ************************************************************/
+char MIXCONF[PATHMAX] = DEFAULT_MIXCONF;       /* mixmaster configuration file */
+char DISCLAIMFILE[PATHMAX] = DEFAULT_DISCLAIMFILE;
+char FROMDSCLFILE[PATHMAX] = DEFAULT_FROMDSCLFILE;
+char POP3CONF[PATHMAX] = DEFAULT_POP3CONF;
+char HELPFILE[PATHMAX] = DEFAULT_HELPFILE;
+char ABUSEFILE[PATHMAX] = DEFAULT_ABUSEFILE;
+char REPLYFILE[PATHMAX] = DEFAULT_REPLYFILE;
+char USAGEFILE[PATHMAX] = DEFAULT_USAGEFILE;
+char USAGELOG[PATHMAX] = DEFAULT_USAGELOG;
+char BLOCKFILE[PATHMAX] = DEFAULT_BLOCKFILE;
+char ADMKEYFILE[PATHMAX] = DEFAULT_ADMKEYFILE;
+char KEYFILE[PATHMAX] = DEFAULT_KEYFILE;
+char PGPKEY[PATHMAX] = DEFAULT_PGPKEY;
+char DSAPARAMS[PATHMAX] = DEFAULT_DSAPARAMS;
+char DHPARAMS[PATHMAX] = DEFAULT_DHPARAMS;
+char MIXRAND[PATHMAX] = DEFAULT_MIXRAND;
+char SECRING[PATHMAX] = DEFAULT_SECRING;
+char PUBRING[PATHMAX] = DEFAULT_PUBRING;
+char IDLOG[PATHMAX] = DEFAULT_IDLOG;
+char STATS[PATHMAX] = DEFAULT_STATS;
+/* To enable multiple dest.blk files, edit the following line. */
+/* Filenames must be seperated by one space.                   */
+char DESTBLOCK[PATHMAX] = DEFAULT_DESTBLOCK;
+char DESTALLOW[PATHMAX] = DEFAULT_DESTALLOW;
+char SOURCEBLOCK[PATHMAX] = DEFAULT_SOURCEBLOCK;
+char HDRFILTER[PATHMAX] = DEFAULT_HDRFILTER;
+char REGULAR[PATHMAX] = DEFAULT_REGULAR;
+char POOL[PATHMAX] = DEFAULT_POOL;             /* remailer pool subdirectory */
+char TYPE1LIST[PATHMAX] = DEFAULT_TYPE1LIST;
+char TYPE2REL[PATHMAX] = DEFAULT_TYPE2REL;
+char TYPE2LIST[PATHMAX] = DEFAULT_TYPE2LIST;
+
+char PGPREMPUBRING[PATHMAX] = DEFAULT_PGPREMPUBRING;
+char PGPREMPUBASC[PATHMAX] = DEFAULT_PGPREMPUBASC;
+char PGPREMSECRING[PATHMAX] = DEFAULT_PGPREMSECRING;
+char NYMSECRING[PATHMAX] = DEFAULT_NYMSECRING;
+char NYMDB[PATHMAX] = DEFAULT_NYMDB;
+
 
 /** config ***************************************************************/
 
@@ -331,7 +371,26 @@ int mix_configline(char *line)
 	  read_conf(MAILBOX) || read_conf(MAILABUSE) ||
 	  read_conf(MAILBLOCK) || read_conf(MAILUSAGE) ||
 	  read_conf(MAILANON) || read_conf(MAILERROR) ||
-	  read_conf(MAILBOUNCE));
+	  read_conf(MAILBOUNCE) ||
+
+	  read_conf(DISCLAIMFILE) || read_conf(FROMDSCLFILE) ||
+	  read_conf(POP3CONF) || read_conf(HELPFILE) ||
+	  read_conf(ABUSEFILE) || read_conf(REPLYFILE) ||
+	  read_conf(USAGEFILE) || read_conf(USAGELOG) ||
+	  read_conf(BLOCKFILE) || read_conf(ADMKEYFILE) ||
+	  read_conf(KEYFILE) || read_conf(PGPKEY) ||
+	  read_conf(DSAPARAMS) || read_conf(DHPARAMS) ||
+	  read_conf(MIXRAND) || read_conf(SECRING) ||
+	  read_conf(PUBRING) || read_conf(IDLOG) ||
+	  read_conf(STATS) || read_conf(DESTBLOCK) ||
+	  read_conf(DESTALLOW) || read_conf(SOURCEBLOCK) ||
+	  read_conf(HDRFILTER) || read_conf(REGULAR) ||
+	  read_conf(POOL) || read_conf(TYPE1LIST) ||
+	  read_conf(TYPE2REL) || read_conf(TYPE2LIST) ||
+	  read_conf(PGPREMPUBRING) || read_conf(PGPREMPUBASC) ||
+	  read_conf(PGPREMSECRING) || read_conf(NYMSECRING) ||
+	  read_conf(NYMDB) );
+
 }
 
 static int mix_config(void)
@@ -385,7 +444,7 @@ static int mix_config(void)
     line[PATHMAX-1] = '\0';
     if (line[strlen(line) - 1] != DIRSEP)
       strcatn(line, DIRSEPSTR, PATHMAX);
-    strcatn(line, "Mix", PATHMAX);
+    strcatn(line, HOMEMIXDIR, PATHMAX);
     err = mixdir(line, 1);
   }
 #endif
@@ -408,6 +467,15 @@ static int mix_config(void)
 #endif
       strncpy(POOLDIR, MIXDIR, PATHMAX);
 
+#ifdef GLOBALMIXCONF
+  f = mix_openfile(GLOBALMIXCONF, "r");
+  if (f != NULL) {
+    while (fgets(line, LINELEN, f) != NULL)
+      if (line[0] > ' ' && line[0] != '#')
+	mix_configline(line);
+    fclose(f);
+  }
+#endif
   f = mix_openfile(MIXCONF, "r");
   if (f != NULL) {
     while (fgets(line, LINELEN, f) != NULL)
@@ -517,6 +585,8 @@ static int mix_config(void)
     strncpy(NEWS, MAILtoNEWS, sizeof(NEWS));
 
   if (f == NULL) {
+#ifndef GLOBALMIXCONF
+    /* Only write the config file in non systemwide installation */
     f = mix_openfile(MIXCONF, "w");
     if (f == NULL)
       errlog(WARNING, "Can't open %s%s!\n", MIXDIR, MIXCONF);
@@ -531,6 +601,7 @@ static int mix_config(void)
       fprintf(f, "COMPLAINTS	%s\n", COMPLAINTS);
       fclose(f);
     }
+#endif
     REMAIL = 0;
   }
 

@@ -1,5 +1,5 @@
 .TH MIX 1 "Mixmaster Version 3.0 beta"
-.\" $Id: mix.1,v 1.4 2002/07/24 07:48:50 rabbi Exp $
+.\" $Id: mix.1,v 1.5 2002/07/24 09:00:10 weaselp Exp $
 .SH NAME
 mix \- anonymous remailer software
 .SH SYNOPSIS
@@ -689,57 +689,59 @@ The
 .BR getdomainname (2)
 function is available.
 .SH FILES
+These filenames can be overriden by setting the corresponding configuration
+option (given in parentheses).
 .TP
 .B mix.cfg
 Mixmaster configuration file.
 .TP
 .B pubring.asc
-Type 1 remailer keys.
+Type 1 remailer keys (\fBPGPREMPUBASC\fP).
 .TP
 .B pubring.mix
-Type 2 remailer keys.
+Type 2 remailer keys (\fBPUBRING\fP).
 .TP
 .B rlist.txt
-List of reliable type 1 remailers.
+List of reliable type 1 remailers (\fBTYPE1LIST\fP).
 .TP
 .B mlist.txt 
-List of reliable type 2 remailers.
+List of reliable type 2 remailers (\fBTYPE2REL\fP).
 .TP
 .B type2.list
-List of known type 2 remailers (optional).
+List of known type 2 remailers (optional) (\fBTYPE2LIST\fP).
 .SS Remailer files:
 .TP
 .B disclaim.txt
 A string to be inserted in the header of all anonymous
-messages.
+messages (\fBDISCLAIMFILE\fP).
 .TP
 .B fromdscl.txt
 A string to be inserted at the top of the message body
 if an anonymous message contains a user-supplied
 .B From:
-line.
+line (\fBFROMDSCLFILE\fP).
 .TP
 .B help.txt
 Help file sent in response to
 .B remailer-help
-requests.
+requests (\fBHELPFILE\fP).
 .TP
 .B adminkey.txt
 The PGP key of the remailer operator sent in response to
 .B remailer-adminkey
-requests.
+requests (\fBADMKEYFILE\fP).
 .TP
 .B abuse.txt
 File sent in response to mail to the
 .I COMPLAINTS
 address if
 .B AUTOREPLY
-is set.
+is set (\fBABUSEFILE\fP).
 .TP
 .B reply.txt
 Help file sent in response to replies to anonymous messages if
 .B AUTOREPLY
-is set.
+is set (\fBREPLYFILE\fP).
 .TP
 .B usage.txt
 Help file sent in response to non-remailer message sent to
@@ -749,25 +751,25 @@ if
 is set. If
 .B usage.log
 exists, recipients are logged and a reply is sent only once to avoid
-mail loops.
+mail loops (\fBUSAGEFILE\fP).
 .TP
 .B blocked.txt
 Information sent in response to automatically processed blocking requests if
 .B AUTOREPLY
-is set.
+is set (\fBBLOCKFILE\fP).
 .TP
 .B pop3.cfg
 List of POP3 accounts with lines of the form
 .I account@host.domain password
 to get remailer messages from. The lines may optionally contain the
-keyword "apop" or "pass" to select an authentication method.
+keyword "apop" or "pass" to select an authentication method (\fBPOP3CONF\fP).
 .TP
 .B dest.alw
-List of addresses to which Mixmaster will deliver, even in middleman mode.
+List of addresses to which Mixmaster will deliver, even in middleman mode (\fBDESTALLOW\fP).
 .TP
 .B dest.blk
 List of blocked destination addresses.
-Mixmaster does not send mail to the blocked addresses listed in this file.
+Mixmaster does not send mail to the blocked addresses listed in this file (\fBDESTBLOCK\fP).
 .TP
 .B rab.blk
 Identical to
@@ -778,12 +780,12 @@ For use with external remailer abuse blocklists.
 .B source.blk
 List of blocked source addresses.  If an incoming message originates
 from an address or IP in this in this list, it will be ignored. This
-feature can be used to avoid spam and other abusive mail.
+feature can be used to avoid spam and other abusive mail (\fBSOURCEBLOCK\fP).
 .TP
 .B header.blk
 List of unwanted header fields. The file is used to delete unwanted
 header lines (e.g. lines that indicate a false identity, or Usenet
-control messages), and do other header filtering.
+control messages), and do other header filtering (\fBHDRFILTER\fP).
 .PP
 A destination address or header line is left out if it contains a
 search string or matches a regular expression specified in the block
@@ -812,40 +814,40 @@ line, while replacing any given address with the remailer address.
 Mixmaster uses the following files internally:
 .TP
 .B mixrand.bin
-Random seed file.
+Random seed file (\fBMIXRAND\fP).
 .TP
 .B secrets.mix
-List of your nyms with configuration data (encrypted).
+List of your nyms with configuration data (encrypted) (\fBNYMDB\fP).
 .TP
 .B nymsec.pgp
-Your nyms' secret PGP keys (encrypted).
+Your nyms' secret PGP keys (encrypted) (\fBNYMSECRING\fP).
 .TP
 .B secring.pgp
-Remailer type 1 secret keys.
+Remailer type 1 secret keys (\fBPGPREMSECRING\fP).
 .TP
 .B secring.mix
-Remailer type 2 secret keys.
+Remailer type 2 secret keys (\fBSECRING\fP).
 .TP
 .B pgpkey.txt
-The public type 1 remailer key.
+The public type 1 remailer key (\fBPGPKEY\fP).
 .TP
 .B key.txt
-The public type 2 remailer key.
+The public type 2 remailer key (\fB\fP).
 .TP
 .B id.log
-Log file of messages already processed.
+Log file of messages already processed (\fBKEYFILE\fP).
 .TP
 .B stats.log
-Log file for remailer statistics.
+Log file for remailer statistics (\fBSTATS\fP).
 .TP
 .B time.log
-Time for periodic remailer actions.
+Time for periodic remailer actions (\fBREGULAR\fP).
 .TP
 .B dhparam.mix
-Public Diffie-Hellman parameters used for El-Gamal key generation.
+Public Diffie-Hellman parameters used for El-Gamal key generation (\fBDHPARAMS\fP).
 .TP
 .B dsaparam.mix
-Public DSA parameters used for DSA key generation.
+Public DSA parameters used for DSA key generation (\fBDSAPARAMS\fP).
 .TP
 .BI pool/m *
 Message pool.

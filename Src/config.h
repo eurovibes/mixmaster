@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.8 2002/07/24 07:58:55 weaselp Exp $ */
+   $Id: config.h,v 1.9 2002/07/24 09:00:11 weaselp Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -132,49 +132,93 @@
 #define LINELEN 128
 #define BUFSIZE 4096
 
-/** file names ********************************************************/
+/** if it is a systemwide installation defined GLOBALMIXCONF **********/
+/* #define GLOBALMIXCONF "/etc/mix.cfg" */
 
-#define MIXCONF "mix.cfg"	/* mixmaster configuration file */
-#define DISCLAIMFILE "disclaim.txt"
-#define FROMDSCLFILE "fromdscl.txt"
-#define POP3CONF "pop3.cfg"
-#define HELPFILE "help.txt"
-#define ABUSEFILE "abuse.txt"
-#define REPLYFILE "reply.txt"
-#define USAGEFILE "usage.txt"
-#define USAGELOG "usage.log"
-#define BLOCKFILE "blocked.txt"
-#define ADMKEYFILE "adminkey.txt"
-#define KEYFILE "key.txt"
-#define PGPKEY "pgpkey.txt"
-#define DSAPARAMS "dsaparam.mix"
-#define DHPARAMS "dhparam.mix"
-#define MIXRAND "mixrand.bin"
-#define SECRING "secring.mix"
-#define PUBRING "pubring.mix"
-#define IDLOG "id.log"
-#define STATS "stats.log"
-/* To enable multiple dest.blk files, edit the following line. */
-/* Filenames must be seperated by one space.                   */
-#define DESTBLOCK "dest.blk rab.blk"
-#define DESTALLOW "dest.alw"
-#define SOURCEBLOCK "source.blk"
-#define HDRFILTER "header.blk"
-#define REGULAR "time.log"
-#define POOL "pool"		/* remailer pool subdirectory */
-#define TYPE1LIST "rlist.txt"
-#define TYPE2REL "mlist.txt"
-#ifdef SHORTNAMES
-#define TYPE2LIST "type2.lis"
-#else
-#define TYPE2LIST "type2.list"
+/* The path to append to a user's homedirectory for his local Mix dir */
+#ifndef HOMEMIXDIR
+#define HOMEMIXDIR "Mix"
 #endif
 
-#define PGPREMPUBRING "pubring.pgp"
-#define PGPREMPUBASC "pubring.asc"
-#define PGPREMSECRING "secring.pgp"
-#define NYMSECRING "nymsec.pgp"
-#define NYMDB "secrets.mix"
+/** file names ********************************************************/
+
+#define DEFAULT_MIXCONF "mix.cfg"      /* mixmaster configuration file */
+#define DEFAULT_DISCLAIMFILE "disclaim.txt"
+#define DEFAULT_FROMDSCLFILE "fromdscl.txt"
+#define DEFAULT_POP3CONF "pop3.cfg"
+#define DEFAULT_HELPFILE "help.txt"
+#define DEFAULT_ABUSEFILE "abuse.txt"
+#define DEFAULT_REPLYFILE "reply.txt"
+#define DEFAULT_USAGEFILE "usage.txt"
+#define DEFAULT_USAGELOG "usage.log"
+#define DEFAULT_BLOCKFILE "blocked.txt"
+#define DEFAULT_ADMKEYFILE "adminkey.txt"
+#define DEFAULT_KEYFILE "key.txt"
+#define DEFAULT_PGPKEY "pgpkey.txt"
+#define DEFAULT_DSAPARAMS "dsaparam.mix"
+#define DEFAULT_DHPARAMS "dhparam.mix"
+#define DEFAULT_MIXRAND "mixrand.bin"
+#define DEFAULT_SECRING "secring.mix"
+#define DEFAULT_PUBRING "pubring.mix"
+#define DEFAULT_IDLOG "id.log"
+#define DEFAULT_STATS "stats.log"
+/* To enable multiple dest.blk files, edit the following line. */
+/* Filenames must be seperated by one space.                   */
+#define DEFAULT_DESTBLOCK "dest.blk rab.blk"
+#define DEFAULT_DESTALLOW "dest.alw"
+#define DEFAULT_SOURCEBLOCK "source.blk"
+#define DEFAULT_HDRFILTER "header.blk"
+#define DEFAULT_REGULAR "time.log"
+#define DEFAULT_POOL "pool"            /* remailer pool subdirectory */
+#define DEFAULT_TYPE1LIST "rlist.txt"
+#define DEFAULT_TYPE2REL "mlist.txt"
+#ifdef SHORTNAMES
+#define DEFAULT_TYPE2LIST "type2.lis"
+#else
+#define DEFAULT_TYPE2LIST "type2.list"
+#endif
+  
+#define DEFAULT_PGPREMPUBRING "pubring.pgp"
+#define DEFAULT_PGPREMPUBASC "pubring.asc"
+#define DEFAULT_PGPREMSECRING "secring.pgp"
+#define DEFAULT_NYMSECRING "nymsec.pgp"
+#define DEFAULT_NYMDB "secrets.mix"
+
+extern char MIXCONF[];
+extern char DISCLAIMFILE[];
+extern char FROMDSCLFILE[];
+extern char POP3CONF[];
+extern char HELPFILE[];
+extern char ABUSEFILE[];
+extern char REPLYFILE[];
+extern char USAGEFILE[];
+extern char USAGELOG[];
+extern char BLOCKFILE[];
+extern char ADMKEYFILE[];
+extern char KEYFILE[];
+extern char PGPKEY[];
+extern char DSAPARAMS[];
+extern char DHPARAMS[];
+extern char MIXRAND[];
+extern char SECRING[];
+extern char PUBRING[];
+extern char IDLOG[];
+extern char STATS[];
+extern char DESTBLOCK[];
+extern char DESTALLOW[];
+extern char SOURCEBLOCK[];
+extern char HDRFILTER[];
+extern char REGULAR[];
+extern char POOL[];
+extern char TYPE1LIST[];
+extern char TYPE2REL[];
+extern char TYPE2LIST[];
+
+extern char PGPREMPUBRING[];
+extern char PGPREMPUBASC[];
+extern char PGPREMSECRING[];
+extern char NYMSECRING[];
+extern char NYMDB[];
 
 /* string constants */
 #define remailer_type "Remailer-Type: Mixmaster "
