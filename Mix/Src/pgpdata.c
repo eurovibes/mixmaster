@@ -6,7 +6,7 @@
    details.
 
    OpenPGP data
-   $Id: pgpdata.c,v 1.23 2002/09/26 22:28:25 weaselp Exp $ */
+   $Id: pgpdata.c,v 1.24 2002/10/01 08:23:20 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -974,13 +974,15 @@ end:
   return (err);
 }
 
-int pgp_makeseckey(BUFFER *keypacket, BUFFER *outtxt,
+int pgp_makekeyheader(int type, BUFFER *keypacket, BUFFER *outtxt,
 		   BUFFER *pass, int keyalgo)
 {
   BUFFER *p, *pubkey, *seckey, *subkey, *sig, *tmp, *dummy;
-  int type, thisalgo, err = -1;
+  int thisalgo, err = -1;
   time_t created;
 
+  assert(type == PGP_SECKEY || type == PGP_PUBKEY);
+  
   p = buf_new();
   seckey = buf_new();
   pubkey = buf_new();
@@ -990,18 +992,17 @@ int pgp_makeseckey(BUFFER *keypacket, BUFFER *outtxt,
   dummy = buf_new();
 
   buf_set(seckey, keypacket);
-  type = pgp_getpacket(keypacket, p);
-  if (type != PGP_SECKEY)
+  if (type != pgp_getpacket(keypacket, p))
     goto end;
 
-  thisalgo = pgp_makepkpacket(PGP_SECKEY, p, outtxt, tmp, pubkey, pass,
+  thisalgo = pgp_makepkpacket(type, p, outtxt, tmp, pubkey, pass,
 			      &created);
   if (thisalgo == -1 || (keyalgo != 0 && keyalgo != thisalgo))
     goto end;
 
   while ((type = pgp_getpacket(keypacket, p)) > 0) {
-    if (type == PGP_SECSUBKEY) {
-      if (pgp_makepkpacket(PGP_SECSUBKEY, p, outtxt, dummy, subkey, pass,
+    if (type == PGP_SECSUBKEY || type == PGP_PUBSUBKEY) {
+      if (pgp_makepkpacket(type, p, outtxt, dummy, subkey, pass,
 			   &created) == -1)
 	goto end;
       buf_nl(outtxt);

@@ -6,7 +6,7 @@
    details.
 
    OpenPGP messages
-   $Id: pgp.h,v 1.13 2002/09/26 22:28:25 weaselp Exp $ */
+   $Id: pgp.h,v 1.14 2002/10/01 08:23:20 weaselp Exp $ */
 
 
 #ifdef USE_PGP
@@ -115,7 +115,7 @@ int pgp_rsa(BUFFER *buf, BUFFER *key, int mode);
 void pgp_sigcanonic(BUFFER *msg);
 int pgp_makepubkey(BUFFER *seckey, BUFFER *outtxt, BUFFER *pubkey,
 		   BUFFER *pass, int keyalgo);
-int pgp_makeseckey(BUFFER *keypacket, BUFFER *outtxt,
+int pgp_makekeyheader(int type, BUFFER *keypacket, BUFFER *outtxt,
                    BUFFER *pass, int keyalgo);
 int pgp_getkey(int mode, int algo, int *sym, int *mdc, long *expires, BUFFER *keypacket, BUFFER *key,
 	       BUFFER *keyid, BUFFER *userid, BUFFER *pass);
