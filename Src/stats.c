@@ -6,7 +6,7 @@
    details.
 
    Remailer statistics
-   $Id: stats.c,v 1.5 2002/07/10 01:55:16 weaselp Exp $ */
+   $Id: stats.c,v 1.6 2002/07/25 11:52:26 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -261,6 +261,7 @@ int conf(BUFFER *out)
     }
   }
 
+  flag = 0;
   f = mix_openfile(HDRFILTER, "r");
   if (f != NULL) {
     buf_read(b, f);
