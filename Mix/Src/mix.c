@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.11.2.1 2002/10/04 23:49:16 rabbi Exp $ */
+   $Id: mix.c,v 1.11.2.2 2002/10/05 00:39:25 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -460,19 +460,6 @@ int mix_config(void)
     getcwd(MIXDIR, PATHMAX);
     mixdir(MIXDIR, 0);
   }
-
-  strncpy(POOLDIR, MIXDIR, PATHMAX - 32);
-  strcatn(POOLDIR, POOL, PATHMAX);
-  if (POOLDIR[strlen(POOLDIR) - 1] == DIRSEP)
-    POOLDIR[strlen(POOLDIR) - 1] = '\0';
-  if (stat(POOLDIR, &buf) != 0)
-    if
-#ifndef POSIX
-      (mkdir(POOLDIR) != 0)
-#else
-      (mkdir(POOLDIR, S_IRWXU) == -1)
-#endif
-      strncpy(POOLDIR, MIXDIR, PATHMAX);
 
 #ifdef GLOBALMIXCONF
   f = mix_openfile(GLOBALMIXCONF, "r");

@@ -107,4 +107,4 @@ EXPORTS
     VERBOSE                         @102
     pgp_signtxt                     @103
     PASSPHRASE                      @104
-
+    mix_config                      @105
