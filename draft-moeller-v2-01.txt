@@ -508,8 +508,21 @@ authenticity of the key files.
 
 5.1 Key Rotation
 
-[Describe key rotation here. We need a good policy for this -- is what we
-do in CVS the right thing wrt to partitioning implications? -LS]
+Beginning with version 3.0, Mixmaster offers automatic key rotation. Care
+must be taken to minimize the possibility for partitioning attacks during
+the key rotation window.
+
+Keys are generated with a validity date and an expiration date. Mixmaster
+clients only display keys which are currently valid and not expired.
+
+Keys are valid for a 13 month period. Mixmaster remailers generate new
+keys when the existing key's expiration date is one month or less in the
+future. Remailers report the most recently generated key as the remailer
+key when queried, effectively giving each key a 12 month service period.
+
+Remailers continue to decrypt and process mail encrypted to expired keys
+for one week past the expiration date on the key. One week after
+expiration, an expired remailer key should be securely destroyed.
 
 6. Delivery of Anonymous Messages
 
