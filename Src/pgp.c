@@ -6,7 +6,7 @@
    details.
 
    OpenPGP messages
-   $Id: pgp.c,v 1.3 2002/08/03 17:08:02 weaselp Exp $ */
+   $Id: pgp.c,v 1.4 2002/08/15 16:52:11 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -433,6 +433,8 @@ int pgp_signtxt(BUFFER *msg, BUFFER *uid, BUFFER *pass,
 
   buf_appends(out, begin_pgpsigned);
   buf_nl(out);
+  if (pgpdb_getkey(PK_SIGN, PGP_ANY, NULL, NULL, NULL, uid, NULL, NULL, secring, pass) == PGP_S_DSA)
+    buf_appends(out, "Hash: SHA1\n");
   buf_nl(out);
   while (buf_getline(msg, line) != -1) {
     if (line->data[0] == '-')
