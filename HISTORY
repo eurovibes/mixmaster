@@ -288,6 +288,8 @@
                              string.
                            Minor configuration default changes and Install 
                              script fixes.
+                           Install script now always uses "make" and not 
+                             "gmake". IDEA detection is fixed.
 
 2002-10-18      3.0a1      Applied Maildir feature patch by drt@un.bewaff.net,
                              with some changes by PP:
@@ -327,6 +329,7 @@
                                seemed sensible.
                            Mixmaster now generates dummy messages automatically
                              as mail enters and exits the pool.
-                           New Star-Exclude feature by Colin: Certain remailers
-                             can be excluded from chosen as random hops.
-                             as mail enters and exits the pool.
+
+2002-xx-xx      3.0a2      New Star-Exclude feature by Colin Tuckley: 
+                             User-selected remailers can be excluded from 
+                             being chosen as random hops.

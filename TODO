@@ -36,6 +36,7 @@ Items for 3.0 or 3.0.1
 * support a list of remailers not to be selected as *.
   - a user suggested allowing filtering regexen over chains.
     useful?  <20021001215010.28351.qmail@nym.alias.net>
+  - documentation for Colin's patch is needed.
 * allow for verification of clearsigned OpenPGP messages
 * AES support -- requires OpenSSL 0.9.7
 * further mpgp testing of AES/MDC packet support
