@@ -985,9 +985,8 @@ y)es, post locally; use m)ail-to-news gateway; n)o."
 # echo "How many messages do you want to keep in the reordering pool?
 #A larger pool is more secure, but also causes higher latency.
 #0 means to remail immediately."
-# readln "Pool size:" 20
+# readln "Pool size:" 45
 # poolsize=$ans
-poolsize=25
 
  mbox=
  if [ -f ~/.forward ]
@@ -1062,11 +1061,12 @@ ORGANIZATION	$orga
 MID		$mid
 
 # Remailing strategy:
-SENDPOOLTIME    10m
-POOLSIZE        $poolsize
-RATE            30
-INDUMMYP        3
-OUTDUMMYP       10
+SENDPOOLTIME    15m
+POOLSIZE        45
+RATE            65
+INDUMMYP        10
+OUTDUMMYP       90
+CHAIN           *,*,*,*
 IDEXP           7d
 PACKETEXP       7d
 

@@ -1,5 +1,5 @@
 ## mix.cfg - Mixmaster configuration file
-## see mix(1) for a description
+## see mixmaster(1) for a description
 ##
 ## All paths relative to compile-time defined SPOOL (default: ~/Mix)
 ## Can be overriden by environment variable $MIXPATH 
@@ -75,13 +75,13 @@ SIZELIMIT           0
 
 ## Remailing strategy:
 MAILINTIME          5m
-SENDPOOLTIME        10m
-POOLSIZE            25
-RATE                30
+SENDPOOLTIME        15m
+POOLSIZE            45
+RATE                65
 
 ## Dummy generation probabilities
-INDUMMYP            3
-OUTDUMMYP           10 
+INDUMMYP            10
+OUTDUMMYP           90 
 
 ## How long to store packet IDs and incomplete message parts
 IDEXP               7d
