@@ -38,8 +38,6 @@ perhaps has a list of more remailer clients.
 
 <h2>Other Remailers</h2>
 
-<h3>Reliable</h3>
-
 <a href="http://www.bigfoot.com/~potatoware/reli">Reliable</a> is
 a popular piece remailer software for Microsoft Windows. It is type I
 (cypherpunk) only but has type II callbacks. So if you additionally install
