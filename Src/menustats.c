@@ -232,6 +232,44 @@ int good_stats_source (BUFFER *allpingers, char *sourcename) {
   buf_free (value);
   return (res);
 }
+
+/* Do a stats download update and report status */
+/* 0  on success              */
+/* -1 File download failed    */
+/* -2 Error writing file      */
+/* -3 Stats source incomplete */
+
+int download_stats(char *sourcename) {
+  BUFFER *inifile;
+  FILE *f;
+  int ret;
+  inifile = buf_new();
+  read_allpingers(inifile);
+  if (good_stats_source(inifile, sourcename) == 1) {
+    if (stats_download(inifile, sourcename, 0) == 0) {
+      f = mix_openfile(STATSSRC, "w+");
+      if (f != NULL) {
+        fprintf(f, "%s", sourcename);
+        fclose(f);
+        ret = 0;
+      } else {
+        ret = -2;
+	errlog(ERRORMSG, "Could not open stats source file for writing.\n");
+      }
+    } else {
+        ret = -1;
+	errlog(ERRORMSG, "Stats source download failed.\n");
+    }
+  } else {
+      ret = -3;
+      errlog(ERRORMSG, "Stats source does not include all required files.\n");
+  }
+
+  buf_free(inifile);
+  return (ret);
+}
+
+
 /* Download allpingers.txt */
 /* -1 on error */
 static int download_list() {

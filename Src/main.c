@@ -380,26 +380,15 @@ int main(int argc, char *argv[])
     goto end;
   }
   if (update_stats) {
-    BUFFER *inifile;
-    inifile = buf_new();
-    read_allpingers(inifile);
-    if (good_stats_source(inifile, statssrc->data) == 1) {
-      if (stats_download(inifile, statssrc->data, 0) == 0) {
-	f = mix_openfile(STATSSRC, "w+");
-	if (f != NULL) {
-	  fprintf(f, "%s", statssrc->data);
-	  fclose(f);
-	} else {
-	  fprintf(stderr, "Could not open stats source file for writing\n");
-	  errlog(ERRORMSG, "Could not open stats source file for writing.\n");
-	}
-      }
-    } else {
+    ret = download_stats(statssrc->data);
+    if (ret == -3) {
       fprintf(stderr, "Stats source does not include all required files.\n");
-      errlog(ERRORMSG, "Stats source does not include all required files.\n");
+    } else if (ret == -2) {
+      fprintf(stderr, "Could not open stats source file for writing\n");
+    } else if (ret == -1) {
+      fprintf(stderr, "Stats source download failed.\n");
     }
     ret = 0;
-    buf_free(inifile);
     goto end;
   }
   if (help ||about ||(isatty(fileno(stdin)) && isatty(fileno(stdout))))
