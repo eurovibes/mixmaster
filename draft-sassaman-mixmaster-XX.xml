@@ -202,7 +202,7 @@
         delivered to the recipient. For partial messages, a message ID is
         used to identify the other parts as they arrive. When all parts have
         arrived, the message is reassembled, decompressed if necessary, and
-        delivered. A final remailer MAY discard partial messages if all
+        delivered. A final remailer may discard partial messages if all
         packets have not been received within a local time limit.</t>
 
       <t>Note that only the final remailer can determine whether packets
@@ -250,7 +250,7 @@
     <section anchor="dummy-traffic" title="Dummy Traffic">
 
       <t>Dummy messages are multi-hop messages with four randomly
-        selected remailers as the sequence. The sequences MUST selected
+        selected remailers as the sequence. The sequences must selected
         such that no remailer will appear twice unless two other remailers
         separate them.</t>
 
@@ -263,7 +263,7 @@
         random number from a different geometric distribution and adds
         that many dummy messages to the pool as well.</t>
 
-      <t>The parameters SHOULD BE chosen so that on average the remailer
+      <t>The parameters should be chosen so that on average the remailer
         creates one dummy for every 32 inbound messages and one every
         nine mixing rounds.</t>
 
@@ -636,10 +636,10 @@ Remailer-Type: Mixmaster [version number]
         the email address of the remailer:
         <list style="hanging">
           <t hangText="remailer-help">Returns information about using the
-            remailer. The remailer MAY support a suffix consisting of a
+            remailer. The remailer may support a suffix consisting of a
             dash and a two-leter ISO 639 country code. For example,
             remailer-help-ar will return a help file in Arabic, if
-            available.  Supported languages SHOULD be listed at the
+            available.  Supported languages should be listed at the
             beginning of the "remailer-help" response.</t>
           <t hangText="remailer-key">Returns the remailer's public key as
             described in <xref target="key-format"/>. It may also return the keys and attributes
@@ -674,16 +674,16 @@ Remailer-Type: Mixmaster [version number]
         attacks during the key rotation window.</t>
 
       <t>Keys are generated with a validity date and an expiration date.
-        User agents SHOULD only display valid keys which have not
+        User agents should only display valid keys which have not
         expired.</t>
 
-      <t>Keys are valid for a 13 month period. A remailer MUST generate
+      <t>Keys are valid for a 13 month period. A remailer must generate
         a new key when the existing key's expiration date is one month or
-        less in the future. When queried, a remailer MUST report the most
+        less in the future. When queried, a remailer must report the most
         recently generated key as its key, effectively giving each key a 12
         month service period.</t>
 
-      <t>Remailers MUST continue to decrypt and process mail encrypted to
+      <t>Remailers must continue to decrypt and process mail encrypted to
         expired keys for one week past the expiration date on the key.
         One week after expiration, an expired remailer key should be
         securely destroyed.</t>
