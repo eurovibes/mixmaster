@@ -6,7 +6,7 @@
    details.
 
    Send messages from pool
-   $Id: pool.c,v 1.21 2002/12/08 00:56:23 weaselp Exp $ */
+   $Id: pool.c,v 1.22 2002/12/28 02:05:32 weaselp Exp $ */
 
 #include "mix3.h"
 #include <stdlib.h>
@@ -366,7 +366,7 @@ int pool_read(BUFFER *pool)
   int size = 0;
 
   d = opendir(POOLDIR);
-  if (d != NULL)
+  if (d != NULL) {
     for (;;) {
       e = readdir(d);
       if (e == NULL)
@@ -379,7 +379,9 @@ int pool_read(BUFFER *pool)
 	size++;
       }
     }
-  closedir(d);
+    closedir(d);
+  } else
+    errlog(WARNING, "Error reading pool dir %s\n", POOLDIR);
   return (size);
 }
 
@@ -404,7 +406,8 @@ void pool_dosend(void)
       }
     }
     closedir(d);
-  }
+  } else
+    errlog(WARNING, "Error reading pool dir %s\n", POOLDIR);
   sendmail_end();
 }
 
