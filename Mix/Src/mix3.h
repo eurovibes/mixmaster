@@ -6,7 +6,7 @@
    details.
 
    Function prototypes
-   $Id: mix3.h,v 1.8 2002/07/29 23:52:00 weaselp Exp $ */
+   $Id: mix3.h,v 1.9 2002/08/21 11:22:37 weaselp Exp $ */
 
 
 #ifndef _MIX3_H
@@ -119,6 +119,7 @@ int file_to_out(const char *name);
 FILE *mix_openfile(const char *name, const char *a);
 FILE *openpipe(const char *prog);
 int closepipe(FILE *fp);
+int maildirWrite(char *maildir, BUFFER *message, int create);
 
 typedef struct {
   char *name;
