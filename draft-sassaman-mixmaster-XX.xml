@@ -219,7 +219,7 @@
 
       <t>To obfuscate the link between incoming and outgoing messages,
         Mixmaster uses a pooling scheme. Messages to be forwarded are
-        stored in a pool. In regular intervals the remailer starts and
+        stored in a pool. In regular intervals the remailer
         sends some random messages from the pool to either the next hop or
         their final recipients.</t>
 
@@ -241,6 +241,9 @@
             them.</t>
         </list>
       </t>
+
+      <!-- XXX: give the default Mix 3.0 parameters here for reference?
+                - weasel -->
 
     </section>
 
