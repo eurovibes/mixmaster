@@ -292,11 +292,11 @@
         compatibility.</t>
 
       <t>The payload format is as follows:<figure><artwork>
-Number of destination fields   [        1 byte]
-Destination fields             [ 80 bytes each]
-Number of header line fields   [        1 byte]
-Header lines fields            [ 80 bytes each]
-User data section              [ up to ~2.5 MB]</artwork></figure>
+Number of destination fields   [                    1 byte]
+Destination fields             [             80 bytes each]
+Number of header line fields   [                    1 byte]
+Header lines fields            [             80 bytes each]
+User data section              [ 2549K -  previous fields ]</artwork></figure>
       </t>
 
       <t>Each destination field consists of a string of up to 80 ASCII
@@ -519,8 +519,8 @@ Remailer-Type: Mixmaster [version number]
 
       <t>The length field always contains the decimal number "20480", since
         the size of Mixmaster packets is constant. An MD5 message digest
-        <xref target="RFC1321"/> of the (un-encoded) packet is encoded in
-        base64.</t>
+        <xref target="RFC1321"/> of the packet prior to Base-64 encoding is 
+        encoded in Base-64.</t>
 
       <t>The packet itself is encoded in Base-64 encoding <xref
           target="RFC1421"/>, with line-breaks every 40 characters.</t>
@@ -630,8 +630,9 @@ Remailer-Type: Mixmaster [version number]
 
      <t>Ensuring that a remailer's keyring contains up to date copies of 
         the public keys for other remailers is the responsibility of the 
-        given remailer's operator. Utilities such as Echolot can be used
-        to assist in automating this task.</t>
+        given remailer's operator. Utilities such as Echolot <xref 
+        target="Palfrader03"/> can be used to assist in automating this task.
+        </t>
 
 
       <t>If the remailer receives a Mixmaster message that, when decrypted,
@@ -721,12 +722,6 @@ Remailer-Type: Mixmaster [version number]
         mechanisms and filters to anonymous messages. Appropriate additional
         information about the origin of the message can be inserted in the
         "Comments:" header field of the anonymous messages.</t>
-
-      <t>If the recipient does not wish to receive anonymous messages,
-        unobservability of communications and authenticity can be achieved at
-        the same time by the remailer verifying that the message is
-        cryptographically signed <xref target="RFC2440"/> by a known
-        sender.</t>
 
       <t>Anonymous remailers are sometimes used to send harassing e-mail. To
         prevent this abuse, remailer software should allow operators to block
@@ -869,6 +864,18 @@ Remailer-Type: Mixmaster [version number]
       </front>
       <seriesInfo name="Communications of the ACM" value="24:2"/>
     </reference>
+
+    <reference anchor="Palfrader03"
+      target="http://http://www.palfrader.org/echolot/">
+      <front>
+        <title>Echolot: A Pinger for Anonymous Remailers</title>
+        <author initials="P." surname="Palfrader" fullname="Peter Palfrader">
+          <organization/><address/>
+        </author>
+        <date year="2003"/>
+      </front>
+    </reference>
+
 
     <reference anchor="Mazieres98"
       target="ftp://cag.lcs.mit.edu/pub/dm/papers/mazieres:pnym.ps.gz">
