@@ -58,6 +58,7 @@ This FAQ is maintained by Alex Kirk <a href="mailto:alex@schnarff.com">< alex@sc
 3.3.2 mail2news Gateway<br>
 3.3.3 Pinger<br>
 3.4 Useful System Tools<br>
+<a href=#3.5>3.5 Bounce Re-Inject Script</a>
 <br>
 4. Security<br>
 <a href=#4.1>4.1 Host System Security<br></a>
@@ -252,6 +253,14 @@ Reasons for doing this include: keeping unhappy end-users from escalating compla
 <h3>3.3.2 mail2news Gateway</h3>
 <h3>3.3.3 Pinger</h3>
 <h3>3.4 Useful System Tools</h3>
+<a name=3.5></a>
+<h3>3.5 Bounce Re-Inject Script</h3>
+cmeclax po'u le cmevi'u ke'umrs written <a href=http://ixazon.dynip.com/~cmeclax/resend>a script</a> (http://ixazon.dynip.com/~cmeclax/resend) which automates the process of re-sending valid messages that have been bounced because of problems with a particular remailer, such as an over-quota account or misconfiguration.
+<br><br>
+To use it, you need to first put the entireity of the bounced messages into one big file. Alex Kirk has <a href=http://www.schnarff.com/mixmaster/combine>a script</a> (http://www.schnarff.com/mixmaster/combine) which will do this automatically for those running Maildirs.
+<br><br>
+Once you have your messages in this file, simply run "resend <filename> <remailer@domain>", prefereably as the "mix" user (since, if you were to run this as example_user, messages appear to be coming from example_user@yourdomain). You should probably pick a remailer besides the one that has ben bouncing messages to you, and probably go with one that has a good uptime/statistics history.<br><br>
+Keep in mind that this procedure should be repeated regularly, so that a) messages actually get through with some sense of timeliness, and b) you don't end up shooting out hundreds of messages to a particular remailer in one go.
 <h3>
 <h3>4. Security</h3>
 <a name=4.1></a>
