@@ -6,7 +6,7 @@
    details.
 
    OpenPGP data
-   $Id: pgpdata.c,v 1.5 2002/07/10 00:40:56 weaselp Exp $ */
+   $Id: pgpdata.c,v 1.6 2002/07/10 01:10:55 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -44,11 +44,10 @@ int mpi_get(BUFFER *b, BUFFER *mpi)
   return (l);
 }
 
-  int l;
-  int i;
 
 int mpi_bitcount(BUFFER *mpi)
 {
+  int i;
   int l = mpi->length * 8;
   for (i = 7; i >= 0; i--)
     if (((mpi->data[0] >> i) & 1) == 1) {
