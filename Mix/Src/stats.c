@@ -197,7 +197,7 @@ int stats(BUFFER *b)
     for ((i = (today - havestats) / SECONDSPERDAY) > 79 ? 79 : i;
 	 i >= 1; i--) {
       t = now - i * SECONDSPERDAY;
-      gt = localtime(&t);
+      gt = gmtime(&t);
       strftime(line, LINELEN, "%d %b: ", gt);
       buf_appends(b, line);
 

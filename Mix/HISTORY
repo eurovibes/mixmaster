@@ -330,4 +330,5 @@
                            Handle a pool we cannot read correctly: don't close
                              the NULL dir handle (segfaults on *bsd). We also
                              print a warning in that case now.
-                           Fix buts with pool stats.
+                           Fix stats a bit (gmtime vs localtime).
+                           Fix bits with pool stats.
