@@ -6,7 +6,7 @@
    details.
 
    MIME functions
-   $Id: mime.c,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: mime.c,v 1.2 2001/12/12 19:29:52 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -347,6 +347,48 @@ int boundary(BUFFER *line, BUFFER *boundary)
 
 #define pgpenc 1
 #define pgpsig 2
+
+/*
+ * decodes non-multipart quoted printable message
+ */
+int qp_decode_message(BUFFER *msg)
+{
+  BUFFER *out, *line, *field, *content;
+  out     = buf_new();
+  line    = buf_new();
+  field   = buf_new();
+  content = buf_new();
+
+  buf_rewind(msg);
+
+  /* copy over headers without decoding */
+  while (buf_getheader(msg, field, content) == 0) {
+    if (bufieq(field, "content-transfer-encoding")
+        && bufieq(content, "quoted-printable")) {
+      continue;                 /* no longer quoted-printable */
+    } else {
+      buf_appendheader(out, field, content);
+    }
+  }
+
+  buf_nl(out);
+
+  /* copy over body, quoted-printable decoding as we go */
+  while (buf_getline(msg, line) != -1) {
+    int softbreak;
+    softbreak = decode_line(line);
+    buf_cat(out, line);
+    if (!softbreak)
+      buf_nl(out);
+  }
+  buf_move(msg, out);
+  buf_free(out);
+  buf_free(line);
+  buf_free(field);
+  buf_free(content);
+  return 0;
+}
+
 
 int entity_decode(BUFFER *msg, int message, int mptype, BUFFER *data)
 {

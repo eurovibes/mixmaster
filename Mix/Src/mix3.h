@@ -6,7 +6,7 @@
    details.
 
    Function prototypes
-   $Id: mix3.h,v 1.3 2001/12/11 20:59:26 rabbi Exp $ */
+   $Id: mix3.h,v 1.4 2001/12/12 19:29:52 rabbi Exp $ */
 
 
 #ifndef _MIX3_H
@@ -162,6 +162,7 @@ int attachfile(BUFFER *message, BUFFER *filename);
 int pgpmime_sign(BUFFER *message, BUFFER *uid, BUFFER *pass, char *secring);
 int mime_attach(BUFFER *message, BUFFER *attachment, BUFFER *type);
 void mimedecode(BUFFER *msg);
+int qp_decode_message(BUFFER *msg);
 
 #define MIME_8BIT 1   /* transport is 8bit */
 #define MIME_7BIT 2   /* transport is 7bit */
