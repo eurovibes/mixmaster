@@ -12,7 +12,9 @@
 #ifndef _CONFIG_H
 #define _CONFIG_H
 #include "version.h"
+#ifndef WIN32
 #include "sys/param.h"
+#endif /* WIN32 */
 
 /* Disclaimer to be inserted in all anonymous messages: */
 #define DISCLAIMER \
@@ -42,8 +44,7 @@
 #define DEFLTENTITY "text/plain; charset=" MIMECHARSET
 #endif
 
-/* the following are defined by Autoconf */
-#if 0
+#ifdef WIN32
 /* Use the PCRE regular expression library for destination blocking? */
 #define USE_PCRE
 /* Use zlib for compression? */
@@ -54,7 +55,9 @@
 #define USE_WINGUI
 /* Use sockets to deliver mail */
 #define USE_SOCK
-#endif
+/* Compile in Win32 service support */
+#define WIN32SERVICE
+#endif /* WIN32 */
 
 /** System dependencies **********************************************/
 /* Macros: UNIX  for Unix-style systems
@@ -152,6 +155,14 @@
 # define HAVE_GETDOMAINNAME
 #endif
 
+#ifdef WIN32
+# ifdef _MSC_VER
+#pragma warning(disable: 4018) /* signed/unsigned mismatch */
+#pragma warning(disable: 4761) /* integral size mismatch */
+# endif
+#endif
+
+
 #endif /* End of not HAVE_CONFIG_H */
 
 /** Constants *********************************************************/
@@ -161,9 +172,13 @@
 
 #ifdef MAXPATHLEN
 #define PATHMAX MAXPATHLEN
-#else
+#else /* MAXPATHLEN */
+#ifdef _MSC
+#define PATHMAX MAX_PATH
+#else /* _MSC */
 #define PATHMAX 512
-#endif
+#endif /* not _MSC */
+#endif /* not MAXPATHLEN */
 #define LINELEN 128
 #define BUFSIZE 4096
 
