@@ -449,6 +449,8 @@
                              and will fail at the 20th node.
 
 2004-03-20      3.0b2-unreleased
+                           Use /dev/arandom instead of /dev/srandom on 
+                             OpenBSD (Nikolay Sturm).
                            Fall back to 3DES as Encrypt-Key cipher if we don't
                              have IDEA. - Laurent Fousse <laurent@komite.net>
                            Also sort mail into the various mboxes if autoreply
