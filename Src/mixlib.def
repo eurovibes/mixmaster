@@ -13,9 +13,9 @@ EXPORTS
     mix_decrypt                       @8
     mix_send                          @9
     mix_regular                      @10
-    nym_config                       @11
-    nym_encrypt                      @12
-    nym_decrypt                      @13
+;   nym_config                       @11
+;   nym_encrypt                      @12
+;   nym_decrypt                      @13
     t1_decrypt                       @14
     t2_decrypt                       @15
     mix_pool                         @16
@@ -112,3 +112,9 @@ EXPORTS
     ENTEREDPASSPHRASE               @107
     PASSPHRASE                      @108
     mix_config                      @109
+    RATE                            @110
+    SENDPOOLTIME                    @111
+    CLIENTAUTOFLUSH                 @112
+    redirect_message                @113
+    mix_check_timeskew              @114
+    MIXCONF                         @115

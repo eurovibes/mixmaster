@@ -1,0 +1,89 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "mix"=".\mix.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name mixlib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "mixlib"=".\mixlib.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name Pcre
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name zlib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "pcre"=".\Pcre.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name pcre_chartables
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "pcre_chartables"=".\Pcre_Chartables.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "zlib"=".\zlib.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+
