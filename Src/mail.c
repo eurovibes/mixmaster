@@ -6,7 +6,7 @@
    details.
 
    Socket-based mail transport services
-   $Id: mail.c,v 1.7 2002/08/07 17:27:01 weaselp Exp $ */
+   $Id: mail.c,v 1.8 2002/08/22 22:23:16 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -670,6 +670,8 @@ void pop3get(void)
   f = mix_openfile(POP3CONF, "r");
   if (f != NULL)
     while (fgets(cfg, sizeof(cfg), f) != NULL) {
+      if (cfg[0] == '#')
+        continue;
       if (strchr(cfg, '@'))
 	strchr(cfg, '@')[0] = ' ';
       if (sscanf(cfg, "%127s %127s %127s %4s", user, host, pass, auth) < 3)
