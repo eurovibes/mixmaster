@@ -6,7 +6,7 @@
    details.
 
    Function prototypes
-   $Id: mix3.h,v 1.2 2001/11/06 23:41:58 rabbi Exp $ */
+   $Id: mix3.h,v 1.3 2001/12/11 20:59:26 rabbi Exp $ */
 
 
 #ifndef _MIX3_H
@@ -385,6 +385,11 @@ typedef int SOCKET;
 SOCKET opensocket(char *hostname, int port);
 int closesocket(SOCKET s);
 
+#endif
+
+#ifdef WIN32
+int is_nt_service(void);
+void set_nt_exit_event();
 #endif
 
 /* check for memory leaks */

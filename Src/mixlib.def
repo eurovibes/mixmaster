@@ -94,3 +94,5 @@ EXPORTS
     user_delpass                     @89
     strcatn                          @90
     file_to_out                      @91
+    is_nt_service                    @92
+    set_nt_exit_event                @93

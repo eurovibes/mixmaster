@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.2 2001/11/06 23:41:58 rabbi Exp $ */
+   $Id: main.c,v 1.3 2001/12/11 20:59:26 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -22,72 +22,6 @@
 static char *largopt(char *p, char *opt, char *name, int *error);
 static void noarg(char *name, char p);
 
-#ifdef WIN32SERVICE
-#include "service.h"
-int main_(int argc, char *argv[]);
-HANDLE hThread = NULL;
-HANDLE hMustTerminate = NULL;
-
-DWORD ThreadFunc(LPDWORD lpdwparam)
-{
-    char filename[_MAX_PATH+1];
-    char home[_MAX_PATH+1], *p;
-    char *argv[2];
-
-    argv[0] = filename;
-    argv[1] = "-D";
-    GetModuleFileName(NULL , filename, _MAX_PATH);
-    strcpy(home, filename);
-    p = strrchr(home, '\\');
-    if (p) {
-        *p = 0;
-        chdir(home);
-    }
-
-    return main_(2, argv);
-}
-
-VOID ServiceStart(DWORD dwArgc, LPTSTR *lpszArgv)
-{
-    if (bDebug) {
-        dwArgc--;
-        lpszArgv[1] = lpszArgv[0];
-        lpszArgv++;
-        main_(dwArgc, lpszArgv);
-        return;
-    }
-
-    ReportStatusToSCMgr(SERVICE_START_PENDING, NO_ERROR, 0);
-    if (!hMustTerminate)
-        hMustTerminate = CreateEvent(NULL, FALSE, FALSE, "mixmaster-stop");
-    DuplicateHandle(GetCurrentProcess(), GetCurrentThread(), GetCurrentProcess(), &hThread,
-            0, FALSE, DUPLICATE_SAME_ACCESS);
-    ReportStatusToSCMgr(SERVICE_RUNNING, NO_ERROR, 0);
-    ThreadFunc(NULL);
-}
-
-VOID ServiceStop(void)
-{
-    ReportStatusToSCMgr(SERVICE_STOP_PENDING, NO_ERROR, 5000);
-    if (hMustTerminate) {
-        SetEvent(hMustTerminate);
-        if (WaitForSingleObject(hThread, 4500) == WAIT_TIMEOUT)
-            if (hThread)
-                TerminateThread(hThread, 0);
-        CloseHandle(hMustTerminate);
-        hMustTerminate = NULL;
-    } else
-        if (hThread)
-            TerminateThread(hThread, 0);
-    if (hThread)
-        CloseHandle(hThread);
-    hThread = NULL;
-    ReportStatusToSCMgr(SERVICE_STOPPED, NO_ERROR, 0);
-}
-
-#define main main_
-#endif
-
 /** main *****************************************************************/
 
 /* Returns:
@@ -95,7 +29,11 @@ VOID ServiceStop(void)
  1 command line error
  2 client error condition */
 
+#ifdef WIN32SERVICE
+int mix_main(int argc, char *argv[])
+#else
 int main(int argc, char *argv[])
+#endif
 {
   int error = 0, deflt = 1, help = 0, readmail = 0, send = -1, sendpool = 0,
   header = 1, maint = 0, keygen = 0, verbose = 2, sign = 0, encrypt = 0;
@@ -409,7 +347,15 @@ Remailer:\n\
 #endif
 	   "-P, --pop-mail                    force getting messages from POP3 servers\n\
 -G, --generate-key                generate a new remailer key\n\
--K, --update-keys                 generate remailer keys if necessary\n");
+-K, --update-keys                 generate remailer keys if necessary\n"
+#ifdef WIN32SERVICE
+	   "\n\
+WinNT service:\n\
+\n\
+    --install                     to install the service\n\
+    --remove                      to remove the service\n"
+#endif
+    );
 
     ret = 0;
     goto end;
