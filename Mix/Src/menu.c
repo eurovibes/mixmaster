@@ -6,7 +6,7 @@
    details.
 
    Menu-based user interface
-   $Id: menu.c,v 1.8 2002/09/28 12:48:57 ulfm Exp $ */
+   $Id: menu.c,v 1.9 2002/09/30 21:24:01 ulfm Exp $ */
 
 
 #include "menu.h"
@@ -97,6 +97,8 @@ void read_folder(char command, char *foldername, char *nym)
       if (strileft(l, "from:") || strileft(l, "path:")
 	  || strileft(l, "xref:"))
 	mailfolder = 0;
+      else
+        break;
     }
     if (eof || (mailfolder && strleft(l, "From ")) ||
 	(mailfolder == 0 && from != -1 &&
