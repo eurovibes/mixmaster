@@ -458,10 +458,11 @@ Packet type 2 (final hop, partial message):
   [ Initialization vector        8 bytes ]</artwork></figure>
 
           <list style="hanging">
-            <t hangText="Initialization vectors:"> For packet type one and two
+            <t hangText="Initialization vectors:"> For packet type 1 and 2,
+              the IV is used to symmetrically encrypt the packet body. For
               packet type 0, there is one IV for each of the 19 following
               header sections. The IV for the last header section is also
-              used for the packet body.</t>
+              used for the packet body.
             <t hangText="Remailer address:">E-mail address of next hop.</t>
             <t hangText="Message ID:">Identifier unique to
               (all chunks of) this message.</t>
