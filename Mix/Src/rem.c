@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.13 2002/02/21 09:38:01 rabbi Exp $ */
+   $Id: rem.c,v 1.14 2002/03/09 02:45:34 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -282,6 +282,7 @@ int pool_packetfile(char *fname, BUFFER *mid, int packetnum)
 
 void pool_packetexp(void)
 {
+  char path[PATHMAX];
   DIR *d;
   struct dirent *e;
   struct stat sb;
@@ -297,7 +298,10 @@ void pool_packetexp(void)
 	    time(NULL) - sb.st_mtime > PACKETEXP) {
 	  errlog(NOTICE, "Expiring partial message %s.\n",
 		 e->d_name);
-	  unlink(e->d_name);
+          strncpy(path, POOLDIR, PATHMAX);
+          strncat(path, DIRSEPSTR, PATHMAX);
+          strncat(path, e->d_name, PATHMAX);
+          unlink(path);
 	}
       }
     }
