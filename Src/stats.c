@@ -6,7 +6,7 @@
    details.
 
    Remailer statistics
-   $Id: stats.c,v 1.21 2003/05/19 23:57:59 weaselp Exp $ */
+   $Id: stats.c,v 1.22 2003/06/27 10:52:11 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -120,8 +120,8 @@ int stats(BUFFER *b)
 	  poold[0][(now - then) / (60 * 60)] += num;
 	  poold[1][(now - then) / (60 * 60)] += i;
 	} else if (today - then < 80 * SECONDSPERDAY) {
-	  poold[0][(today - then) / (24 * 60 * 60)] += num;
-	  poold[1][(today - then) / (24 * 60 * 60)] += i;
+	  pool[0][(today - then) / (24 * 60 * 60)] += num;
+	  pool[1][(today - then) / (24 * 60 * 60)] += i;
 	}
 	if (havestats == 0 || then < havestats)
 	  havestats = then;
