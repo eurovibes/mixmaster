@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.33 2002/10/09 20:53:29 weaselp Exp $ */
+   $Id: mix.c,v 1.34 2002/10/09 21:40:03 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -984,7 +984,9 @@ void set_nt_exit_event(HANDLE h_svc_exit_event)
 int mix_daemon(void)
 {
   long t, slept;
-  t = (MAILINTIME < SENDPOOLTIME && (MAILIN != NULL && (strcmp(MAILIN, "") != 0))) ? MAILINTIME : SENDPOOLTIME;
+  t = SENDPOOLTIME;
+  if (MAILINTIME < t && (MAILIN != NULL && MAILIN[0] != '\0'))
+    t = MAILINTIME;
 #ifdef USE_SOCK
   if (POP3TIME < t)
     t = POP3TIME;
@@ -998,7 +1000,9 @@ int mix_daemon(void)
     if (rereadconfig) {
       rereadconfig = 0;
       mix_config();
-      t = (MAILINTIME < SENDPOOLTIME && (MAILIN != NULL && (strcmp(MAILIN, "") != 0))) ? MAILINTIME : SENDPOOLTIME;
+      t = SENDPOOLTIME;
+      if (MAILINTIME < t && (MAILIN != NULL && MAILIN[0] != '\0'))
+	t = MAILINTIME;
 #ifdef USE_SOCK
       if (POP3TIME < t)
 	t = POP3TIME;
