@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.5 2001/12/12 19:29:52 rabbi Exp $ */
+   $Id: rem.c,v 1.6 2001/12/14 22:24:18 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -402,8 +402,27 @@ int blockrequest(BUFFER *message)
 	} while (c > ' ');
       } else
 	buf_set(addr, from);
+      {
+	BUFFER *real_addr;
+	real_addr = buf_new();
+	rfc822_addr (addr, real_addr);
+	buf_set (addr, real_addr);
+	buf_free (real_addr);
+      }
+      if (addr->length == 0) {
+	return (2);
+      };
+      if (! buffind(addr, "@"))
+      {
+	errlog(LOG, "Ignoring blocking request for %b from %b (no @ sign in address).\n", addr, from);
+	return (2);
+      };
       if (bufieq(addr, REMAILERADDR)) {
 	errlog(LOG, "Ignoring blocking request for %b from %b.\n", addr, from);
+	return (2);
+      }
+      if (bufleft(addr, "/")) {
+	errlog(LOG, "Ignoring blocking request: %b from %b is a regex.\n", addr, from);
 	return (2);
       }
       if (buf_ieq(addr, from))
