@@ -6,7 +6,7 @@
    details.
 
    Create OpenPGP packets
-   $Id: pgpcreat.c,v 1.5 2002/08/16 19:03:37 rabbi Exp $ */
+   $Id: pgpcreat.c,v 1.6 2002/08/29 08:50:00 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -675,15 +675,15 @@ int pgp_sign(BUFFER *msg, BUFFER *msg2, BUFFER *sig, BUFFER *userid,
     err = algo;
     goto end;
   }
-  if (algo == PGP_S_DSA)
+  if (algo == PGP_S_DSA || algo == PGP_E_ELG)
     version = 4;
   if (version == 3)
     hashalgo = PGP_H_MD5;
   else
     hashalgo = PGP_H_SHA1;
 
-  if (!self)
-    version = 3;
+  if (!self && type != PGP_SIG_BINDSUBKEY)
+    version = 3; /* why this one? shouldn't it be removed? */
 
   switch (type) {
    case PGP_SIG_CERT:
@@ -760,6 +760,15 @@ int pgp_sign(BUFFER *msg, BUFFER *msg2, BUFFER *sig, BUFFER *userid,
     pgp_subpacket(d, PGP_SUB_CREATIME);
     buf_cat(sub, d);
 
+    if (self || type == PGP_SIG_BINDSUBKEY) {
+      if (KEYLIFETIME) { /* add key expirtaion time */
+        buf_clear(d);
+        buf_appendl(d, KEYLIFETIME);
+        pgp_subpacket(d, PGP_SUB_KEYEXPIRETIME);
+        buf_cat(sub, d);
+      }
+    }
+
     if (self) {
       buf_setc(d, PGP_K_CAST5);
 #ifdef USE_AES 
@@ -769,7 +778,7 @@ int pgp_sign(BUFFER *msg, BUFFER *msg2, BUFFER *sig, BUFFER *userid,
       pgp_subpacket(d, PGP_SUB_PSYMMETRIC);
       buf_cat(sub, d);
 
-      buf_setc(d, 0x01); // now we support MDC, so we can add MDC flag
+      buf_setc(d, 0x01); /* now we support MDC, so we can add MDC flag */
       pgp_subpacket(d, PGP_SUB_FEATURES);
       buf_cat(sub, d);
     }

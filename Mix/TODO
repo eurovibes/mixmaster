@@ -7,6 +7,7 @@ Mandatory todo items before 3.0 release:
 * do full regression tests on as many platforms possible
   + list only these platforms as supported
 * resolve any new critical issues
+* keylifetime needs to be documented once its finished
 
 Items for 3.0 or 3.0.1
 

@@ -6,7 +6,7 @@
    details.
 
    OpenPGP data
-   $Id: pgpdata.c,v 1.12 2002/08/26 19:17:31 weaselp Exp $ */
+   $Id: pgpdata.c,v 1.13 2002/08/29 08:50:00 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -847,7 +847,7 @@ int pgp_rsakeygen(int bits, BUFFER *userid, BUFFER *pass, char *pubring,
 
   buf_appendc(skey, 3);
   buf_appendl(skey, now);
-  buf_appendi(skey, 0);
+  buf_appendi(skey, KEYLIFETIME/(24*60*60));
   buf_appendc(skey, PGP_ES_RSA);
   mpi_bnput(skey, k->n);
   mpi_bnput(skey, k->e);
