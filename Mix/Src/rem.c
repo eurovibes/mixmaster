@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.15 2002/03/13 01:45:58 rabbi Exp $ */
+   $Id: rem.c,v 1.16 2002/03/13 01:46:52 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -492,5 +492,6 @@ int idexp(void)
     fclose(f);
   }
   unlockfile(i);
+  buf_free(b);
   return (0);
 }
