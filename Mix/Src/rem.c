@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.36 2003/05/03 05:31:07 weaselp Exp $ */
+   $Id: rem.c,v 1.37 2003/06/29 19:13:15 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -70,7 +70,7 @@ int create_dummy_mailin();
 int get_otherrequests_reply(BUFFER *reply, BUFFER *filename)
 {
   FILE *f = NULL;
-  char c;
+  int c;
   int err;
   BUFFER *path;
 
