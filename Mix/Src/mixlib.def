@@ -106,3 +106,4 @@ EXPORTS
     PGPPUBRING                      @101
     VERBOSE                         @102
     pgp_signtxt                     @103
+    pool_add                        @104
