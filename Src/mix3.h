@@ -6,7 +6,7 @@
    details.
 
    Function prototypes
-   $Id: mix3.h,v 1.7 2002/07/24 07:00:16 rabbi Exp $ */
+   $Id: mix3.h,v 1.8 2002/07/29 23:52:00 weaselp Exp $ */
 
 
 #ifndef _MIX3_H
@@ -62,6 +62,7 @@ int buf_getline(BUFFER *buffer, BUFFER *line);
 int buf_chop(BUFFER *b);
 void buf_move(BUFFER *dest, BUFFER *src);
 byte *buf_data(BUFFER *buffer);
+int buf_isheader(BUFFER *buffer);
 int buf_getheader(BUFFER *buffer, BUFFER *field, BUFFER *content);
 int buf_appendheader(BUFFER *buffer, BUFFER *field, BUFFER *contents);
 int buf_lookahead(BUFFER *buffer, BUFFER *line);
@@ -111,6 +112,7 @@ void rfc822_addr(BUFFER *line, BUFFER *list);
 void rfc822_name(BUFFER *line, BUFFER *name);
 void sendmail_begin(void);	/* begin mail sending session */
 void sendmail_end(void);	/* end mail sending session */
+int sendmail_loop(BUFFER *message, char *from, BUFFER *address);
 int sendmail(BUFFER *message, char *from, BUFFER *address);
 int mixfile(char *path, const char *name);
 int file_to_out(const char *name);

@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.18 2002/07/25 08:49:03 weaselp Exp $ */
+   $Id: rem.c,v 1.19 2002/07/29 23:52:00 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -345,7 +345,7 @@ void logmail(char *mailbox, BUFFER *message)
 	goto isloop;
       }
     buf_sets(content, mailbox);
-    sendmail(message, NULL, content);
+    sendmail_loop(message, NULL, content);
   isloop:
     buf_free(field);
     buf_free(content);
