@@ -608,6 +608,10 @@ elif [ "$version" = "90609f" ]
  then
   echo "Compiling with OpenSSL 0.9.7c."
   DEF="$DEF -DUSE_AES"
+ elif [ "$version" = "90704f" ]
+ then
+  echo "Compiling with OpenSSL 0.9.7d."
+  DEF="$DEF -DUSE_AES"
  elif [ "$version" -lt "920" ]
  then
   echo "This version: ${version} of SSLeay is not supported."
