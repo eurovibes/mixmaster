@@ -5,7 +5,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Makefile-sh.in,v 1.1 2002/10/18 22:04:13 rabbi Exp $
+# $Id: Makefile-sh.in,v 1.2 2003/03/28 16:12:46 weaselp Exp $
 
 # Edit according to the libraries you want to use:
 INC = %INC
@@ -23,7 +23,7 @@ AR = ar rc
 RANLIB = ranlib
 #MAKE = make
 
-OBJ = mix.o rem.o rem1.o rem2.o rem3.o chain.o chain1.o chain2.o chain3.o nym.o pgp.o pgpdb.o pgpdata.o pgpget.o pgpcreat.o pool.o mail.o rfc822.o mime.o keymgt.o compress.o stats.o crypto.o random.o util.o buffers.o maildir.o
+OBJ = mix.o rem.o rem1.o rem2.o rem3.o chain.o chain1.o chain2.o chain3.o nym.o pgp.o pgpdb.o pgpdata.o pgpget.o pgpcreat.o pool.o mail.o rfc822.o mime.o keymgt.o compress.o stats.o crypto.o random.o util.o buffers.o maildir.o parsedate.tab.o
 
 MIXOBJ = rndseed.o menu.o menusend.o menunym.o menuutil.o
 NOMENUOBJ = rndseed.o dummy.o
@@ -69,5 +69,13 @@ allclean: clean
 
 ci: clean
 	cd ~/mix3; ci -l * Mix/* Mix/Src/*; echo
+
+parsedate.tab.c: parsedate.y
+	@echo Expect 6 shift/reduce conflicts
+	bison $<
+
+parsedate: parsedate.tab.c
+	gcc -DTEST $< -o $@
+
 
 include Makefile.deps
