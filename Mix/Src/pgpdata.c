@@ -6,7 +6,7 @@
    details.
 
    OpenPGP data
-   $Id: pgpdata.c,v 1.16 2002/09/12 17:26:00 disastry Exp $ */
+   $Id: pgpdata.c,v 1.17 2002/09/12 17:36:43 disastry Exp $ */
 
 
 #include "mix3.h"
@@ -420,7 +420,7 @@ static int pgp_iskeyid(BUFFER *key, BUFFER *keyid)
   return(ret);
 }
 
-int pgp_get_sig_subpacket(BUFFER * p1, BUFFER *out)
+static int pgp_get_sig_subpacket(BUFFER * p1, BUFFER *out)
 {
   int suptype, len = buf_getc(p1);
   if (len > 192 && len < 255)
