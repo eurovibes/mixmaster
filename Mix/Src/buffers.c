@@ -6,7 +6,7 @@
    details.
 
    Dynamically allocated buffers
-   $Id: buffers.c,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: buffers.c,v 1.2 2002/07/29 23:52:00 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -433,6 +433,36 @@ int buf_chop(BUFFER *b)
   return (0);
 }
 
+int buf_isheader(BUFFER *buffer)
+{
+  BUFFER *line;
+  long p;
+  int i;
+  int err;
+  int ret;
+
+  line = buf_new();
+  p = buffer->ptr;
+  ret = 0;
+  err = buf_getline(buffer, line);
+  if (err != 0)
+    goto end;
+
+  for (i = 0; i < line->length; i++) {
+    if (line->data[i] == ' ' || line->data[i] == '\t')
+      break;
+    if (line->data[i] == ':') {
+      ret = 1;
+      break;
+    }
+  }
+
+end:
+  buffer->ptr = p;
+  buf_free(line);
+  return(ret);
+}
+
 int buf_getheader(BUFFER *buffer, BUFFER *field, BUFFER *content)
 {
   BUFFER *line;
@@ -449,11 +479,14 @@ int buf_getheader(BUFFER *buffer, BUFFER *field, BUFFER *content)
     goto end;
 
   err = -1;
-  for (i = 0; i < line->length; i++)
+  for (i = 0; i < line->length; i++) {
+    if (line->data[i] == ' ' || line->data[i] == '\t')
+      break;
     if (line->data[i] == ':') {
       err = 0;
       break;
     }
+  }
   if (err == -1) {
     /* badly formatted message -- try to process anyway */
     buf_sets(field, "X-Invalid");

@@ -6,7 +6,7 @@
    details.
 
    Socket-based mail transport services
-   $Id: mail.c,v 1.3 2001/12/11 20:56:07 rabbi Exp $ */
+   $Id: mail.c,v 1.4 2002/07/29 23:52:00 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -76,6 +76,21 @@ end:
 }
 
 int smtpsend(BUFFER *head, BUFFER *message, char *from);
+
+
+int sendmail_loop(BUFFER *message, char *from, BUFFER *address)
+{
+  BUFFER *msg;
+  int err;
+
+  msg = buf_new();
+  buf_appendf(msg, "X-Loop: %s\n", REMAILERADDR);
+  buf_cat(msg, message);
+  err = sendmail(msg, from, address);
+  buf_free(msg);
+
+  return(err);
+};
 
 int sendmail(BUFFER *message, char *from, BUFFER *address)
 {
@@ -353,7 +368,7 @@ int smtp_send(SOCKET relay, BUFFER *head, BUFFER *message, char *from)
 	rfc822_addr(content, rcpt);
   buf_rewind(head);
 
-  while (buf_getheader(message, field, content) == 0) {
+  while (buf_isheader(message) && buf_getheader(message, field, content) == 0) {
     if (bufieq(field, "to") || bufieq(field, "cc") || bufieq(field, "bcc")) {
 #ifdef BROKEN_MTA
       if (!bufifind(rcpt, content->data)) 

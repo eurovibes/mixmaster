@@ -536,6 +536,14 @@ int buf_chop(BUFFER *buf);
   other lines of text buf may contain are removed.
 
 
+int buf_isheader(BUFFER *buf);
+
+  This function checks whether the first line of buf is a RFC 822 header line.
+
+  Returns:
+   0 if it is not a header line.
+   1 if it is a header line.
+
 int buf_getheader(BUFFER *buf, BUFFER *field, BUFFER *content);
 
   This function reads a RFC 822 header line from buf. The field name of
@@ -711,6 +719,10 @@ int sendmail(BUFFER *message, BUFFER *address, const char *from);
   This function sends a mail message. The From: line and the destination
   address may be contained in the message; in that case address and from
   must be NULL. address is checked against the destination block list.
+
+int sendmail_loop(BUFFER *message, BUFFER *address, const char *from);
+
+  Identical to sendmail() but adds an X-Loop: header line.
 
 
 Printable Encoding
