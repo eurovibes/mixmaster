@@ -2,16 +2,14 @@ Items that need to be completed before the next MAIN release:
 
 - Full functionality / regression testing around chain operations
   following the recent whitespace bug fix. (everyone)
-
 - Full WIN32 support.
-
+  - rename pop3.cfg to pop3.cfg.txt
+  - different editor handling?  if so, provide suggestions.
 - stats stuff:
   - port it to unix
   - use proper configured filenames
   - make the allpingers filename and url configureable
-
 - Add equivalent features to -V and --about to mpgp and document in mpgp.1
-
 - Remove OpenSSL version checks. Maybe print a message stating the 
   supported versions, and leave it up to the user?
 
@@ -19,21 +17,23 @@ Items to watch:
 
 - Hunt and kill bug in Mixmaster causing echolot pings to be turned
   into permanent t* files.
-
   [This is a pesky one. Changing the .forward pipe to go through 
    truss first 'fixes' it. Grr. --rabbi]
 
-
 Items for 3.0.x:
 
+- Make the default mix.cfg file we write more useful.
+  Include (commented out) in a user section:
+    + SMTPRELAY
+- Write a document on how to setup a remailer on windows
+    + install as service
+    + configure pop3.cfg
 - doallow() should check more than one email address in a line
   (patch # 877312) (weasel)
-
 - delete secret keys securely after keygraceperiod expires
-  (Should this just be a call to an external program? I.e., 
+  (Should this just be a call to an external program? I.e.
   "/bin/rm -P" or "/usr/bin/shred -fz -n3")? Does this even
   serve a purpose now that journaled FSes are the norm?
-
 - destblk request confirmation (patch # 873498)
 
 Packaging:
