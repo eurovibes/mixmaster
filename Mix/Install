@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.8 2002/08/09 18:00:06 rabbi Exp $
+# $Id: Install,v 1.8.2.1 2002/09/11 20:44:49 rabbi Exp $
 
 #whereis program default-path
 whereis()
@@ -263,7 +263,12 @@ if [ -f $MIXSRC/Makefile ]
 then
  if grep "#Makefile generated.*$HOSTNAME" $MIXSRC/Makefile
  then
-  echo "Found a Makefile."
+  echo "Found a Makefile for this system."
+  readln "Use this Makefile?" y
+  if [ "$ans" = n ]
+  then
+   rm -f $MIXSRC/Makefile
+  fi
  else
   readln "Remove old Makefile?" y
   if [ "$ans" = y ]
@@ -307,6 +312,10 @@ then
   if [ -f $MIXDEST/secring.mix ]
   then
     remailer=y
+    if grep PASSPHRASE $MIXDEST/mix.cfg >/dev/null
+    then
+      PASSINCONFIG=1
+    fi
   else
     readln "Do you want to set up a remailer?" n
     remailer=$ans
@@ -320,6 +329,60 @@ else
   remailer=$ans
 fi
 
+
+ans=""
+if [ "$remailer" = "y" ]
+then
+  ans="n"
+  if [ "$PASSINCONFIG" != 1 ]
+  then
+    echo ""
+    echo "You can either compile your secret passphrase into the binary
+or you can set it in your config file. Note that the former does not
+really increase security as the passphrase can still be discovered by
+running something like »strings mix«."
+    echo ""
+    echo "Most users should answer »n« to this question:"
+    echo ""
+    readln "Do you want to compile the passphrase into the binary?" n
+  fi
+
+  rm -f "$MIXSRC/mix.o" # make sure our new passphrase takes effect
+  if [ "$ans" = "y" ]
+  then
+    ans=""
+    echo "Please enter a passphrase for your remailer (must be the same
+whenever you re-compile Mixmaster)."
+    read ans
+
+    if [ "$ans" != "" ]
+    then
+      PASS="PASS=$ans"
+    else
+      echo "WARNING: not setting a passphrase"
+    fi
+  else
+    if [ "$PASSINCONFIG" != 1 ]
+    then
+      ans=""
+      echo "Please enter a passphrase for your remailer (it will be
+stored in mix.cfg in clear)."
+      read ans
+
+      if [ "$ans" = "" ]
+      then
+	echo "WARNING: setting empty passphrase"
+      fi
+      PASSPHRASE="PASSPHRASE	$ans" 
+      if [ -f $MIXDEST/mix.cfg ]
+      then
+	echo "$PASSPHRASE" >> $MIXDEST/mix.cfg
+      fi
+    fi
+  fi
+fi
+
+
 cd $MIXSRC
 if [ ! -f Makefile ]
 then
@@ -327,6 +390,11 @@ then
  INC=
  DEF=
  LDFLAGS=
+
+ if [ ! -z "$PASS" ]
+ then
+   DEF="$DEF -DCOMPILEDPASS='\"\$(PASS)\"'"
+ fi
 
  if [ "$system" = msdos ]
  then
@@ -340,30 +408,6 @@ then
  if [ "$system" = SunOS ]
  then
   LDFLAGS="-lsocket -lnsl"
- fi
-
- if [ "$system" = OpenBSD ]
- then
-  LIBDIR=
-  INCDIR=
-  SRCDIR=idea*
-  findlib libidea.a
-  if [ "$found" = "" ]
-  then
-   echo "Please build libidea.a or install OpenSSL with IDEA now."
-   exit 1
-  else
-   DEF="$DEF -DUSE_IDEA"
-   IDEALIB="$MAKELIB"
-   LIBS="$LIBS $LIB"
-   LDFLAGS="$LDFLAGS $LDFLAG"
-   if [ "$INCDIR" != "" ]
-   then
-    INC="$INC -I$INCDIR"
-   fi
-  fi
- else
-  DEF="$DEF -DUSE_IDEA"
  fi
 
  LIBDIR=
@@ -410,6 +454,17 @@ then
  LIBDIR=/usr/local/ssl/lib
  INCDIR="/usr/include /usr/include/ssl /usr/lib/ssl/include /usr/local/ssl/include"
  SRCDIR="openssl*"
+
+ opensslwarn()
+ {
+ echo $opensslwarning
+  readln "Continue anyway?" y
+  if [ "$ans" = "n" ]
+  then
+   echo $opensslinfo
+   exit 1
+  fi
+ }
 
  if [ "$system" = win32 ]
  then
@@ -462,36 +517,47 @@ then
    echo $opensslinfo
    exit 1
   fi
- elif [ "16#$version" = "16#90581f" ]
+ elif [ "$version" = "90581f" ]
  then
   echo "Compiling with OpenSSL 0.9.5a."
-  echo $opensslwarning
- elif [ "16#$version" = "16#90601f" ]
+  opensslwarn
+ elif [ "$version" = "90601f" ]
  then
   echo "Compiling with OpenSSL 0.9.6a."
-  echo $opensslwarning
- elif [ "16#$version" = "16#90602f" ]
+  opensslwarn
+ elif [ "$version" = "90602f" ]
  then
   echo "Compiling with OpenSSL 0.9.6b."
-  echo $opensslwarning
- elif [ "16#$version" = "16#90603f" ]
+  opensslwarn
+ elif [ "$version" = "90603f" ]
  then
   echo "Compiling with OpenSSL 0.9.6c."
-  echo $opensslwarning
- elif [ "16#$version" = "16#90604f" ]
+  opensslwarn
+ elif [ "$version" = "90604f" ]
  then
   echo "Compiling with OpenSSL 0.9.6d."
-  echo $opensslwarning
- elif [ "16#$version" = "16#90605f" ]
+  opensslwarn
+ elif [ "$version" = "90605f" ]
  then
   echo "Compiling with OpenSSL 0.9.6e."
-  echo $opensslwarning
- elif [ "16#$version" = "16#90606f" ]
+  opensslwarn
+ elif [ "$version" = "90606f" ]
  then
   echo "Compiling with OpenSSL 0.9.6f."
- elif [ "16#$version" = "16#90607f" ]
+ elif [ "$version" = "90607f" ]
  then
   echo "Compiling with OpenSSL 0.9.6g."
+ elif [ "$version" = "907001" ]
+ then
+  echo "Compiling with OpenSSL 0.9.7beta1."
+  opensslwarn
+ elif [ "$version" = "907002" ]
+ then
+  echo "Compiling with OpenSSL 0.9.7beta2."
+  opensslwarn
+ elif [ "$version" = "907003" ]
+ then
+  echo "Compiling with OpenSSL 0.9.7beta3."
  elif [ "$version" -lt "920" ]
  then
   echo "This version: ${version} of SSLeay is not supported."
@@ -568,6 +634,47 @@ http://www.clark.net/pub/dickey/ncurses/ncurses.tar.gz"
   fi
  fi
 
+ if [ "$system" = OpenBSD ]
+ then
+  LIBDIR=
+  INCDIR=
+  SRCDIR=idea*
+  findlib libidea.a
+  if [ "$found" = "" ]
+  then
+    echo "WARNING: Building without IDEA. This means (among other things) that
+Mixmaster will not create an RSA OpenPGP key (to cut down mail loss)"
+  else
+   DEF="$DEF -DUSE_IDEA"
+   IDEALIB="$MAKELIB"
+   LIBS="$LIBS $LIB"
+   LDFLAGS="$LDFLAGS $LDFLAG"
+   if [ "$INCDIR" != "" ]
+   then
+    INC="$INC -I$INCDIR"
+   fi
+  fi
+ elif [ "$system" = msdos -o "$system" = win32 ]
+ then
+  DEF="$DEF -DUSE_IDEA"
+ else
+   cat <<END >tmptst.c
+#include <openssl/idea.h>
+int main() {
+  exit(0);
+}
+END
+   if gcc $INC tmptst.c -c -o /dev/null
+   then
+     DEF="$DEF -DUSE_IDEA"
+   else
+     echo "WARNING: Building without IDEA. This means (among other things) that
+Mixmaster will not create an RSA OpenPGP key (to cut down mail loss)"
+   fi
+   rm -f tmptst.c
+ fi
+
+
 # if [ "$MIXDEST" = "$HOME/Mix" ]
 # then
 #  SPOOL=
@@ -589,18 +696,9 @@ http://www.clark.net/pub/dickey/ncurses/ncurses.tar.gz"
  echo "$OPENSSL" >>Makefile
 fi
 
-ans=""
-if [ "$remailer" = "y" ]
-then
-  echo "Please enter a pass phrase for your remailer (must be the same
-whenever you re-compile Mixmaster)."
-  read ans
-fi
 
-if [ "$ans" != "" ]
-then
- PASS="PASS=$ans"
-fi
+
+
 
 echo "Compiling. Please wait."
 whereis gmake make
@@ -885,15 +983,20 @@ ORGANIZATION	$orga
 MID		$mid
 
 # Remailing strategy:
-SENDPOOLTIME    0h
+SENDPOOLTIME    1h
 POOLSIZE        $poolsize
-RATE            100
-
+RATE            95
+INDUMMYP        20
+OUTDUMMYP       67
 IDEXP           7d
 PACKETEXP       7d
 
+$PASSPHRASE
+
 END
-fi
+
+fi # not yet installed
+
 
 REPLACE="s/%RMN/$RMN/g;s/%RMA/$RMA/g;s/%CA/$CA/g;s/%RAA/$RAA/g"
 if [ "$installed" = "n" ]
