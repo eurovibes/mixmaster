@@ -6,7 +6,7 @@
    details.
 
    Prepare messages for remailer chain
-   $Id: chain.c,v 1.14 2003/05/22 14:35:47 weaselp Exp $ */
+   $Id: chain.c,v 1.15 2003/05/22 14:44:55 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -86,16 +86,16 @@ void parse_badchains(int badchains[MAXREM][MAXREM], char *file, char *startindic
       badchains[lefti][righti] = 1;
     }
     fclose(list);
-  }
-  /* If some broken chain includes all remailers (*) mark it broken for
-   * every single remailer - this simplifies handling in other places */
-  for (i=1; i < maxrem; i++ ) {
-    if (badchains[0][i])
-      for (j=1; j < maxrem; j++ )
-	badchains[j][i] = 1;
-    if (badchains[i][0])
-      for (j=1; j < maxrem; j++ )
-	badchains[i][j] = 1;
+    /* If some broken chain includes all remailers (*) mark it broken for
+     * every single remailer - this simplifies handling in other places */
+    for (i=1; i < maxrem; i++ ) {
+      if (badchains[0][i])
+	for (j=1; j < maxrem; j++ )
+	  badchains[j][i] = 1;
+      if (badchains[i][0])
+	for (j=1; j < maxrem; j++ )
+	  badchains[i][j] = 1;
+    }
   }
 }
 
