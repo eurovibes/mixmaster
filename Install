@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.14 2002/08/31 09:45:11 rabbi Exp $
+# $Id: Install,v 1.15 2002/09/06 21:04:14 rabbi Exp $
 
 #whereis program default-path
 whereis()
@@ -263,7 +263,12 @@ if [ -f $MIXSRC/Makefile ]
 then
  if grep "#Makefile generated.*$HOSTNAME" $MIXSRC/Makefile
  then
-  echo "Found a Makefile."
+  echo "Found a Makefile for this system."
+  readln "Use this Makefile?" y
+  if [ "$ans" = n ]
+  then
+   rm -f $MIXSRC/Makefile
+  fi
  else
   readln "Remove old Makefile?" y
   if [ "$ans" = y ]
@@ -331,7 +336,7 @@ then
   ans="n"
   if [ "$PASSINCONFIG" != 1 ]
   then
-    echo "You can eiter compile your secret pass phrase into the binary
+    echo "You can eiter compile your secret passphrase into the binary
 or you can set it in your config file. Note that the former does not
 really increase security as the passphrase can still be found out
 by running something like »strings mix«."
@@ -342,7 +347,7 @@ by running something like »strings mix«."
   if [ "$ans" = "y" ]
   then
     ans=""
-    echo "Please enter a pass phrase for your remailer (must be the same
+    echo "Please enter a passphrase for your remailer (must be the same
 whenever you re-compile Mixmaster)."
     read ans
 
@@ -356,7 +361,7 @@ whenever you re-compile Mixmaster)."
     if [ "$PASSINCONFIG" != 1 ]
     then
       ans=""
-      echo "Please enter a pass phrase for your remailer (it will be
+      echo "Please enter a passphrase for your remailer (it will be
 stored in mix.cfg in clear)."
       read ans
 
@@ -970,10 +975,11 @@ ORGANIZATION	$orga
 MID		$mid
 
 # Remailing strategy:
-SENDPOOLTIME    0h
+SENDPOOLTIME    1h
 POOLSIZE        $poolsize
-RATE            100
-
+RATE            95
+INDUMMYP        20
+OUTDUMMYP       67
 IDEXP           7d
 PACKETEXP       7d
 
