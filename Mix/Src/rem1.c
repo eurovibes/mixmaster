@@ -241,8 +241,13 @@ header:
 	latent = rnd_number(latent);
     } else if (bufieq(field, "null"))
       type = MSG_NULL;
+#ifdef USE_IDEA
     else if (bufieq(field, "encrypt-key") || bufieq(field, "encrypt-idea"))
       buf_set(ek, content);
+#else
+    else if (bufieq(field, "encrypt-key") || bufieq(field, "encrypt-idea"))
+      buf_set(ekdes, content);
+#endif
     else if (bufieq(field, "encrypt-des") || bufieq(field, "encrypt-3des"))
       buf_set(ekdes, content);
     else if (bufieq(field, "encrypt-cast") || bufieq(field, "encrypt-cast5"))
