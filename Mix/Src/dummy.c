@@ -5,8 +5,16 @@
    ANY KIND, either express or implied. See the file COPYRIGHT for
    details.
 
-   Version definition file.
+   Dummy function for programs that don't use menuutil.c 
 */
 
 
-#define VERSION "2.9b41"
+#include "mix3.h"
+
+int menu_getuserpass(BUFFER *b, int i)
+{
+  return -1;
+}
+
+void cl(int y, int x)
+{}

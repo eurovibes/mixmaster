@@ -1,12 +1,12 @@
 #!/bin/sh
-# Mixmaster version 3  --  (C) 1999 Anonymizer Inc.
+# Mixmaster version 2.9  --  (C) 1999 Anonymizer Inc. and others.
 
 # Mixmaster may be redistributed and modified under certain conditions.
 # This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: upgrade,v 1.2.2.1 2002/10/09 21:45:16 weaselp Exp $
+# $Id: upgrade,v 1.2.2.2 2002/12/16 22:38:02 rabbi Exp $
 
 # readln text default
 readln()

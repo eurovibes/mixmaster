@@ -1,8 +1,13 @@
-/* PGP module test */
+/* Mixmaster version 2.9  --  (C) 1999 - 2002 Anonymizer Inc. and others.
 
-/* This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
+   Mixmaster may be redistributed and modified under certain conditions.
+   This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
    ANY KIND, either express or implied. See the file COPYRIGHT for
-   details. */
+   details.
+
+   PGP module test 
+*/
+
 
 #include "mix3.h"
 #include "pgp.h"

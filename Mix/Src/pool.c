@@ -1,4 +1,4 @@
-/* Mixmaster version 3  --  (C) 1999 Anonymizer Inc.
+/* Mixmaster version 2.9  --  (C) 1999 - 2002 Anonymizer Inc. and others.
 
    Mixmaster may be redistributed and modified under certain conditions.
    This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
@@ -6,7 +6,7 @@
    details.
 
    Send messages from pool
-   $Id: pool.c,v 1.10.2.4 2002/10/09 21:40:56 weaselp Exp $ */
+   $Id: pool.c,v 1.10.2.5 2002/12/16 22:38:10 rabbi Exp $ */
 
 #include "mix3.h"
 #include <stdlib.h>

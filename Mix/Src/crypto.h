@@ -1,4 +1,4 @@
-/* Mixmaster version 3  --  (C) 1999 Anonymizer Inc.
+/* Mixmaster version 2.9  --  (C) 1999 - 2002 Anonymizer Inc. and others.
 
    Mixmaster may be redistributed and modified under certain conditions.
    This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
@@ -6,7 +6,7 @@
    details.
 
    Interface to cryptographic library
-   $Id: crypto.h,v 1.2.2.2 2002/10/16 20:32:57 rabbi Exp $ */
+   $Id: crypto.h,v 1.2.2.3 2002/12/16 22:38:05 rabbi Exp $ */
 
 
 #ifndef _CRYPTO_H

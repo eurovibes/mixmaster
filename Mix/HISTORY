@@ -296,5 +296,7 @@
                            Mixmaster will now ensure that an address
                              submitted in a blocking request does not
                              match that of a known remailer before
-                             adding it to the dest.blk file.
+                             adding it to the dest.blk file (patch
+                             submitted by Trek. Vulnerability originally
+                             discovered by noise and rabbi.)
                            Minor documentation fixes.

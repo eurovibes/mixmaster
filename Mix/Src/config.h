@@ -1,4 +1,4 @@
-/* Mixmaster version 3  --  (C) 1999 Anonymizer Inc.
+/* Mixmaster version 2.9  --  (C) 1999 - 2002 Anonymizer Inc. and others.
 
    Mixmaster may be redistributed and modified under certain conditions.
    This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.9.2.5 2002/10/18 22:16:58 rabbi Exp $ */
+   $Id: config.h,v 1.9.2.6 2002/12/16 22:38:04 rabbi Exp $ */
 
 
 #ifndef _CONFIG_H

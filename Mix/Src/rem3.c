@@ -5,8 +5,18 @@
    ANY KIND, either express or implied. See the file COPYRIGHT for
    details.
 
-   Version definition file.
-*/
+   Process Mixmaster 3 remailer messages
+   $Id: rem3.c,v 1.1.1.1.2.1 2002/12/16 22:38:12 rabbi Exp $ */
 
 
-#define VERSION "2.9b41"
+#include "mix3.h"
+
+int v3_magic(byte *b)
+{
+  return (b[0] == MAGIC0 && b[1] == MAGIC1);
+}
+
+int mix3_decrypt(BUFFER *m)
+{
+  NOT_IMPLEMENTED;
+}

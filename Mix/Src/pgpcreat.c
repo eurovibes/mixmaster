@@ -1,4 +1,4 @@
-/* Mixmaster version 3  --  (C) 1999 Anonymizer Inc.
+/* Mixmaster version 2.9  --  (C) 1999 - 2002 Anonymizer Inc. and others.
 
    Mixmaster may be redistributed and modified under certain conditions.
    This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
@@ -6,7 +6,7 @@
    details.
 
    Create OpenPGP packets
-   $Id: pgpcreat.c,v 1.5.2.4 2002/10/09 20:51:07 weaselp Exp $ */
+   $Id: pgpcreat.c,v 1.5.2.5 2002/12/16 22:38:09 rabbi Exp $ */
 
 
 #include "mix3.h"

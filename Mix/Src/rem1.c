@@ -1,4 +1,4 @@
-/* Mixmaster version 3  --  (C) 1999 Anonymizer Inc.
+/* Mixmaster version 2.9  --  (C) 1999 - 2002 Anonymizer Inc. and others.
 
    Mixmaster may be redistributed and modified under certain conditions.
    This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
@@ -6,7 +6,7 @@
    details.
 
    Process Cypherpunk remailer messages
-   $Id: rem1.c,v 1.6.2.1 2002/10/09 20:29:44 weaselp Exp $ */
+   $Id: rem1.c,v 1.6.2.2 2002/12/16 22:38:10 rabbi Exp $ */
 
 
 #include "mix3.h"
