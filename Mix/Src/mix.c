@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.44 2003/07/07 11:18:20 weaselp Exp $ */
+   $Id: mix.c,v 1.45 2003/07/07 11:28:05 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -118,6 +118,7 @@ int PGP;
 int UNENCRYPTED;
 int REMIX;
 int REPGP;
+char EXTFLAGS[LINELEN];	/* user-defined capstring flags */
 
 int POOLSIZE;
 int RATE;
@@ -443,6 +444,7 @@ static void mix_setdefaults()
 	UNENCRYPTED   = 0;
 	REMIX         = 1;
 	REPGP         = 1;
+	strnncpy(EXTFLAGS, "");
 
 	POOLSIZE      = 0;
 	RATE          = 100;
@@ -528,7 +530,7 @@ int mix_configline(char *line)
 	  read_conf_i(REMAIL) || read_conf_i(MIX) ||
 	  read_conf_i(PGP) || read_conf_i(UNENCRYPTED) ||
 	  read_conf_i(REMIX) || read_conf(NEWS) ||
-	  read_conf_i(REPGP) ||
+	  read_conf_i(REPGP) || read_conf(EXTFLAGS) ||
 	  read_conf(MAILtoNEWS) || read_conf(ERRLOG) ||
 	  read_conf(ORGANIZATION) || read_conf(MID) ||
 	  read_conf(TYPE1) || read_conf_i(POOLSIZE) ||

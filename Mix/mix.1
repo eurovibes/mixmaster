@@ -1,5 +1,5 @@
 .TH MIX 1 "Mixmaster Version 3.0 beta"
-.\" $Id: mix.1,v 1.31 2003/07/07 11:18:20 weaselp Exp $
+.\" $Id: mix.1,v 1.32 2003/07/07 11:28:05 weaselp Exp $
 .SH NAME
 mix \- anonymous remailer software
 .SH SYNOPSIS
@@ -467,6 +467,10 @@ which is now deprecated.
 This should
 .I not
 be the same as the client passphrase.
+.TP
+.B EXTFLAGS
+Additional flags you want to set in the remailer's capabilities string.
+Defaults to the empty string, which means none.
 .PP
 The following variables can be set to
 .B y
