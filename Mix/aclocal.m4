@@ -1,11 +1,12 @@
 dnl Various specific config bits for Mixmaster.
+dnl
+dnl $Id: aclocal.m4,v 1.2 2003/08/07 15:15:35 dybbuk Exp $
 
+dnl Zlib versions before 1.1.4 had a nasty bug.
 AC_DEFUN(AM_ZLIB_CHECK, [
-zlib_ok=0
-AC_CHECK_LIB([z], [compress], [
-  dnl Zlib versions before 1.1.4 had a nasty bug.
+  zlib_ok=0
   AC_MSG_CHECKING(for zlib 1.1.4)
-  AC_TRY_RUN([#include <zlib.h>
+  AC_RUN_IFELSE([#include <zlib.h>
 #include <string.h>
 
 int main(void)
@@ -22,19 +23,11 @@ else
   ],
   [ AC_MSG_RESULT(ok)
     zlib_ok=1
-    LIBS="-lz ${LIBS}" ],
-  [], [])
-  if test "${zlib_ok}" = "0"
-  then
-     AC_MSG_RESULT([nope! We'll the included Zlib.])
-  fi
- ],
- [ ])
-if test "$zlib_ok" = "1"
-then
+    LIBS="-lz ${LIBS}"
     CPPFLAGS="-DUSE_ZLIB ${CPPFLAGS}"
-else
-    # how do I tell us to build zlib?
+  ],
+  [
+    AC_MSG_RESULT([no ... use the included Zlib.])
     AC_MSG_CHECKING(for included zlib)
     if test -d "Src/zlib-1.1.4"
     then
@@ -45,7 +38,7 @@ else
     CPPFLAGS="-DUSE_ZLIB -Izlib-1.1.4 ${CPPFLAGS}"
     TOPDIRS="Src/zlib-1.1.4 ${TOPDIRS}"
     XLIBS="zlib-1.1.4/libz.a ${XLIBS}"
-fi
+  ], [])
 ])
 
 AC_DEFUN(AM_PASSPHRASE, [
@@ -178,8 +171,12 @@ if test -z "$enable_idea" -o "$enable_idea" = "yes"; then
     AC_MSG_CHECKING(for IDEA support)
     AC_TRY_RUN([
 #include <openssl/idea.h>
+#include <openssl/evp.h>
 int main() {
-  exit(0);
+  if(EVP_get_cipherbyname("idea-cbc") != NULL)
+    exit(0);
+  else  
+    exit(1);
 }
  ], [
     AC_MSG_RESULT(yes)
@@ -187,7 +184,8 @@ int main() {
  ],
  [ AC_MSG_ERROR(IDEA support not found!
     Please explicitly disable it with --disable-idea and read the
-    documentation to find out what will be broken or missing.) ])
+    documentation to find out what will be broken or missing if IDEA
+    support is disabled.) ])
 fi
 
 ])
@@ -201,8 +199,12 @@ if test -z "$enable_aes" -o "$enable_aes" = "yes"; then
     AC_MSG_CHECKING(for AES support)
     AC_TRY_RUN([
 #include <openssl/aes.h>
+#include <openssl/evp.h>
 int main() {
-  exit(0);
+  if(EVP_get_cipherbyname("aes-128-cbc") != NULL)
+    exit(0);
+  else
+    exit(1);
 }
  ], [
     AC_MSG_RESULT(yes)
@@ -232,7 +234,7 @@ AC_ARG_WITH(mixdir,
 AC_SUBST(MIXDIR)
 ])
       
-dnl And, MIXDIR's lovely cousin, HOMEMIXDIR.
+dnl HOMEMIXDIR is something else.
 AC_DEFUN(AM_HOMEMIXDIR, [
 HOMEMIXDIR=""
 AC_MSG_CHECKING(for default relative Mix directory)
@@ -244,6 +246,7 @@ AC_ARG_WITH(homemixdir,
   [ AC_MSG_RESULT(using default) ])
 ])
 
+dnl Is the global mixmaster config working yet?
 AC_DEFUN(AM_MIX_CONF, [
 MIXCONF=""
 AC_MSG_CHECKING(for global configuration file)
