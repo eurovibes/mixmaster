@@ -1,7 +1,6 @@
 Todo items before 2.9.1 release:
 
 * permit CRAM-MD5 SMTP AUTH in addition to LOGIN.  n/a (patch welcome)
-* Update the nymservers in default dest.alw  rabbi
 
 
 Items that need to be completed before the next HEAD release:

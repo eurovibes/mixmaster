@@ -1,5 +1,41 @@
-/@anon\.nymserver\.com$/
-/@mailanon\.com$/
-/@anon\.efga\.org$/
+#
+# List of addresses to which Mixmaster will deliver, even in middleman mode
+# Beware: substring matches
+#
+
+##
+## allowed destinations
+##
+
+## Allows mail to *@example.com
+#/@example\.com$/
+
+## Matches *myaddress@example.net*
+#myaddress@example.net
+
+## Allows direct posts to alt.test and alt.anonymous.messages
+## (mix posts, not user-defined mail2news)
+#/^Newsgroups: +(alt\.test|alt\.anonymous\.messages)$/
+
+
+##
+## nymservers
+##
+
 /@nym\.alias\.net$/
-/@alias\.cyberpass\.net$/
+/@hod\.aarg\.net$/
+/@redneck\.gacracker\.org$/
+/@blackhole\.riot\.eu\.org$/
+/@nym\.cryptofortress\.com$/
+/@nym\.xganon\.com$/
+/@nym\.frogadmin\.yi\.org$/
+/@rodent\.frell\.eu\.org$/
+
+
+##
+## presumably dead nymservers
+##
+
+#/@anon\.nymserver\.com$/
+#/@mailanon\.com$/
+#/@alias\.cyberpass\.net$/
