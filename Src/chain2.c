@@ -6,7 +6,7 @@
    details.
 
    Encrypt message for Mixmaster chain
-   $Id: chain2.c,v 1.8 2003/05/03 05:31:07 weaselp Exp $ */
+   $Id: chain2.c,v 1.9 2003/05/03 06:56:22 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -153,7 +153,24 @@ int mix2_rlist(REMAILER remailer[], int badchains[MAXREM][MAXREM])
   list = mix_openfile(TYPE2REL, "r");
   if (list != NULL) {
     while (fgets(line, sizeof(line), list) != NULL &&
-	   !strleft(line, "--------------------------------------------")) ;
+	   !strleft(line, "--------------------------------------------")) {
+      if (strleft(line, "Last update:")) {
+	char *tmp = line + strlen("Last update:") + 1;
+	/* For some weird reason, this isn't rfc822 */
+	if (strleft(tmp, "Mon") ||
+	    strleft(tmp, "Tue") ||
+	    strleft(tmp, "Wed") ||
+	    strleft(tmp, "Thu") ||
+	    strleft(tmp, "Fri") ||
+	    strleft(tmp, "Sat") ||
+	    strleft(tmp, "Sun"))
+	  tmp += 3;
+        int generated = parsedate(tmp);
+	int now = time(NULL);
+	if (generated != -1 && generated < now - SECONDSPERDAY)
+	  errlog(WARNING, "Remailer Reliability Statistics are older than one day.\n");
+      }
+    };
     while (fgets(line, sizeof(line), list) != NULL &&
 	   !strleft(line, "</PRE>"))
       if (strlen(line) >= 44 && strlen(line) <= 46)
