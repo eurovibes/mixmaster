@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.8.2.18 2002/12/17 21:24:13 rabbi Exp $
+# $Id: Install,v 1.8.2.19 2002/12/19 08:58:06 weaselp Exp $
 
 #whereis program default-path
 whereis()
@@ -661,8 +661,9 @@ http://www.clark.net/pub/dickey/ncurses/ncurses.tar.gz"
   WARNING: Your version of OpenSSL has been configured without IDEA support.
   If you continue, Mixmaster will be installed with reduced functionality.
   This means (among other things) that Mixmaster will not creade an RSA
-  OpenPGP key (to avoid mail loss). You may want to re-install OpenSSL
-  before proceeding."
+  OpenPGP key (to avoid mail loss). It will not concern you if you only want
+  to run a type II remailer or only want a type II client. You may want to
+  re-install OpenSSL before proceeding."
     readln "Continue anyway?" y
     if [ "$ans" = "n" ]
     then
