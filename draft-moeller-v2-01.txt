@@ -209,7 +209,7 @@ Every t seconds:
 
 3.2. Dummy Traffic
 
-"Dummy messages" are multi-hop messages of type NULL with five randomly
+"Dummy messages" are multi-hop messages of type NULL with four randomly
 selected nodes as their chain.
 
 Older versions of Mixmaster (2.0.4 - 2.9.0) allowed for the creation of
