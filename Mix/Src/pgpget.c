@@ -6,7 +6,7 @@
    details.
 
    Read OpenPGP packets
-   $Id: pgpget.c,v 1.10 2002/09/18 23:26:16 rabbi Exp $ */
+   $Id: pgpget.c,v 1.11 2002/09/26 07:01:13 disastry Exp $ */
 
 
 #include "mix3.h"
@@ -304,7 +304,7 @@ void pgp_verify(BUFFER *msg, BUFFER *detached, pgpsig *sig)
   sig->ok = PGP_SIGBAD;
 
   if (msg->length == 0) {	/* detached signature */
-    if (detached->length) {
+    if (detached && detached->length) {
       buf_move(msg, detached);
       if (sig->sigtype == PGP_SIG_CANONIC)
 	pgp_sigcanonic(msg); /* for cleartext signatures */
