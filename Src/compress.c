@@ -6,7 +6,7 @@
    details.
 
    Buffer compression (interface to zlib)
-   $Id: compress.c,v 1.2 2002/09/18 23:26:16 rabbi Exp $ */
+   $Id: compress.c,v 1.3 2003/10/14 05:31:09 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -115,7 +115,7 @@ int buf_zip(BUFFER *out, BUFFER *in, int bits)
     goto end;
 
   outstart = out->length;
-  buf_append(out, NULL, in->length);	/* try to fit all into one chunk */
+  buf_append(out, NULL, (int)13+in->length*1.01); /* fit it in one chunk */
 
   s.next_in = in->data;
   s.avail_in = in->length;
@@ -127,6 +127,7 @@ int buf_zip(BUFFER *out, BUFFER *in, int bits)
     out->length -= s.avail_out;
     if (err != Z_OK)
       break;
+    errlog(ERRORMSG, "Compressed data did not fit in one chunk.\n");
     buf_append(out, NULL, BUFSIZE);
   }
   if (deflateEnd(&s) != Z_OK || err != Z_STREAM_END)
