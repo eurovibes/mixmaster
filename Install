@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.6 2002/07/24 07:58:55 weaselp Exp $
+# $Id: Install,v 1.7 2002/07/29 12:35:00 weaselp Exp $
 
 #whereis program default-path
 whereis()
@@ -989,7 +989,7 @@ then
  then
   readln "Overwrite now?" n
  else
-  readln "Do that now?" y
+  readln "Do that now?" n
  fi
  if [ "$ans" = "y" ]
  then
