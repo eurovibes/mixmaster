@@ -24,8 +24,9 @@ The current 2.9beta* versions are stable and widely deployed.
 <p>
 To download Mixmaster visit Sourceforge's
 <a href="http://sourceforge.net/project/showfiles.php?group_id=37891">download center</a>.
-Packages for the Debian GNU/Linux distribution can be found at
-<a href="http://non-us.debian.org/~weasel/archive/">http://non-us.debian.org/~weasel/archive/</a>.
+Packages for the Debian GNU/Linux distribution can be found in the testing and unstable
+distributions on a mirror near you. Also see
+<a href="http://packages.debian.org/mixmaster">http://http://packages.debian.org/mixmaster</a>.
 
 <p>
 For pingers and other remailer implementations see <a href="related.shtml">related Software</a>.
