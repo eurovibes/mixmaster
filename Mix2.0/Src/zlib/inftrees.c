@@ -231,7 +231,7 @@ uIntf *v;               /* working area: values in order of bit length */
 
         /* allocate new table */
         if (*hn + z > MANY)     /* (note: doesn't matter for fixed) */
-          return Z_MEM_ERROR;   /* not enough memory */
+          return Z_DATA_ERROR;  /* presumably corrupt data, see inftrees.h */
         u[h] = q = hp + *hn;
         *hn += z;
 
