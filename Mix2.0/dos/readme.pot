@@ -96,32 +96,30 @@ Useful Links
         http://members.xoom.com/potatoware
         
     Home of Mixmaster 2.0.4:
-        http://www.thur.de/ulf/mix/
+        http://mixmaster.sf.net/
 
     Lance Cottrell's Site (Mixmaster FAQ):
         http://obscura.com/~loki/
 
     Mixmaster Statistics URLs:
-        http://www.mit.edu:8001/finger?rlist@anon.lcs.mit.edu
-        Finger: mlist@anon.lcs.mit.edu
-        http://anon.efga.org/anon/mixmaster-list.html
-        http://www.publius.net/mixmaster-list.html
+        http://stats.melontraffickers.com/mlist.txt
+        http://mixmaster.shinn.net/stats/mlist
+        http://anon.efga.org/Remailers/mlist
+        http://www.noreply.org/echolot/mlist.txt
 
     Mixmaster Files:
-        http://members.tripod.com/~l4795/type2.lis
-        http://members.tripod.com/~l4795/pubring.mix
+        http://stats.melontraffickers.com/type2.list
+        http://stats.melontraffickers.com/pubring.mix
 
-        http://www.privacy.nb.ca/remailer/type2.list
-        http://www.privacy.nb.ca/remailer/pubring.mix
+        http://mixmaster.shinn.net/stats/type2.list
+        http://mixmaster.shinn.net/stats/pubring.mix
 
-        http://anon.efga.org/anon/type2.list
-        http://anon.efga.org/anon/pubring.mix
+        http://anon.efga.org/Remailers/type2.list
+        http://anon.efga.org/Remailers/pubring.mix
 
-        http://www.jpunix.com/type2.html     (Must be saved as plain text)
-        http://www.jpunix.com/pubring.html   (Must be saved as plain text)
-
-        http://www.publius.net/type2.list
-        http://www.publius.net/pubring.mix
+        http://www.noreply.org/echolot/type2.list
+        http://www.noreply.org/echolot/pubring.mix
 
 
 RProcess  18-Apr-98
+(updated -- rabbi 21-Sep-02)

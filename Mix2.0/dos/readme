@@ -1,7 +1,7 @@
 This software is being distributed under the GNU Public License, see
 the file LICENSE.GNU for more details.
 
-Mixmaster contains SSLeay and BSAFEeay. See the file LICENSE.EAY for
+Mixmaster contains OpenSSL and BSAFEeay. See the file LICENSE.EAY for
 details. For use in the US, an RSA patent license must be obtained
 seperately.
 
@@ -68,7 +68,8 @@ Lance Cottrell     1 Oct 1995
 ======================
 
 Modified by <um@idril.shnet.org>, 1997-11-01.
-Please report problems to <mix-l@jpunix.com>
+Modified by Len Sassaman <rabbi@abditum.com>.
+Please report problems to <mixmaster-users@lists.sf.net>.
 
 Thanks for help and valuable suggestions to:
   Antonomasia <ant@notatla.demon.co.uk>
@@ -80,6 +81,9 @@ Thanks for help and valuable suggestions to:
   Medusa <medusa-admin@weasel.owl.de>
   Dave Del Torto <ddt@pgp.com>
   RProcess <rprocess@nym.alias.net>
+  Nikolay Sturm <sturm@sec.informatik.tu-darmstadt.de>
+  Rodney Thayer <rodney@tillerman.to>
+  Dingo Admin <dingoadmin@dingoremailer.com>
 
   Mixmaster uses Jean-loup Gailly and Mark Adler's compression library
   zlib.

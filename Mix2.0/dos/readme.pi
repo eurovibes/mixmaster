@@ -1,13 +1,13 @@
 Mixmaster and Private Idaho 2.7
 -------------------------------
 Mixmaster (or Type II) remailers offer a high level of security 
-(see http://www.obscura.com/~loki for complete details).  Up until now,
+(see http://mixmaster.sf.net for complete details).  Up until now,
 Mixmaster has only been available to UNIX users.  Mixmaster's author, 
 Lance Cottrell, has recently released a DOS client version of the 
 application that works with Private Idaho 2.7b (and later).
 
 Since the Mixmaster client uses export-controlled cryptography, it is not
-included with Private Idaho.  Refer to http://www.obscura.com/~loki for 
+included with Private Idaho.  Refer to http://mixmaster.sf.net for 
 information on how to get a copy of MIXMASTE.ZIP (the compressed version
 of Mixmaster and its support files).
 
@@ -51,11 +51,11 @@ MIXMASTE.HTM files.
 
 Updated Mixmaster information can be found at:
 
-http://www.cs.berkeley.edu/~raph/remailer-list.html
+http://anon.efga.org/Remailers/
 
 and
 
-http://www.jpunix.com
+http://stats.melontraffickers.com
 
 Please address any comments, questions about Private Idaho to:
 
