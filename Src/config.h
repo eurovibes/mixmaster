@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.27 2002/12/05 04:23:32 weaselp Exp $ */
+   $Id: config.h,v 1.28 2002/12/08 00:56:23 weaselp Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -303,6 +303,7 @@ extern int INDUMMYP;
 extern int OUTDUMMYP;
 extern int MIDDLEMAN;
 extern int AUTOBLOCK;
+extern int STATSDETAILS;
 extern char FORWARDTO[];
 extern int SIZELIMIT;
 extern int INFLATEMAX;

@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.39 2002/12/05 04:23:33 weaselp Exp $ */
+   $Id: mix.c,v 1.40 2002/12/08 00:56:23 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -125,6 +125,7 @@ int INDUMMYMAXP;
 int OUTDUMMYMAXP;
 int MIDDLEMAN;
 int AUTOBLOCK;
+int STATSDETAILS;
 char FORWARDTO[LINELEN];
 int SIZELIMIT;		/* maximal size of remailed messages */
 int INFLATEMAX;		/* maximal size of Inflate: padding */
@@ -444,6 +445,7 @@ static void mix_setdefaults()
 	OUTDUMMYMAXP  = 96;     /* set max INDUMMYP and OUTDUMMYP such that 24 and 5.25 dummy messages will */
 	MIDDLEMAN     = 0;      /* be generated on average. More than this is insane. */
 	AUTOBLOCK     = 1;
+	STATSDETAILS  = 1;
 	strnncpy(FORWARDTO, "*");
 	SIZELIMIT     = 0;		/* maximal size of remailed messages */
 	INFLATEMAX    = 50;		/* maximal size of Inflate: padding */
@@ -524,6 +526,7 @@ int mix_configline(char *line)
 	  read_conf_i(INDUMMYP) ||
 	  read_conf_i(OUTDUMMYP) ||
 	  read_conf_i(AUTOBLOCK) || read_conf(FORWARDTO) ||
+	  read_conf_i(STATSDETAILS) ||
 	  read_conf_i(SIZELIMIT) || read_conf_i(INFLATEMAX) ||
 	  read_conf_i(MAXRANDHOPS) || read_conf_i(BINFILTER) ||
 	  read_conf_i(LISTSUPPORTED) ||

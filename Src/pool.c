@@ -6,7 +6,7 @@
    details.
 
    Send messages from pool
-   $Id: pool.c,v 1.20 2002/12/05 04:23:33 weaselp Exp $ */
+   $Id: pool.c,v 1.21 2002/12/08 00:56:23 weaselp Exp $ */
 
 #include "mix3.h"
 #include <stdlib.h>
@@ -494,13 +494,15 @@ int msg_send(char *name)
     if (err == -1)
       goto end;
     err = sendmail(m, REMAILERADDR, addr);
+    stats_log(3);
   } else if (type == MSG_MAIL || type == MSG_POST) {
     err = buf_read(m, f);
     if (err == -1)
       goto end;
-    if (MIDDLEMAN && ! allowmessage(m))
+    if (MIDDLEMAN && ! allowmessage(m)) {
       mix2_encrypt(type, m, FORWARDTO, 1, NULL);
-    else {
+      stats_log(6);
+    } else {
       err = filtermsg(m);
       if (err == 1)
 	userfrom = 1, err = 0;
@@ -508,9 +510,10 @@ int msg_send(char *name)
 	/* message has recipients */
 	errlog(DEBUGINFO, "Sending message (%ld bytes)\n", m->length);
 
-	if (type == MSG_MAIL)
+	if (type == MSG_MAIL) {
 	  err = sendmail(m, userfrom ? NULL : ANONNAME, NULL);
-	else if (type == MSG_POST) {
+	  stats_log(4);
+	} else if (type == MSG_POST) {
 	  if (strchr(NEWS, '@') && !strchr(NEWS, ' ')) {
 	    errlog(LOG, "Mailing article to %s.\n", NEWS);
 	    buf_sets(addr, NEWS);
@@ -530,6 +533,7 @@ int msg_send(char *name)
 	    closepipe(f);
 	  } else
 	    errlog(NOTICE, "Rejecting news article.\n");
+	  stats_log(5);
 	}
       } else
 	errlog(ERRORMSG, "Bad message file.\n");
