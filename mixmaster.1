@@ -625,8 +625,19 @@ limits the number of allowed recipients in outgoing mail.  Anything that exceeds
 number is dropped silently.  Default:
 .BR 5 .
 .PP
-The following are time variables. They can be given as days, hours, or
-minutes.
+The following are time variables. They can be given as years (
+.BR y
+), months (
+.BR b
+), days (
+.BR d
+), hours (
+.BR h
+), minutes (
+.BR m
+), or seconds (
+.BR s
+).
 .TP
 .B SENDPOOLTIME
 How often Mixmaster should check the pool for messages
@@ -674,6 +685,30 @@ minimum:
 If set to
 .BR 0 ,
 no log is kept.
+.TP
+.B KEYLIFETIME
+Mixmaster sets an expiration date on its remailer keys 
+.B KEYLIFETIME
+after the key creation date. Default:
+.BR 13b .
+.TP
+.B KEYGRACEPERIOD
+Mixmaster will continue to decrypt messages encrypted to an expired key 
+for
+.B KEYGRACEPERIOD 
+period of time after the expiration. This is done to ensure that messages
+already injected into the network are allowed to exit. Do not change this
+value unless you know what you are doing, or you will risk partitioning
+attacks. Default:
+.BR 7d . 
+.TP
+.B KEYOVERLAPPERIOD
+Mixmaster will generate and advertise a new key 
+.BR KEYOVERLAPPERIOD
+period of time before the expiration of the key. Clients should always use 
+the most recently created valid key. Clients that deviate from this 
+recommended behavior risk partitioning attacks. Default:
+.BR 1b . 
 .PP
 The following strings must be specified at compile-time in
 .BR config.h .
