@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.9 2002/08/03 17:08:02 weaselp Exp $ */
+   $Id: main.c,v 1.10 2002/08/07 21:45:59 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -560,9 +560,27 @@ end:
     int pid;
 
     fprintf(stderr, "Detaching.\n");
+    /* Detach as suggested by the Unix Programming FAQ */
     pid = fork();
     if (pid > 0)
       exit(0);
+    if (setsid() < 0) {
+      /* This should never happen. */
+      fprintf(stderr, "setsid() failed.\n");
+      exit(1);
+    };
+    pid = fork();
+    if (pid > 0)
+      exit(0);
+    if (chdir(MIXDIR) < 0) {
+      if (chdir("/") < 0) {
+        fprintf(stderr, "Cannot chdir to mixdir or /.\n");
+        exit(1);
+      };
+    };
+    freopen ("/dev/null", "r", stdin);
+    freopen ("/dev/null", "w", stdout);
+    freopen ("/dev/null", "w", stderr);
 #endif
     mix_daemon();
   }
