@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.20.2.7 2002/12/16 22:38:10 rabbi Exp $ */
+   $Id: rem.c,v 1.20.2.8 2002/12/17 10:39:16 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -373,7 +373,7 @@ void logmail(char *mailbox, BUFFER *message)
       fprintf(mbox, line);
     }
     buf_write(message, mbox);
-    fprintf(mbox, "\n");
+    fprintf(mbox, "\n\n");
     unlock(mbox);
     fclose(mbox);
   }

@@ -283,16 +283,19 @@
                            Minor code formating cleanup and Install script
                              fixes.
 
-2002-12-15      2.0b41     The Mixmaster protocol version is now prepended 
+2002-12-15      2.0b41     The Mixmaster protocol version is now prepended
                              to the software version in the Mixmaster cap-
                              string.
-                           Minor configuration default changes and Install 
+                           Minor configuration default changes and Install
                              script fixes.
-                           Install script now always uses "make" and not  
-                             "gmake". IDEA detection is fixed.
+                           Install script now always uses "make" and not
+                             "gmake".
+                           IDEA detection is fixed on systems that provide
+                             the header files but then turn out to not
+                             have the required functions upon linking.
                            Install now properly identifies system-wide
-                             installations of pcre and/or zlib if they 
-                             are installed in /usr/local/. 
+                             installations of pcre and/or zlib if they
+                             are installed in /usr/local/.
                            Mixmaster will now ensure that an address
                              submitted in a blocking request does not
                              match that of a known remailer before
@@ -300,3 +303,6 @@
                              submitted by Trek. Vulnerability originally
                              discovered by noise and rabbi.)
                            Minor documentation fixes.
+                           Append another newline character to mbox folders
+                             when storing a mail so that the mandatory empty
+                             line is there.
