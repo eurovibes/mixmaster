@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.27 2002/12/16 06:02:28 weaselp Exp $
+# $Id: Install,v 1.28 2003/03/31 18:19:13 weaselp Exp $
 
 #whereis program default-path
 whereis()
@@ -552,17 +552,9 @@ then
  elif [ "$version" = "90607f" ]
  then
   echo "Compiling with OpenSSL 0.9.6g."
- elif [ "$version" = "907001" ]
+ elif [ "$version" = "90700f" ]
  then
-  echo "Compiling with OpenSSL 0.9.7beta1."
-  opensslwarn
- elif [ "$version" = "907002" ]
- then
-  echo "Compiling with OpenSSL 0.9.7beta2."
-  opensslwarn
- elif [ "$version" = "907003" ]
- then
-  echo "Compiling with OpenSSL 0.9.7beta3."
+  echo "Compiling with OpenSSL 0.9.7."
  elif [ "$version" -lt "920" ]
  then
   echo "This version: ${version} of SSLeay is not supported."
@@ -642,8 +634,14 @@ http://www.clark.net/pub/dickey/ncurses/ncurses.tar.gz"
  ideawarn()
  {
     echo "
-  WARNING: Building without IDEA. This means (among other things) that
-  Mixmaster will not create an RSA OpenPGP key (to avoid mail loss)"
+  WARNING: Your version of OpenSSL has been configured without IDEA support.
+  If you continue, Mixmaster will be installed with reduced functionality.
+  This means (among other things) that Mixmaster will not create an RSA
+  OpenPGP key (to avoid mail loss in the Type I system). You may want to
+  re-install OpenSSL before proceeding.
+
+  This will not concern you if you only plan to run a type II remailer or
+  simply want a type II client."
     readln "Continue anyway?" y
     if [ "$ans" = "n" ]
     then
@@ -674,6 +672,7 @@ http://www.clark.net/pub/dickey/ncurses/ncurses.tar.gz"
  then
   DEF="$DEF -DUSE_IDEA"
  else
+   echo "Checking for IDEA support..."
    cat <<END >tmptst.c
 #include <openssl/idea.h>
 int main() {
@@ -682,13 +681,13 @@ int main() {
   exit(0);
 }
 END
-   if gcc $LDFLAGS $INC tmptst.c -o /dev/null $OPENSSLLIB
+   if gcc $LDFLAGS $INC tmptst.c -o tmptst $OPENSSLLIB
    then
      DEF="$DEF -DUSE_IDEA"
    else
      ideawarn
    fi
-   rm -f tmptst.c
+   rm -f tmptst.c tmptst
  fi
 
 
