@@ -386,12 +386,12 @@
                              time mixmaster is run unless CLIENTAUTOFLUSH is
                              set to n.  (closes: #676794: Rate implementation
                              doubled)
-                           Found that weird bug that weird bug that sometimes
-                             led to "Unknown remailer version!" errors: In
-                             chain_randfinal() we selected a random value
-                             between 0 and maxrem instead of 0 and maxrem - 1.
-                           Mixmaster now uses broken-chain info from stats. I
-                             hope this doesn't break any Nym functionality.
+                           Found that weird bug that sometimes led to "Unknown
+                             remailer version!" errors: In chain_randfinal() we
+                             selected a random value between 0 and maxrem instead
+                             of 0 and maxrem - 1.  Mixmaster now uses
+                             broken-chain info from stats. I hope this doesn't
+                             break any Nym functionality.
                            Warn if remailer stats are older than a day.
 
 2003-05-08      3.0a5      Experimental feature:  --redirect -l <chain>.
