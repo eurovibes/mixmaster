@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.28 2003/03/28 16:12:49 weaselp Exp $ */
+   $Id: main.c,v 1.29 2003/05/03 01:56:08 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -73,13 +73,13 @@ int main(int argc, char *argv[])
       menu_main();
     else
       menu_folder(0, NULL);
-    goto end;
+    goto clientpool;
   }
 #endif /* USE_NCURSES */
   if (argc > 1 && strleft(argv[1], "-f")) {
     menu_folder(strlen(argv[1]) > 2 ? argv[1][2] : 0,
 		argc < 3 ? NULL : argv[2]);
-    goto end;
+    goto clientpool;
   }
   for (i = 1; i < argc; i++) {
     p = argv[i];
@@ -573,6 +573,13 @@ WinNT service:\n\
     check_get_pass(1);
     mix_regular(0);
   }
+
+clientpool:
+  if ((REMAIL == 0) && (CLIENTAUTOFLUSH == 1)) {
+    SENDPOOLTIME = 0;
+    RATE = 100;
+    mix_send();
+  };
 
 end:
   buf_free(field);

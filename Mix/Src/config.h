@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.30 2003/04/09 10:36:34 weaselp Exp $ */
+   $Id: config.h,v 1.31 2003/05/03 01:56:08 weaselp Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -342,6 +342,7 @@ extern char MAILUSAGE[];
 extern char MAILANON[];
 extern char MAILERROR[];
 extern char MAILBOUNCE[];
+extern int CLIENTAUTOFLUSH;
 
 DLLIMPORT extern char ENTEREDPASSPHRASE[LINELEN];
 

@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.42 2003/04/09 10:36:34 weaselp Exp $ */
+   $Id: mix.c,v 1.43 2003/05/03 01:56:08 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -169,6 +169,8 @@ char MAILUSAGE[PATHMAX];
 char MAILANON[PATHMAX];
 char MAILERROR[PATHMAX];
 char MAILBOUNCE[PATHMAX];
+
+int CLIENTAUTOFLUSH;
 
 char ENTEREDPASSPHRASE[LINELEN] = "";
 
@@ -505,6 +507,8 @@ static void mix_setdefaults()
 	strnncpy(MAILERROR , "/dev/null");
 #endif /* else if not WIN32 */
 	strnncpy(MAILBOUNCE, "");
+
+	CLIENTAUTOFLUSH = 1;
 }
 
 int mix_configline(char *line)
@@ -572,7 +576,9 @@ int mix_configline(char *line)
 	  read_conf(TYPE2REL) || read_conf(TYPE2LIST) ||
 	  read_conf(PGPREMPUBRING) || read_conf(PGPREMPUBASC) ||
 	  read_conf(PGPREMSECRING) || read_conf(NYMSECRING) ||
-	  read_conf(NYMDB) || read_conf(PIDFILE) );
+	  read_conf(NYMDB) || read_conf(PIDFILE) ||
+	  
+	  read_conf_i(CLIENTAUTOFLUSH) );
 }
 
 int mix_config(void)
