@@ -60,7 +60,7 @@ This FAQ is maintained by Alex Kirk <a href="mailto:alex@schnarff.com">< alex@sc
 3.4 Useful System Tools<br>
 <br>
 4. Security<br>
-4.1 Host System Security<br>
+<a href=#4.1>4.1 Host System Security<br></a>
 4.1.1 Philosophy<br>
 4.1.2 Firewalls<br>
 <a href=#4.1.3>4.1.3 Minimalism/Unnecessary Software<br></a>
@@ -82,8 +82,8 @@ This FAQ is maintained by Alex Kirk <a href="mailto:alex@schnarff.com">< alex@sc
 5.1 Always Have A Posted Policy!<br>
 5.2 Responding to Abuse Complaints<br>
 5.3 To Monitor Or Not To Monitor?<br>
-5.4 Cryptographically Signing Posts & E-mail<br>
-5.4.1 How To<br>
+<a href=#5.4>5.4 Cryptographically Signing Posts & E-mail<br></a>
+<a href=5.4.1>5.4.1 How To<br></a>
 5.5 Changing Remailer Keys<br>
 <a href=#5.6>5.6 Legal Links<br></a>
 <br>
@@ -291,8 +291,15 @@ Eager to receive less spam, I tried this myself. I am please to report that bloc
 <h3>5.1 Always Have A Posted Policy!</h3>
 <h3>5.2 Responding to Abuse Complaints</h3>
 <h3>5.3 To Monitor Or Not To Monitor?</h3>
+<a name=5.4></a>
 <h3>5.4 Cryptographically Signing Posts & E-mail</h3>
+If you're running a remailer, you probably have at least the basic concepts of cryptography down -- at least enough to know that it's possible to cryptographically sign mail messages and Usenet posts, and that doing so helps verify your identity in the message. What you may not realize is that there have been (and will probably continue to be) extremely good forgeries of messages from remailer operators on the official mailing lists. Since someone forging a message could do really nasty things, such as issue bogus keys for your remailer, it is of the utmost importance that you *always* sign your messages, so that a forgery will be obvious (and if a forger has access to your keys to sign your messages, well, you've got bigger problems). Remember, if you only sign messages some of the time, it will be very easy for someone to sneak in and act as you (thought the occasional unsigned post followed two minutes later with a "Crap! Forgot to sign that last one!" post will be understood. ;-).<br><br>
+It is even worth your while to sign things like your abuse autoresponse, as forgeries have been known to occur in them as well (particularly when people are accusing you of abuse, and are trying to claim that your abuse policy is not strong enough).
+<a name=5.4></a>
 <h3>5.4.1 How To</h3>
+The first thing you'll need to do is have <a href=http://www.pgpi.com>PGP</a> or <a href=http://www.gnupg.org>GPG</a>installed. Chances are, if you're here, you've already done this.<br><br>
+Once this is done, you'll want to establish a key seperate from your remailer keys as your administrator key. If you've already got a keyset you're officially using, simply use it; if not, generate a new keyset, preferably RSA (as this is stronger than DSS), and at least 1024 bits (thought 2048 wouldn't be bad at all, especially for the paranoid amongst us).<br><br>
+As far as getting your mail client to work with PGP/GPG, well, it all depends. For many Windows systems, such as Outlook (Express), Eudora, etc., you can simply use the PGP plug-in. For Mozilla, you'll want to use <a href=http://enigmail.mozdev.org/>Enigmail</a>, which is freely available for all major operating systems. If you use a webmail system, you'll need to check its documentation.
 <h3>5.5 Changing Remailer Keys</h3>
 <a name=5.6></a>
 <h3>5.6 Legal Links</h3>
