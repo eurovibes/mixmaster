@@ -6,7 +6,7 @@
    details.
 
    Socket-based mail transport services
-   $Id: mail.c,v 1.7.2.4 2002/10/09 20:51:01 weaselp Exp $ */
+   $Id: mail.c,v 1.7.2.5 2002/10/10 10:17:44 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -153,18 +153,18 @@ int sendmail(BUFFER *message, char *from, BUFFER *address)
     /* Step 2:  Stat the file.  Wait for ENOENT as a response. */
     for (count = 0;; count++) {
       snprintf(path, PATHMAX, "%s%cout.%lu.%u_%lu.%s,S=%lu.txt",
-       POOLDIR, DIRSEP, time(NULL), getpid(), namecounter++, hostname, head->length + message->length);
+	POOLDIR, DIRSEP, time(NULL), getpid(), namecounter++, hostname, head->length + message->length);
       path[PATHMAX-1] = '\0';
 
       if (stat(path, &statbuf) == 0)
-       errno = EEXIST;
+	errno = EEXIST;
       else if (errno == ENOENT) { /* create the file (at least try) */
-       f = fopen(path, "w");
-       if (f != NULL)
-	 break; /* we managed to open the file */
-      }
+	f = fopen(path, "w");
+	if (f != NULL)
+	  break; /* we managed to open the file */
+	}
       if (count > 5)
-       break; /* Too many retries - give up */
+	break; /* Too many retries - give up */
 #ifdef WIN32
       Sleep(2000); /* sleep and retry */
 #else /* end of WIN32 */
