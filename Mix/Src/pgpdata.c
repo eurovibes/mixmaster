@@ -6,7 +6,7 @@
    details.
 
    OpenPGP data
-   $Id: pgpdata.c,v 1.6 2002/07/10 01:10:55 weaselp Exp $ */
+   $Id: pgpdata.c,v 1.7 2002/07/22 17:54:48 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -20,6 +20,13 @@
 int pgp_keylen(int symalgo)
 {
   switch (symalgo) {
+#ifdef USE_AES
+  case PGP_K_AES256:
+    return (32);
+  case PGP_K_AES192:
+    return (24);
+  case PGP_K_AES128:
+#endif
   case PGP_K_IDEA:
   case PGP_K_CAST5:
   case PGP_K_BF:
@@ -27,7 +34,26 @@ int pgp_keylen(int symalgo)
   case PGP_K_3DES:
     return (24);
   default:
-    return (-1);
+    return (0);
+  }
+}
+
+int pgp_blocklen(int symalgo)
+{
+  switch (symalgo) {
+#ifdef USE_AES
+  case PGP_K_AES256:
+  case PGP_K_AES192:
+  case PGP_K_AES128:
+    return (16);
+#endif
+  case PGP_K_IDEA:
+  case PGP_K_CAST5:
+  case PGP_K_BF:
+  case PGP_K_3DES:
+    return (8);
+  default:
+    return (16);
   }
 }
 
@@ -72,6 +98,12 @@ int skcrypt(BUFFER *data, int skalgo, BUFFER *key, BUFFER *iv, int enc)
 #ifdef USE_IDEA
   case PGP_K_IDEA:
     return (buf_ideacrypt(data, key, iv, enc));
+#endif
+#ifdef USE_AES
+  case PGP_K_AES128:
+  case PGP_K_AES192:
+  case PGP_K_AES256:
+    return (buf_aescrypt(data, key, iv, enc));
 #endif
   case PGP_K_3DES:
     return (buf_3descrypt(data, key, iv, enc));
@@ -265,7 +297,7 @@ static int getski(BUFFER *p, BUFFER *pass, BUFFER *key, BUFFER *iv)
     break;
   }
 
-  buf_get(p, iv, 8);
+  buf_get(p, iv, pgp_blocklen(skalgo));
 
  end:
   buf_free(salt);
@@ -285,7 +317,7 @@ static void makeski(BUFFER *secret, BUFFER *pass, int remail)
   } else {
     buf_appendc(out, 255);
     pgp_makesk(out, key, PGP_K_CAST5, 3, PGP_H_SHA1, pass);
-    buf_setrnd(iv, 8);
+    buf_setrnd(iv, pgp_blocklen(PGP_K_CAST5));
     buf_cat(out, iv);
     skcrypt(secret, PGP_K_CAST5, key, iv, 1);
     buf_cat(out, secret);
@@ -390,6 +422,7 @@ int pgp_getkey(int mode, int algo, int *psym, BUFFER *keypacket, BUFFER *key,
   int thisalgo, version, skalgo;
   int needsym = 0, symfound = 0;
   BUFFER *p1, *iv, *sk, *i, *thiskeyid;
+  int ivlen;
   int csstart;
 
   p1 = buf_new();
@@ -501,16 +534,18 @@ int pgp_getkey(int mode, int algo, int *psym, BUFFER *keypacket, BUFFER *key,
 	  switch (version) {
 	   case 2:
 	   case 3:
+	    ivlen = pgp_blocklen(skalgo);
 	    for (j = 0; j < pgp_numsecmpi(thisalgo); j++) {
-	      unsigned char lastb[8];
+	      unsigned char lastb[16];
 	      if (mpi_get(p1, i) == -1) {
 		keytype = -1;
 		goto end;
 	      }
-	      if (j)
-		{buf_clear(iv); buf_append(iv, lastb, 8);} // memcpy(iv->data, lastb, 8);
-	      memcpy(lastb, i->data+i->length-8, 8);
+	      assert(ivlen <= 16);
+	      memcpy(lastb, i->data+i->length-ivlen, ivlen);
 	      skcrypt(i, skalgo, sk, iv, DECRYPT);
+	      buf_clear(iv);
+	      buf_append(iv, lastb, ivlen);
 	      mpi_put(key, i);
 	    }
 	    break;
@@ -749,7 +784,7 @@ int pgp_rsakeygen(int bits, BUFFER *userid, BUFFER *pass, char *pubring,
   if (pass != NULL && pass->length > 0 && remail != 2) {
     skalgo = PGP_K_IDEA;
     digest_md5(pass, dk);
-    buf_setrnd(iv, 8);
+    buf_setrnd(iv, pgp_blocklen(skalgo));
     buf_appendc(skey, skalgo);
     buf_cat(skey, iv);
   }

@@ -6,7 +6,7 @@
    details.
 
    Interface to cryptographic library
-   $Id: crypto.c,v 1.2 2002/07/10 01:58:49 rabbi Exp $ */
+   $Id: crypto.c,v 1.3 2002/07/22 17:54:48 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -443,6 +443,24 @@ int buf_castcrypt(BUFFER *buf, BUFFER *key, BUFFER *iv, int enc)
 		     enc == ENCRYPT ? CAST_ENCRYPT : CAST_DECRYPT);
   return (0);
 }
+
+#ifdef USE_AES
+int buf_aescrypt(BUFFER *buf, BUFFER *key, BUFFER *iv, int enc)
+{
+  int n = 0;
+  AES_KEY ks;
+
+  if (key == NULL || key->length == 0)
+    return (-1);
+
+  assert(enc == ENCRYPT || enc == DECRYPT);
+  assert((key->length == 16 || key->length == 24 || key->length == 32) && iv->length == 16);
+  AES_set_encrypt_key(key->data, key->length<<3, &ks);
+  AES_cfb128_encrypt(buf->data, buf->data, buf->length, &ks, iv->data, &n,
+		     enc == ENCRYPT ? AES_ENCRYPT : AES_DECRYPT);
+  return (0);
+}
+#endif /* USE_AES */
 
 #ifdef USE_IDEA
 int buf_ideacrypt(BUFFER *buf, BUFFER *key, BUFFER *iv, int enc)
