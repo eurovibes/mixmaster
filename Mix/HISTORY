@@ -418,7 +418,8 @@
                              instead of 0 and maxrem - 1.  Mixmaster now uses
                              broken-chain info from stats. I hope this doesn't
                              break any Nym functionality.
-                           Warn if remailer stats are older than a day.
+                           Warn if remailer stats are older than a day or
+                             from the future.
                            Don't send messages to ourselves via the mailsystem
                              but instead place them in the pool as incoming
                              messages so that they will get processed with the
