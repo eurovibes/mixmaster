@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.3 2001/12/11 20:59:26 rabbi Exp $ */
+   $Id: main.c,v 1.4 2001/12/11 21:45:53 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -352,8 +352,8 @@ Remailer:\n\
 	   "\n\
 WinNT service:\n\
 \n\
-    --install                     to install the service\n\
-    --remove                      to remove the service\n"
+    --svc-install                 install the service\n\
+    --svc-remove                  remove the service\n"
 #endif
     );
 
