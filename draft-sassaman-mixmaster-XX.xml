@@ -432,10 +432,10 @@ User data section              [ up to ~2.5 MB]</artwork></figure>
             </t>
             <t hangText="Timestamp:">A timestamp is introduced with the byte
               sequence (48, 48, 48, 48, 0). The following two bytes specify
-              the number of days since January 1, 1970, in little-endian
-              byte order. A random number between one and three, inclusive,
-              may be subtracted from the number of days in order to obscure
-              the origin of the message.</t>
+              the number of days since January 1, 1970 (00:00 UTC), in
+              little-endian byte order. A random number between one and
+              three, inclusive, may be subtracted from the number of days
+              in order to obscure the origin of the message.</t>
             <t hangText="Message digest:">MD5 digest computed over the
               preceding elements of the encrypted header part.</t>
           </list>
@@ -648,7 +648,8 @@ Remailer-Type: Mixmaster [version number]
             described in <xref target="key-format"/>. It may also return the keys and attributes
             of other remailers it knows about.</t>
           <t hangText="remailer-stats:">Returns information about the number
-            of messages the remailer has processed per day.</t>
+            of messages the remailer has processed per day (again, a day
+            starts at 00:00 UTC).</t>
           <t hangText="remailer-conf:">Returns local configuration
             information such as software version, supported protocols,
             filtered headers, blocked newsgroups and domains, and the
