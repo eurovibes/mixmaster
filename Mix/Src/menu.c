@@ -6,7 +6,7 @@
    details.
 
    Menu-based user interface
-   $Id: menu.c,v 1.7 2002/09/18 23:26:16 rabbi Exp $ */
+   $Id: menu.c,v 1.8 2002/09/28 12:48:57 ulfm Exp $ */
 
 
 #include "menu.h"
@@ -166,7 +166,7 @@ void read_folder(char command, char *foldername, char *nym)
     mix_status("%s is empty.\n", path);
     goto end;
   }
-  if (mailfolder != 1) {
+  if (mailfolder == -1) {
 #ifdef USE_NCURSES
     clear();
     beep();
@@ -487,7 +487,7 @@ menu_redraw:
     y = 12, x = 25;
     mvprintw(y++, x, "m)ail");
     mvprintw(y++, x, "p)ost to Usenet");
-    mvprintw(y++, x, "r)ead mail");
+    mvprintw(y++, x, "r)ead mail (or news article)");
     mvprintw(y++, x, "d)ummy message");
     mvprintw(y++, x, "s)end messages from pool");
     mvprintw(y++, x, "q)uit");
