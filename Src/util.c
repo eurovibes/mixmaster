@@ -6,7 +6,7 @@
    details.
 
    Utility functions
-   $Id: util.c,v 1.5 2002/09/05 01:21:54 weaselp Exp $ */
+   $Id: util.c,v 1.6 2002/09/07 11:11:28 disastry Exp $ */
 
 
 #include "mix3.h"
@@ -614,17 +614,30 @@ time_t parse_yearmonthday(char* str)
     struct tm timestruct;
     char *tz;
     tz = getenv("TZ");
+#ifdef WIN32
+    putenv("TZ=");
+#else
     setenv("TZ", "", 1);
+#endif
     tzset();
     memset(&timestruct, 0, sizeof(timestruct));
     timestruct.tm_mday = day;
     timestruct.tm_mon = month - 1;
     timestruct.tm_year = year - 1900;
     date = mktime(&timestruct);
+#ifdef WIN32
+    if (tz) {
+      char envstr[LINELEN];
+      snprintf(envstr, LINELEN, "TZ=%s", tz);
+      putenv(envstr);
+    } else
+      putenv("TZ=");
+#else
     if (tz)
       setenv("TZ", tz, 1);
     else
       unsetenv("TZ");
+#endif
     tzset();
     return date;
   } else
