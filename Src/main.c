@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 {
   int error = 0, deflt = 1, help = 0, readmail = 0, send = -1, sendpool = 0,
   header = 1, maint = 0, keygen = 0, verbose = 2, sign = 0, encrypt = 0,
-  redirect_mail = 0, version=0;
+  redirect_mail = 0, about=0, version=0;
   int daemon = 0, type_list = 0, nodetach = 0;
 
 #ifdef USE_SOCK
@@ -95,6 +95,8 @@ int main(int argc, char *argv[])
 	  help = 1, deflt = 0;
         else if (streq(p, "version"))
           version = 1, deflt = 0;
+        else if (streq(p, "about"))
+          about = 1, deflt = 0;
 	else if (streq(p, "verbose"))
 	  verbose = 1;
 	else if (streq(p, "type-list"))
@@ -335,11 +337,16 @@ int main(int argc, char *argv[])
     buf_free(type2list);
     goto end;
   }
-  if (help ||version ||(isatty(fileno(stdin)) && isatty(fileno(stdout))))
-    fprintf(stderr, "Mixmaster %s\n", VERSION);
-  if (help ||version)
-    printf("\n\n");
   if (version) {
+    printf("Mixmaster %s\n", VERSION);
+    ret = 0;  
+    goto end;
+  }
+  if (help ||about ||(isatty(fileno(stdin)) && isatty(fileno(stdout))))
+    fprintf(stderr, "Mixmaster %s\n", VERSION);
+  if (help ||about)
+    printf("\n\n");
+  if (about) {
     printf("Many people have contributed to the source code for Mixmaster.\n");
     printf("These contributors include:\n\n");
     printf("Anonymizer, Inc.\n");
@@ -358,6 +365,7 @@ int main(int argc, char *argv[])
 \n\
 -h, --help                        summary of command line options\n\
 -V, --version                     print version information\n\
+    --about                       print authorship information\n\
 -T, --type-list                   list available remailers\n\
 -t, --to=user@host                the recipient's address(es)\n\
 -g, --post-to=newsgroup           newsgroup(s) to post to\n\
