@@ -6,7 +6,7 @@
    details.
 
    Function prototypes
-   $Id: mix3.h,v 1.11 2002/08/22 08:13:35 weaselp Exp $ */
+   $Id: mix3.h,v 1.12 2002/08/25 13:27:40 weaselp Exp $ */
 
 
 #ifndef _MIX3_H
@@ -255,6 +255,13 @@ int stats_log(int);
 int stats_out(int);
 
 /* OpenPGP */
+#define PGP_ARMOR_NORMAL        0
+#define PGP_ARMOR_REM           1
+#define PGP_ARMOR_KEY           2
+#define PGP_ARMOR_NYMKEY        3
+#define PGP_ARMOR_NYMSIG        4
+#define PGP_ARMOR_SECKEY        5
+
 int pgp_keymgt(int force);
 int pgp_armor(BUFFER *buf, int mode);
 int pgp_dearmor(BUFFER *buf, BUFFER *out);
