@@ -6,7 +6,7 @@
    details.
 
    Send messages from pool
-   $Id: pool.c,v 1.2 2001/11/02 20:39:48 rabbi Exp $ */
+   $Id: pool.c,v 1.3 2001/11/06 23:41:58 rabbi Exp $ */
 
 #include "mix3.h"
 #include <stdlib.h>
@@ -64,14 +64,14 @@ static void mv(char *name, char *newtype)
 {
   char old[PATHMAX], new[PATHMAX];
 
-  sprintf(old, "%s/%s", POOLDIR, name);
+  sprintf(old, "%s%c%s", POOLDIR, DIRSEP, name);
 #ifdef SHORTNAMES
   assert(strlen(name) > 4);
   strcpy(name + strlen(name) - 3, newtype);
 #else
   name[0] = newtype[0];
 #endif
-  sprintf(new, "%s/%s", POOLDIR, name);
+  sprintf(new, "%s%c%s", POOLDIR, DIRSEP, name);
   rename(old, new);
 }
 
@@ -92,7 +92,7 @@ int latent_read(void)
       if (e == NULL)
 	break;
       if (is(e->d_name, "lat")) {
-	sprintf(path, "%s/%s", POOLDIR, e->d_name);
+	sprintf(path, "%s%c%s", POOLDIR, DIRSEP, e->d_name);
 	f = fopen(path, "rb");
 	if (f != NULL) {
 	  fscanf(f, "%*d %ld\n", &then);
@@ -124,7 +124,7 @@ int infile_read(void)
 	break;
       if (is(e->d_name, "inf")) {
 	mv(e->d_name, "tmp");
-	sprintf(path, "%s/%s", POOLDIR, e->d_name);
+	sprintf(path, "%s%c%s", POOLDIR, DIRSEP, e->d_name);
 	f = fopen(path, "rb");
 	if (f != NULL) {
 	  buf_clear(msg);
@@ -165,16 +165,16 @@ FILE *pool_new(char *type, char *tmpname, char *path)
 
   assert(strlen(type) == 3);
 #ifdef SHORTNAMES
-  sprintf(tmpname, "%s/%02x%02x%02x%02x.tmp", POOLDIR, rnd_byte(), rnd_byte(),
+  sprintf(tmpname, "%s%c%02x%02x%02x%02x.tmp", POOLDIR, DIRSEP, rnd_byte(), rnd_byte(),
 	  rnd_byte(), rnd_byte());
   strcpy(path, tmpname);
   memcpy(path + strlen(path) - 3, type, 3);
 #else
-  sprintf(tmpname, "%s/t%02x%02x%02x%02x%02x%02x%01x", POOLDIR, rnd_byte(),
+  sprintf(tmpname, "%s%ct%02x%02x%02x%02x%02x%02x%01x", POOLDIR, DIRSEP, rnd_byte(),
 	  rnd_byte(), rnd_byte(), rnd_byte(), rnd_byte(),
 	  rnd_byte(), rnd_byte() & 15);
   strcpy(path, tmpname);
-  strrchr(path, '/')[1] = type[0];
+  strrchr(path, DIRSEP)[1] = type[0];
 #endif
   f = fopen(tmpname, "wb");
   if (f == NULL)
@@ -221,7 +221,7 @@ void pool_dosend(void)
       if (is(e->d_name, "snd")) {
 	sendmail_begin();
 	mv(e->d_name, "tmp");
-	sprintf(path, "%s/%s", POOLDIR, e->d_name);
+	sprintf(path, "%s%c%s", POOLDIR, DIRSEP, e->d_name);
 	if (msg_send(path) == 1)
 	  mv(e->d_name, "err");
       }

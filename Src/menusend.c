@@ -6,7 +6,7 @@
    details.
 
    Menu-based user interface -- send message
-   $Id: menusend.c,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: menusend.c,v 1.2 2001/11/06 23:41:58 rabbi Exp $ */
 
 
 #include "menu.h"
@@ -300,7 +300,7 @@ redraw:
 	    editor = "vi";
 	  showhdr = 1;
 	  linecount = 1;
-	  sprintf(path, "%s/x%02x%02x%02x%02x.txt", POOLDIR,
+	  sprintf(path, "%s%cx%02x%02x%02x%02x.txt", POOLDIR, DIRSEP,
 		  rnd_byte(), rnd_byte(), rnd_byte(), rnd_byte());
 	  f = fopen(path, "w");
 	  if (f == NULL) {

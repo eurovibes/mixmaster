@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.2 2001/11/02 20:57:03 rabbi Exp $ */
+   $Id: rem.c,v 1.3 2001/11/06 23:41:58 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -259,11 +259,11 @@ int pool_packetfile(char *fname, BUFFER *mid, int packetnum)
      /* create a filename */
 {
 #ifdef SHORTNAMES
-  sprintf(fname, "%s/p%02x%02x%02x%01x.%02x", POOLDIR,
+  sprintf(fname, "%s%cp%02x%02x%02x%01x.%02x", POOLDIR, DIRSEP,
 	  mid->data[0], mid->data[1], mid->data[2], mid->data[3] & 15,
 	  packetnum);
 #else
-  sprintf(fname, "%s/p%02x%02x%02x%02x%02x%02x%01x", POOLDIR,
+  sprintf(fname, "%s%cp%02x%02x%02x%02x%02x%02x%01x", POOLDIR, DIRSEP,
 	  packetnum, mid->data[0], mid->data[1], mid->data[2], mid->data[3],
 	  mid->data[4], mid->data[5] & 15);
 #endif

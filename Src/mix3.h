@@ -6,7 +6,7 @@
    details.
 
    Function prototypes
-   $Id: mix3.h,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: mix3.h,v 1.2 2001/11/06 23:41:58 rabbi Exp $ */
 
 
 #ifndef _MIX3_H
@@ -21,6 +21,14 @@
 #define _WINSOCKAPI_		/* don't include winsock */
 #endif
 #include <windows.h>
+#ifdef _MSC
+#define snprintf _snprintf
+#endif
+#define DIRSEP '\\'
+#define DIRSEPSTR "\\"
+#else
+#define DIRSEP '/'
+#define DIRSEPSTR "/"
 #endif
 
 #define NOT_IMPLEMENTED {printf("Function not implemented.\n");return -1;}
