@@ -618,7 +618,7 @@ anonymous remailers are discussed in [Mazieres 1998].
 
 The security of the mix-net relies on the assumption that the
 underlying cryptographic primitives are secure. In addition, specific
-attacks on the mix-net need to be considered ([Möller 1998] contains a
+attacks on the mix-net need to be considered ([Moeller 1998] contains a
 more detailed analysis of these attacks).
 
 Passive adversaries can observe some or all of the messages sent to
@@ -704,7 +704,7 @@ in section 7.
 
 Several people contributed ideas and source code to the Mixmaster v2
 software. "Antonomasia" <ant@notatla.demon.co.uk>, Adam Back
-<adam@cypherspace.org> and Bodo Möller <bmoeller@acm.org> suggested
+<adam@cypherspace.org> and Bodo Moeller <bmoeller@acm.org> suggested
 improvements to this document.
 
 
@@ -713,12 +713,12 @@ improvements to this document.
 [Chaum 1981] Chaum, D., "Untraceable Electronic Mail, Return Addresses, and
 Digital Pseudonyms", Communications of the ACM 24 (1981) 2.
 
-[Mazieres 1998] Mazières, D., and Kaashoek, F., "The Design, Implementation and
+[Mazieres 1998] Mazieres, D., and Kaashoek, F., "The Design, Implementation and
 Operation of an Email Pseudonym Server",
 5th ACM Conference on Computer and Communications Security, 1998.
 <URL: ftp://cag.lcs.mit.edu/pub/dm/papers/mazieres:pnym.ps.gz>.
 
-[Möller 1998] Möller, U., "Anonymisierung von Internet-Diensten",
+[Moeller 1998] Moeller, U., "Anonymisierung von Internet-Diensten",
 Studienarbeit, University of Hamburg, January 1998.
 <URL: http://agn-www.informatik.uni-hamburg.de/people/3umoelle/st.ps>.
 
