@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.2 2001/11/02 21:48:21 rabbi Exp $
+# $Id: Install,v 1.3 2002/07/10 04:57:06 rabbi Exp $
 
 #whereis program default-path
 whereis()
@@ -822,7 +822,7 @@ MIDDLEMAN	$middle
 BINFILTER	$binfilter
 AUTOBLOCK	$autoblock
 
-ERRLOG          errlog
+ERRLOG          error.log
 VERBOSE		$verbose
 
 # Remailer name and addresses
