@@ -1,0 +1,56 @@
+        - Not done
+        * Top priority
+        . Partially done
+        o Done
+        D Deferred
+        X Abandoned
+
+Items that need to be completed before the next MAIN release:
+
+- delete secret keys securely after keygraceperiod expires
+  (Should this just be a call to an external program? I.e., 
+  "/bin/rm -P" or "/usr/bin/shred -fz -n3")? Does this even
+  serve a purpose now that journaled FSes are the norm?
+- implement time-skew sanity checks so that the timestamp, 
+  key rotation and key deletion features don't cause havok.
+
+Packaging:
+- Modify release tarball generation script to build the .tab.c file from
+  parsedate.y, so we don't end up requiring bison on every system that
+  wants to build mixmaster  (rabbi)
+- rpm -- dybbuk
+- Windows build instructions/files  (rabbi)
+- provide a packaged Windows build to be used with QuickSilver
+  + Richard has an Installer we can use for this purpose  (rabbi)
+- Macintosh OS/X support  (rabbi)
+- Update Install script to put files in global system locations if
+  invoked by root. Also update to be smart about AES support.
+- The main binary should be called "mixmaster", not "mix".
+
+Wishlist:
+- don't drop messages if there are not enough reliable remailers.
+- permit CRAM-MD5 SMTP AUTH in addition to LOGIN.  n/a (patch welcome)
+- do full regression tests on as many platforms possible
+  - list only these platforms as supported
+  - test on Solaris 9 on SPARC.
+- saner usage of /dev/[u]random is required  -- throw warning when not in daemon mode
+- clean up documentation and tarball contents
+  + reorganize directory structure
+- AES support -- requires OpenSSL 0.9.7  dybbuk
+
+
+Abandoned/Deferred:
+D allow for separate hard-coded remailer and client defaults.  n/a
+D allow for verification of clearsigned OpenPGP messages  disastry
+D honor key preferences when encrypting to multiple keys  ulf/disastry (n/a)
+D further mpgp testing of AES/MDC packet support  ulf
+D make mpgp friendlier
+  D mpgp man page  n/a
+X nym client needs major work.
+  X store nym public keys locally
+D find bug that is causing t* files to linger  n/a
+D COMMENT entire existing codebase!  (HAHA)
+D support for Borland compiler on Windows.
+  D I'ld even go so far as drop Visual C (or whatever we're supporting at
+    the moment) and require gcc with Cygwin to build it. But only if this
+    results in a Binary that runs without additional DLLs. (Weasel)
