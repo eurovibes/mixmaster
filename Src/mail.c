@@ -6,7 +6,7 @@
    details.
 
    Socket-based mail transport services
-   $Id: mail.c,v 1.19 2003/07/07 11:18:20 weaselp Exp $ */
+   $Id: mail.c,v 1.20 2003/07/07 11:32:45 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -171,6 +171,9 @@ int sendmail(BUFFER *message, char *from, BUFFER *address)
   }
   if (address != NULL)
     buf_appendf(head, "To: %b\n", address);
+
+  if (PRECEDENCE[0])
+	buf_appendf(head, "Precedence: %s\n", PRECEDENCE);
 
   buf_rewind(message);
 

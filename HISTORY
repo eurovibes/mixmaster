@@ -426,3 +426,6 @@
                           Messages to more than one remailer are dropped.
                           Config option EXTFLAGS allows appending additional
                             flags to the capabilities string.  (Hauke Lampe)
+                          Config option PRECEDENCE allows setting the
+                            Precedence: header on all outgoing mail.
+                            (Hauke Lampe)

@@ -1,5 +1,5 @@
 .TH MIX 1 "Mixmaster Version 3.0 beta"
-.\" $Id: mix.1,v 1.32 2003/07/07 11:28:05 weaselp Exp $
+.\" $Id: mix.1,v 1.33 2003/07/07 11:32:45 weaselp Exp $
 .SH NAME
 mix \- anonymous remailer software
 .SH SYNOPSIS
@@ -470,7 +470,16 @@ be the same as the client passphrase.
 .TP
 .B EXTFLAGS
 Additional flags you want to set in the remailer's capabilities string.
-Defaults to the empty string, which means none.
+Defaults to the empty string, which means none.  Example:
+.BR testing .
+.TP
+.B PRECEDENCE
+Sets the header Precedence: to this value for all outgoing mail.
+Defaults to the empty string, which means no such header is added.
+Example: 
+.BR anon .
+If you use this you might want to block user supplied precedence
+headers in your header block file.
 .PP
 The following variables can be set to
 .B y
