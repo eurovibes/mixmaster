@@ -14,7 +14,7 @@
 <p>
 The <a href="http://sourceforge.net/projects/jbn">JBN</a> project on
 sourceforge was just started in order to maintain JBN again and bring it up to
-date.
+date. (<a href="http://www.theinternet.cc/potatoware/jbn2">old versions</a>)
 
 <p>
 <a href="http://sourceforge.net/projects/mixlet">Mixlet</a> is a Mix Client in
@@ -41,7 +41,7 @@ perhaps has a list of more remailer clients.
 <h3>Reliable</h3>
 
 <a href="http://www.bigfoot.com/~potatoware/reli">Reliable</a> is
-a very popular remailer software for Microsoft Windows. It is type I
+a popular piece remailer software for Microsoft Windows. It is type I
 (cypherpunk) only but has type II callbacks. So if you additionally install
 Mix2 or Mix3 on your system it can also do type II. 
 
