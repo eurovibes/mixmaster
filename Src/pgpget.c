@@ -6,7 +6,7 @@
    details.
 
    Read OpenPGP packets
-   $Id: pgpget.c,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: pgpget.c,v 1.2 2001/11/22 00:20:28 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -46,6 +46,10 @@ int pgp_getmsg(BUFFER *in, BUFFER *key, BUFFER *sig, char *pubring,
 	buf_move(out, p);
       break;
     case PGP_ENCRYPTED:
+      if (!key) {
+	err = -1;
+	break;
+      }
       if (/*key->length > 0 &&*/ algo == 0) {
 	algo = PGP_K_IDEA;
 	digest_md5(key, key);
@@ -60,6 +64,10 @@ int pgp_getmsg(BUFFER *in, BUFFER *key, BUFFER *sig, char *pubring,
 	buf_move(out, p);
       break;
     case PGP_SESKEY:
+      if (!key) {
+	err = -1;
+	break;
+      }
       err = pgp_getsessionkey(p, key, secring);
       if (err >= 0) {
 	algo = err;
@@ -68,11 +76,15 @@ int pgp_getmsg(BUFFER *in, BUFFER *key, BUFFER *sig, char *pubring,
       }
       break;
     case PGP_SYMSESKEY:
+      if (!key) {
+	err = -1;
+	break;
+      }
       err = pgp_getsymsessionkey(p, key);
       if (err >= 0) {
 	algo = err;
 	err = 0;
-	buf_set(key, p);
+	if (key) buf_set(key, p);
       }
       break;
     case PGP_MARKER:
@@ -216,8 +228,10 @@ int pgp_getpacket(BUFFER *in, BUFFER *p)
       buf_cat(p, tmp);
       pgp_packetpartial(in, &len, &partial);
     }
-    buf_get(in, tmp, len);
-    buf_cat(p, tmp);
+    if (len > 0) {
+      buf_get(in, tmp, len);
+      buf_cat(p, tmp);
+    }
   }
   
   buf_free(tmp);
