@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.24 2002/10/02 22:23:35 rabbi Exp $ */
+   $Id: config.h,v 1.25 2002/10/09 20:53:28 weaselp Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -193,7 +193,7 @@
 #define DEFAULT_TYPE2LIST "type2.list"
 #endif
 #define DEFAULT_PIDFILE "mix.pid"
-  
+
 #define DEFAULT_PGPREMPUBRING "pubring.pgp"
 #define DEFAULT_PGPREMPUBASC "pubring.asc"
 #define DEFAULT_PGPREMSECRING "secring.pgp"

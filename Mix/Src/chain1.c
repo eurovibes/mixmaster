@@ -6,7 +6,7 @@
    details.
 
    Encrypt message for Cypherpunk remailer chain
-   $Id: chain1.c,v 1.3 2002/09/18 23:26:16 rabbi Exp $ */
+   $Id: chain1.c,v 1.4 2002/10/09 20:53:28 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -116,7 +116,7 @@ int t1_ek(BUFFER *key, BUFFER *seed, int num)
   fprintf(stderr, "passphrase=%s (%2X%2X%2X%2X %d)\n", key->data,
 	  seed->data[0], seed->data[1], seed->data[2], seed->data[3], num);
 #endif /* DEBUG */
-  return (0); 
+  return (0);
 }
 
 int t1_encrypt(int type, BUFFER *message, char *chainstr, int latency,

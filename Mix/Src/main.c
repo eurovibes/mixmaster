@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.23 2002/10/05 18:53:25 ulfm Exp $ */
+   $Id: main.c,v 1.24 2002/10/09 20:53:29 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -90,8 +90,8 @@ int main(int argc, char *argv[])
 	  help = 1, deflt = 0;
 	else if (streq(p, "verbose"))
 	  verbose = 1;
-        else if (streq(p, "type-list"))
-          type_list = 1;
+	else if (streq(p, "type-list"))
+	  type_list = 1;
 	else if (streq(p, "dummy"))
 	  send = MSG_NULL, deflt = 0;
 	else if (streq(p, "remailer"))
@@ -135,7 +135,7 @@ int main(int argc, char *argv[])
 	} else if ((q = largopt(p, "chain", argv[0], &error)) != NULL) {
 	  buf_appendf(msg, "Chain: %s\n", q);
 	}
-#ifdef USE_PGP 
+#ifdef USE_PGP
 	else if ((q = largopt(p, "reply-chain", argv[0], &error)) != NULL) {
 	  buf_appendf(msg, "Reply-Chain: %s\n", q);
 	} else if ((q = largopt(p, "latency", argv[0], &error)) != NULL) {
@@ -415,7 +415,7 @@ WinNT service:\n\
 
     if (f && buf_read(msg, f) != -1) {
       if (readmail == 1) {
-        check_get_pass(1);
+	check_get_pass(1);
 	mix_decrypt(msg);
       } else if (readmail == 2)
 	pool_add(msg, "inf");
@@ -620,7 +620,7 @@ end:
     }
 #endif /* UNIX */
     mix_daemon();
-#ifdef UNIX 
+#ifdef UNIX
 /* ifdef this one to, so that we do not need to export it from windows dll */
     clear_pidfile(PIDFILE);
 #endif /* UNIX */

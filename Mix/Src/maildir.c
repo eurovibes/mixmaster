@@ -1,7 +1,7 @@
 /* Maildir support for Mixmaster 3 - see
    http://www.qmail.org/man/man5/maildir.html and
    http://cr.yp.to/proto/maildir.html
-   
+
    Added by drt@un.bewaff.net - http://c0re.jp/
 
    To test it try:
@@ -43,7 +43,7 @@ int checkDirectory(char *dir, char *append, int create) {
   char tmp[PATHMAX];
   struct stat buf;
   int err;
-  
+
   tmp[0] = '\0';
   strcatn(tmp, dir, PATHMAX);
   if (append)
@@ -83,10 +83,10 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
   char olddirectory[PATHMAX] = "";
   char normalizedmaildir[PATHMAX];
 
-  /* Declare a handler for SIGALRM so we can time out. */ 
+  /* Declare a handler for SIGALRM so we can time out. */
   /* set_handler(SIGALRM, alarm_handler);  */
   /* alarm(86400); */
- 
+
   hostname[0] = '\0';
   gethostname(hostname, 63);
   hostname[63] = '\0';
@@ -112,8 +112,8 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
     returnValue = -1;
     goto functionExit;
   }
-  
-  /* Step 2:  Stat the temporary file.  Wait for ENOENT as a response. */ 
+
+  /* Step 2:  Stat the temporary file.  Wait for ENOENT as a response. */
   for (count = 0;; count++) {
     tmpname[0] = '\0';
     newname[0] = '\0';
@@ -124,18 +124,18 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
     strcatn(tmpname, basename, MAX_SUBNAME);
     strcatn(newname, "new" DIRSEPSTR, MAX_SUBNAME);
     strcatn(newname, basename, MAX_SUBNAME);
-	
+
     if (stat(tmpname, &statbuf) == 0)
       errno = EEXIST;
     else if (errno == ENOENT) {
       /* Step 4: create the file (at least try) */
-      fd = open(tmpname, O_WRONLY|O_CREAT|O_EXCL, S_IWUSR|S_IRUSR); 
-      if (fd >= 0) 
+      fd = open(tmpname, O_WRONLY|O_CREAT|O_EXCL, S_IWUSR|S_IRUSR);
+      if (fd >= 0)
 	break; /* we managed to open the file */
     }
 
     if (count > 5) {
-      /* Too many retries - give up */	  
+      /* Too many retries - give up */
       errlog(ERRORMSG, "Can't create message in %s\n", maildir);
       returnValue = -1;
       goto functionExit;
@@ -144,8 +144,8 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
     /* Step 3: sleep and retry */
     sleep(2);
   }
- 
-  /* Step 5:  write file */ 
+
+  /* Step 5:  write file */
   if(write(fd, message->data, message->length) != message->length) {
     returnValue = -1;
     goto functionExit;
@@ -159,7 +159,7 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
 #endif /* else if WIN32 */
     returnValue = -1;
     goto functionExit;
-  } 
+  }
 
   /* Step 6: move message to 'cur' */
 #ifdef POSIX
@@ -192,7 +192,7 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
     }
 
     if (count > 5) {
-      /* Too many retries - give up */	  
+      /* Too many retries - give up */
       errlog(ERRORMSG, "Can't move message to %s/new/\n", maildir);
       returnValue = -1;
       goto functionExit;
@@ -223,9 +223,9 @@ functionExit:
   assert(olddirectory[0] != '\0');
   if(chdir(olddirectory) != 0)
     returnValue = -1;
-  
+
 realend:
-  
+
   return returnValue;
 }
 
@@ -250,7 +250,7 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
 void errlog(int type, char *fmt,...)
 {
   va_list ap;
-  
+
   va_start(ap, fmt);
   vfprintf(stderr, fmt, ap);
   va_end(ap);
@@ -277,7 +277,7 @@ int main()
 
   /* read them back */
   assert((d = opendir("Maildir.test_maildir/new")) != NULL);
-  for (i = 0; i < count + 2; i++) 
+  for (i = 0; i < count + 2; i++)
     {
       de = readdir(d);
       if(de->d_name[0] != '.')
@@ -294,7 +294,7 @@ int main()
 	  close(fd);
 	}
     }
-  
+
   /* no files left in directory? */
   assert(readdir(d) == NULL);
 
@@ -306,7 +306,7 @@ int main()
 
   /* check if writing to a non existant maildir yilds an error */
   assert(maildirWrite("Maildir.test_maildir", &message, 0) == -1);
-  
+
   puts("OK");
 }
 #endif /* UNITTEST */

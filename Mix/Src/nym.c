@@ -6,7 +6,7 @@
    details.
 
    Create nym server messages
-   $Id: nym.c,v 1.7 2002/09/26 22:28:25 weaselp Exp $ */
+   $Id: nym.c,v 1.8 2002/10/09 20:53:30 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -469,7 +469,7 @@ int nymlist_read(BUFFER *list)
 	buf_clear(list);
 	err = -1;
       }
-    buf_free(key); 
+    buf_free(key);
 #endif /* USE_PGP */
   }
   return (err);

@@ -6,7 +6,7 @@
    details.
 
    OpenPGP key database
-   $Id: pgpdb.c,v 1.20 2002/10/02 08:06:49 weaselp Exp $ */
+   $Id: pgpdb.c,v 1.21 2002/10/09 20:53:31 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -162,7 +162,7 @@ int pgpdb_getnext(KEYRING *keydb, BUFFER *key, BUFFER *keyid, BUFFER *userid)
   p = buf_new();
   i = buf_new();
   thisid = buf_new();
-  
+
   if (key == NULL) {
     tempbuf = 1;
     key = buf_new();
@@ -306,7 +306,7 @@ end:
 	errlog(NOTICE, "Key %b not found!\n", userid);
       else if (keyid && keyid->length > 7)
 	errlog(NOTICE, "Key %02X%02X%02X%02X not found!\n", keyid->data[4],
-               keyid->data[5], keyid->data[6], keyid->data[7]);
+	       keyid->data[5], keyid->data[6], keyid->data[7]);
     }
   }
   if (found > 1) {
@@ -391,7 +391,7 @@ int pgp_keymgt(int force)
   if (force == 0 && (pgpdb_getkey(PK_ENCRYPT, PGP_E_ELG, NULL, NULL, NULL, NULL, NULL,
 				  NULL, NULL, PGPKEY, NULL) > 0) && dsa_ok == 0)
     dsa_ok = 1;
-  
+
   /* No need to rewrite the files - we didn't change a thing */
   if (
 #ifdef USE_RSA
@@ -486,7 +486,7 @@ int pgp_latestkeys(BUFFER* outtxt, int algo)
  * with pgp key header, ascii armored
  *
  * Can probably be extended to do this for all keys if we pass
- * the keyring file and the userid 
+ * the keyring file and the userid
  *
  * IN:  algo: PGP_ANY, PGP_ES_RSA, PGP_E_ELG, PGP_S_DSA
  * OUT: outtxt
@@ -507,11 +507,11 @@ int pgp_latestkeys(BUFFER* outtxt, int algo)
     while (pgpdb_getnext(keys, key, NULL, userid) != -1) {
       buf_clear(tmptxt);
       if (pgp_makekeyheader(PGP_PUBKEY, key, tmptxt, NULL, algo) == 0) {
-        buf_rewind(key);
+	buf_rewind(key);
 	pgp_getkey(PK_VERIFY, algo, NULL, NULL, &expires, key, NULL, NULL, NULL, NULL);
 	if (expires == 0 || (expires_found <= expires)) {
 	  err = 0;
-          buf_clear(outtxt);
+	  buf_clear(outtxt);
 	  buf_appends(outtxt, "Type Bits/KeyID     Date       User ID\n");
 	  buf_cat(outtxt, tmptxt);
 	  buf_nl(outtxt);
@@ -565,7 +565,7 @@ int pgp_rkeylist(REMAILER remailer[], int keyid[], int n)
 
   userid = buf_new();
   id = buf_new();
-  
+
   for (i = 1; i < n; i++) {
     buf_clear(userid);
     buf_setf(userid, "<%s>", remailer[i].addr);
@@ -575,9 +575,9 @@ int pgp_rkeylist(REMAILER remailer[], int keyid[], int n)
       buf_clear(id);
       err = pgpdb_getkey(PK_VERIFY, PGP_ANY, NULL, NULL, NULL, NULL, userid, NULL, id, NULL, NULL);
       if (id->length == 8) {
-        /* printf("%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x %s\n",
+	/* printf("%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x %s\n",
 	   id->data[0], id->data[1], id->data[2], id->data[3], id->data[4], id->data[5], id->data[6], id->data[7], id->data[8], remailer[i].addr); */
-        keyid[i] = (((((id->data[4] << 8) + id->data[5]) << 8) + id->data[6]) << 8) + id->data[7];
+	keyid[i] = (((((id->data[4] << 8) + id->data[5]) << 8) + id->data[6]) << 8) + id->data[7];
       }
     }
   }
