@@ -345,22 +345,19 @@ redraw:
 
 	  do {
 	    /* FIXME: give this its own function */
-	    /* FIXME: it doesn't block yet */
-	    SHELLEXECUTEINFO si;
-	    ZeroMemory(&si, sizeof(SHELLEXECUTEINFO));
-	    si.cbSize = sizeof(SHELLEXECUTEINFO);
-	    si.fMask = SEE_MASK_NOCLOSEPROCESS;
-	    si.hwnd = NULL;
-	    si.lpVerb = "open";
-	    si.lpFile = path;
-	    si.lpParameters = NULL;
-	    si.nShow = SW_SHOWDEFAULT;
-	    if (ShellExecuteEx(&si))
-	    {
-	      HANDLE handle = OpenProcess(SYNCHRONIZE, FALSE, si.hProcess);
-	      WaitForSingleObject(handle, INFINITE);
-	      CloseHandle(handle);
-	      CloseHandle(si.hProcess);
+	    SHELLEXECUTEINFO sei;
+	    ZeroMemory(&sei, sizeof(SHELLEXECUTEINFO));
+	    sei.cbSize = sizeof(SHELLEXECUTEINFO);
+	    sei.fMask = SEE_MASK_NOCLOSEPROCESS | SEE_MASK_FLAG_DDEWAIT;
+	    sei.hwnd = NULL;
+	    sei.lpVerb = "open";
+	    sei.lpFile = path;
+	    sei.lpParameters = NULL;
+	    sei.nShow = SW_SHOWNORMAL;
+
+	    if (ShellExecuteEx(&sei) == TRUE) {
+	      WaitForSingleObject(sei.hProcess, INFINITE);
+	      CloseHandle(sei.hProcess);
 	    }
 	  } while (0);
 
