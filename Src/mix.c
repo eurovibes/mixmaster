@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.34 2002/10/09 21:40:03 weaselp Exp $ */
+   $Id: mix.c,v 1.35 2002/10/10 13:02:11 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -1013,18 +1013,20 @@ int mix_daemon(void)
       slept = 0;
     }
 
+#ifdef WIN32SERVICE
+    if (hMustTerminate) {
+      if (WaitForSingleObject(hMustTerminate, t * 1000) == WAIT_OBJECT_0) {
+	CloseHandle(hMustTerminate);
+	terminatedaemon = 1;
+      }
+    }
+#endif /* WIN32SERVICE */
+
     if (!terminatedaemon && !rereadconfig) {
       setsignalhandler(0); /* set signal handlers;  don't restart system calls */
 #ifdef WIN32
-#ifdef WIN32SERVICE
-      if (hMustTerminate) {
-	if (WaitForSingleObject(hMustTerminate, t * 1000) == WAIT_OBJECT_0) {
-	  CloseHandle(hMustTerminate);
-	  return 0;
-	}
-      } else
-#endif /* WIN32SERVICE */
-      Sleep(t * 1000);
+      Sleep(t * 1000); /* how to get the real number of seconds slept? */
+      slept = t;
 #else /* end of WIN32 */
       slept += (t - slept) - sleep(t - slept);
 #endif /* else if not WIN32 */
