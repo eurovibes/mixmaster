@@ -26,8 +26,6 @@ Items for 3.0 or 3.0.1
 Further wishlist:
 
 * set an expiration date on OpenPGP keys
-* Allow sending with middlemen remailers last
-  in chain in interactive mixmaster (481244)
 * investigate whether and how it is feasible to
   add expiration/creation dates to mixmaster keys
   if feasible, implement setting and checking

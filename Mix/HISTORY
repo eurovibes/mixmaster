@@ -225,3 +225,6 @@
                              or Maildir folder. New mail will be read from it
                              and the folder cleared every time Mixmaster
                              processes its pool (closes: #597043).
+                           When sending type II messages interactivly you may
+                             now choose a middleman remailer as the last hop
+                             in your chain (closes: #481244).

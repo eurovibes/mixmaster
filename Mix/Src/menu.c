@@ -6,7 +6,7 @@
    details.
 
    Menu-based user interface
-   $Id: menu.c,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: menu.c,v 1.2 2002/08/22 04:01:16 weaselp Exp $ */
 
 
 #include "menu.h"
@@ -818,7 +818,7 @@ void menu_chain(char *chainstr, int chaintype, int post)
   int rlist[2 * MAXREM];
   char newchain[CHAINMAX];
   char info[LINELEN];
-  int num = 0, i, ok = 1;
+  int num = 0, i, middlemanlast=0, ok = 1;
   int c, x, y;
   int nymserv = 0;
   int chain[20], chainlen = 0;
@@ -902,13 +902,19 @@ void menu_chain(char *chainstr, int chaintype, int post)
 	strcatn(newchain, "*", CHAINMAX);
     }
     if (chainlen > 0) {
-      ok = !remailer[chain[chainlen - 1]].flags.middle;
+      ok = 1;
+      middlemanlast = remailer[chain[chainlen - 1]].flags.middle;
       if (post && !remailer[chain[chainlen - 1]].flags.post)
 	ok = 0;
     } else
       ok = 1;
 
-    mvprintw(LINES - 4, 40, ok ? "            " : "INTERMEDIATE");
+    mvprintw(LINES - 4, 40,
+      middlemanlast ? 
+	"MIDDLEMAN   " :
+	(ok ?
+	  "            " : 
+	  "NO POSTING  "));
     cl(LINES - 3, 0);
     cl(LINES - 2, 0);
     cl(LINES - 1, 0);
@@ -921,7 +927,7 @@ void menu_chain(char *chainstr, int chaintype, int post)
     refresh();
     c = getch();
     if (c == '\n' || c == '\r') {
-      if (ok)
+      if (ok || middlemanlast)
 	break;
       else
 	beep();
