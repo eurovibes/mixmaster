@@ -6,7 +6,7 @@
    details.
 
    Dynamically allocated buffers
-   $Id: buffers.c,v 1.4 2002/09/18 23:26:16 rabbi Exp $ */
+   $Id: buffers.c,v 1.5 2002/09/29 10:09:05 ulfm Exp $ */
 
 
 #include "mix3.h"
@@ -513,6 +513,10 @@ int buf_getheader(BUFFER *buffer, BUFFER *field, BUFFER *content)
       err = 0;
       break;
     }
+  }
+  if (err == -1 && bufileft(line, "From ")) {
+    buf_set(field, line);
+    err = 0;
   }
   if (err == -1) {
     /* badly formatted message -- try to process anyway */
