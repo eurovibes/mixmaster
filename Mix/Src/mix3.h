@@ -6,35 +6,30 @@
    details.
 
    Function prototypes
-   $Id: mix3.h,v 1.8.2.8 2003/06/01 23:39:09 rabbi Exp $ */
+   $Id: mix3.h,v 1.8.2.9 2003/06/01 23:40:05 rabbi Exp $ */
 
 
 #ifndef _MIX3_H
 #define _MIX3_H
 #define COPYRIGHT "Copyright Anonymizer Inc."
 
-#ifdef MIXLIB_EXPORTS
-#define DllExport	__declspec( dllexport )
-#else
-#define DllExport
-#endif
-
-#include "config.h"
+#include <stdio.h>
 #include "mix.h"
 
 #ifdef WIN32
-#ifndef USE_SOCK
-#define _WINSOCKAPI_		/* don't include winsock */
-#endif /* not USE_SOCK */
-#include <windows.h>
-#ifdef _MSC
-#define snprintf _snprintf
-#endif /* _MSC */
-#define DIRSEP '\\'
-#define DIRSEPSTR "\\"
+#	ifndef USE_SOCK
+#		define _WINSOCKAPI_		/* don't include winsock */
+#	endif /* not USE_SOCK */
+#	include <windows.h>
+#	ifdef _MSC_VER
+#		define snprintf _snprintf
+#		define vsnprintf _vsnprintf
+#	endif /* _MSC_VER */
+#	define DIRSEP '\\'
+#	define DIRSEPSTR "\\"
 #else /* end of WIN32 */
-#define DIRSEP '/'
-#define DIRSEPSTR "/"
+#	define DIRSEP '/'
+#	define DIRSEPSTR "/"
 #endif /* else if not WIN32 */
 
 #define NOT_IMPLEMENTED {printf("Function not implemented.\n");return -1;}
