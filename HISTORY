@@ -152,4 +152,13 @@
                              package name.
 
 2002-07-01                 Encrypt-to directive is now supported.
+                           Partial packets now properly expire if not
+                             reassembled.
+                           Fixed an address blocking error introduced in
+                             the last version (Peter Palfrader).
                            Various bug fixes.
+
+2002-07-06                 Updated zlib due to security reasons.
+                           Does not generate keys in client mode.
+                           Uses binary format for id.log.
+                           mpgp fixes (by Disastry).
