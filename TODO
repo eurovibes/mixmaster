@@ -12,7 +12,8 @@ Items that need to be completed before the next MAIN release:
 
 - Add equivalent features to -V and --about to mpgp and document in mpgp.1
 
-- Slackware Install issues.
+- Remove OpenSSL version checks. Maybe print a message stating the 
+  supported versions, and leave it up to the user?
 
 Items to watch:
 
