@@ -1,0 +1,21 @@
+# $Id: Makefile.in,v 1.1 2002/10/01 13:01:39 dybbuk Exp $
+
+SUBDIRS=@TOPDIRS@ Src
+
+all: README
+	@for dir in $(SUBDIRS); do \
+	  echo "Making $@ in $$dir"; \
+	  ( cd $$dir && $(MAKE) $@ ); \
+	done
+
+clean:
+	@for dir in $(SUBDIRS); do \
+	  echo "Making $@ in $$dir"; \
+	  ( cd $$dir && $(MAKE) $@ clean ); \
+	done
+
+realclean: clean
+	cd Src && make realclean
+	rm -f config.status config.cache config.log config.h stamp-h Makefile
+
+distclean: realclean
