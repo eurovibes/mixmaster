@@ -6,7 +6,7 @@
    details.
 
    Menu-based user interface
-   $Id: menu.c,v 1.16 2003/08/17 19:04:34 weaselp Exp $ */
+   $Id: menu.c,v 1.17 2003/08/20 19:28:57 weaselp Exp $ */
 
 
 #include "menu.h"
@@ -128,9 +128,11 @@ void read_folder(char command, char *foldername, char *nym)
 	  ;
 	}
 #else
-	buf_clear(mail);
-	from = -1, subject = -1;
-	continue;
+	{
+	  buf_clear(mail);
+	  from = -1, subject = -1;
+	  continue;
+	}
 #endif /* NYMSUPPORT */
 #endif /* USE_PGP */
       buf_cat(folder, mail);
