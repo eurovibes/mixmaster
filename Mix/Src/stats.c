@@ -6,7 +6,7 @@
    details.
 
    Remailer statistics
-   $Id: stats.c,v 1.20 2003/05/19 23:49:16 weaselp Exp $ */
+   $Id: stats.c,v 1.21 2003/05/19 23:57:59 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -71,7 +71,6 @@ int stats(BUFFER *b)
    */
   int poold[2][24], pool[2][80];
   int i, num, type, assigned, daysum;
-  int yesterday[7];
   char c;
   idlog_t idbuf;
 
@@ -82,7 +81,6 @@ int stats(BUFFER *b)
     msgd[0][i] = msgd[1][i] = msgd[2][i] = msgd[3][i] = msgd[4][i] = msgd[5][i] = msgd[6][i]= poold[0][i] = poold[1][i] = 0;
   for (i = 0; i < 80; i++)
     msg[0][i] = msg[1][i] = msg[2][i] = msg[3][i] = msg[4][i] = msg[5][i] = msg[6][i] = pool[0][i] = pool[1][i] = 0;
-  yesterday[0] = yesterday[1] = yesterday[2] = yesterday[3] = yesterday[4] = yesterday[5] = yesterday[6] = 0;
 
   s = mix_openfile(STATS, "r");
   if (s != NULL) {
@@ -108,8 +106,6 @@ int stats(BUFFER *b)
 	  msgd[type][(now - then) / (60 * 60)] += num;
 	else if (today - then < 80 * SECONDSPERDAY)
 	  msg[type][(today - then) / SECONDSPERDAY] += num;
-	if (today - SECONDSPERDAY < then && then <= today)
-	  yesterday[type] += num;
 	if (havestats == 0 || then < havestats)
 	  havestats = then;
 	break;
@@ -183,9 +179,6 @@ int stats(BUFFER *b)
   if (b != NULL) {
     struct tm *gt;
 
-    for (i=0; i<=6; i++)
-      msg[i][0] = yesterday[i];
-
     buf_sets(b, "Subject: Statistics for the ");
     buf_appends(b, SHORTNAME);
     buf_appends(b, " remailer\n\n");
@@ -215,8 +208,8 @@ int stats(BUFFER *b)
     if ((today - havestats) / SECONDSPERDAY >= 1)
       buf_appends(b, "\nNumber of messages per day:\n");
     for ((i = (today - havestats) / SECONDSPERDAY) > 79 ? 79 : i;
-	 i >= 0; i--) {
-      t = now - i * SECONDSPERDAY - SECONDSPERDAY;
+	 i >= 1; i--) {
+      t = now - i * SECONDSPERDAY;
       gt = localtime(&t);
       strftime(line, LINELEN, "%d %b: ", gt);
       buf_appends(b, line);
