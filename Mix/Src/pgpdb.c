@@ -6,7 +6,7 @@
    details.
 
    OpenPGP key database
-   $Id: pgpdb.c,v 1.4 2002/07/24 08:00:36 weaselp Exp $ */
+   $Id: pgpdb.c,v 1.5 2002/07/29 23:50:04 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -20,7 +20,7 @@
 static int pgp_readkeyring(BUFFER *keys, char *filename)
 {
   FILE *keyfile;
-  BUFFER *armored;
+  BUFFER *armored, *line, *tmp;
   int err = -1;
 
   if ((keyfile = mix_openfile(filename, "rb")) == NULL)
@@ -33,9 +33,28 @@ static int pgp_readkeyring(BUFFER *keys, char *filename)
     err = 0;
     buf_move(keys, armored);
   } else {
-    err = pgp_dearmor(armored, keys);
-    if (err == 0)
-      err = ARMORED;
+    line = buf_new();
+    tmp = buf_new();
+
+    while (1) {
+      do
+	if (buf_getline(armored, line) == -1) {
+	  goto end_greedy_dearmor;
+	}
+      while (!bufleft(line, begin_pgp)) ;
+      buf_clear(tmp);
+      buf_appends(tmp, begin_pgp);
+      buf_appends(tmp, "\n");
+      buf_cat(tmp, armored);
+
+      if (pgp_dearmor(tmp, tmp) == 0) {
+	err = ARMORED;
+	buf_cat(keys, tmp);
+      }
+    }
+end_greedy_dearmor:
+    buf_free(line);
+    buf_free(tmp);
   }
   buf_free(armored);
   return (err);
