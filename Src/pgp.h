@@ -6,7 +6,7 @@
    details.
 
    OpenPGP messages
-   $Id: pgp.h,v 1.10 2002/09/18 23:26:16 rabbi Exp $ */
+   $Id: pgp.h,v 1.11 2002/09/26 22:04:58 weaselp Exp $ */
 
 
 #ifdef USE_PGP
@@ -179,7 +179,7 @@ KEYRING *pgpdb_new(char *keyring, int filetype, BUFFER *encryptkey);
 KEYRING *pgpdb_open(char *keyring, BUFFER *encryptkey, int writer);
 int pgpdb_append(KEYRING *keydb, BUFFER *p);
 int pgpdb_getnext(KEYRING *keydb, BUFFER *p, BUFFER *keyid, BUFFER *userid);
-int pgpdb_close(KEYRING *keydb);
+int pgpdb_close(KEYRING *keydb, int armortype);
 
 #endif /* not _PGP_H */
 #endif /* USE_PGP */
