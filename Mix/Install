@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.8.2.7 2002/10/17 22:00:23 rabbi Exp $
+# $Id: Install,v 1.8.2.8 2002/10/17 22:13:14 rabbi Exp $
 
 #whereis program default-path
 whereis()
@@ -312,11 +312,11 @@ then
   if [ -f $MIXDEST/secring.mix ]
   then
     remailer=y
-    if grep PASSPHRASE $MIXDEST/mix.cfg >/dev/null
+    if grep -i PASSPHRASE $MIXDEST/mix.cfg >/dev/null
     then
       PASSINCONFIG=1
     fi
-    if ! grep "REMAIL " $MIXDEST/mix.cfg >/dev/null
+    if ! grep -i "REMAIL " $MIXDEST/mix.cfg >/dev/null
     then
       echo "REMAIL          y" >> $MIXDEST/mix.cfg
     fi
@@ -803,7 +803,7 @@ cd $MIXDEST
 installed=n
 if [ -f mix.cfg ]
 then
- if grep REMAILERADDR mix.cfg >/dev/null
+ if grep -i REMAILERADDR mix.cfg >/dev/null
  then
   installed=y
  fi
