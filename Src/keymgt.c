@@ -6,7 +6,7 @@
    details.
 
    Key management
-   $Id: keymgt.c,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: keymgt.c,v 1.2 2001/11/02 21:25:34 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -310,8 +310,9 @@ int v2keymgt(force)
   if (found) {
     id_encode(k1, line);
     if ((f = mix_openfile(KEYFILE, "w")) != NULL) {
-      fprintf(f, "%s %s %s %s %s\n", SHORTNAME,
+      fprintf(f, "%s %s %s %s %s%s\n", SHORTNAME,
 	      REMAILERADDR, line, VERSION,
+	      MIDDLEMAN ? "M" : "",
 	      NEWS[0] == '\0' ? "C" : (strchr(NEWS, '@') ? "CNm" : "CNp"));
       fprintf(f, "\n%s\n", begin_key);
       fprintf(f, "%s\n258\n", line);
