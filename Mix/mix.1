@@ -1,5 +1,5 @@
 .TH MIX 1 "Mixmaster Version 3.0 beta"
-.\" $Id: mix.1,v 1.6 2002/07/25 15:07:39 weaselp Exp $
+.\" $Id: mix.1,v 1.6.2.1 2002/09/11 21:36:29 rabbi Exp $
 .SH NAME
 mix \- anonymous remailer software
 .SH SYNOPSIS
@@ -223,7 +223,7 @@ Default:
 .B DISTANCE
 When selecting random remailers, the chain will contain
 .I DISTANCE
-other remailers between two occurences of the
+other remailers between two occurrences of the
 same remailer in the chain. Default:
 .BR 2 .
 .TP
@@ -434,7 +434,7 @@ or
 .TP
 .B REMAIL
 Enable remailer functionality. Default:
-.BR y .
+.BR n .
 .TP
 .B MIDDLEMAN
 Act as an intermediate hop only, forward anonymized
@@ -510,7 +510,7 @@ imply higher security and longer delays. Default:
 Percentage of messages from the pool to be sent. Default:
 .BR 100 .
 Lower values cause the pool to increase in size when
-many messages are recieved at a time, reducing the effect
+many messages are received at a time, reducing the effect
 of flooding attacks.
 .TP
 .B SIZELIMIT
@@ -566,7 +566,8 @@ Default:
 .BR 1h .
 .TP
 .B PACKETEXP
-How long to store parts of incomplete multipart messages.
+How long to store parts of incomplete multipart messages and other
+temporary pool files.
 Default:
 .BR 7d .
 .TP
@@ -689,7 +690,7 @@ The
 .BR getdomainname (2)
 function is available.
 .SH FILES
-These filenames can be overriden by setting the corresponding configuration
+These filenames can be overridden by setting the corresponding configuration
 option (given in parentheses).
 .TP
 .B mix.cfg
@@ -800,7 +801,7 @@ entry in
 .BR header.blk ,
 the entire message is deleted.
 
-In addition, regular expressions can be substituted. Backreferences
+In addition, regular expressions can be substituted. Back-references
 are supported. For example
 
  /^From: *([^@]*) <.*>/From: $1/
