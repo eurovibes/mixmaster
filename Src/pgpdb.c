@@ -6,7 +6,7 @@
    details.
 
    OpenPGP key database
-   $Id: pgpdb.c,v 1.16 2002/09/26 22:40:56 weaselp Exp $ */
+   $Id: pgpdb.c,v 1.17 2002/09/27 09:15:54 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -330,7 +330,12 @@ int pgp_keymgt(int force)
   FILE *f = NULL;
   BUFFER *key, *keybak, *userid, *out, *outkey, *outtxt, *pass, *secout;
   KEYRING *keys;
-  int err = 0, type = 0, res;
+  int err = 0, res, recreate_pubring = 0, dsa_ok = 0;
+#ifdef USE_RSA
+#ifdef USE_IDEA
+  int rsa_ok = 0;
+#endif /* USE_IDEA */
+#endif /* USE_RSA */
   long expires;
   LOCK *seclock;
 
@@ -352,61 +357,103 @@ int pgp_keymgt(int force)
    * with IDEA.
    */
 #ifdef USE_IDEA
+  /* FIXME: pgpdb_getky returns the expiration date from the last key in the keyring
+   *        which probably works most of the time if the keys are in the correct order
+   *        it doesn't return the latest expiration date (or 0) if the key in question
+   *        is before another matching key in the keyring tho
+   */
   res = pgpdb_getkey(PK_DECRYPT, PGP_ES_RSA, NULL, NULL, &expires, NULL, NULL,
 				  NULL, NULL, NULL, pass);
-  if (force == 2 || res < 0 || (expires > 0 && expires - KEYOVERLAPPERIOD < time(NULL)))
+  if (force == 2 || res < 0 || (expires > 0 && expires - KEYOVERLAPPERIOD < time(NULL))) {
+    rsa_ok = -1;
     pgp_keygen(PGP_ES_RSA, 0, userid, pass, PGPKEY, PGPREMSECRING, 0);
+  };
 
   if (force == 0 && (pgpdb_getkey(PK_ENCRYPT, PGP_ES_RSA, NULL, NULL, NULL, NULL, NULL,
-				  NULL, NULL, PGPKEY, NULL) < 0))
-    goto end;
+				  NULL, NULL, PGPKEY, NULL) < 0) && rsa_ok == 0)
+    rsa_ok = 1;
 #endif /* USE_IDEA */
 #endif /* USE_RSA */
+  /* FIXME: pgpdb_getky returns the expiration date from the last key in the keyring
+   *        which probably works most of the time if the keys are in the correct order
+   *        it doesn't return the latest expiration date (or 0) if the key in question
+   *        is before another matching key in the keyring tho
+   */
   res = pgpdb_getkey(PK_DECRYPT, PGP_E_ELG, NULL, NULL, &expires, NULL, NULL,
 				  NULL, NULL, NULL, pass);
-  if (force == 2 || res < 0 || (expires > 0 && expires - KEYOVERLAPPERIOD < time(NULL)))
+  if (force == 2 || res < 0 || (expires > 0 && expires - KEYOVERLAPPERIOD < time(NULL))) {
+    dsa_ok = -1;
     pgp_keygen(PGP_E_ELG, 0, userid, pass, PGPKEY, PGPREMSECRING, 0);
+  }
 
   if (force == 0 && (pgpdb_getkey(PK_ENCRYPT, PGP_E_ELG, NULL, NULL, NULL, NULL, NULL,
-				  NULL, NULL, PGPKEY, NULL) > 0))
+				  NULL, NULL, PGPKEY, NULL) > 0) && dsa_ok == 0)
+    dsa_ok = 1;
+  
+  /* No need to rewrite the files - we didn't change a thing */
+  if (
+#ifdef USE_RSA
+#ifdef USE_IDEA
+      rsa_ok == 1 &&
+#endif /* USE_IDEA */
+#endif /* USE_RSA */
+      dsa_ok == 1)
     goto end;
 
-  /* write RSA and DSA/ElGamal keys separately to make old PGP
-     versions happy */
+  /* write keys one key per armor to make hand editing easy and old PGP
+   * versions happy */
   err = -1;
-  for (type = 0; type < 2; type++) {
-    keys = pgpdb_open(PGPREMSECRING, NULL, 0, PGP_TYPE_PRIVATE);
-    if (keys == NULL)
-      goto end;
+  keys = pgpdb_open(PGPKEY, NULL, 0, PGP_TYPE_PUBLIC);
+  if (keys == NULL)
+    recreate_pubring = 1;
+  else {
     while (pgpdb_getnext(keys, key, NULL, userid) != -1) {
       buf_clear(outtxt);
       buf_clear(outkey);
-      buf_clear(keybak);
-      buf_cat(keybak, key);
-      if (pgp_makeseckey(key, outtxt, pass,
-			 type == 0 ? PGP_ES_RSA : PGP_S_DSA) == 0) {
-        err = 0;
-	buf_appends(secout, "Type Bits/KeyID     Date       User ID\n");
-	buf_cat(secout, outtxt);
-	buf_nl(secout);
-	pgp_armor(key, PGP_ARMOR_SECKEY);
-	buf_cat(secout, key);
-	buf_nl(secout);
-      }
-      buf_clear(outtxt);
-      if (pgp_makepubkey(keybak, outtxt, outkey, pass,
-			 type == 0 ? PGP_ES_RSA : PGP_S_DSA) == 0) {
-        err = 0;
+        buf_appends(outtxt, "FIXME");
+	err = 0;
 	buf_appends(out, "Type Bits/KeyID     Date       User ID\n");
 	buf_cat(out, outtxt);
 	buf_nl(out);
-	pgp_armor(outkey, PGP_ARMOR_KEY);
-	buf_cat(out, outkey);
+	pgp_armor(key, PGP_ARMOR_KEY);
+	buf_cat(out, key);
 	buf_nl(out);
-      }
     }
     pgpdb_close(keys);
   }
+  if (err != 0)
+    recreate_pubring = 1;
+  err = -1;
+
+  keys = pgpdb_open(PGPREMSECRING, NULL, 0, PGP_TYPE_PRIVATE);
+  if (keys == NULL)
+    goto end;
+  while (pgpdb_getnext(keys, key, NULL, userid) != -1) {
+    buf_clear(outtxt);
+    buf_clear(outkey);
+    buf_clear(keybak);
+    buf_cat(keybak, key);
+    if (pgp_makeseckey(key, outtxt, pass, PGP_ANY) == 0) {
+      err = 0;
+      buf_appends(secout, "Type Bits/KeyID     Date       User ID\n");
+      buf_cat(secout, outtxt);
+      buf_nl(secout);
+      pgp_armor(key, PGP_ARMOR_SECKEY);
+      buf_cat(secout, key);
+      buf_nl(secout);
+    }
+    buf_clear(outtxt);
+    if (recreate_pubring &&
+	pgp_makepubkey(keybak, outtxt, outkey, pass, PGP_ANY) == 0) {
+      buf_appends(out, "Type Bits/KeyID     Date       User ID\n");
+      buf_cat(out, outtxt);
+      buf_nl(out);
+      pgp_armor(outkey, PGP_ARMOR_KEY);
+      buf_cat(out, outkey);
+      buf_nl(out);
+    }
+  }
+  pgpdb_close(keys);
 
   seclock = lockfile(PGPREMSECRING);
   if (err == 0 && (f = mix_openfile(PGPREMSECRING, "w")) != NULL) {

@@ -6,7 +6,7 @@
    details.
 
    Key management
-   $Id: keymgt.c,v 1.15 2002/09/26 08:21:07 weaselp Exp $ */
+   $Id: keymgt.c,v 1.16 2002/09/27 09:15:54 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -223,6 +223,9 @@ int key(BUFFER *out)
 
   if (PGP) {
     if ((f = mix_openfile(PGPKEY, "r")) != NULL) {
+      /* FIXME: Return only the key with the latest expiration date for each
+       * type (DSA/RSA)
+       */
       buf_appends(out, "Here is the PGP key:\n\n");
       buf_read(out, f);
       buf_nl(out);
