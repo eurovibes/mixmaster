@@ -460,7 +460,17 @@
                            Added new options -V, --version, and --about.
                            Made manpage corrections.
                            Minor ncurses display tweaks.
+                           General improvements for Win32 support (by 
+                             goblin and Peter Palfrader).
+                           Preliminary Windows Installer work.
                            On Win32, default to Application Data/Mixmaster for
                              mixmaster's basedirectory.  This can still be
                              overridden by MIXPATH or the registry entry
                              HKEY_CURRENT_USER\Software\Mixmaster\MixDir
+                           Introduced new option "(e)dit configuration 
+                             file" in the main menu.
+                           Changed 'q)uit' to 'q)uit w/o sending' in 
+                             menusend.c.
+                           Added stats downloading support. Currently 
+                             works under Win32 only (by goblin).
+                           Fixed bug in buffers.c.
