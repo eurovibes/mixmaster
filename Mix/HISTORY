@@ -404,3 +404,9 @@
                              If the total number of hops (which cannot be
                              known) exceeds 20 the message is damanged
                              and will fail at the 20th node.
+
+
+2003-           CVS       Don't send messages to ourselves via the mailsystem
+                            but instead place them in the pool as incoming
+                            messages so that they will get processed with the
+                            next pool run.

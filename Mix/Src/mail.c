@@ -6,7 +6,7 @@
    details.
 
    Socket-based mail transport services
-   $Id: mail.c,v 1.16 2002/10/10 10:15:55 weaselp Exp $ */
+   $Id: mail.c,v 1.17 2003/06/01 18:53:11 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -101,11 +101,12 @@ int sendmail(BUFFER *message, char *from, BUFFER *address)
 {
   /* returns: 0: ok  1: problem, try again  -1: failed */
 
-  BUFFER *head, *block;
+  BUFFER *head, *block, *rcpt;
   FILE *f;
   int err = -1;
 
   head = buf_new();
+  rcpt = buf_new();
 
   block = readdestblk( );
   if ( !block ) block = buf_new( );
@@ -124,7 +125,28 @@ int sendmail(BUFFER *message, char *from, BUFFER *address)
 
   buf_rewind(message);
 
-  if (SMTPRELAY[0])
+  /* search the to address */
+  if (address == NULL) {
+    BUFFER *field, *content;
+    field = buf_new();
+    content = buf_new();
+
+    while (buf_getheader(message, field, content) == 0) {
+      if (bufieq(field, "to")) {
+	buf_set(rcpt, content);
+	break;
+      }
+    }
+    buf_free(field);
+    buf_free(content);
+  } else {
+    buf_set(rcpt, address);
+  }
+
+  if ( REMAIL && strcmp(REMAILERADDR, rcpt->data) == 0) {
+    buf_cat(head, message);
+    err = pool_add(head, "inf");
+  } else if (SMTPRELAY[0])
     err = smtpsend(head, message, from);
   else if (strieq(SENDMAIL, "outfile")) {
     char path[PATHMAX];
@@ -193,6 +215,7 @@ int sendmail(BUFFER *message, char *from, BUFFER *address)
 end:
   buf_free(block);
   buf_free(head);
+  buf_free(rcpt);
   return (err);
 }
 
