@@ -83,7 +83,10 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
   }
 
   /* Step 1: chdir to maildir (and save actual dir by opening it) */
-  currDir = open(".", O_RDONLY);
+  if((currDir = open(".", O_RDONLY)) < 0) {
+    returnValue = -1;
+    goto realend;
+  }
   if(chdir(maildir) != 0) {
     returnValue = -1;
     goto functionExit;
