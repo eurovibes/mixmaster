@@ -6,7 +6,7 @@
    details.
 
    Encrypt message for Cypherpunk remailer chain
-   $Id: chain1.c,v 1.5 2002/12/05 04:23:32 weaselp Exp $ */
+   $Id: chain1.c,v 1.6 2003/05/03 05:31:07 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -16,7 +16,7 @@
 
 #define N(X) (isdigit(X) ? (X)-'0' : 0)
 
-int t1_rlist(REMAILER remailer[])
+int t1_rlist(REMAILER remailer[], int badchains[MAXREM][MAXREM])
 {
   FILE *list, *excl;
   int i, listed = 0;
@@ -107,6 +107,7 @@ int t1_rlist(REMAILER remailer[])
 	}
   }
   fclose(list);
+  parse_badchains(badchains, TYPE1LIST, "Broken type-I remailer chains", remailer, n);
   if (listed < 4)		/* we have no valid reliability info */
     for (i = 1; i < n; i++)
       remailer[i].info[1].reliability = 10000;
@@ -137,6 +138,7 @@ int t1_encrypt(int type, BUFFER *message, char *chainstr, int latency,
 {
   BUFFER *b, *rem, *dest, *line, *field, *content;
   REMAILER remailer[MAXREM];
+  int badchains[MAXREM][MAXREM];
   int maxrem, chainlen = 0;
   int chain[20];
   int hop;
@@ -150,7 +152,7 @@ int t1_encrypt(int type, BUFFER *message, char *chainstr, int latency,
   field = buf_new();
   content = buf_new();
 
-  maxrem = t1_rlist(remailer);
+  maxrem = t1_rlist(remailer, badchains);
   if (maxrem < 1) {
     clienterr(feedback, "No remailer list!");
     err = -1;
@@ -166,14 +168,14 @@ int t1_encrypt(int type, BUFFER *message, char *chainstr, int latency,
     goto end;
   }
   if (chain[0] == 0)
-    chain[0] = chain_randfinal(type, remailer, maxrem, 1);
+    chain[0] = chain_randfinal(type, remailer, badchains, maxrem, 1, ( chainlen == 1 ? -1 : chain[1]));
 
   if (chain[0] == -1) {
     clienterr(feedback, "Invalid remailer chain!");
     err = -1;
     goto end;
   }
-  if (chain_rand(remailer, maxrem, chain, chainlen, 1) == -1) {
+  if (chain_rand(remailer, badchains, maxrem, chain, chainlen, 1) == -1) {
     clienterr(feedback, "No reliable remailers!");
     err = -1;
     goto end;

@@ -6,7 +6,7 @@
    details.
 
    Encrypt message for Mixmaster chain
-   $Id: chain2.c,v 1.7 2002/12/05 04:23:32 weaselp Exp $ */
+   $Id: chain2.c,v 1.8 2003/05/03 05:31:07 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -72,7 +72,7 @@ int prepare_type2list(BUFFER *out)
   return (0);
 }
 
-int mix2_rlist(REMAILER remailer[])
+int mix2_rlist(REMAILER remailer[], int badchains[MAXREM][MAXREM])
 {
   FILE *list, *excl;
   int n, i, listed = 0;
@@ -173,6 +173,8 @@ int mix2_rlist(REMAILER remailer[])
 	  }
     fclose(list);
   }
+
+  parse_badchains(badchains, TYPE2REL, "Broken type-II remailer chains", remailer, n);
   if (listed < 4)		/* we have no valid reliability info */
     for (i = 1; i < n; i++)
       remailer[i].info[0].reliability = 10000;
@@ -182,8 +184,8 @@ int mix2_rlist(REMAILER remailer[])
 
 static int send_packet(int numcopies, BUFFER *packet, int chain[],
 		       int chainlen, int packetnum, int numpackets,
-		       BUFFER *mid, REMAILER remailer[], int maxrem,
-		       BUFFER *feedback)
+		       BUFFER *mid, REMAILER remailer[], int badchains[MAXREM][MAXREM],
+		       int maxrem, BUFFER *feedback)
 {
   BUFFER *pid, *out, *header, *other, *encrypted, *key, *body;
   BUFFER *iv, *ivarray, *temp;
@@ -215,7 +217,7 @@ static int send_packet(int numcopies, BUFFER *packet, int chain[],
     for (hop = 0; hop < chainlen; hop++)
       thischain[hop] = chain[hop];
 
-    israndom = chain_rand(remailer, maxrem, thischain, chainlen, 0);
+    israndom = chain_rand(remailer, badchains, maxrem, thischain, chainlen, 0);
     if (israndom == -1) {
       err = -1;
       clienterr(feedback, "No reliable remailers!");
@@ -359,6 +361,7 @@ int mix2_encrypt(int type, BUFFER *message, char *chainstr, int numcopies,
      remailer chain or an error message */
 
   REMAILER remailer[MAXREM];
+  int badchains[MAXREM][MAXREM];
   int maxrem;
   BUFFER *line, *field, *content, *header, *msgdest, *msgheader, *body,
       *temp, *mid;
@@ -389,7 +392,7 @@ int mix2_encrypt(int type, BUFFER *message, char *chainstr, int numcopies,
   if (numcopies > 10)
     numcopies = 10;
 
-  maxrem = mix2_rlist(remailer);
+  maxrem = mix2_rlist(remailer, badchains);
   if (maxrem < 1) {
     clienterr(feedback, "No remailer list!");
     err = -1;
@@ -404,8 +407,10 @@ int mix2_encrypt(int type, BUFFER *message, char *chainstr, int numcopies,
     err = -1;
     goto end;
   }
-  if (chain[0] == 0)
-    chain[0] = chain_randfinal(type, remailer, maxrem, 0);
+  if (chain[0] == 0) {
+    chain[0] = chain_randfinal(type, remailer, badchains, maxrem, 0, ( chainlen == 1 ? -1 : chain[1]));
+    fprintf(stderr,"bla %d\n", chain[0]);
+  };
 
   if (chain[0] == -1) {
     clienterr(feedback, "No reliable remailers!");
@@ -470,7 +475,7 @@ int mix2_encrypt(int type, BUFFER *message, char *chainstr, int numcopies,
       buf_pad(packet, 10240);
       if (send_packet(numcopies, packet, chain, chainlen,
 		      i + 1, body->length / 10236 + 1,
-		      mid, remailer, maxrem, feedback) == -1)
+		      mid, remailer, badchains, maxrem, feedback) == -1)
 	err = -1;
     }
     break;
@@ -478,6 +483,7 @@ int mix2_encrypt(int type, BUFFER *message, char *chainstr, int numcopies,
     NOT_IMPLEMENTED;
     break;
   default:
+    fprintf(stderr, "%d\n", chain[0]);
     clienterr(feedback, "Unknown remailer version!");
     err = -1;
   }

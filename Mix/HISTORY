@@ -386,3 +386,5 @@
                              "Unknown remailer version!" errors: In chain_randfinal()
                              we selected a random value between 0 and maxrem instead
                              of 0 and maxrem - 1.
+                           Mixmaster now uses broken-chain info from stats. I hope
+                             this doesn't break any Nym functionality.
