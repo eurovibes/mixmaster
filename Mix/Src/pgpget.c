@@ -6,7 +6,7 @@
    details.
 
    Read OpenPGP packets
-   $Id: pgpget.c,v 1.2 2001/11/22 00:20:28 rabbi Exp $ */
+   $Id: pgpget.c,v 1.3 2001/12/13 22:33:38 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -223,7 +223,7 @@ int pgp_getpacket(BUFFER *in, BUFFER *p)
   type = pgp_packettype(in, &len, &partial);
   if (type > 0 && len > 0) {
     buf_clear(p);
-    while(partial) {
+    while(partial && len > 0) {
       buf_get(in, tmp, len);
       buf_cat(p, tmp);
       pgp_packetpartial(in, &len, &partial);
