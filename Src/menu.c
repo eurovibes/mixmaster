@@ -6,7 +6,7 @@
    details.
 
    Menu-based user interface
-   $Id: menu.c,v 1.10 2002/10/02 06:12:47 ulfm Exp $ */
+   $Id: menu.c,v 1.11 2002/10/02 19:49:17 ulfm Exp $ */
 
 
 #include "menu.h"
@@ -95,7 +95,7 @@ void read_folder(char command, char *foldername, char *nym)
       if (strleft(l, "From "))
 	mailfolder = 1;
       else if (strileft(l, "from:") || strileft(l, "path:")
-	  || strileft(l, "xref:"))
+	  || strileft(l, "xref:") || strileft(l, "return-path"))
 	mailfolder = 0;
       else
         break;
@@ -103,7 +103,7 @@ void read_folder(char command, char *foldername, char *nym)
     if (eof || (mailfolder && strleft(l, "From ")) ||
 	(mailfolder == 0 && from != -1 &&
 	 (strileft(l, "path:") ||
-	  strileft(l, "xref:")))) {
+	  strileft(l, "xref:") || strileft(l,"return-path")))) {
       if (num > 1)
 	mix_status("Reading message %d", num);
 #ifdef USE_PGP
