@@ -3,7 +3,7 @@ Expires: December 31, 2003
                                                          Lance Cottrell
                                                         Anonymizer Inc.
                                                         Peter Palfrader
-
+                                                  The Mixmaster Project
                                                            Len Sassaman
                                                  Nomen Abditum Services
                                                               July 2003
@@ -454,18 +454,19 @@ public RSA key:
   [encoded key]
   -----End Mix Key-----
 
-The attributes are listed in one line separated by spaces:
+The attributes are listed in one line separated by spaces. Individual
+attributes must not contain whitespace:
 
  identifier:       a human readable string identifying the remailer
  address:          the remailer's Internet mail address
  key ID:           public key ID
  version:          the Mixmaster software version number
  capabilities:     flags indicating additional remailer capabilities
- creation date:    date of the key's creation
+ validity date:    date from which the key is valid
  expiration date:  date of the key's expiration
 
 The identifier consists of lowercase alphanumeric characters, beginning
-with an alphabetic character. It must not contain whitespace.
+with an alphabetic character.
 
 The encoded key packet consists of two bytes specifying the key length
 (1024 bits) in little-endian byte order, and of the RSA modulus and
@@ -478,6 +479,13 @@ The key ID is the MD5 message digest of the representation of the RSA
 public key (not including the length bytes). It is encoded as a
 hexadecimal string.
 
+The version field consists of the protocol version number followed by a
+colon and the software version information, limited to the ASCII
+alphanumeric characters, plus dot (.) and dash (-). All implimentations of
+this protocol should prepend the software version with "2:" to indicate
+Mixmaster protocol version 2. Existing implimentations lacking a protocol
+version number imply protocol version 2.
+
 The capabilities field is optional. It is a list of flags represented
 by a string of ASCII characters. Clients should ignore unknown
 flags. The following flags are used in version 2.0.4 through 3.0:
@@ -488,9 +496,10 @@ flags. The following flags are used in version 2.0.4 through 3.0:
  Np    supports direct posting to Usenet.
 
 The date fields introduced in version 3.0 are optional. They are ASCII
-date stamps in the format YYYY-MM-DD. The first date indicates the key
-creation date; the second date indicates its expiration. If only one date
-is present, it is treated as the key creation date.
+date stamps in the format YYYY-MM-DD. The first date indicates the date
+from which the key is first valid; the second date indicates its
+expiration. If only one date is present, it is treated as the key creation
+date. (The date stamp implies 00:00 UTC).
 
 Digital signatures [RFC 2440] should be used to ensure the
 authenticity of the key files.
