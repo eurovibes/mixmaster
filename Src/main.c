@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.32 2003/08/17 19:04:34 weaselp Exp $ */
+   $Id: main.c,v 1.33 2003/08/17 19:15:29 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -149,6 +149,7 @@ int main(int argc, char *argv[])
 	  buf_appendf(msg, "Latency: %s\n", q);
 	} else if ((q = largopt(p, "attachment", argv[0], &error)) != NULL) {
 	  buf_appendf(attachments, "%s\n", q);
+#endif /* NYMSUPPORT */
 	} else if ((q = largopt(p, "nym-config", argv[0], &error)) != NULL) {
 	  deflt = 0;
 	  strncpy(nym, q, sizeof(nym));
@@ -159,6 +160,7 @@ int main(int argc, char *argv[])
 	} else if ((q = largopt(p, "nym", argv[0], &error)) != NULL) {
 	  buf_appendf(msg, "Nym: %s\n", q);
 	}
+#endif /* NYMSUPPORT */
 #endif /* USE_PGP */
 	else if ((q = largopt(p, "copies", argv[0], &error)) != NULL) {
 	  sscanf(q, "%d", &numcopies);
@@ -356,9 +358,11 @@ int main(int argc, char *argv[])
 -d, --dummy                       generate a dummy message\n\
 -S, --send                        send the message(s) in the pool\n"
 #ifdef USE_PGP
+#ifdef NYMSUPPORT
 	   "    --nym-config=yournym          generate a new pseudonym\n\
     --latency=hours               reply chain latency\n\
     --reply-chain=rem1,rem2,...   reply chain for the pseudonym\n"
+#endif /* NYMSUPPORT */
 #endif /* USE_PGP */
 	   "-v, --verbose                     output informational messages\n\
 -f [file]                         read a mail folder\n"
