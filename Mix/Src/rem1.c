@@ -6,7 +6,7 @@
    details.
 
    Process Cypherpunk remailer messages
-   $Id: rem1.c,v 1.5 2002/07/10 01:58:49 rabbi Exp $ */
+   $Id: rem1.c,v 1.6 2002/07/24 07:48:50 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -255,7 +255,7 @@ header:
       BUFFER *pass;
 
       pass = buf_new();
-      buf_sets(pass, PASS_PHRASE);
+      buf_sets(pass, PASSPHRASE);
       err = pgp_decrypt(temp, pass, NULL, NULL, NULL);
       buf_free(pass);
     }
