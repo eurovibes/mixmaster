@@ -340,6 +340,32 @@ redraw:
 	  else
 	    snprintf(s, PATHMAX, "%s %s", editor, path);
 
+#ifdef WIN32
+	  // ShellExecuteEx(NULL,"open",path,NULL,NULL,SW_SHOWDEFAULT);
+
+	  do {
+	    /* FIXME: give this its own function */
+	    /* FIXME: it doesn't block yet */
+	    SHELLEXECUTEINFO si;
+	    ZeroMemory(&si, sizeof(SHELLEXECUTEINFO));
+	    si.cbSize = sizeof(SHELLEXECUTEINFO);
+	    si.fMask = SEE_MASK_NOCLOSEPROCESS;
+	    si.hwnd = NULL;
+	    si.lpVerb = "open";
+	    si.lpFile = path;
+	    si.lpParameters = NULL;
+	    si.nShow = SW_SHOWDEFAULT;
+	    if (ShellExecuteEx(&si))
+	    {
+	      HANDLE handle = OpenProcess(SYNCHRONIZE, FALSE, si.hProcess);
+	      WaitForSingleObject(handle, INFINITE);
+	      CloseHandle(handle);
+	      CloseHandle(si.hProcess);
+	    }
+	  } while (0);
+
+#else /* WIN32 */
+
 #ifdef USE_NCURSES
 	  clear();
 	  refresh();
@@ -349,6 +375,8 @@ redraw:
 #ifdef USE_NCURSES
 	  refresh();
 #endif /* USE_NCURSES */
+
+#endif /* WIN32 */
 
 	  f = fopen(path, "r");
 	  if (f == NULL) {
