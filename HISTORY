@@ -393,3 +393,13 @@
                            Mixmaster now uses broken-chain info from stats. I
                              hope this doesn't break any Nym functionality.
                            Warn if remailer stats are older than a day.
+                           Experimental feature:  --redirect -l <chain>.
+                             If you have a mixmaster message with a
+                             chain starting with hop1 (you cannot know any
+                             more because it already is encrypted) then
+                             mix --redirect -l=foo,bar < file
+                             redirect the message so the chain is actually
+                             foo,bar,hop1,... and places it in your pool.
+                             If the total number of hops (which cannot be
+                             known) exceeds 20 the message is damanged
+                             and will fail at the 20th node.

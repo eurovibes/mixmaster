@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.30 2003/05/03 11:20:41 weaselp Exp $ */
+   $Id: main.c,v 1.31 2003/05/08 18:07:08 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -40,7 +40,8 @@ int main(int argc, char *argv[])
 #endif /* WIN32SERVICE */
 {
   int error = 0, deflt = 1, help = 0, readmail = 0, send = -1, sendpool = 0,
-  header = 1, maint = 0, keygen = 0, verbose = 2, sign = 0, encrypt = 0;
+  header = 1, maint = 0, keygen = 0, verbose = 2, sign = 0, encrypt = 0,
+  redirect_mail = 0;
   int daemon = 0, type_list = 0, nodetach = 0;
 
 #ifdef USE_SOCK
@@ -108,6 +109,8 @@ int main(int argc, char *argv[])
 	  sendpool = 1, deflt = 0;
 	else if (streq(p, "read-mail"))
 	  readmail = 1, deflt = 0;
+	else if (streq(p, "redirect"))
+	  redirect_mail = 1, deflt = 0;
 	else if (streq(p, "store-mail"))
 	  readmail = 2, deflt = 0;
 #ifdef USE_SOCK
@@ -408,7 +411,7 @@ WinNT service:\n\
   if (header == 0)
     buf_nl(msg);
 
-  if (readmail || send == MSG_MAIL || send == MSG_POST) {
+  if (readmail || redirect_mail || send == MSG_MAIL || send == MSG_POST) {
     if (filename == NULL || streq(filename, "-"))
       f = stdin;
     else {
@@ -423,7 +426,7 @@ WinNT service:\n\
 	mix_decrypt(msg);
       } else if (readmail == 2)
 	pool_add(msg, "inf");
-      if (send == MSG_MAIL || send == MSG_POST) {
+      if (send == MSG_MAIL || send == MSG_POST || redirect_mail) {
 	BUFFER *sendmsg;
 	int numdest = 0;
 
@@ -443,10 +446,10 @@ WinNT service:\n\
 	    } else
 	      strncpy(chain, content->data, sizeof(chain));
 	  else {		/* line goes into message */
-	    if ((send == MSG_MAIL && bufieq(field, "to"))
+	    if (((redirect_mail || send == MSG_MAIL) && bufieq(field, "to"))
 		|| (send == MSG_POST && bufieq(field, "newsgroups")))
 	      numdest++;
-	    if (bufieq(field, "from"))
+	    if (bufieq(field, "from") && !redirect_mail)
 	      fprintf(stderr, "Warning: The message has a From: line.\n");
 	    buf_appendheader(sendmsg, field, content);
 	  }
@@ -493,8 +496,10 @@ WinNT service:\n\
 	  fprintf(stderr, "Invalid number of copies!\n");
 	  ret = 2;
 	} else {
-	  if (mix_encrypt(send, sendmsg, chain, numcopies,
-			  chainlist) == -1) {
+	  if ( ( redirect_mail ?
+		redirect_message(sendmsg, chain, numcopies, chainlist) :
+		mix_encrypt(send, sendmsg, chain, numcopies, chainlist)
+		) == -1) {
 	    ret = 2;
 	    if (chainlist->length)
 	      fprintf(stderr, "%s\n", chainlist->data);
