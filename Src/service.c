@@ -1,5 +1,3 @@
-#ifdef WIN32SERVICE
-
 #include <windows.h>
 #include <stdio.h>
 #include <direct.h>
@@ -7,6 +5,8 @@
 #include <fcntl.h>
 
 #include "mix3.h"
+
+#ifdef WIN32SERVICE
 
 #define SVCNAME        "Mixmaster"
 #define SVCDISPLAYNAME "Mixmaster Service"
