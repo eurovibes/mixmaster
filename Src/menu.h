@@ -6,7 +6,7 @@
    details.
 
    Menu-based user interface
-   $Id: menu.h,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: menu.h,v 1.2 2002/07/21 03:53:11 weaselp Exp $ */
 
 
 #ifndef _MENU_H
@@ -40,7 +40,6 @@ int menu_replychain(int *d, int *l, char *mdest, char *pdest, char *psub,
 
 #endif
 
-#define NYMDB "secrets.mix"
 #define maxnym 30
 
 #endif
