@@ -6,7 +6,7 @@
    details.
 
    OpenPGP data
-   $Id: pgpdata.c,v 1.22 2002/09/26 22:14:00 weaselp Exp $ */
+   $Id: pgpdata.c,v 1.23 2002/09/26 22:28:25 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -1092,7 +1092,7 @@ int pgp_rsakeygen(int bits, BUFFER *userid, BUFFER *pass, char *pubring,
 
   if (secring == NULL)
     secring = PGPREMSECRING;
-  keydb = pgpdb_open(secring, remail == 2 ? pass : NULL, 1);
+  keydb = pgpdb_open(secring, remail == 2 ? pass : NULL, 1, PGP_TYPE_PRIVATE);
   if (keydb == NULL) {
     err = -1;
     goto end;
@@ -1105,7 +1105,7 @@ int pgp_rsakeygen(int bits, BUFFER *userid, BUFFER *pass, char *pubring,
   if (pubring != NULL) {
     if (pgp_makepubkey(skey, NULL, pkey, pass, 0) == -1)
       goto end;
-    keydb = pgpdb_open(pubring, NULL, 1);
+    keydb = pgpdb_open(pubring, NULL, 1, PGP_TYPE_PUBLIC);
     if (keydb == NULL)
       goto end;
     if (keydb->filetype == -1)
@@ -1315,7 +1315,7 @@ int pgp_dhkeygen(int bits, BUFFER *userid, BUFFER *pass, char *pubring,
 
   if (secring == NULL)
     secring = PGPREMSECRING;
-  keydb = pgpdb_open(secring, remail == 2 ? pass : NULL, 1);
+  keydb = pgpdb_open(secring, remail == 2 ? pass : NULL, 1, PGP_TYPE_PRIVATE);
   if (keydb == NULL) {
     err = -1;
     goto end;
@@ -1327,7 +1327,7 @@ int pgp_dhkeygen(int bits, BUFFER *userid, BUFFER *pass, char *pubring,
 
   if (pubring != NULL) {
     pgp_makepubkey(skey, NULL, pkey, pass, 0);
-    keydb = pgpdb_open(pubring, NULL, 1);
+    keydb = pgpdb_open(pubring, NULL, 1, PGP_TYPE_PUBLIC);
     if (keydb == NULL)
       goto end;
     if (keydb->filetype == -1)

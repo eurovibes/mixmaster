@@ -6,7 +6,7 @@
    details.
 
    Create OpenPGP packets
-   $Id: pgpcreat.c,v 1.11 2002/09/20 17:59:25 disastry Exp $ */
+   $Id: pgpcreat.c,v 1.12 2002/09/26 22:28:25 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -832,7 +832,7 @@ int pgp_pubkeycert(BUFFER *userid, char *keyring, BUFFER *pass,
   int err = -1;
 
   key = buf_new();
-  r = pgpdb_open(keyring, pass, 0);
+  r = pgpdb_open(keyring, pass, 0, PGP_TYPE_UNDEFINED);
   if (r != NULL)
     while (pgpdb_getnext(r, key, NULL, userid) != -1) {
       if (pgp_makepubkey(key, NULL, out, pass, 0) != -1)
