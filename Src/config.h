@@ -192,7 +192,11 @@
 
 /** file names ********************************************************/
 
+#ifdef WIN32
+#define DEFAULT_MIXCONF "mix.cfg.txt"  /* mixmaster configuration file */
+#else
 #define DEFAULT_MIXCONF "mix.cfg"      /* mixmaster configuration file */
+#endif
 #define DEFAULT_DISCLAIMFILE "disclaim.txt"
 #define DEFAULT_FROMDSCLFILE "fromdscl.txt"
 #define DEFAULT_MSGFOOTERFILE "footer.txt"
