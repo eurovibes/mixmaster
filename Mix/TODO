@@ -7,11 +7,10 @@
 
 Items that need to be completed before the next MAIN release:
 
-o drop messages without timestamp (weasel)
-  - document somewhere  (rabbi)
-o drop messages with future timestamp  (weasel)
-  - document somewhere  (rabbi)
 - delete secret keys securely after keygraceperiod expires
+  (Should this just be a call to an external program? I.e., 
+  "/bin/rm -P" or "/usr/bin/shred -fz -n3")? Does this even
+  serve a purpose now that journaled FSes are the norm?
 - implement time-skew sanity checks so that the timestamp, 
   key rotation and key deletion features don't cause havok.
 
@@ -24,6 +23,9 @@ Packaging:
 - provide a packaged Windows build to be used with QuickSilver
   + Richard has an Installer we can use for this purpose  (rabbi)
 - Macintosh OS/X support  (rabbi)
+- Update Install script to put files in global system locations if
+  invoked by root. Also update to be smart about AES support.
+- The main binary should be called "mixmaster", not "mix".
 
 Wishlist:
 - don't drop messages if there are not enough reliable remailers.
@@ -34,7 +36,6 @@ Wishlist:
 - saner usage of /dev/[u]random is required  -- throw warning when not in daemon mode
 - clean up documentation and tarball contents
   + reorganize directory structure
-  + add a CONTRIBUTORS or THANKS file.   rabbi
 - AES support -- requires OpenSSL 0.9.7  dybbuk
 
 

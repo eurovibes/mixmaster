@@ -313,13 +313,26 @@
 
 2002-12-25      2.9.0      Release version. Minor documentation changes
                              and version number change only.
-                           [stable tree forks off]
 
-2002-10-18      3.0a1      Applied Maildir feature patch by drt@un.bewaff.net,
-                             with some changes by PP:
-                             MAILBOX can now be a Maildir (closes: #586223).
-                           Mixmaster in daemon mode reloads configuration on
-                             SIGHUP.
+2003-11-08      2.9.1      Several changes for the Windows build.
+                           Some Install script fixes.
+                           Fixed a problem in blockrequest() where a buffer
+                             could have been used after it was free()'d which
+                             resulted in segfaults.
+                           Check that feedback buffer is not null before
+                             operating on it in chain_select().
+                             Closes #631353, thanks Sami Farin.
+                           Make sure DH/DSA param file is actually opened
+                             before writing to it. Fixes a segfault in
+                             case it is not.
+                           Handle a pool we cannot read correctly: don't close
+                             the NULL dir handle (segfaults on *BSD). We also
+                             print a warning in that case now.
+                           Minor stats fix (gmtime vs localtime).
+                           Fix pool stats bug.
+
+2003-12-xx      3.0b1      FEATURE ENHANCEMENTS:
+
                            The secret pgp keyring is now stored ASCII armored
                              with one key per ascii armor.
                            NB: Due to the bug with reading armored keyrings and
@@ -353,26 +366,20 @@
                                seemed sensible.
                            Mixmaster now generates dummy messages automatically
                              as mail enters and exits the pool.
-
-2002-xx-xx      3.0a2      New Star-Exclude feature by Colin Tuckley: 
+                           Applied Maildir feature patch by drt@un.bewaff.net,
+                             with some changes by PP:
+                             MAILBOX can now be a Maildir (closes: #586223).
+                           New Star-Exclude feature by Colin Tuckley: 
                              User-selected remailers can be excluded from 
                              being chosen as random hops.
                            Have stats on intermediate vs. final hop count
                              (closes: #649900).
-
-2003-05-03      3.0a4      Handle a pool we cannot read correctly: don't close
-                             the NULL dir handle (segfaults on *bsd). We also
-                             print a warning in that case now.
                            Add max capability for Type I.
-                           Make sure DH/DSA param file is actually opened before
-                             writing to it.  Fixes a segfault in case it is not.
-                           Fix a problem in blockrequest() where a buffer
-                             could have been used after it was free()d which
-                             resulted in segfaults.
-                           Install script tweaks
-                           Check that feedback buffer is not null before
-                             operating on it in chain_select().
-                             Closes #631353, thanks Sami Farin.
+                           Config option EXTFLAGS allows appending additional
+                             flags to the capabilities string.  (Hauke Lampe)
+                           Config option PRECEDENCE allows setting the
+                             Precedence: header on all outgoing mail.
+                             (Hauke Lampe)
                            In order to serve help files in different languages
                              we need a way to reply to requests like
                              remailer-help-it.  In order to not have to modify
@@ -382,6 +389,14 @@
                              remailer-<something> requests.
                              remailer-{help,key, stats,conf,adminkey} still are
                              special cases tho.
+                           Drop messages without timestamps and messages with
+                            future timestamps.  This abandons backwards
+                            compatibility with Mixmaster 2.0.3 and earlier.
+
+                           BUG FIXES:
+
+                           Mixmaster in daemon mode reloads configuration on
+                             SIGHUP.
                            In the curses interface chain selection it was not
                              possible to select a random last hop with a usenet
                              post message.  Fixed (closes: #719165).
@@ -401,8 +416,21 @@
                              broken-chain info from stats. I hope this doesn't
                              break any Nym functionality.
                            Warn if remailer stats are older than a day.
-
-2003-05-08      3.0a5      Experimental feature:  --redirect -l <chain>.
+                           Don't send messages to ourselves via the mailsystem
+                            but instead place them in the pool as incoming
+                            messages so that they will get processed with the
+                            next pool run.
+                          No longer try to send a message if there are no
+                            recipients left.
+                          Set default max-randhops from 20 to 4.
+                          Remix-To chain is limited by max-randhops limit as
+                            well.
+                          Messages to more than one remailer are dropped.
+                          Nym support is not compiled in by default anymore.
+                          Ignore 'No reliable remailers' problems when
+                            randhopping messages in middleman mode.
+                            That is better than dropping them.
+                          Experimental feature:  --redirect -l <chain>.
                              If you have a mixmaster message with a
                              chain starting with hop1 (you cannot know any
                              more because it already is encrypted) then
@@ -413,35 +441,3 @@
                              known) exceeds 20 the message is damanged
                              and will fail at the 20th node.
 
-
-2003-06-27      3.0a6     Don't send messages to ourselves via the mailsystem
-                            but instead place them in the pool as incoming
-                            messages so that they will get processed with the
-                            next pool run.
-                          Hopefully fix a bug with pool stats.
-
-2003-06-29      3.0a7     Two minor fixes for bugs introduced in 3.0a6 and
-                            3.0a4.
-
-2003-06-30      3.0a8     Minor stats fix.  The date in remailer-stats was
-                            sometimes wrong.
-
-2003-10-12      3.0a9     Don't try to send a message if there are no
-                            recipients left.
-                          Set default max-randhops from 20 to 4.
-                          Remix-To chain is limited by max-randhops limit as
-                            well.
-                          Messages to more than one remailer are dropped.
-                          Config option EXTFLAGS allows appending additional
-                            flags to the capabilities string.  (Hauke Lampe)
-                          Config option PRECEDENCE allows setting the
-                            Precedence: header on all outgoing mail.
-                            (Hauke Lampe)
-                          Nym support is not compiled in by default anymore.
-                          Ignore 'No reliable remailers' problems when
-                            randhopping messages in middleman mode.
-                            That is better than dropping them.
-
-2003-??-??      CVS       Drop messages without timestamps and messages with
-                            future timestamps.  This abandons backwards
-                            compatibility with mixmaster 2.0.3 and earlier.
