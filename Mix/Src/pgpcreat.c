@@ -6,7 +6,7 @@
    details.
 
    Create OpenPGP packets
-   $Id: pgpcreat.c,v 1.2 2001/11/06 23:41:58 rabbi Exp $ */
+   $Id: pgpcreat.c,v 1.3 2001/11/07 00:44:09 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -507,8 +507,8 @@ int pgp_sign(BUFFER *msg, BUFFER *msg2, BUFFER *sig, BUFFER *userid,
 
   switch (type) {
    case PGP_SIG_CERT:
-     type1 = pgp_getpacket(msg, d);
-     assert (type1 == PGP_PUBKEY);
+     type1 = pgp_getpacket(msg, d) == PGP_PUBKEY;
+     assert (type1);
      buf_setc(msg, 0x99);
      buf_appendi(msg, d->length);
      buf_cat(msg, d);
@@ -526,15 +526,15 @@ int pgp_sign(BUFFER *msg, BUFFER *msg2, BUFFER *sig, BUFFER *userid,
      }
      break;
    case PGP_SIG_BINDSUBKEY:
-     type1 = pgp_getpacket(msg, d);
-     assert (type1 == PGP_PUBKEY);
+     type1 = pgp_getpacket(msg, d) == PGP_PUBKEY;
+     assert (type1);
      buf_clear(msg);
      buf_appendc(msg, 0x99);
      buf_appendi(msg, d->length);
      buf_cat(msg, d);
      
-     type1 = pgp_getpacket(msg2, d);
-     assert (type1 == PGP_PUBSUBKEY);
+     type1 = pgp_getpacket(msg2, d) == PGP_PUBSUBKEY;
+     assert (type1);
      buf_appendc(msg, 0x99);
      buf_appendi(msg, d->length);
      buf_cat(msg, d);
