@@ -1,7 +1,8 @@
 # Process this file with autoconf to produce a configure script.
-# $Id: configure.in,v 1.4 2003/08/08 15:17:52 dybbuk Exp $
+# $Id: configure.ac,v 1.1 2003/10/14 03:42:05 dybbuk Exp $
 AC_INIT(Src/version.h)
 AC_CONFIG_AUX_DIR(etc)
+AM_INIT_AUTOMAKE(mixmaster, [3.08+cvs], mixmaster-devel@lists.sourceforge.net)
 AC_CONFIG_HEADER([config.h])
 
 dnl Find system type
