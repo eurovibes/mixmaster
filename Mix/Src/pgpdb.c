@@ -6,7 +6,7 @@
    details.
 
    OpenPGP key database
-   $Id: pgpdb.c,v 1.3 2002/07/24 07:48:50 rabbi Exp $ */
+   $Id: pgpdb.c,v 1.4 2002/07/24 08:00:36 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -306,6 +306,11 @@ int pgp_keymgt(int force)
   outkey = buf_new();
 
 #ifdef USE_RSA
+  /* We only want to build RSA keys if we also can do IDEA
+   * This is to not lose any mail should users try our RSA key
+   * with IDEA.
+   */
+#ifdef USE_IDEA
   if (force == 2 || (pgpdb_getkey(PK_DECRYPT, PGP_ES_RSA, NULL, NULL, NULL,
 				  NULL, NULL, NULL, pass) < 0))
     pgp_keygen(PGP_ES_RSA, 0, userid, pass, PGPKEY, PGPREMSECRING, 0);
@@ -313,6 +318,7 @@ int pgp_keymgt(int force)
   if (force == 0 && (pgpdb_getkey(PK_ENCRYPT, PGP_ES_RSA, NULL, NULL, NULL,
 				  NULL, NULL, PGPKEY, NULL) < 0))
     goto end;
+#endif
 #endif
   if (force == 2 || (pgpdb_getkey(PK_DECRYPT, PGP_E_ELG, NULL, NULL, NULL,
 				  NULL, NULL, NULL, pass) < 0))

@@ -182,3 +182,5 @@
                              back to pubring.mix.
                            USE_IDEA is no longer default in config.h. It always
                              gets defined by the Install script instead.
+                           Only create OpenPGP RSA keys if we compiled with
+                             IDEA.
