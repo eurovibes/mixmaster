@@ -803,9 +803,16 @@ int buf_unzip(BUFFER *buf, int type);
 #define _MIXLIB_H
 
 #include <stdio.h>
+#include "config.h"
 #ifdef WIN32
-#include <windows.h>
+#	include <windows.h>
 #endif /* WIN32 */
+
+#ifdef MIXLIB_EXPORTS
+#define DllExport	__declspec( dllexport )
+#else
+#define DllExport
+#endif
 
 typedef unsigned char byte;
 

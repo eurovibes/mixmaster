@@ -6,10 +6,11 @@
    details.
 
    Menu-based user interface - nym management
-   $Id: menunym.c,v 1.1.1.1.2.2 2002/12/16 22:38:06 rabbi Exp $ */
+   $Id: menunym.c,v 1.1.1.1.2.3 2003/06/01 23:39:09 rabbi Exp $ */
 
 
 #include "menu.h"
+#include "mix.h"
 #include "mix3.h"
 #include <string.h>
 #include <stdlib.h>

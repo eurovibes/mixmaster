@@ -320,3 +320,5 @@
                            Fixed a problem in blockrequest() where a buffer
                              could have been used after it was free()'d which
                              resulted in segfaults.
+
+2003-xx-xx      xxxxxx     Windows build changes.

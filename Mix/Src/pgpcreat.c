@@ -6,9 +6,10 @@
    details.
 
    Create OpenPGP packets
-   $Id: pgpcreat.c,v 1.5.2.5 2002/12/16 22:38:09 rabbi Exp $ */
+   $Id: pgpcreat.c,v 1.5.2.6 2003/06/01 23:39:09 rabbi Exp $ */
 
 
+#include "mix.h"
 #include "mix3.h"
 #ifdef USE_PGP
 #include "pgp.h"

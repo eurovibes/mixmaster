@@ -4,8 +4,8 @@
 
 CC=cl
 LD=link
-CFLAGS=-O -nologo
-LDFLAGS=
+CFLAGS=-O1 -Og -nologo -Zi
+LDFLAGS= /fixed:no /debug
 O=.obj
 
 # variables

@@ -6,8 +6,7 @@
    details.
 
    Randomness
-   $Id: random.c,v 1.2.2.3 2003/01/12 22:21:26 colintu Exp $ */
-
+   $Id: random.c,v 1.2.2.4 2003/06/01 23:39:10 rabbi Exp $ */
 
 #include "mix3.h"
 #include "crypto.h"
@@ -20,7 +19,7 @@
 #include <process.h>
 #endif /* else if not POSIX */
 #ifdef WIN32
-#include <windows.h>
+/* #include <windows.h> */
 #endif /* WIN32 */
 #include <assert.h>
 #include <string.h>

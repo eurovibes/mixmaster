@@ -6,7 +6,7 @@
    details.
 
    Utility functions
-   $Id: util.c,v 1.2.2.7 2003/01/12 22:21:26 colintu Exp $ */
+   $Id: util.c,v 1.2.2.8 2003/06/01 23:39:10 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -138,9 +138,9 @@ FILE *openpipe(const char *prog)
 #ifdef POSIX
   p = popen(prog, "w");
 #endif /* POSIX */
-#ifdef _MSC
+#ifdef _MSC_VER
   p = _popen(prog, "w");
-#endif /* _MSC */
+#endif /* _MSC_VER */
 
   if (p == NULL)
     errlog(ERRORMSG, "Unable to open pipe to %s\n", prog);
@@ -167,11 +167,11 @@ int closepipe(FILE *p)
 {
 #ifdef POSIX
   return (pclose(p));
-#elif defined(_MSC) /* end of POSIX */
+#elif defined(_MSC_VER) /* end of POSIX */
   return (_pclose(p));
-#else /* end of defined(_MSC) */
+#else /* end of defined(_MSC_VER) */
   return -1;
-#endif /* else if not defined(_MSC), POSIX */
+#endif /* else if not defined(_MSC_VER), POSIX */
 }
 
 /** Base 64 encoding ****************************************************/
@@ -608,7 +608,7 @@ int fileno(FILE *f)
 
 #endif /* __RSXNT__ */
 
-#ifdef _MSC	/* Visual C lacks dirent */
+#ifdef _MSC_VER	/* Visual C lacks dirent */
 
 DIR *opendir(const char *name)
 {
@@ -653,4 +653,4 @@ int closedir(DIR *dir)
   return (-1);
 }
 
-#endif /* _MSC */
+#endif /* _MSC_VER */

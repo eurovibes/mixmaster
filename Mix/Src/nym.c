@@ -6,9 +6,9 @@
    details.
 
    Create nym server messages
-   $Id: nym.c,v 1.2.2.3 2002/12/16 22:38:08 rabbi Exp $ */
+   $Id: nym.c,v 1.2.2.4 2003/06/01 23:39:09 rabbi Exp $ */
 
-
+#include "mix.h"
 #include "mix3.h"
 #include "pgp.h"
 #include <string.h>

@@ -6,9 +6,9 @@
    details.
 
    Read OpenPGP packets
-   $Id: pgpget.c,v 1.7.2.4 2002/12/16 22:38:10 rabbi Exp $ */
+   $Id: pgpget.c,v 1.7.2.5 2003/06/01 23:39:10 rabbi Exp $ */
 
-
+#include "mix.h"
 #include "mix3.h"
 #ifdef USE_PGP
 #include "pgp.h"

@@ -6,13 +6,17 @@
    details.
 
    Process Cypherpunk remailer messages
-   $Id: rem1.c,v 1.6.2.2 2002/12/16 22:38:10 rabbi Exp $ */
+   $Id: rem1.c,v 1.6.2.3 2003/06/01 23:39:10 rabbi Exp $ */
 
 
+#include "mix.h"
 #include "mix3.h"
 #include <ctype.h>
 #include <time.h>
 #include <string.h>
+#ifdef USE_PGP
+#	include "pgp.h"
+#endif
 
 static int t1msg(BUFFER *in, int hdr);
 

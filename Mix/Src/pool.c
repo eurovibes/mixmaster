@@ -6,7 +6,7 @@
    details.
 
    Send messages from pool
-   $Id: pool.c,v 1.10.2.5 2002/12/16 22:38:10 rabbi Exp $ */
+   $Id: pool.c,v 1.10.2.6 2003/06/01 23:39:10 rabbi Exp $ */
 
 #include "mix3.h"
 #include <stdlib.h>
@@ -19,9 +19,9 @@
 #else /* end of POSIX */
 #include <io.h>
 #endif /* else if not POSIX */
-#ifndef _MSC
+#ifndef _MSC_VER
 #include <dirent.h>
-#endif /* not _MSC */
+#endif /* not _MSC_VER */
 #include <assert.h>
 
 #ifdef USE_PCRE

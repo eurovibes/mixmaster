@@ -6,7 +6,7 @@
    details.
 
    Function prototypes
-   $Id: mix3.h,v 1.8.2.7 2003/01/21 16:11:55 colintu Exp $ */
+   $Id: mix3.h,v 1.8.2.8 2003/06/01 23:39:09 rabbi Exp $ */
 
 
 #ifndef _MIX3_H
@@ -389,17 +389,17 @@ int nymlist_getnym(char *nym, BUFFER *config, BUFFER *ek, BUFFER *opt,
 int nymlist_getstatus(char *nym);
 
 /* Visual C lacks dirent */
-#ifdef _MSC
+#ifdef _MSC_VER
 typedef HANDLE DIR;
 
 struct dirent {
-  char d_name[PATHMAX];
+  char d_name[MAX_PATH];
 };
 
 DIR *opendir(const char *name);
 struct dirent *readdir(DIR *dir);
 int closedir(DIR *dir);
-#endif /* _MSC */
+#endif /* _MSC_VER */
 
 /* sockets */
 #if defined(WIN32) && defined(USE_SOCK)

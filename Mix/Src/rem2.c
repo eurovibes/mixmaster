@@ -6,7 +6,7 @@
    details.
 
    Process Mixmaster remailer messages
-   $Id: rem2.c,v 1.2.2.3 2002/12/16 22:38:11 rabbi Exp $ */
+   $Id: rem2.c,v 1.2.2.4 2003/06/01 23:39:10 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -20,9 +20,9 @@
 #else /* end of POSIX */
 #include <io.h>
 #endif /* else if not POSIX */
-#ifndef _MSC
+#ifndef _MSC_VER
 #include <dirent.h>
-#endif /* not _MSC */
+#endif /* not _MSC_VER */
 #include <assert.h>
 
 int mix_dearmor(BUFFER *in, BUFFER *out)

@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.20.2.9 2003/03/31 18:24:15 weaselp Exp $ */
+   $Id: rem.c,v 1.20.2.10 2003/06/01 23:39:10 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -21,9 +21,9 @@
 #else /* end of POSIX */
 #include <io.h>
 #endif /* else if not POSIX */
-#ifndef _MSC
+#ifndef _MSC_VER
 #include <dirent.h>
-#endif /* not _MSC */
+#endif /* not _MSC_VER */
 #include <assert.h>
 
 int blockrequest(BUFFER *message);
@@ -556,11 +556,11 @@ int idexp(void)
       fseek(f,fpi,SEEK_SET);
     }
   }
-#ifdef _MSC
+#ifdef _MSC_VER
     chsize(fileno(f),fpo);
-#else /* end of _MSC */
+#else /* end of _MSC_VER */
     ftruncate(fileno(f),fpo);
-#endif /* else if not _MSC */
+#endif /* else if not _MSC_VER */
   fclose(f);
   unlockfile(i);
   buf_free(b);

@@ -6,9 +6,9 @@
    details.
 
    OpenPGP key database
-   $Id: pgpdb.c,v 1.6.2.6 2002/12/16 22:38:09 rabbi Exp $ */
+   $Id: pgpdb.c,v 1.6.2.7 2003/06/01 23:39:10 rabbi Exp $ */
 
-
+#include "mix.h"
 #include "mix3.h"
 #ifdef USE_PGP
 #include "pgp.h"

@@ -6,11 +6,10 @@
    details.
 
    PGP module test 
-   $Id: pgptest.c,v 1.2.2.5 2002/12/16 22:51:21 rabbi Exp $ */
+   $Id: pgptest.c,v 1.2.2.6 2003/06/01 23:39:10 rabbi Exp $ */
 
-
+#include "mix.h"
 #include "mix3.h"
-#include "pgp.h"
 #include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
@@ -20,9 +19,13 @@
 #include <time.h>
 #include <fcntl.h>
 #ifdef POSIX
-#include <unistd.h>
-#include <termios.h>
+#	include <unistd.h>
+#	include <termios.h>
 #endif /* POSIX */
+
+#ifdef USE_PGP
+#	include "pgp.h"
+#endif
 
 int pass(BUFFER *b)
 {

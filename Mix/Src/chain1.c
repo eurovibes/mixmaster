@@ -6,11 +6,13 @@
    details.
 
    Encrypt message for Cypherpunk remailer chain
-   $Id: chain1.c,v 1.2.2.2 2002/12/16 22:38:03 rabbi Exp $ */
+   $Id: chain1.c,v 1.2.2.3 2003/06/01 23:39:09 rabbi Exp $ */
 
-
+#include "mix.h"
 #include "mix3.h"
-#include "pgp.h"
+#ifdef USE_PGP
+#	include "pgp.h"
+#endif
 #include <string.h>
 #include <ctype.h>
 

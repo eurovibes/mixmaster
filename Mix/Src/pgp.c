@@ -6,9 +6,10 @@
    details.
 
    OpenPGP messages
-   $Id: pgp.c,v 1.6.2.5 2002/12/16 22:38:08 rabbi Exp $ */
+   $Id: pgp.c,v 1.6.2.6 2003/06/01 23:39:09 rabbi Exp $ */
 
 
+#include "mix.h"
 #include "mix3.h"
 #ifdef USE_PGP
 #include "pgp.h"

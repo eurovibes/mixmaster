@@ -6,19 +6,23 @@
    details.
 
    Menu-based user interface -- send message
-   $Id: menusend.c,v 1.2.2.4 2002/12/16 22:38:06 rabbi Exp $ */
+   $Id: menusend.c,v 1.2.2.5 2003/06/01 23:39:09 rabbi Exp $ */
 
-
+#include "mix.h"
 #include "menu.h"
 #include "mix3.h"
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
 #ifdef POSIX
-#include <unistd.h>
+#	include <unistd.h>
 #else /* end of POSIX */
-#include <io.h>
+#	include <io.h>
 #endif /* else if not POSIX */
+
+#ifdef USE_PGP
+#	include "pgp.h"
+#endif
 
 /* Command line option +nn to position the cursor? */
 #define cursorpos (strfind(editor, "emacs") || streq(editor, "vi") || \

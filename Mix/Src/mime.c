@@ -6,12 +6,15 @@
    details.
 
    MIME functions
-   $Id: mime.c,v 1.3.2.2 2002/12/16 22:38:07 rabbi Exp $ */
+   $Id: mime.c,v 1.3.2.3 2003/06/01 23:39:09 rabbi Exp $ */
 
-
+#include "mix.h"
 #include "mix3.h"
 #include <ctype.h>
 #include <string.h>
+#ifdef USE_PGP
+#	include "pgp.h"
+#endif
 
 #define hex(i) (isdigit(i) ? (i) - '0' : tolower(i) - 'a' + 10)
 

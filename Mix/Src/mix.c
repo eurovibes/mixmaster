@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.11.2.11 2003/01/12 22:21:26 colintu Exp $ */
+   $Id: mix.c,v 1.11.2.12 2003/06/01 23:39:09 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -916,11 +916,7 @@ void mix_status(char *fmt,...)
 
   if (fmt != NULL) {
     va_start(args, fmt);
-#ifdef _MSC
-    _vsnprintf(statusline, sizeof(statusline) - 1, fmt, args);
-#else /* end of _MSC */
     vsnprintf(statusline, sizeof(statusline) - 1, fmt, args);
-#endif /* else if not _MSC */
     va_end(args);
   }
 #ifdef USE_NCURSES

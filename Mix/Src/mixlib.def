@@ -108,3 +108,5 @@ EXPORTS
     pgp_signtxt                     @103
     PASSPHRASE                      @104
     mix_config                      @105
+    pool_add
+    MIXCONF
