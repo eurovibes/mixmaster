@@ -6,7 +6,7 @@
    details.
 
    Menu-based user interface -- send message
-   $Id: menusend.c,v 1.3 2002/08/25 13:27:40 weaselp Exp $ */
+   $Id: menusend.c,v 1.4 2002/09/17 19:55:21 rabbi Exp $ */
 
 
 #include "menu.h"
@@ -33,13 +33,13 @@ void send_message(int type, char *nym, BUFFER *in)
   int hdr = 0;			/* txt buffer contains header lines */
   FILE *f;
   int n, err;
-  char reliability[9];
 
 #ifdef USE_PGP
   int sign = 0, encrypt = 0, key = 0;
 
 #endif
 #ifdef USE_NCURSES
+  char reliability[9];
   int c;
   char line[LINELEN];
 

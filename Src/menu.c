@@ -6,7 +6,7 @@
    details.
 
    Menu-based user interface
-   $Id: menu.c,v 1.5 2002/08/26 21:34:49 rabbi Exp $ */
+   $Id: menu.c,v 1.6 2002/09/17 19:55:21 rabbi Exp $ */
 
 
 #include "menu.h"
@@ -33,7 +33,11 @@ void menu_folder(char command, char *foldername)
 
 void read_folder(char command, char *foldername, char *nym)
 {
+#ifdef USE_NCURSES
   char path[PATHMAX] = "stdin", path_with_tilde[PATHMAX], l[LINELEN];
+#else
+  char path[PATHMAX] = "stdin", l[LINELEN];
+#endif
   char *h;
   FILE *f;
   BUFFER *folder;
@@ -44,12 +48,11 @@ void read_folder(char command, char *foldername, char *nym)
   int num = 0;
   long from = -1, subject = -1;
   int folder_has_changed;
+#ifdef USE_NCURSES
   BUFFER *deleted_message;
   BUFFER *new_folder;
   BUFFER *new_index;
   long length;
-
-#ifdef USE_NCURSES
   char sub[LINELEN], str[LINELEN], search[LINELEN] = "";
   long p;
   int display, range, selected, i, redraw, c, q;
@@ -82,7 +85,7 @@ void read_folder(char command, char *foldername, char *nym)
     if (foldername)
       beep();
 #endif
-    mix_status("Can't read %s.", path);
+    mix_status("Can't read %s.\n", path);
     goto end;
   }
   for (;;) {
@@ -160,15 +163,15 @@ void read_folder(char command, char *foldername, char *nym)
     clear();
     beep();
 #endif
-    mix_status("%s is empty.", path);
+    mix_status("%s is empty.\n", path);
     goto end;
   }
-  if (mailfolder == -1) {
+  if (mailfolder != 1) {
 #ifdef USE_NCURSES
     clear();
     beep();
 #endif
-    mix_status("%s is not a mail folder.", path);
+    mix_status("%s is not a mail folder.\n", path);
     goto end;
   }
 #ifndef USE_NCURSES
