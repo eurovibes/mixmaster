@@ -1,7 +1,8 @@
 Mixmaster 2.9 -- anonymous remailer software -- (C) 1999 - 2002 Anonymizer Inc.
 -------------------------------------------------------------------------------
 
-PREVIEW VERSION  ---  WARNING: THIS SOFTWARE IS UNDER DEVELOPMENT!
+PREVIEW VERSION  --  WARNING: THIS SOFTWARE IS UNDER DEVELOPMENT!
+Some functionality may not be complete until the 3.0 release.
 
 This program consists of
 
@@ -195,4 +196,4 @@ University of California, Berkeley and its contributors.
 
 All trademarks are the property of their respective owners.
 
-$Id: README,v 1.5.2.3 2002/10/09 21:45:16 weaselp Exp $
+$Id: README,v 1.5.2.4 2002/12/16 22:54:32 rabbi Exp $
