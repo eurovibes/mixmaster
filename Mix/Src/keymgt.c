@@ -15,13 +15,11 @@
 #include <assert.h>
 
 int getv2seckey(byte keyid[], BUFFER *key);
-static int getv3seckey(byte keyid[], BUFFER *key);
 static int getv2pubkey(byte keyid[], BUFFER *key);
-static int getv3pubkey(byte keyid[], BUFFER *key);
 
 int db_getseckey(byte keyid[], BUFFER *key)
 {
-  if (getv3seckey(keyid, key) == -1 && getv2seckey(keyid, key) == -1)
+  if (getv2seckey(keyid, key) == -1)
     return (-1);
   else
     return (0);
@@ -29,20 +27,10 @@ int db_getseckey(byte keyid[], BUFFER *key)
 
 int db_getpubkey(byte keyid[], BUFFER *key)
 {
-  if (getv3pubkey(keyid, key) == -1 && getv2pubkey(keyid, key) == -1)
+  if (getv2pubkey(keyid, key) == -1)
     return (-1);
   else
     return (0);
-}
-
-static int getv3seckey(byte keyid[], BUFFER *key)
-{
-  return -1;			/*  XXX */
-}
-
-static int getv3pubkey(byte keyid[], BUFFER *key)
-{
-  return -1;			/*  XXX */
 }
 
 /* now accepts NULL keyid too, with NULL keyid any key
