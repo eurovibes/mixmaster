@@ -6,7 +6,7 @@
    details.
 
    Remailer statistics
-   $Id: stats.c,v 1.6 2002/07/25 11:52:26 weaselp Exp $ */
+   $Id: stats.c,v 1.7 2002/08/18 06:08:27 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -251,13 +251,12 @@ int conf(BUFFER *out)
       while(buf_getline(b, line) != -1) {
         if (line->length > 0 && line->data[0] != '#') {
           if (flag == 0) {
-            buf_appends(out, "In addition to other remailers, this mixmaster also sends mail to these\n addresses directly:\n");
+            buf_appends(out, "In addition to other remailers, this Mixmaster also sends mail to these\n addresses directly:\n");
             flag = 1;
           }
           buf_appendf(out, "   %b\n", line);
         }
       }
-      buf_nl(out);
     }
   }
 
