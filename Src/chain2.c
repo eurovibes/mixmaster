@@ -156,19 +156,24 @@ int mix2_rlist(REMAILER remailer[], int badchains[MAXREM][MAXREM])
         int generated;
 	int now = time(NULL);
 	char *tmp = line + strlen("Last update:") + 1;
-	/* For some weird reason, this isn't rfc822 */
-	if (strleft(tmp, "Mon") ||
-	    strleft(tmp, "Tue") ||
-	    strleft(tmp, "Wed") ||
-	    strleft(tmp, "Thu") ||
-	    strleft(tmp, "Fri") ||
-	    strleft(tmp, "Sat") ||
-	    strleft(tmp, "Sun"))
-	  tmp += 3;
-        generated = parsedate(tmp);
+	generated = parsedate(tmp);
+	if (generated == -1) {
+	  /* For some weird reason, this isn't rfc822 */
+	  if (strleft(tmp, "Mon") ||
+	      strleft(tmp, "Tue") ||
+	      strleft(tmp, "Wed") ||
+	      strleft(tmp, "Thu") ||
+	      strleft(tmp, "Fri") ||
+	      strleft(tmp, "Sat") ||
+	      strleft(tmp, "Sun"))
+	    tmp += 3;
+          generated = parsedate(tmp);
+	}
 	now = time(NULL);
 	if (generated != -1 && generated < now - SECONDSPERDAY)
-	  errlog(WARNING, "Remailer Reliability Statistics are older than one day.\n");
+	  errlog(WARNING, "Remailer Reliability Statistics are older than one day (check your clock?).\n");
+	if (generated != -1 && generated > now)
+	  errlog(WARNING, "Remailer Reliability Statistics are from the future (check your clock?).\n");
       }
     };
     while (fgets(line, sizeof(line), list) != NULL &&
