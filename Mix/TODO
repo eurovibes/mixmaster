@@ -1,3 +1,7 @@
+Things that really get done before the next release
+
+- Fall back to 3DES as Encrypt-Key cipher if we don't have IDEA.
+
 Items that need to be completed before the next MAIN release:
 
 - delete secret keys securely after keygraceperiod expires
