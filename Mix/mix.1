@@ -1,5 +1,5 @@
 .TH MIX 1 "Mixmaster Version 3.0 beta"
-.\" $Id: mix.1,v 1.16 2002/09/06 21:04:15 rabbi Exp $
+.\" $Id: mix.1,v 1.17 2002/09/25 23:02:44 ulfm Exp $
 .SH NAME
 mix \- anonymous remailer software
 .SH SYNOPSIS
@@ -284,10 +284,16 @@ rather than by
 .BR sendmail (1).
 .TP
 .B HELONAME
-Name used in the SMTP dialogue.
+Host name used in the SMTP dialogue.
 Default: The
 .I ENVFROM
 host name or the current network name associated with the socket.
+.TP
+.B SMTPUSERNAME
+Some mail servers require authentication for sending mail. This is
+the authenticated SMTP user name.
+.B SMTPPASSWORD
+Password for authenticated SMTP.
 .TP
 .B ENVFROM
 Envelope from address used in the SMTP dialogue. (When the client is

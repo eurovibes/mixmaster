@@ -6,7 +6,7 @@
    details.
 
    Socket-based mail transport services
-   $Id: mail.c,v 1.13 2002/09/18 23:26:16 rabbi Exp $ */
+   $Id: mail.c,v 1.14 2002/09/25 23:02:44 ulfm Exp $ */
 
 
 #include "mix3.h"
@@ -306,19 +306,25 @@ int sock_cat(SOCKET s, BUFFER *b)
 
 /* send messages by SMTP ************************************************/
 
-static int sock_getsmtp(SOCKET s, BUFFER *line)
+static int sock_getsmtp(SOCKET s, BUFFER *response)
 {
   int ret;
+  BUFFER *line;
+  line = buf_new();
 
-  do
+  buf_clear(response);
+  do {
     ret = sock_getline(s, line);
-  while (line->length >= 4 && line->data[3] == '-');
+    buf_cat(response, line);
+  } while (line->length >= 4 && line->data[3] == '-');
+  buf_free(line);
   return (ret);
 }
 
 SOCKET smtp_open(void)
 {
   int s = INVALID_SOCKET;
+  int esmtp = 0;
   BUFFER *line;
 
 #ifdef USE_SOCK
@@ -327,13 +333,18 @@ SOCKET smtp_open(void)
   if (s != INVALID_SOCKET) {
     line = buf_new();
     sock_getsmtp(s, line);
+    if (bufifind(line, "ESMTP"))
+      esmtp = 1;
     if (line->data[0] != '2') {
       errlog(ERRORMSG, "SMTP relay not ready. %b\n", line);
       closesocket(s);
       s = INVALID_SOCKET;
     } else {
       errlog(DEBUGINFO, "Opening SMTP connection.\n");
-      buf_sets(line, "HELO ");
+      if (esmtp)
+        buf_sets(line, "EHLO ");
+      else
+        buf_sets(line, "HELO ");
       if (HELONAME[0])
 	buf_appends(line, HELONAME);
       else if (strchr(ENVFROM, '@'))
@@ -352,6 +363,7 @@ SOCKET smtp_open(void)
 	else
 	  buf_appends(line, SHORTNAME);
       }
+      buf_chop(line);
       buf_appends(line, "\r\n");
       sock_cat(s, line);
       sock_getsmtp(s, line);
@@ -359,8 +371,33 @@ SOCKET smtp_open(void)
 	errlog(ERRORMSG, "SMTP relay refuses HELO: %b\n", line);
 	closesocket(s);
 	s = INVALID_SOCKET;
+      } else if (SMTPUSERNAME[0] && esmtp && bufifind(line, "AUTH") && bufifind(line, "LOGIN")) {
+        buf_sets(line, "AUTH LOGIN\r\n");
+        sock_cat(s, line);
+        sock_getsmtp(s, line);
+        if (!bufleft(line, "334")) {
+          errlog(ERRORMSG, "SMTP AUTH fails: %b\n", line);
+          goto err;
+        }
+        buf_sets(line, SMTPUSERNAME);
+        encode(line, 0);
+        buf_appends(line, "\r\n");
+        sock_cat(s, line);
+        sock_getsmtp(s, line);
+        if (!bufleft(line, "334")) {
+          errlog(ERRORMSG, "SMTP username rejected: %b\n", line);
+          goto err;
+        }
+        buf_sets(line, SMTPPASSWORD);
+        encode(line, 0);
+        buf_appends(line, "\r\n");
+        sock_cat(s, line);
+        sock_getsmtp(s, line);
+        if (!bufleft(line, "235"))
+          errlog(ERRORMSG, "SMTP authentication failed: %b\n", line); 
       }
     }
+err:
     buf_free(line);
   }
 #endif /* USE_SOCK */
@@ -446,6 +483,10 @@ int smtp_send(SOCKET relay, BUFFER *head, BUFFER *message, char *from)
     sock_getsmtp(relay, line);
     if (bufleft(line, "421")) {
       errlog(ERRORMSG, "SMTP relay error: %b\n", line);
+      goto end;
+    }
+    if (bufleft(line, "530")) {
+      errlog(ERRORMSG, "SMTP authentication required: %b\n", line);
       goto end;
     }
   }
