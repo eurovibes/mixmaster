@@ -368,24 +368,28 @@
                            In order to serve help files in different languages
                              we need a way to reply to requests like
                              remailer-help-it.  In order to not have to modify
-                             the code for each and every new ressource, Mixmaster
-                             now sends the file requests/remailer-<something> to
-                             remailer-<something> requests.  remailer-{help,key,
-                             stats,conf,adminkey} still are special cases tho.
+                             the code for each and every new ressource,
+                             Mixmaster now sends the file
+                             requests/remailer-<something> to
+                             remailer-<something> requests.
+                             remailer-{help,key, stats,conf,adminkey} still are
+                             special cases tho.
                            In the curses interface chain selection it was not
                              possible to select a random last hop with a usenet
                              post message.  Fixed (closes: #719165).
                            If remix was enabled and we had a Type-I Anon-Post-To
-                             request we accidently randhoped it via the configured
-                             default remailing chain (default: *,*,*,*).
+                             request we accidently randhoped it via the
+                             configured default remailing chain (default:
+                             *,*,*,*).
                              Fixed (closes: #729494).
-                           In client mode (REMAIL n) the pool is flushed every time
-                             mixmaster is run unless CLIENTAUTOFLUSH is set to n.
-                             (closes: #676794: Rate implementation doubled)
-                           Found that weird bug that weird bug that sometimes led to
-                             "Unknown remailer version!" errors: In chain_randfinal()
-                             we selected a random value between 0 and maxrem instead
-                             of 0 and maxrem - 1.
-                           Mixmaster now uses broken-chain info from stats. I hope
-                             this doesn't break any Nym functionality.
+                           In client mode (REMAIL n) the pool is flushed every
+                             time mixmaster is run unless CLIENTAUTOFLUSH is
+                             set to n.  (closes: #676794: Rate implementation
+                             doubled)
+                           Found that weird bug that weird bug that sometimes
+                             led to "Unknown remailer version!" errors: In
+                             chain_randfinal() we selected a random value
+                             between 0 and maxrem instead of 0 and maxrem - 1.
+                           Mixmaster now uses broken-chain info from stats. I
+                             hope this doesn't break any Nym functionality.
                            Warn if remailer stats are older than a day.
