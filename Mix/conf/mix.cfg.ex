@@ -32,7 +32,7 @@ PACKETEXP	7d
 SENDMAIL	/usr/lib/sendmail -t
 
 # Where to log error messages:
-ERRLOG		errlog
+ERRLOG		error.log
 
 # Path to inews, or address of mail-to-news gateway:
 #NEWS		mail2news@nym.alias.net
