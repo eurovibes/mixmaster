@@ -225,7 +225,7 @@
         their final recipients.</t>
 
       <t>The pooling scheme is a "Timed Dynamic Pool
-        Mix," which has the following three parameters:
+        Mix" <xref target="trickle02"/>, which has the following three parameters:
         <texttable>
           <ttcol align='left' width='20%'>Name</ttcol>
           <ttcol align='left'>Description</ttcol>
@@ -892,6 +892,25 @@ Remailer-Type: Mixmaster [version number]
         <date month="January" year="1998"/>
       </front>
     </reference>
+
+    <reference anchor="trickle02"
+      target="http://freehaven.net/doc/batching-taxonomy/taxonomy.pdf">
+      <front>
+        <title>From a Trickle to a Flood: Active Attacks on Several Mix Types</title>
+        <author initials="A." surname="Serjantov" fullname="Andrei Serjantov">
+          <organization/><address/>
+        </author>
+        <author initials="R." surname="Dingledine" fullname="Roger Dingledine">
+          <organization/><address/>
+        </author>
+        <author initials="P." surname="Syverson" fullname="Paul Syverson">
+          <organization>Proceedings of Information Hiding Workshop (IH 2002)</organization>
+          <address/>
+        </author>
+        <date month="October" year="2002"/>
+      </front>
+    </reference>
+
 
     <reference anchor="Schneier96">
       <front>
