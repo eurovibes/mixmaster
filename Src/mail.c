@@ -6,7 +6,7 @@
    details.
 
    Socket-based mail transport services
-   $Id: mail.c,v 1.20 2003/07/07 11:32:45 weaselp Exp $ */
+   $Id: mail.c,v 1.21 2003/09/26 21:00:45 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -152,7 +152,7 @@ int sendmail(BUFFER *message, char *from, BUFFER *address)
   BUFFER *head, *block, *rcpt;
   FILE *f;
   int err = -1;
-  int rcpt_cnt = 0;
+  int rcpt_cnt;
 
   head = buf_new();
   rcpt = buf_new();
@@ -183,6 +183,7 @@ int sendmail(BUFFER *message, char *from, BUFFER *address)
     field = buf_new();
     content = buf_new();
 
+    rcpt_cnt = 0;
     while (buf_getheader(message, field, content) == 0) {
       if (bufieq(field, "to") || bufieq(field, "cc") || bufieq(field, "bcc")) {
 	int thislinercpts = 1;
@@ -198,10 +199,16 @@ int sendmail(BUFFER *message, char *from, BUFFER *address)
     }
     buf_free(field);
     buf_free(content);
-  } else {
-    buf_set(rcpt, address);
+  } else if (address->data[0]) {
+    char *tmp = address->data;
     rcpt_cnt = 1;
-  }
+    while ((tmp = strchr(tmp+1, ',')))
+      rcpt_cnt ++;
+
+    buf_set(rcpt, address);
+  } else
+    rcpt_cnt = 0;
+
   buf_rewind(message);
 
   if ( ! rcpt_cnt ) {
