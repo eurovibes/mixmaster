@@ -6,12 +6,13 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.38 2003/09/19 00:52:47 weaselp Exp $ */
+   $Id: config.h,v 1.39 2003/09/29 20:41:39 weaselp Exp $ */
 
 
 #ifndef _CONFIG_H
 #define _CONFIG_H
 #include "version.h"
+#include "sys/param.h"
 
 /* Disclaimer to be inserted in all anonymous messages: */
 #define DISCLAIMER \
@@ -158,7 +159,11 @@
 /* Give up if a file is larger than BUFFER_MAX bytes: */
 /* #define BUFFER_MAX 64*1024*1024 */
 
+#ifdef MAXPATHLEN
+#define PATHMAX MAXPATHLEN
+#else
 #define PATHMAX 512
+#endif
 #define LINELEN 128
 #define BUFSIZE 4096
 
