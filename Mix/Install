@@ -1,12 +1,12 @@
 #!/bin/sh
-# Mixmaster version 2.9  --  (C) 1999 Anonymizer Inc. and others.
+# Mixmaster version 2.9  --  (C) 1999-2002 Anonymizer Inc. and others.
 
 # Mixmaster may be redistributed and modified under certain conditions.
 # This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.8.2.17 2002/12/16 23:25:11 ulfm Exp $
+# $Id: Install,v 1.8.2.18 2002/12/17 21:24:13 rabbi Exp $
 
 #whereis program default-path
 whereis()
@@ -576,6 +576,9 @@ then
  elif [ "$version" = "907005" ]
  then
   echo "Compiling with OpenSSL 0.9.7-beta5."
+ elif [ "$version" = "907006" ]
+ then
+  echo "Compiling with OpenSSL 0.9.7-beta6."
  elif [ "$version" -lt "920" ]
  then
   echo "This version: ${version} of SSLeay is not supported."
