@@ -168,3 +168,5 @@
                              middleman remailers (by Kat).
                            Reworked the OpenSSL version check in the
                              Install script.
+
+2002-07-21      ??????     Removed duplicate define of NYMDB from menu.h.
