@@ -107,3 +107,7 @@ EXPORTS
     VERBOSE                         @102
     pgp_signtxt                     @103
     pool_add                        @104
+    getv2seckey                     @105
+    pgpdb_getkey                    @106
+    ENTEREDPASSPHRASE               @107
+    PASSPHRASE                      @108

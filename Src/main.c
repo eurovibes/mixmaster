@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.18 2002/08/28 09:35:25 weaselp Exp $ */
+   $Id: main.c,v 1.19 2002/08/28 16:29:28 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -360,7 +360,7 @@ Remailer:\n\
 -R, --read-mail                   read remailer message from stdin\n\
 -I, --store-mail                  read remailer msg from stdin, do not decrypt\n\
 -M, --remailer                    process the remailer pool\n\
--D, --daemon                      remailer as background process\n
+-D, --daemon                      remailer as background process\n\
     --no-detach                   do not detach from terminal as daemon\n"
 #ifdef USE_SOCK
 	   "-S, --send                        force sending messages from the pool\n"
@@ -613,7 +613,9 @@ end:
     }
 #endif
     mix_daemon();
+#ifdef UNIX /* ifdef this one to, so that we do not need to export it from windows dll */
     clear_pidfile(PIDFILE);
+#endif
   }
   mix_exit();
   return (ret);
