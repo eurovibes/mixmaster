@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.34 2003/07/07 11:32:45 weaselp Exp $ */
+   $Id: config.h,v 1.35 2003/08/08 15:17:52 dybbuk Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -41,20 +41,7 @@
 #define DEFLTENTITY "text/plain; charset=" MIMECHARSET
 #endif
 
-/** Libraries and library functions **********************************/
-
-/* Use the OpenSSL crypto library (required) */
-#define USE_OPENSSL
-/* Use the RSA cryptosystem? */
-#define USE_RSA
-/* Use IDEA algorithm? (See file idea.txt) */
-/* #define USE_IDEA */
-/* Use AES algorithm? - should be handled by Install script setting compiler option -DUSE_AES */
-/* #define USE_AES */
-/* Support the OpenPGP message format? */
-#define USE_PGP
-
- /* the following are defined in the Makefile */
+/* the following are defined by Autoconf */
 #if 0
 /* Use the PCRE regular expression library for destination blocking? */
 #define USE_PCRE
@@ -91,8 +78,6 @@
 #endif
 
 #ifdef UNIX
-#define HAVE_UNAME
-#define HAVE_GECOS
 #define DEV_URANDOM "/dev/urandom"
 #ifdef __OpenBSD__
 #define DEV_RANDOM "/dev/srandom"
@@ -101,19 +86,9 @@
 #endif
 #endif
 
-#if defined(POSIX) || defined(USE_SOCK)
-#define HAVE_GETHOSTNAME
-#endif
-
 #ifdef POSIX
-#define HAVE_TERMIOS
-/* not a POSIX function, but avaiable on virtually all Unix systems */
-#define HAVE_GETTIMEOFDAY
-#endif
-
-#ifdef linux
-#define HAVE_GETDOMAINNAME
-#endif
+# define HAVE_TERMIOS
+#endif /* POSIX */
 
 #ifdef MSDOS
 #define SHORTNAMES
@@ -121,10 +96,6 @@
 #define HAVE_GETKEY
 #undef USE_SOCK
 #endif
-#endif
-
-#ifdef WIN32
-#define NO_SETENV
 #endif
 
 #if defined(USE_WINGUI) && !defined(WIN32)
@@ -136,6 +107,53 @@
 #else
 #define DLLIMPORT
 #endif
+
+/* This block includes the config.h created by autoconf/configure.
+ * Eventually this old config.h stuff should be merged with the autoconf
+ * stuff perhaps. */
+#ifdef HAVE_CONFIG_H
+# include "../config.h"
+#else /* End of HAVE_CONFIG_H */
+
+/* Setup for stuff that happens when autoconf isn't run.  This should be 
+ * removed once we finally nuke that damn Install script. */
+
+/** Libraries and library functions **********************************/
+
+/* Use the OpenSSL crypto library (required) */
+#define USE_OPENSSL
+/* Use the RSA cryptosystem? */
+#define USE_RSA
+/* Use IDEA algorithm? (See file idea.txt) */
+/* #define USE_IDEA */
+/* Use AES algorithm? - should be handled by Install script setting compiler option -DUSE_AES */
+/* #define USE_AES */
+/* Support the OpenPGP message format? */
+#define USE_PGP
+
+#ifndef WIN32
+# define HAVE_SETENV 1
+#endif
+
+#ifdef UNIX
+# define HAVE_UNAME
+# define HAVE_GECOS
+#endif
+
+#if defined(POSIX) || defined(USE_SOCK)
+# define HAVE_GETHOSTNAME
+#endif
+
+#ifdef POSIX
+/* not a POSIX function, but avaiable on virtually all Unix systems */
+# define HAVE_GETTIMEOFDAY
+#endif
+
+#ifdef linux
+# define HAVE_GETDOMAINNAME
+#endif
+
+#endif /* End of not HAVE_CONFIG_H */
 
 /** Constants *********************************************************/
 
