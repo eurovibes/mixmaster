@@ -203,6 +203,7 @@
                            Minor Install script fixes.
 
 2002-??-??      N/A yet    Fix a small bug in pgpdata.c that stopped mixmaster
-                             from reading cipher preferences.
+                             from reading cipher preferences. (by Disastry).
                            Fixed Passphrase reading in mpgp (the test program)
-                             on Windows platform.
+                             on Windows platform. (by Disastry).
+                           Several PGP fixes. (by Disastry).

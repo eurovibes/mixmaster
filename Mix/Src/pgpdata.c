@@ -6,7 +6,7 @@
    details.
 
    OpenPGP data
-   $Id: pgpdata.c,v 1.9 2002/08/13 14:33:23 weaselp Exp $ */
+   $Id: pgpdata.c,v 1.10 2002/08/15 16:52:12 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -73,8 +73,10 @@ int mpi_get(BUFFER *b, BUFFER *mpi)
 
 int mpi_bitcount(BUFFER *mpi)
 {
-  int i;
-  int l = mpi->length * 8;
+  int i, l;
+  while (!mpi->data[0] && mpi->length) // remove leading zeros from mpi
+    memmove(mpi->data, mpi->data+1, --mpi->length);
+  l = mpi->length * 8;
   for (i = 7; i >= 0; i--)
     if (((mpi->data[0] >> i) & 1) == 1) {
       l -= 7 - i;
@@ -260,13 +262,17 @@ static void mpi_bnputenc(BUFFER *o, BIGNUM *i, int ska, BUFFER *key,
 			 BUFFER *iv)
 {
   BUFFER *b;
+  int ivlen = iv->length;
 
   b = buf_new();
   buf_prepare(b, BN_num_bytes(i));
   b->length = BN_bn2bin(i, b->data);
   buf_appendi(o, mpi_bitcount(b));
-  if (key && key->length)
+  if (key && key->length) {
     skcrypt(b, ska, key, iv, ENCRYPT);
+    buf_clear(iv);
+    buf_append(iv, b->data+b->length-ivlen, ivlen);
+  }
   buf_cat(o, b);
   buf_free(b);
 }
