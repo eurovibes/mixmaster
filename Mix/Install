@@ -1,5 +1,5 @@
 #!/bin/sh
-# Mixmaster version 2.9  --  (C) 1999-2002 Anonymizer Inc. and others.
+# Mixmaster version 2.9  --  (C) 1999-2003 Anonymizer Inc. and others.
 
 # Mixmaster may be redistributed and modified under certain conditions.
 # This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
@@ -559,6 +559,18 @@ then
  elif [ "$version" = "90608f" ]
  then
   echo "Compiling with OpenSSL 0.9.6h."
+ elif [ "$version" = "90609f" ]
+ then
+  echo "Compiling with OpenSSL 0.9.6i."
+ elif [ "$version" = "9060a0" ]
+ then
+  echo "Compiling with OpenSSL 0.9.6j."
+ elif [ "$version" = "9060b0" ]
+ then
+  echo "Compiling with OpenSSL 0.9.6k."
+ elif [ "$version" = "9060c0" ]
+ then
+  echo "Compiling with OpenSSL 0.9.6l."
  elif [ "$version" = "90700f" ]
  then
   echo "Compiling with OpenSSL 0.9.7."
