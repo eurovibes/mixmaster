@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.17 2002/09/10 16:02:46 rabbi Exp $
+# $Id: Install,v 1.18 2002/09/10 19:21:44 weaselp Exp $
 
 #whereis program default-path
 whereis()
@@ -369,10 +369,10 @@ stored in mix.cfg in clear)."
       then
 	echo "WARNING: setting empty passphrase"
       fi
-      PASSPHRASE="PASSPHRASE      $ans" 
-      if [ -f $MIXDEST/mix.cfg ] 
+      PASSPHRASE="PASSPHRASE	$ans" 
+      if [ -f $MIXDEST/mix.cfg ]
       then
-        cat $PASSPHRASE >> $MIXDEST/mix.cfg
+	echo "$PASSPHRASE" >> $MIXDEST/mix.cfg
       fi
     fi
   fi
