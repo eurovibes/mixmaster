@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.31 2002/09/26 12:34:53 disastry Exp $ */
+   $Id: mix.c,v 1.32 2002/10/02 07:57:32 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -455,10 +455,10 @@ static void mix_setdefaults()
 	SENDPOOLTIME  = 60 * 60;	/* frequency for sending pool messages */
 	MAILINTIME    = 5 * 60;		/* frequency for processing MAILIN mail */
 
-	KEYLIFETIME      = 8 * 30 * 24 * 60 * 60;	/* expire time for keys */
-	KEYOVERLAPPERIOD = 1 * 30 * 24 * 60 * 60;	/* if old keys are only still valid for that time */
+	KEYLIFETIME      = 13 * 30 * 24 * 60 * 60;	/* expire time for keys */
+	KEYOVERLAPPERIOD =  1 * 30 * 24 * 60 * 60;	/* if old keys are only still valid for that time */
 	                                        	/* create new ones with ./mix -K */
-	KEYGRACEPERIOD   = 1 * 30 * 24 * 60 * 60;	/* accept mail to the old one for that long after */
+	KEYGRACEPERIOD   =       7 * 24 * 60 * 60;	/* accept mail to the old one for that long after */
 	                                        	/* it has expired */
 
 
