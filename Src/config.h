@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.23 2002/09/25 23:02:44 ulfm Exp $ */
+   $Id: config.h,v 1.24 2002/10/02 22:23:35 rabbi Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -121,6 +121,10 @@
 #define HAVE_GETKEY
 #undef USE_SOCK
 #endif
+#endif
+
+#ifdef WIN32
+#define NO_SETENV
 #endif
 
 #if defined(USE_WINGUI) && !defined(WIN32)
