@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-# $Id: configure.in,v 1.2 2003/08/07 15:15:35 dybbuk Exp $
+# $Id: configure.in,v 1.3 2003/08/07 17:24:23 dybbuk Exp $
 AC_INIT(Src/version.h)
 AC_CONFIG_AUX_DIR(etc)
 AC_CONFIG_HEADER([config.h])
@@ -100,8 +100,9 @@ AM_PASSPHRASE
 # Where should Mixmaster work its lovely magic?  Apparently this has a
 # sane default now?
 AM_MIXMASTER_DIR
-AM_HOMEMIXDIR
-AM_MIX_CONF
+AM_MIXMASTER_SPOOL
+AM_MIXMASTER_HOME
+AM_MIXMASTER_CONF
 
 # Contains additional build information (such as pcre and zlib)
 AC_SUBST(TOPDIRS)

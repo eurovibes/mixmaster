@@ -1,6 +1,6 @@
 dnl Various specific config bits for Mixmaster.
 dnl
-dnl $Id: aclocal.m4,v 1.3 2003/08/07 17:03:21 dybbuk Exp $
+dnl $Id: aclocal.m4,v 1.4 2003/08/07 17:24:23 dybbuk Exp $
 
 dnl Zlib versions before 1.1.4 had a nasty bug.
 AC_DEFUN(AM_ZLIB_CHECK, [
@@ -221,11 +221,11 @@ AC_DEFUN(AM_MIXMASTER_DIR, [
 MIXDIR=""
 AC_MSG_CHECKING(for Mixmaster directory)
 AC_ARG_WITH(mixdir,
-  [  --with-mixdir           Set default Mix directory ],
-  [ if test -d "$mixdir"
+  [  --with-mixdir=DIR       Set default Mix directory ],
+  [ if test ! -z "$with_mixdir"
     then
-       AC_MSG_RESULT($mixdir)
-       MIXDIR="-DSPOOL='\"$mixdir\"'"
+       AC_MSG_RESULT($with_mixdir)
+       MIXDIR="-DMIXDIR='\"$with_mixdir\"'"
     else
        AC_MSG_RESULT([not found, using default])
     fi
@@ -233,13 +233,30 @@ AC_ARG_WITH(mixdir,
   [ AC_MSG_RESULT(using default) ])
 AC_SUBST(MIXDIR)
 ])
+
+dnl Select a non-standard spool.
+AC_DEFUN(AM_MIXMASTER_SPOOL, [
+SPOOL=""
+AC_MSG_CHECKING(for custom spool directory)
+AC_ARG_WITH(spool,
+  [  --with-spool=DIR        Set default spool directory ],
+  [ if test ! -z "$with_spool"
+    then
+       AC_MSG_RESULT($with_spool)
+       CPPFLAGS="-DSPOOL='\"$with_spool\"' ${CPPFLAGS}"
+    else
+       AC_MSG_RESULT([using default])
+    fi
+  ],
+  [ AC_MSG_RESULT([using default]) ])
+])
       
 dnl HOMEMIXDIR is something else.
-AC_DEFUN(AM_HOMEMIXDIR, [
+AC_DEFUN(AM_MIXMASTER_HOME, [
 HOMEMIXDIR=""
 AC_MSG_CHECKING(for default relative Mix directory)
 AC_ARG_WITH(homemixdir,
-  [  --with-homemixdir=DIR   Default Mix directory relative to \$HOME ],
+  [  --with-homemixdir=DIR   Default Mix directory relative to $HOME ],
   [ HOMEMIXDIR="$with_homemixdir"
     CPPFLAGS="-DHOMEMIXDIR='\"$HOMEMIXDIR\"' ${CPPFLAGS}"
     AC_MSG_RESULT(["\$HOME/${HOMEMIXDIR}"]) ],
@@ -247,7 +264,7 @@ AC_ARG_WITH(homemixdir,
 ])
 
 dnl Is the global mixmaster config working yet?
-AC_DEFUN(AM_MIX_CONF, [
+AC_DEFUN(AM_MIXMASTER_CONF, [
 MIXCONF=""
 AC_MSG_CHECKING(for global configuration file)
 AC_ARG_WITH(global_conf,
