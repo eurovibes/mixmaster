@@ -236,7 +236,7 @@
                            Linux PPC fixes (and all other archs where char is
                              unsigned).
 
-2002-xx-xx      2.9b39     Added a new feature, --store-mail (-I), which will
+2002-10-07      2.9b39     Added a new feature, --store-mail (-I), which will
                              deliver an encrypted mix packet to the message pool
                              without attempting being decrypted.
                            Made minor updates for WIN32 DLL.
@@ -264,6 +264,11 @@
                              Currently, only AUTH LOGIN is supported.
                            Mixmaster now handles <CR><LF> in pubring.mix.
                            Removed incorrect NT service checks in mix.c.  
+                           Mixmaster now keeps no stats in client mode.
+                           The pool is autmatically checked for waiting
+                             messages in the client configuration.
+                           Mixmaster now bears a DFSG-compliant license.
+                           Fixed permissions on tarball release.
                            Documentation updates.
 
 2002-??-??      MAIN      Applied Maildir feature patch by drt@un.bewaff.net,
