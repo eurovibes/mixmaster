@@ -25,17 +25,18 @@
 
 /@nym\.alias\.net$/
 /@hod\.aarg\.net$/
-/@redneck\.gacracker\.org$/
+/@nym\.gmsociety\.org$/
 /@blackhole\.riot\.eu\.org$/
 /@nym\.cryptofortress\.com$/
 /@nym\.xganon\.com$/
 /@rodent\.frell\.eu\.org$/
 
-
 ##
 ## presumably dead nymservers
 ##
 
+#/@redneck\.gacracker\.org$/
 #/@anon\.nymserver\.com$/
 #/@mailanon\.com$/
-#/@alias\.cyberpass\.net$/
+/@alias\.cyberpass\.net$/
+
