@@ -433,3 +433,7 @@
                           Ignore 'No reliable remailers' problems when
                             randhopping messages in middleman mode.
                             That is better than dropping them.
+
+2003-??-??      CVS       Drop messages without timestamps and messages with
+                            future timestamps.  This abandons backwards
+                            compatibility with mixmaster 2.0.3 and earlier.
