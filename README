@@ -49,8 +49,8 @@ To install or upgrade Mixmaster, type `./Install'.
 
 Mixmaster uses lists of currently operating remailers and information
 about their reliability. You can get the current remailer lists from
-http://anon.efga.org/ and http://mixmaster.shinn.net/ and via finger from
-nym.alias.net:
+http://www.eskimo.com/~turing/remailer/ and http://anon.efga.org/ and via
+finger from nym.alias.net:
 
   pubring.asc    Type 1 remailer keys
   pubring.mix    Type 2 remailer keys
@@ -192,4 +192,4 @@ University of California, Berkeley and its contributors.
 
 All trademarks are the property of their respective owners.
 
-$Id: README,v 1.2 2001/11/03 00:28:53 rabbi Exp $
+$Id: README,v 1.3 2001/11/07 01:02:18 rabbi Exp $
