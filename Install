@@ -833,7 +833,7 @@ else
 fi
 
 cd "$MIXCFG"
-for i in mlist.txt pubring.mix rlist.txt pubring.asc type2.list
+for i in mlist.txt pubring.mix rlist.txt pubring.asc
 do
  if [ ! -f "$MIXDEST/$i" ]
  then
