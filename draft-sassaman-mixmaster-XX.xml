@@ -840,20 +840,6 @@ Remailer-Type: Mixmaster [version number]
 
   </section>
 
-  <section anchor="examples" title="Examples">      <!-- XXX -->
-
-    <t>This section contains a sample message and a sample key file</t>
-
-    <section anchor="example-message" title="Sample Message">
-      <t>To be provided.</t>
-    </section>
-
-    <section anchor="example-keyfile" title="Sample Key File">
-      <t>To be provided.</t>
-    </section>
-
-  </section>
-
 </middle>
 
 <back>
