@@ -12,7 +12,7 @@ Expires: December 31, 2003
 
                       Mixmaster Protocol Version 2
                        <draft-moeller-v2-01.txt>
-                      
+
 Status of This Memo
 
      This document is an Internet-Draft and is subject to all provisions
@@ -420,7 +420,7 @@ message body has the following format:
 
   ::
   Remailer-Type: Mixmaster [version number]
-  
+
   -----BEGIN REMAILER MESSAGE-----
   [packet length ]
   [message digest]
@@ -441,7 +441,7 @@ Remailer public key files consist of a list of attributes and a
 public RSA key:
 
   [attributes list]
-  
+
   -----Begin Mix Key-----
   [key ID]
   [length]
@@ -455,7 +455,7 @@ The attributes are listed in one line separated by spaces:
  key ID:          public key ID
  version:         the Mixmaster software version number
  capabilities:    flags indicating additional remailer capabilities
- creation date:   date stamp in the format YYYY-MM-DD (optional)  
+ creation date:   date stamp in the format YYYY-MM-DD (optional)
  expiration date: date stamp in the format YYYY-MM-DD (optional)
 
 The identifier consists of lowercase alphanumeric characters, beginning with an
@@ -653,7 +653,7 @@ Specifications, Version 2.0", RFC 2437, October 1998.
  Anonymizer, Inc.
  5694 Mission Center Road #426
  San Diego, CA 92108-4380
-  
+
  EMail: loki@infonex.com
 
 
