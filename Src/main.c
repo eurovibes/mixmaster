@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.5 2001/12/12 18:50:09 rabbi Exp $ */
+   $Id: main.c,v 1.6 2002/01/29 02:47:12 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -253,6 +253,7 @@ int main(int argc, char *argv[])
 	    if (i < argc - 1) {
 	      send = MSG_POST, header = 0;
 	      buf_appendf(msg, "Newsgroups: %s\n", argv[++i]);
+              continue;
 	    } else {
 	      noarg(argv[0], *p);
 	      error = 1;
