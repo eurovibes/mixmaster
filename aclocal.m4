@@ -1,6 +1,6 @@
 dnl Various specific config bits for Mixmaster.
 dnl
-dnl $Id: aclocal.m4,v 1.2 2003/08/07 15:15:35 dybbuk Exp $
+dnl $Id: aclocal.m4,v 1.3 2003/08/07 17:03:21 dybbuk Exp $
 
 dnl Zlib versions before 1.1.4 had a nasty bug.
 AC_DEFUN(AM_ZLIB_CHECK, [
@@ -92,7 +92,7 @@ for ssldir in $tryssldir "" /usr /usr/local/openssl /usr/lib/openssl /usr/local/
 
     # So ... can we link with SSL here or not?  Note that the IDEA and
     # AES checks come later.
-    AC_TRY_RUN([
+    AC_RUN_IFELSE([
 #include <string.h>
 #include <openssl/rand.h>
 int main(void) 
@@ -169,10 +169,10 @@ AC_ARG_ENABLE(idea,
 # Are we going without?
 if test -z "$enable_idea" -o "$enable_idea" = "yes"; then
     AC_MSG_CHECKING(for IDEA support)
-    AC_TRY_RUN([
-#include <openssl/idea.h>
+    AC_RUN_IFELSE([
 #include <openssl/evp.h>
 int main() {
+  OpenSSL_add_all_ciphers();
   if(EVP_get_cipherbyname("idea-cbc") != NULL)
     exit(0);
   else  
@@ -197,10 +197,10 @@ AC_ARG_ENABLE(openssl_aes,
 # Where oh where has my little AES gone?
 if test -z "$enable_aes" -o "$enable_aes" = "yes"; then
     AC_MSG_CHECKING(for AES support)
-    AC_TRY_RUN([
-#include <openssl/aes.h>
+    AC_RUN_IFELSE([
 #include <openssl/evp.h>
 int main() {
+  OpenSSL_add_all_ciphers();
   if(EVP_get_cipherbyname("aes-128-cbc") != NULL)
     exit(0);
   else
