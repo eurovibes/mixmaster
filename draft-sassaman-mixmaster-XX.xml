@@ -37,7 +37,6 @@
   </author>
 
   <author initials="P." surname="Palfrader" fullname="Peter Palfrader">
-    <organization>The Mixmaster Project</organization>
     <address>
       <postal>
         <street>Hoettinger Auffahrt 1</street>
@@ -45,6 +44,7 @@
         <country>Austria</country>
       </postal>
       <email>peter@palfrader.org</email>
+      <uri>http://www.palfrader.org/</uri>
     </address>
   </author>
 
