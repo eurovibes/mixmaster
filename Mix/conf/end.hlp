@@ -14,7 +14,8 @@ enables you to assure that you will not be inconvenienced by users of
 this remailer in the future.
 
 To block the users of this remailer from sending email to your address,
-please send a message to <%RMA> containing the line
+please send a message to <%RMA>
+containing the line
 
 DESTINATION-BLOCK
 
@@ -24,9 +25,10 @@ your current email address to be permanently blocked from users of the
 %RMN.
 
 For additional information on this remailer's abuse policy, instructions
-on how to block more than one email address, and to reach the <%RMN>
-operator, please email <%CA>.
-
+on how to block more than one email address, and to reach the
+<%RMN> operator, please send
+email to <%CA>.
+  
 Thank you for your interest in secure and private communications,
 
 -- The %RMN Administrator
