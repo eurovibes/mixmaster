@@ -353,7 +353,7 @@ message body has the following format:
 
 The length field always contains the decimal number "20480", since the
 size of Mixmaster packets is constant. An MD5 message digest [RFC
-1321] of the (un-encoded) packet is encoded as a hexadecimal string.
+1321] of the (un-encoded) packet is encoded in base64.
 
 The packet itself is encoded in base 64 encoding [RFC 1421], broken
 into lines of 40 characters (except that the last line is shorter).
