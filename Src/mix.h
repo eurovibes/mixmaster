@@ -904,4 +904,12 @@ int pgp_keygen(int algo, int bits, BUFFER *userid, BUFFER *pass,
 /* parsedate */
 time_t parsedate(char *p);
 
+
+
+#ifdef WIN32
+
+#define sleep(x) Sleep(x*1000)
+
+#endif /* WIN32 */
+
 #endif /* not _MIXLIB_H */

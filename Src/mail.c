@@ -264,11 +264,7 @@ int sendmail(BUFFER *message, char *from, BUFFER *address)
       }
       if (count > 5)
 	break; /* Too many retries - give up */
-#ifdef WIN32
-      Sleep(2000); /* sleep and retry */
-#else /* end of WIN32 */
       sleep(2); /* sleep and retry */
-#endif /* else not WIN32 */
     }
 #endif /* else not SHORTNAMES */
     if (f != NULL) {
