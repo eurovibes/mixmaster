@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.8.2.9 2002/12/05 04:59:09 weaselp Exp $
+# $Id: Install,v 1.8.2.10 2002/12/14 20:18:24 weaselp Exp $
 
 #whereis program default-path
 whereis()
@@ -638,6 +638,18 @@ http://www.clark.net/pub/dickey/ncurses/ncurses.tar.gz"
   fi
  fi
 
+ ideawarn()
+ {
+    echo "
+  WARNING: Building without IDEA. This means (among other things) that
+  Mixmaster will not create an RSA OpenPGP key (to avoid mail loss)"
+    readln "Continue anyway?" y
+    if [ "$ans" = "n" ]
+    then
+     exit 1
+    fi
+ }
+
  if [ "$system" = OpenBSD ]
  then
   LIBDIR=
@@ -646,8 +658,7 @@ http://www.clark.net/pub/dickey/ncurses/ncurses.tar.gz"
   findlib libidea.a
   if [ "$found" = "" ]
   then
-    echo "WARNING: Building without IDEA. This means (among other things) that
-Mixmaster will not create an RSA OpenPGP key (to cut down mail loss)"
+   ideawarn
   else
    DEF="$DEF -DUSE_IDEA"
    IDEALIB="$MAKELIB"
@@ -674,8 +685,7 @@ END
    then
      DEF="$DEF -DUSE_IDEA"
    else
-     echo "WARNING: Building without IDEA. This means (among other things) that
-Mixmaster will not create an RSA OpenPGP key (to cut down mail loss)"
+     ideawarn
    fi
    rm -f tmptst.c
  fi
