@@ -80,11 +80,12 @@ Table of Contents
    5. Key Format
    5.1 Key Rotation
    6. Administrative Commands
-   6. Delivery of Anonymous Messages
-   7. Security Considerations
-   8. Acknowledgements
-   9. References
-   9. Authors' Addresses
+   7. Delivery of Anonymous Messages
+   8. Security Considerations
+   9. Acknowledgements
+   10. References
+   11. Authors' Addresses
+
 
 1. Introduction
 
@@ -229,6 +230,7 @@ distribution and adds that many dummy messages to the pool as well.
 The distributions' parameters are chosen so that on average the remailer
 creates one dummy for every 32 messages coming in and one every 9 mixing
 rounds.
+
 
 4. Message Format
 
@@ -507,6 +509,7 @@ date. (The date stamp implies 00:00 UTC).
 Digital signatures [RFC 2440] should be used to ensure the
 authenticity of the key files.
 
+
 5.1 Key Rotation
 
 Beginning with version 3.0, Mixmaster offers automatic key rotation. Care
@@ -524,6 +527,7 @@ key when queried, effectively giving each key a 12 month service period.
 Remailers continue to decrypt and process mail encrypted to expired keys
 for one week past the expiration date on the key. One week after
 expiration, an expired remailer key should be securely destroyed.
+
 
 6. Administrative Commands
 
@@ -563,7 +567,8 @@ strings for other remailers the remailer knows about.
 The remailer-adminkey request returns a public OpenPGP key for use in
 communication with the remailer operator.
 
-6. Delivery of Anonymous Messages
+
+7. Delivery of Anonymous Messages
 
 When anonymous messages are forwarded to third parties, remailer
 operators should be aware that senders might try to supply header
@@ -594,7 +599,7 @@ destination addresses on request. Real-life abuse and attacks on
 anonymous remailers are discussed in [Mazieres 1998].
 
 
-7. Security Considerations
+8. Security Considerations
 
 The security of the mix-net relies on the assumption that the
 underlying cryptographic primitives are secure. In addition, specific
@@ -667,7 +672,7 @@ cryptographic authentication. Possible countermeasures are discussed
 in section 5.
 
 
-7. Acknowledgements
+9. Acknowledgements
 
 Several people contributed ideas and source code to the Mixmaster v2
 software. "Antonomasia" <ant@notatla.demon.co.uk>, Adam Back
@@ -675,7 +680,7 @@ software. "Antonomasia" <ant@notatla.demon.co.uk>, Adam Back
 improvements to this document.
 
 
-8. References
+10. References
 
 [Chaum 1981] Chaum, D., "Untraceable Electronic Mail, Return Addresses, and
 Digital Pseudonyms", Communications of the ACM 24 (1981) 2.
@@ -719,7 +724,7 @@ Specifications, Version 2.0", RFC 2437, October 1998.
 1996.
 
 
-9. Authors' Addresses
+11. Authors' Addresses
 
 
  Ulf Moeller
