@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.10.2.1 2002/10/04 23:49:16 rabbi Exp $ */
+   $Id: main.c,v 1.10.2.2 2002/10/05 00:15:14 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -360,7 +360,7 @@ Remailer:\n\
 -R, --read-mail                   read remailer message from stdin\n\
 -I, --store-mail                  read remailer msg from stdin, do not decrypt\n\
 -M, --remailer                    process the remailer pool\n\
--D, --daemon                      remailer as background process\n\"
+-D, --daemon                      remailer as background process\n"
 #ifdef USE_SOCK
 	   "-S, --send                        force sending messages from the pool\n"
 #endif
