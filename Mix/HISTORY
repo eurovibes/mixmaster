@@ -322,3 +322,6 @@
                              resulted in segfaults.
 
 2003-xx-xx      xxxxxx     Windows build changes.
+                           Check that feedback buffer is not null before
+                             operating on it in chain_select().
+                             Closes #631353, thanks Sami Farin.
