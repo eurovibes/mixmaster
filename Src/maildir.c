@@ -35,6 +35,8 @@
 #define S_ISDIR(m) (((m) & S_IFMT) == S_IFDIR)
 #endif
 
+#ifndef SHORTNAMES
+
 static unsigned long namecounter = 0;
 
 int checkDirectory(char *dir, char *append, int create) {
@@ -205,7 +207,7 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
     strcatn(newname, basename, MAX_SUBNAME);
   }
 #else /* POSIX */
-  /* On non POSIX systems we simply use rename(). Let's hobe DJB
+  /* On non POSIX systems we simply use rename(). Let's hope DJB
    * never finds out
    */
   if (rename(tmpname, newname) != 0) {
@@ -226,6 +228,15 @@ realend:
   
   return returnValue;
 }
+
+#else /* no SHORTNAMES */
+int maildirWrite(char *maildir, BUFFER *message, int create) {
+{
+  errlog(ERRORMSG, "Maildir delivery does not work with SHORTNAMES.\n");
+  return -1;
+}
+#endif /* no SHORTNAMES */
+
 
 #ifdef UNITTEST
 
