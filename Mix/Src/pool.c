@@ -6,7 +6,7 @@
    details.
 
    Send messages from pool
-   $Id: pool.c,v 1.6 2001/12/14 23:57:56 rabbi Exp $ */
+   $Id: pool.c,v 1.7 2002/01/10 23:20:09 rabbi Exp $ */
 
 #include "mix3.h"
 #include <stdlib.h>
@@ -341,9 +341,9 @@ int msg_send(char *name)
 	errlog(ERRORMSG, "Bad message file.\n");
     }
   }
+end:
   if (f != NULL)
     fclose(f);
-end:
   if (err != 1)			/* problem sending mail */
     unlink(name);
   buf_free(m);
