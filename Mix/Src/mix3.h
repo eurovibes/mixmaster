@@ -6,7 +6,7 @@
    details.
 
    Function prototypes
-   $Id: mix3.h,v 1.8.2.6 2003/01/12 22:21:26 colintu Exp $ */
+   $Id: mix3.h,v 1.8.2.7 2003/01/21 16:11:55 colintu Exp $ */
 
 
 #ifndef _MIX3_H
@@ -145,11 +145,11 @@ int doallow(BUFFER *line, BUFFER *filter);
 int allowmessage(BUFFER *in);
 
 DllExport void errlog(int type, char *format,...);
-void clienterr(BUFFER *msgbuf, char *err);
-void logmail(char *mailbox, BUFFER *message);
+DllExport void clienterr(BUFFER *msgbuf, char *err);
+DllExport void logmail(char *mailbox, BUFFER *message);
 
-void mix_status(char *fmt,...);
-void mix_genericerror(void);
+DllExport void mix_status(char *fmt,...);
+DllExport void mix_genericerror(void);
 
 #define ERRORMSG 1
 #define WARNING 2
@@ -157,17 +157,17 @@ void mix_genericerror(void);
 #define LOG 4
 #define DEBUGINFO 5
 
-int decode(BUFFER *in, BUFFER *out);
-int encode(BUFFER *b, int linelen);
-void id_encode(byte id[], byte *s);
-void id_decode(byte *s, byte id[]);
+DllExport int decode(BUFFER *in, BUFFER *out);
+DllExport int encode(BUFFER *b, int linelen);
+DllExport void id_encode(byte id[], byte *s);
+DllExport void id_decode(byte *s, byte id[]);
 
 int decode_header(BUFFER *content);
 int boundary(BUFFER *line, BUFFER *mboundary);
 void get_parameter(BUFFER *content, char *attribute, BUFFER *value);
 int get_type(BUFFER *content, BUFFER *type, BUFFER *subtype);
 int mail_encode(BUFFER *in, int encoding);
-int hdr_encode(BUFFER *in, int n);
+DllExport int hdr_encode(BUFFER *in, int n);
 DllExport int attachfile(BUFFER *message, BUFFER *filename);
 int pgpmime_sign(BUFFER *message, BUFFER *uid, BUFFER *pass, char *secring);
 int mime_attach(BUFFER *message, BUFFER *attachment, BUFFER *type);
@@ -178,16 +178,16 @@ int qp_decode_message(BUFFER *msg);
 #define MIME_7BIT 2   /* transport is 7bit */
 
 /* randomness */
-int rnd_bytes(byte *b, int n);
-byte rnd_byte(void);
-int rnd_number(int n);
-int rnd_add(byte *b, int l);
-int rnd_seed(void);
-void rnd_time(void);
+DllExport int rnd_bytes(byte *b, int n);
+DllExport byte rnd_byte(void);
+DllExport int rnd_number(int n);
+DllExport int rnd_add(byte *b, int l);
+DllExport int rnd_seed(void);
+DllExport void rnd_time(void);
 
-int rnd_init(void);
-int rnd_final(void);
-void rnd_error(void);
+DllExport int rnd_init(void);
+DllExport int rnd_final(void);
+DllExport void rnd_error(void);
 
 #define RND_QUERY 0
 #define RND_NOTSEEDED -1

@@ -1,5 +1,4 @@
-# Microsoft Developer Studio Generated NMAKE File, Format Version 4.20
-# ** DO NOT EDIT **
+# mix.exe makefile
 
 # TARGTYPE "Win32 (x86) Console Application" 0x0103
 
@@ -34,18 +33,10 @@ NULL=nul
 CPP=cl.exe
 RSC=rc.exe
 
+MIXOPTS=/D "USE_SOCK" /D "WIN32" /D "_MSC" /D "WIN32SERVICE" /D "_MBCS" /D "_CONSOLE"
+
 !IF  "$(CFG)" == "Mix - Win32 Release"
 
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "Mix___Wi"
-# PROP BASE Intermediate_Dir "Mix___Wi"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "Release"
-# PROP Intermediate_Dir "Release"
-# PROP Target_Dir ""
 OUTDIR=.\Release
 INTDIR=.\Release
 
@@ -59,24 +50,19 @@ CLEAN :
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /YX /c
-# ADD CPP /nologo /MD /W2 /GX /O2 /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "USE_SOCK" /D "_MSC" /D "WIN32SERVICE" /YX /c
-CPP_PROJ=/nologo /MD /W2 /GX /O2 /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D\
- "_MBCS" /D "USE_SOCK" /D "_MSC" /D "WIN32SERVICE" /Fp"$(INTDIR)/Mix.pch" /YX\
+CPP_PROJ=/nologo /MD /W2 /GX /O2 /D "NDEBUG" /Fp"$(INTDIR)/Mix.pch" /YX\
  /Fo"$(INTDIR)/" /c 
+
 CPP_OBJS=.\Release/
 CPP_SBRS=.\.
-# ADD BASE RSC /l 0x409 /d "NDEBUG"
-# ADD RSC /l 0x409 /d "NDEBUG"
+
 BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
+
 BSC32_FLAGS=/nologo /o"$(OUTDIR)/Mix.bsc" 
 BSC32_SBRS= \
 	
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib C:\mixmaster-2.9.0\Src\Release\mixlib.lib /nologo /subsystem:console /machine:I386
+
 LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
  advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib\
  odbccp32.lib C:\mixmaster-2.9.0\Src\Release\mixlib.lib /nologo\
@@ -93,16 +79,6 @@ LINK32_OBJS= \
 
 !ELSEIF  "$(CFG)" == "Mix - Win32 Debug"
 
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "Debug"
-# PROP BASE Intermediate_Dir "Debug"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "Debug"
-# PROP Intermediate_Dir "Debug"
-# PROP Target_Dir ""
 OUTDIR=.\Debug
 INTDIR=.\Debug
 
@@ -120,24 +96,19 @@ CLEAN :
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-# ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /YX /c
-# ADD CPP /nologo /MDd /W2 /Gm /GX /Zi /Od /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "USE_SOCK" /D "_MSC" /D "WIN32SERVICE" /YX /c
-CPP_PROJ=/nologo /MDd /W2 /Gm /GX /Zi /Od /D "_DEBUG" /D "WIN32" /D "_CONSOLE"\
- /D "_MBCS" /D "USE_SOCK" /D "_MSC" /D "WIN32SERVICE" /Fp"$(INTDIR)/Mix.pch" /YX\
+CPP_PROJ=/nologo /MDd /W2 /Gm /GX /Zi /Od /D "_DEBUG" /Fp"$(INTDIR)/Mix.pch" /YX\
  /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
+
 CPP_OBJS=.\Debug/
 CPP_SBRS=.\.
-# ADD BASE RSC /l 0x409 /d "_DEBUG"
-# ADD RSC /l 0x409 /d "_DEBUG"
+
 BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
+
 BSC32_FLAGS=/nologo /o"$(OUTDIR)/Mix.bsc" 
 BSC32_SBRS= \
 	
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib C:\mixmaster-2.9.0\Src\Release\mixlib.lib /nologo /subsystem:console /debug /machine:I386
+
 LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
  advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib\
  odbccp32.lib C:\mixmaster-2.9.0\Src\Release\mixlib.lib /nologo\
@@ -155,34 +126,22 @@ LINK32_OBJS= \
 !ENDIF 
 
 .c{$(CPP_OBJS)}.obj:
-   $(CPP) $(CPP_PROJ) $<  
+   $(CPP) $(CPP_PROJ) $(MIXOPTS) $<  
 
 .cpp{$(CPP_OBJS)}.obj:
-   $(CPP) $(CPP_PROJ) $<  
+   $(CPP) $(CPP_PROJ) $(MIXOPTS) $<  
 
 .cxx{$(CPP_OBJS)}.obj:
-   $(CPP) $(CPP_PROJ) $<  
+   $(CPP) $(CPP_PROJ) $(MIXOPTS) $<  
 
 .c{$(CPP_SBRS)}.sbr:
-   $(CPP) $(CPP_PROJ) $<  
+   $(CPP) $(CPP_PROJ) $(MIXOPTS) $<  
 
 .cpp{$(CPP_SBRS)}.sbr:
-   $(CPP) $(CPP_PROJ) $<  
+   $(CPP) $(CPP_PROJ) $(MIXOPTS) $<  
 
 .cxx{$(CPP_SBRS)}.sbr:
-   $(CPP) $(CPP_PROJ) $<  
-
-################################################################################
-# Begin Target
-
-# Name "Mix - Win32 Release"
-# Name "Mix - Win32 Debug"
-
-!IF  "$(CFG)" == "Mix - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "Mix - Win32 Debug"
-
-!ENDIF 
+   $(CPP) $(CPP_PROJ) $(MIXOPTS) $<  
 
 ################################################################################
 # Begin Source File

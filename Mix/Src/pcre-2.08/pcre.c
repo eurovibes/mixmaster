@@ -121,7 +121,7 @@ static BOOL
 
 /* PCRE is thread-clean and doesn't use any global variables in the normal
 sense. However, it calls memory allocation and free functions via the two
-indirections below, which are can be changed by the caller, but are shared
+indirections below, which can be changed by the caller, but are shared
 between all threads. */
 
 void *(*pcre_malloc)(size_t) = malloc;

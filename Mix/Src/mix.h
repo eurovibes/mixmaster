@@ -819,10 +819,10 @@ typedef struct {
 
 DllExport int mix_init(char *);
 DllExport void mix_exit(void);
-void rnd_update(byte *b, int n);
-void rnd_initialized(void);
+DllExport void rnd_update(byte *b, int n);
+DllExport void rnd_initialized(void);
 #ifdef WIN32
-int rnd_mouse(UINT i, WPARAM w, LPARAM l);
+DllExport int rnd_mouse(UINT i, WPARAM w, LPARAM l);
 #endif /* WIN32 */
 
 DllExport BUFFER *buf_new(void);
@@ -848,7 +848,7 @@ DllExport int mix_send(void);
 #define FORCE_MAILIN 8
 DllExport int mix_regular(int force);
 DllExport int mix_daemon(void);
-int process_mailin(void);
+DllExport int process_mailin(void);
 
 #ifdef USE_PGP
 
@@ -890,11 +890,11 @@ DllExport int nym_decrypt(BUFFER *msg, char *nym, BUFFER *log);
 #define PGP_E_ELG 16
 #define PGP_S_DSA 17
 
-int pgp_encrypt(int mode, BUFFER *message, BUFFER *encr, BUFFER *sigid,
+DllExport int pgp_encrypt(int mode, BUFFER *message, BUFFER *encr, BUFFER *sigid,
 		BUFFER *pass, char *pubring, char *secring);
-int pgp_decrypt(BUFFER *message, BUFFER *pass, BUFFER *sig, char *pubring,
+DllExport int pgp_decrypt(BUFFER *message, BUFFER *pass, BUFFER *sig, char *pubring,
 		char *secring);
-int pgp_keygen(int algo, int bits, BUFFER *userid, BUFFER *pass,
+DllExport int pgp_keygen(int algo, int bits, BUFFER *userid, BUFFER *pass,
 		  char *pubring, char *secring, int remail);
 #endif /* USE_PGP */
 #endif /* not _MIXLIB_H */

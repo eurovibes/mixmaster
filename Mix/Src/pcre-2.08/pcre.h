@@ -12,16 +12,14 @@
 #define PCRE_MINOR 8
 #define PCRE_DATE  31-Aug-1999
 
-/* Win32 uses DLL by default */
-
 #ifdef _WIN32
-# ifdef STATIC
-#  define PCRE_DL_IMPORT
-# else
-#  define PCRE_DL_IMPORT __declspec(dllimport)
-# endif
+#ifdef _USRDLL
+#define PCRE_DL_IMPORT __declspec(dllimport)
 #else
-# define PCRE_DL_IMPORT
+#define PCRE_DL_IMPORT
+#endif
+#else
+#define PCRE_DL_IMPORT
 #endif
 
 /* Have to include stdlib.h in order to ensure that size_t is defined;

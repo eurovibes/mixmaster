@@ -1,5 +1,4 @@
-# Microsoft Developer Studio Generated NMAKE File, Format Version 4.20
-# ** DO NOT EDIT **
+# mixlib Makefile
 
 # TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
 
@@ -30,30 +29,21 @@ NULL=nul
 !ENDIF 
 ################################################################################
 # Begin Project
-# PROP Target_Last_Scanned "mixlib - Win32 Debug"
 CPP=cl.exe
 RSC=rc.exe
 MTL=mktyplib.exe
 
+MIXOPTS=/D "_USRDLL" /D "MIXLIB_EXPORTS" /D "USE_SOCK" /D "_WINDOWS" /D "BROKEN_MTA" \
+ /D "WIN32" /D "USE_ZLIB" /D "USE_PCRE" /D "_MSC" /D "WIN32SERVICE" /D "_MBCS"
+
 !IF  "$(CFG)" == "mixlib - Win32 Release"
 
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "Release"
-# PROP BASE Intermediate_Dir "Release"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "Release"
-# PROP Intermediate_Dir "Release"
-# PROP Target_Dir ""
 OUTDIR=.\Release
 INTDIR=.\Release
 
 ALL : "$(OUTDIR)\mixlib.dll"
 
 CLEAN : 
-	-@erase "$(INTDIR)\adler32.obj"
 	-@erase "$(INTDIR)\buffers.obj"
 	-@erase "$(INTDIR)\chain.obj"
 	-@erase "$(INTDIR)\chain1.obj"
@@ -61,13 +51,6 @@ CLEAN :
 	-@erase "$(INTDIR)\chain3.obj"
 	-@erase "$(INTDIR)\compress.obj"
 	-@erase "$(INTDIR)\crypto.obj"
-	-@erase "$(INTDIR)\deflate.obj"
-	-@erase "$(INTDIR)\infblock.obj"
-	-@erase "$(INTDIR)\infcodes.obj"
-	-@erase "$(INTDIR)\inffast.obj"
-	-@erase "$(INTDIR)\inflate.obj"
-	-@erase "$(INTDIR)\inftrees.obj"
-	-@erase "$(INTDIR)\infutil.obj"
 	-@erase "$(INTDIR)\keymgt.obj"
 	-@erase "$(INTDIR)\mail.obj"
 	-@erase "$(INTDIR)\menu.obj"
@@ -91,9 +74,7 @@ CLEAN :
 	-@erase "$(INTDIR)\rfc822.obj"
 	-@erase "$(INTDIR)\rndseed.obj"
 	-@erase "$(INTDIR)\stats.obj"
-	-@erase "$(INTDIR)\trees.obj"
 	-@erase "$(INTDIR)\util.obj"
-	-@erase "$(INTDIR)\zutil.obj"
 	-@erase "$(OUTDIR)\mixlib.dll"
 	-@erase "$(OUTDIR)\mixlib.exp"
 	-@erase "$(OUTDIR)\mixlib.lib"
@@ -101,35 +82,27 @@ CLEAN :
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /c
-# ADD CPP /nologo /MD /W2 /GX /I "include" /I "zlib-1.1.4" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /D "MIXLIB_EXPORTS" /D "USE_SOCK" /D "USE_ZLIB" /D "_MSC" /D "WIN32SERVICE" /D "BROKEN_MTA" /D "_MBCS" /YX /c
-CPP_PROJ=/nologo /MD /W2 /GX /I "include" /I "zlib-1.1.4" /D "NDEBUG" /D\
- "WIN32" /D "_WINDOWS" /D "_USRDLL" /D "MIXLIB_EXPORTS" /D "USE_SOCK" /D\
- "USE_ZLIB" /D "_MSC" /D "WIN32SERVICE" /D "BROKEN_MTA" /D "_MBCS"\
+CPP_PROJ=/nologo /MD /W2 /GX /I "include" /I "zlib-1.1.4" /I "pcre-2.08" /D "NDEBUG" \
  /Fp"$(INTDIR)/mixlib.pch" /YX /Fo"$(INTDIR)/" /c 
+
 CPP_OBJS=.\Release/
 CPP_SBRS=.\.
-# ADD BASE MTL /nologo /D "NDEBUG" /win32
-# ADD MTL /nologo /D "NDEBUG" /win32
+
 MTL_PROJ=/nologo /D "NDEBUG" /win32 
-# ADD BASE RSC /l 0x409 /d "NDEBUG"
-# ADD RSC /l 0x409 /d "NDEBUG"
+
 BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
+
 BSC32_FLAGS=/nologo /o"$(OUTDIR)/mixlib.bsc" 
 BSC32_SBRS= \
 	
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib /nologo /subsystem:windows /dll /machine:I386
+
 LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
  advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib\
  odbccp32.lib wsock32.lib /nologo /subsystem:windows /dll /incremental:no\
  /pdb:"$(OUTDIR)/mixlib.pdb" /machine:I386 /out:"$(OUTDIR)/mixlib.dll"\
  /implib:"$(OUTDIR)/mixlib.lib" 
 LINK32_OBJS= \
-	"$(INTDIR)\adler32.obj" \
 	"$(INTDIR)\buffers.obj" \
 	"$(INTDIR)\chain.obj" \
 	"$(INTDIR)\chain1.obj" \
@@ -137,13 +110,6 @@ LINK32_OBJS= \
 	"$(INTDIR)\chain3.obj" \
 	"$(INTDIR)\compress.obj" \
 	"$(INTDIR)\crypto.obj" \
-	"$(INTDIR)\deflate.obj" \
-	"$(INTDIR)\infblock.obj" \
-	"$(INTDIR)\infcodes.obj" \
-	"$(INTDIR)\inffast.obj" \
-	"$(INTDIR)\inflate.obj" \
-	"$(INTDIR)\inftrees.obj" \
-	"$(INTDIR)\infutil.obj" \
 	"$(INTDIR)\keymgt.obj" \
 	"$(INTDIR)\mail.obj" \
 	"$(INTDIR)\menu.obj" \
@@ -167,9 +133,9 @@ LINK32_OBJS= \
 	"$(INTDIR)\rfc822.obj" \
 	"$(INTDIR)\rndseed.obj" \
 	"$(INTDIR)\stats.obj" \
-	"$(INTDIR)\trees.obj" \
 	"$(INTDIR)\util.obj" \
-	"$(INTDIR)\zutil.obj" \
+	".\zlib.lib" \
+	".\pcre.lib" \
 	".\libeay32.lib"
 
 "$(OUTDIR)\mixlib.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
@@ -179,23 +145,12 @@ LINK32_OBJS= \
 
 !ELSEIF  "$(CFG)" == "mixlib - Win32 Debug"
 
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "mixlib_"
-# PROP BASE Intermediate_Dir "mixlib_"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "mixlib_"
-# PROP Intermediate_Dir "mixlib_"
-# PROP Target_Dir ""
-OUTDIR=.\mixlib_
-INTDIR=.\mixlib_
+OUTDIR=.\Debug
+INTDIR=.\Debug
 
 ALL : "$(OUTDIR)\mixlib.dll"
 
 CLEAN : 
-	-@erase "$(INTDIR)\adler32.obj"
 	-@erase "$(INTDIR)\buffers.obj"
 	-@erase "$(INTDIR)\chain.obj"
 	-@erase "$(INTDIR)\chain1.obj"
@@ -203,13 +158,6 @@ CLEAN :
 	-@erase "$(INTDIR)\chain3.obj"
 	-@erase "$(INTDIR)\compress.obj"
 	-@erase "$(INTDIR)\crypto.obj"
-	-@erase "$(INTDIR)\deflate.obj"
-	-@erase "$(INTDIR)\infblock.obj"
-	-@erase "$(INTDIR)\infcodes.obj"
-	-@erase "$(INTDIR)\inffast.obj"
-	-@erase "$(INTDIR)\inflate.obj"
-	-@erase "$(INTDIR)\inftrees.obj"
-	-@erase "$(INTDIR)\infutil.obj"
 	-@erase "$(INTDIR)\keymgt.obj"
 	-@erase "$(INTDIR)\mail.obj"
 	-@erase "$(INTDIR)\menu.obj"
@@ -233,11 +181,9 @@ CLEAN :
 	-@erase "$(INTDIR)\rfc822.obj"
 	-@erase "$(INTDIR)\rndseed.obj"
 	-@erase "$(INTDIR)\stats.obj"
-	-@erase "$(INTDIR)\trees.obj"
 	-@erase "$(INTDIR)\util.obj"
 	-@erase "$(INTDIR)\vc40.idb"
 	-@erase "$(INTDIR)\vc40.pdb"
-	-@erase "$(INTDIR)\zutil.obj"
 	-@erase "$(OUTDIR)\mixlib.dll"
 	-@erase "$(OUTDIR)\mixlib.exp"
 	-@erase "$(OUTDIR)\mixlib.ilk"
@@ -247,35 +193,27 @@ CLEAN :
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /I "include" /I "zlib-1.1.4" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /D "MIXLIB_EXPORTS" /D "USE_SOCK" /D "USE_ZLIB" /D "_MSC" /D "WIN32SERVICE" /D "BROKEN_MTA" /D "_MBCS" /YX /c
-CPP_PROJ=/nologo /MDd /W3 /Gm /GX /Zi /I "include" /I "zlib-1.1.4" /D "_DEBUG"\
- /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /D "MIXLIB_EXPORTS" /D "USE_SOCK" /D\
- "USE_ZLIB" /D "_MSC" /D "WIN32SERVICE" /D "BROKEN_MTA" /D "_MBCS"\
+CPP_PROJ=/nologo /MDd /W3 /Gm /GX /Zi /I "include" /I "zlib-1.1.4" /I "pcre-2.08" /D "_DEBUG"\
  /Fp"$(INTDIR)/mixlib.pch" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
+
 CPP_OBJS=.\mixlib_/
 CPP_SBRS=.\.
-# ADD BASE MTL /nologo /D "_DEBUG" /win32
-# ADD MTL /nologo /D "_DEBUG" /win32
+
 MTL_PROJ=/nologo /D "_DEBUG" /win32 
-# ADD BASE RSC /l 0x409 /d "_DEBUG"
-# ADD RSC /l 0x409 /d "_DEBUG"
+
 BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
+
 BSC32_FLAGS=/nologo /o"$(OUTDIR)/mixlib.bsc" 
 BSC32_SBRS= \
 	
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib /nologo /subsystem:windows /dll /debug /machine:I386
+
 LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
  advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib\
  odbccp32.lib wsock32.lib /nologo /subsystem:windows /dll /incremental:yes\
  /pdb:"$(OUTDIR)/mixlib.pdb" /debug /machine:I386 /out:"$(OUTDIR)/mixlib.dll"\
  /implib:"$(OUTDIR)/mixlib.lib" 
 LINK32_OBJS= \
-	"$(INTDIR)\adler32.obj" \
 	"$(INTDIR)\buffers.obj" \
 	"$(INTDIR)\chain.obj" \
 	"$(INTDIR)\chain1.obj" \
@@ -283,13 +221,6 @@ LINK32_OBJS= \
 	"$(INTDIR)\chain3.obj" \
 	"$(INTDIR)\compress.obj" \
 	"$(INTDIR)\crypto.obj" \
-	"$(INTDIR)\deflate.obj" \
-	"$(INTDIR)\infblock.obj" \
-	"$(INTDIR)\infcodes.obj" \
-	"$(INTDIR)\inffast.obj" \
-	"$(INTDIR)\inflate.obj" \
-	"$(INTDIR)\inftrees.obj" \
-	"$(INTDIR)\infutil.obj" \
 	"$(INTDIR)\keymgt.obj" \
 	"$(INTDIR)\mail.obj" \
 	"$(INTDIR)\menu.obj" \
@@ -313,9 +244,9 @@ LINK32_OBJS= \
 	"$(INTDIR)\rfc822.obj" \
 	"$(INTDIR)\rndseed.obj" \
 	"$(INTDIR)\stats.obj" \
-	"$(INTDIR)\trees.obj" \
 	"$(INTDIR)\util.obj" \
-	"$(INTDIR)\zutil.obj" \
+	".\zlib.lib" \
+	".\pcre.lib" \
 	".\libeay32.lib"
 
 "$(OUTDIR)\mixlib.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
@@ -326,34 +257,22 @@ LINK32_OBJS= \
 !ENDIF 
 
 .c{$(CPP_OBJS)}.obj:
-   $(CPP) $(CPP_PROJ) $<  
+   $(CPP) $(CPP_PROJ) $(MIXOPTS) $<  
 
 .cpp{$(CPP_OBJS)}.obj:
-   $(CPP) $(CPP_PROJ) $<  
+   $(CPP) $(CPP_PROJ) $(MIXOPTS) $<  
 
 .cxx{$(CPP_OBJS)}.obj:
-   $(CPP) $(CPP_PROJ) $<  
+   $(CPP) $(CPP_PROJ) $(MIXOPTS) $<  
 
 .c{$(CPP_SBRS)}.sbr:
-   $(CPP) $(CPP_PROJ) $<  
+   $(CPP) $(CPP_PROJ) $(MIXOPTS) $<  
 
 .cpp{$(CPP_SBRS)}.sbr:
-   $(CPP) $(CPP_PROJ) $<  
+   $(CPP) $(CPP_PROJ) $(MIXOPTS) $<  
 
 .cxx{$(CPP_SBRS)}.sbr:
-   $(CPP) $(CPP_PROJ) $<  
-
-################################################################################
-# Begin Target
-
-# Name "mixlib - Win32 Release"
-# Name "mixlib - Win32 Debug"
-
-!IF  "$(CFG)" == "mixlib - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "mixlib - Win32 Debug"
-
-!ENDIF 
+   $(CPP) $(CPP_PROJ) $(MIXOPTS) $<  
 
 ################################################################################
 # Begin Source File
@@ -368,54 +287,6 @@ DEP_CPP_BUFFE=\
 
 "$(INTDIR)\buffers.obj" : $(SOURCE) $(DEP_CPP_BUFFE) "$(INTDIR)"
 
-
-# End Source File
-################################################################################
-# Begin Source File
-
-SOURCE=.\version.h
-
-!IF  "$(CFG)" == "mixlib - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "mixlib - Win32 Debug"
-
-!ENDIF 
-
-# End Source File
-################################################################################
-# Begin Source File
-
-SOURCE=.\mix.h
-
-!IF  "$(CFG)" == "mixlib - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "mixlib - Win32 Debug"
-
-!ENDIF 
-
-# End Source File
-################################################################################
-# Begin Source File
-
-SOURCE=.\mix3.h
-
-!IF  "$(CFG)" == "mixlib - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "mixlib - Win32 Debug"
-
-!ENDIF 
-
-# End Source File
-################################################################################
-# Begin Source File
-
-SOURCE=.\config.h
-
-!IF  "$(CFG)" == "mixlib - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "mixlib - Win32 Debug"
-
-!ENDIF 
 
 # End Source File
 ################################################################################
@@ -511,18 +382,6 @@ DEP_CPP_MENUU=\
 
 "$(INTDIR)\menuutil.obj" : $(SOURCE) $(DEP_CPP_MENUU) "$(INTDIR)"
 
-
-# End Source File
-################################################################################
-# Begin Source File
-
-SOURCE=.\libeay32.lib
-
-!IF  "$(CFG)" == "mixlib - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "mixlib - Win32 Debug"
-
-!ENDIF 
 
 # End Source File
 ################################################################################
@@ -966,171 +825,6 @@ DEP_CPP_PGP_C=\
 ################################################################################
 # Begin Source File
 
-SOURCE=".\zlib-1.1.4\deflate.c"
-DEP_CPP_DEFLA=\
-	".\zlib-1.1.4\deflate.h"\
-	".\zlib-1.1.4\zconf.h"\
-	".\zlib-1.1.4\zlib.h"\
-	".\zlib-1.1.4\zutil.h"\
-	{$(INCLUDE)}"\sys\types.h"\
-	
-
-"$(INTDIR)\deflate.obj" : $(SOURCE) $(DEP_CPP_DEFLA) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-# End Source File
-################################################################################
-# Begin Source File
-
-SOURCE=".\zlib-1.1.4\infblock.c"
-DEP_CPP_INFBL=\
-	".\zlib-1.1.4\infblock.h"\
-	".\zlib-1.1.4\infcodes.h"\
-	".\zlib-1.1.4\inftrees.h"\
-	".\zlib-1.1.4\infutil.h"\
-	".\zlib-1.1.4\zconf.h"\
-	".\zlib-1.1.4\zlib.h"\
-	".\zlib-1.1.4\zutil.h"\
-	{$(INCLUDE)}"\sys\types.h"\
-	
-
-"$(INTDIR)\infblock.obj" : $(SOURCE) $(DEP_CPP_INFBL) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-# End Source File
-################################################################################
-# Begin Source File
-
-SOURCE=".\zlib-1.1.4\inftrees.c"
-DEP_CPP_INFTR=\
-	".\zlib-1.1.4\inffixed.h"\
-	".\zlib-1.1.4\inftrees.h"\
-	".\zlib-1.1.4\zconf.h"\
-	".\zlib-1.1.4\zlib.h"\
-	".\zlib-1.1.4\zutil.h"\
-	{$(INCLUDE)}"\sys\types.h"\
-	
-
-"$(INTDIR)\inftrees.obj" : $(SOURCE) $(DEP_CPP_INFTR) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-# End Source File
-################################################################################
-# Begin Source File
-
-SOURCE=".\zlib-1.1.4\infutil.c"
-DEP_CPP_INFUT=\
-	".\zlib-1.1.4\infblock.h"\
-	".\zlib-1.1.4\infcodes.h"\
-	".\zlib-1.1.4\inftrees.h"\
-	".\zlib-1.1.4\infutil.h"\
-	".\zlib-1.1.4\zconf.h"\
-	".\zlib-1.1.4\zlib.h"\
-	".\zlib-1.1.4\zutil.h"\
-	{$(INCLUDE)}"\sys\types.h"\
-	
-
-"$(INTDIR)\infutil.obj" : $(SOURCE) $(DEP_CPP_INFUT) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-# End Source File
-################################################################################
-# Begin Source File
-
-SOURCE=".\zlib-1.1.4\infcodes.c"
-DEP_CPP_INFCO=\
-	".\zlib-1.1.4\infblock.h"\
-	".\zlib-1.1.4\infcodes.h"\
-	".\zlib-1.1.4\inffast.h"\
-	".\zlib-1.1.4\inftrees.h"\
-	".\zlib-1.1.4\infutil.h"\
-	".\zlib-1.1.4\zconf.h"\
-	".\zlib-1.1.4\zlib.h"\
-	".\zlib-1.1.4\zutil.h"\
-	{$(INCLUDE)}"\sys\types.h"\
-	
-
-"$(INTDIR)\infcodes.obj" : $(SOURCE) $(DEP_CPP_INFCO) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-# End Source File
-################################################################################
-# Begin Source File
-
-SOURCE=".\zlib-1.1.4\inffast.c"
-DEP_CPP_INFFA=\
-	".\zlib-1.1.4\infblock.h"\
-	".\zlib-1.1.4\infcodes.h"\
-	".\zlib-1.1.4\inffast.h"\
-	".\zlib-1.1.4\inftrees.h"\
-	".\zlib-1.1.4\infutil.h"\
-	".\zlib-1.1.4\zconf.h"\
-	".\zlib-1.1.4\zlib.h"\
-	".\zlib-1.1.4\zutil.h"\
-	{$(INCLUDE)}"\sys\types.h"\
-	
-
-"$(INTDIR)\inffast.obj" : $(SOURCE) $(DEP_CPP_INFFA) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-# End Source File
-################################################################################
-# Begin Source File
-
-SOURCE=".\zlib-1.1.4\adler32.c"
-DEP_CPP_ADLER=\
-	".\zlib-1.1.4\zconf.h"\
-	".\zlib-1.1.4\zlib.h"\
-	{$(INCLUDE)}"\sys\types.h"\
-	
-
-"$(INTDIR)\adler32.obj" : $(SOURCE) $(DEP_CPP_ADLER) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-# End Source File
-################################################################################
-# Begin Source File
-
-SOURCE=".\zlib-1.1.4\zutil.c"
-DEP_CPP_ZUTIL=\
-	".\zlib-1.1.4\zconf.h"\
-	".\zlib-1.1.4\zlib.h"\
-	".\zlib-1.1.4\zutil.h"\
-	{$(INCLUDE)}"\sys\types.h"\
-	
-
-"$(INTDIR)\zutil.obj" : $(SOURCE) $(DEP_CPP_ZUTIL) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-# End Source File
-################################################################################
-# Begin Source File
-
-SOURCE=".\zlib-1.1.4\inflate.c"
-DEP_CPP_INFLA=\
-	".\zlib-1.1.4\infblock.h"\
-	".\zlib-1.1.4\zconf.h"\
-	".\zlib-1.1.4\zlib.h"\
-	".\zlib-1.1.4\zutil.h"\
-	{$(INCLUDE)}"\sys\types.h"\
-	
-
-"$(INTDIR)\inflate.obj" : $(SOURCE) $(DEP_CPP_INFLA) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-# End Source File
-################################################################################
-# Begin Source File
-
 SOURCE=.\chain.c
 DEP_CPP_CHAIN_=\
 	".\config.h"\
@@ -1140,24 +834,6 @@ DEP_CPP_CHAIN_=\
 	
 
 "$(INTDIR)\chain.obj" : $(SOURCE) $(DEP_CPP_CHAIN_) "$(INTDIR)"
-
-
-# End Source File
-################################################################################
-# Begin Source File
-
-SOURCE=".\zlib-1.1.4\trees.c"
-DEP_CPP_TREES=\
-	".\zlib-1.1.4\deflate.h"\
-	".\zlib-1.1.4\trees.h"\
-	".\zlib-1.1.4\zconf.h"\
-	".\zlib-1.1.4\zlib.h"\
-	".\zlib-1.1.4\zutil.h"\
-	{$(INCLUDE)}"\sys\types.h"\
-	
-
-"$(INTDIR)\trees.obj" : $(SOURCE) $(DEP_CPP_TREES) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 # End Source File

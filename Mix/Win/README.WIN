@@ -1,7 +1,7 @@
 Mixmaster 2.9 -- anonymous remailer software -- (C) 1999 - 2002 Anonymizer Inc.
 -------------------------------------------------------------------------------
 
-This is the README.WIN file for the Windows distribution of Mixmaster.
+This is the README.WIN file for the Windows distribution of MixMaster.
 
 PREVIEW VERSION  --  WARNING: THIS SOFTWARE IS UNDER DEVELOPMENT!
 Some functionality may not be complete until the 3.0 release.
@@ -16,35 +16,46 @@ Installation:
      (e.g. c:\openssl-0.9.7).
      Follow the instructions in INSTALL.W32 which is included with the package.
 
-2.  Download the latest Mixmaster source package from SourceForge.net and 
-    extract it into a suitable directory (e.g. c:\mixmaster-2.9.0).
+2.  Download the latest Mixmaster source package from SourceForge.net and extract
+    it into a suitable directory (e.g. c:\mixmaster-2.9.0).
 
 3.  Copy the following files from the OpenSSL package you built in
     step 1 into the mixmaster tree.
    
-        c:\openssl-0.9.7\inc32\openssl\*.* -> 
-        c:\mixmaster-2.9.0\Src\include\openssl\
+        c:\openssl-0.9.7\inc32\openssl\*.* -> c:\mixmaster-2.9.0\Src\include\openssl\
+        c:\openssl-0.9.7\out32dll\libeay32.* -> c:\mixmaster-2.9.0\Src\
 
-        c:\openssl-0.9.7\out32dll\libeay32.* -> 
+4.  Copy the two makefiles mix.mak and mixlib.mak from c:\mixmaster-2.9.0\Win\ to
         c:\mixmaster-2.9.0\Src\
 
-4.  Copy the two makefiles mix.mak and mixlib.mak from c:\mixmaster-2.9.0\Win\
-    to c:\mixmaster-2.9.0\Src\
+5.  Copy the makefile zlib.mak from c:\mixmaster-2.9.0\Win\ to
+    c:\mixmaster-2.9.0\Src\zlib-1.1.4\
 
-5.  Start a command line (Dos) session and cd \mixmaster-2.9.0\Src
+6.  Copy the makefile pcre.mak from c:\mixmaster-2.9.0\Win\ to
+    c:\mixmaster-2.9.0\Src\pcre-2.08\
 
-6.  Build the mixmaster library by typing "nmake -f mixlib.mak"
-      There will be some compiler warnings which can be ignored.
+7.  Start a command line (Dos) session and cd \mixmaster-2.9.0\Src\zlib-1.1.4
 
-7.  Build the mixmaster executable by typing "nmake -f mix.mak"
+8.  Build the zlib library by typing "nmake -f zlib.mak"
 
-8.  Copy the files mix.exe and mixlib.dll from c:\mixmaster-2.9.0\Src\Release 
-    to a suitable mixmaster run directory (e.g. c:\mix).
+9.  Change dir to \mixmaster-2.9.0\Src\pcre-2.08
    
-9.  Copy c:\mixmaster-2.9.0\Src\libeay32.dll to the same mixmaster run 
-    directory.
+10. Build the pcre library by typing "nmake -f pcre.mak"
+      There may be some warnings which can be ignored.
 
-10. Copy the other files required to run mixmaster from c:\mixmaster-2.9.0\conf
+11. Change dir to \mixmaster-2.9.0\Src
+
+12. Build the mixmaster library by typing "nmake -f mixlib.mak"
+      There may be some compiler warnings which can be ignored.
+
+13. Build the mixmaster executable by typing "nmake -f mix.mak"
+
+14. Copy the files mix.exe and mixlib.dll from c:\mixmaster-2.9.0\Src\Release to a suitable
+    mixmaster run directory (e.g. c:\mix).
+   
+15. Copy c:\mixmaster-2.9.0\Src\libeay32.dll to the same mixmaster run directory.
+
+16. Copy the other files required to run mixmaster from c:\mixmaster-2.9.0\conf
     to the same mixmaster run directory.
 
 
@@ -69,4 +80,4 @@ University of California, Berkeley and its contributors.
 
 All trademarks are the property of their respective owners.
 
-$Id: README.WIN,v 1.1.2.2 2003/01/15 10:33:42 rabbi Exp $
+$Id: README.WIN,v 1.1.2.3 2003/01/21 16:11:57 colintu Exp $
