@@ -56,8 +56,8 @@ finger from nym.alias.net:
   mlist.txt      List of reliable type 2 remailers
   type2.list     List of known type 2 remailers (optional)
 
-If you wish to participate in the Remailer Abuse Blocklist, you will need 
-to obtain the blocklist file from http://www.paracrypt.com/remailerabuse/ 
+If you wish to participate in the Remailer Abuse Blocklist, you will need
+to obtain the blocklist file from http://www.paracrypt.com/remailerabuse/
 and place it in your Mix directory. This may be automated with cron.
 
 For support for multiple RAB services, edit the file Src/config.h manually,
@@ -66,7 +66,7 @@ and add additional block files to the existing line, such as:
 #define DESTBLOCK "dest.blk rab.blk rab2.blk rab3.blk"
 
 Note that only the first file should the the local block list, as it is the
-only file mix will open for writing. Most users will not need to edit 
+only file mix will open for writing. Most users will not need to edit
 config.h.
 
 
@@ -123,7 +123,7 @@ whether to use the source code.
 The ncurses library can use termcap and terminfo databases. The
 Mixmaster Install script tries to find out whether terminfo is
 available. If you get a "Can't open display" error when starting
-the Mixmaster menu, run "./configure --enable-termcap; make lib/libncurses.a" 
+the Mixmaster menu, run "./configure --enable-termcap; make lib/libncurses.a"
 in the ncurses directory.
 
 
@@ -195,4 +195,4 @@ University of California, Berkeley and its contributors.
 
 All trademarks are the property of their respective owners.
 
-$Id: README,v 1.5.2.2 2002/10/07 23:20:00 rabbi Exp $
+$Id: README,v 1.5.2.3 2002/10/09 21:45:16 weaselp Exp $

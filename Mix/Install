@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.8.2.2 2002/09/11 20:52:57 rabbi Exp $
+# $Id: Install,v 1.8.2.3 2002/10/09 21:45:16 weaselp Exp $
 
 #whereis program default-path
 whereis()
@@ -127,7 +127,7 @@ findlib()
  then
   echo "Found source directory $source."
   if [ "$found" = "" ]
-  then 
+  then
    ans=y
   else
    echo "Use the source if the pre-installed library causes compilation problems."
@@ -373,7 +373,7 @@ stored in mix.cfg in clear)."
       then
 	echo "WARNING: setting empty passphrase"
       fi
-      PASSPHRASE="PASSPHRASE	$ans" 
+      PASSPHRASE="PASSPHRASE	$ans"
       if [ -f $MIXDEST/mix.cfg ]
       then
 	echo "$PASSPHRASE" >> $MIXDEST/mix.cfg
@@ -498,7 +498,7 @@ then
     version=920
    fi
   fi
- fi 
+ fi
 
  # Find the OpenSSL version header
  if [ -f $INCDIR/openssl/opensslv.h ]
@@ -602,15 +602,15 @@ then
   else
    findlib libncurses.a
   fi
- if [ "$found" = "" ] 
+ if [ "$found" = "" ]
  then
   if [ "$system" != win32 ]
   then
    readln "Do you want to use Mixmaster's menu-based user interface?" y
    if [ "$ans" = "y" ]
    then
-    echo "Please install ncurses now. It is available from 
-http://www.clark.net/pub/dickey/ncurses/ncurses.tar.gz"   
+    echo "Please install ncurses now. It is available from
+http://www.clark.net/pub/dickey/ncurses/ncurses.tar.gz"
     exit 1
    fi
   fi
@@ -803,7 +803,7 @@ then
  then
   installed=y
  fi
-fi 
+fi
 
 if [ "$installed" = "n" ]
 then
@@ -865,9 +865,9 @@ understand (If the address <$RMA> is also used"
  fi
 
  echo "Mixmaster will log error messages and warnings. Do you want to log"
- readln "informational messages about normal operation as well?" y 
+ readln "informational messages about normal operation as well?" y
  if [ "$ans" = y ]
- then 
+ then
   verbose=2
  else
   verbose=1

@@ -6,7 +6,7 @@ Todo items before 2.9 release:
 * Backport the MAILIN/MAILINTIME features.
 * Backport the pid file support for -D.
 
-Optionally: 
+Optionally:
 
 * Permit CRAM-MD5 SMTP AUTH in addition to LOGIN.
 * Backport expiration/revocation checking of OpenPGP keys.

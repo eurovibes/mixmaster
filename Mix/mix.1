@@ -1,5 +1,5 @@
 .TH MIX 1 "Mixmaster Version 3.0 beta"
-.\" $Id: mix.1,v 1.6.2.3 2002/10/09 21:40:55 weaselp Exp $
+.\" $Id: mix.1,v 1.6.2.4 2002/10/09 21:45:16 weaselp Exp $
 .SH NAME
 mix \- anonymous remailer software
 .SH SYNOPSIS
@@ -470,7 +470,7 @@ where complaints about anonymous messages must be
 avoided. (The variable
 .B FORWARDTO
 specifies the remailer
-chain to be used; default: 
+chain to be used; default:
 .BR * .)
 Default:
 .BR n .
@@ -667,9 +667,9 @@ the remailer is configured to filter out binaries.
 The character set used for MIME-encoded header lines.
 .TP
 .B DESTBLOCK
-A quoted list of files that contain blocked addresses. 
-Files must be separated by one space. Mixmaster will choose 
-the first file for writing 
+A quoted list of files that contain blocked addresses.
+Files must be separated by one space. Mixmaster will choose
+the first file for writing
 .B AUTOBLOCK
 is enabled.
 .PP
@@ -684,7 +684,7 @@ casual attackers. You can use
 .B `make PASS="\fIyour passphrase\fB"'
 to set a passphrase. This should
 .I not
-be the same as the client passphrase. This option is now deprecated in 
+be the same as the client passphrase. This option is now deprecated in
 favor of the configuration file option
 .BR PASSPHRASE .
 .TP
@@ -755,7 +755,7 @@ Type 2 remailer keys (\fBPUBRING\fP).
 .B rlist.txt
 List of reliable type 1 remailers (\fBTYPE1LIST\fP).
 .TP
-.B mlist.txt 
+.B mlist.txt
 List of reliable type 2 remailers (\fBTYPE2REL\fP).
 .TP
 .B type2.list
