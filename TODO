@@ -25,6 +25,7 @@ o Remove nym stuff from the manpage  (rabbi)
 - ship with CVS ChangeLog
 - libraries (pcre, zlib) were removed from the Src directory.
   auto* needs to be updated (dybbuk)
+- fix configure bug with global config file: .../${prefix}/... (dybbuk)
 
 Packaging:
 - rpm -- dybbuk
