@@ -1,6 +1,6 @@
 dnl Macros automatically included in aclocal.m4.
 dnl
-dnl $Id: acinclude.m4,v 1.1 2003/10/14 03:42:05 dybbuk Exp $
+dnl $Id: acinclude.m4,v 1.2 2003/10/14 15:10:45 dybbuk Exp $
 
 dnl Zlib versions before 1.1.4 had a nasty bug.
 AC_DEFUN(AM_ZLIB_CHECK, [
@@ -280,6 +280,10 @@ AC_ARG_WITH(homemixdir,
 ])
 
 dnl Is the global mixmaster config working yet?
+AH_TEMPLATE(
+ [GLOBALMIXCONF],
+ [Define as a string pointing to the location of the global config file.]
+)
 AC_DEFUN(AM_MIXMASTER_CONF, [
 GLOBALMIXCONF="${sysconfdir}/mix.cfg" 
 AC_MSG_CHECKING(for global configuration file)
