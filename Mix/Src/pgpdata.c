@@ -946,10 +946,13 @@ static void *params(int dsa, int bits)
       buf_append(p, b, l);
       encode(p, 64);
       f = mix_openfile(DSAPARAMS, "a");
-      fprintf(f, "%s\n%d\n", begin_param, bits);
-      buf_write(p, f);
-      fprintf(f, "%s\n", end_param);
-      fclose(f);
+      if (f != NULL) {
+	fprintf(f, "%s\n%d\n", begin_param, bits);
+	buf_write(p, f);
+	fprintf(f, "%s\n", end_param);
+	fclose(f);
+      } else
+	errlog(ERRORMSG, "Cannot open %s!\n", DSAPARAMS);
       buf_free(p);
     }
     return (k);
@@ -966,10 +969,13 @@ static void *params(int dsa, int bits)
       buf_append(p, b, l);
       encode(p, 64);
       f = mix_openfile(DHPARAMS, "a");
-      fprintf(f, "%s\n%d\n", begin_param, bits);
-      buf_write(p, f);
-      fprintf(f, "%s\n", end_param);
-      fclose(f);
+      if (f != NULL) {
+	fprintf(f, "%s\n%d\n", begin_param, bits);
+	buf_write(p, f);
+	fprintf(f, "%s\n", end_param);
+	fclose(f);
+      } else
+	errlog(ERRORMSG, "Cannot open %s!\n", DHPARAMS);
       buf_free(p);
     }
     return (d);
