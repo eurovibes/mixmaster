@@ -6,7 +6,7 @@
    details.
 
    OpenPGP key database
-   $Id: pgpdb.c,v 1.19 2002/10/02 07:54:12 weaselp Exp $ */
+   $Id: pgpdb.c,v 1.20 2002/10/02 08:06:49 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -507,6 +507,7 @@ int pgp_latestkeys(BUFFER* outtxt, int algo)
     while (pgpdb_getnext(keys, key, NULL, userid) != -1) {
       buf_clear(tmptxt);
       if (pgp_makekeyheader(PGP_PUBKEY, key, tmptxt, NULL, algo) == 0) {
+        buf_rewind(key);
 	pgp_getkey(PK_VERIFY, algo, NULL, NULL, &expires, key, NULL, NULL, NULL, NULL);
 	if (expires == 0 || (expires_found <= expires)) {
 	  err = 0;
