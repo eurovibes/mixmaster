@@ -1,9 +1,6 @@
-Todo items before 2.9 release:
+Todo items before 2.9.1 release:
 
-* confirm backport of changes between 2.9b38 and MAIN was successful
 * permit CRAM-MD5 SMTP AUTH in addition to LOGIN.
-* Fix Install script bug wrt overwriting mix while in use
-* Look in proper locations for libs on OS X
 * Check and enforce expiration/revocation of OpenPGP keys (?)
 * Apply fixes for any new bugs based on existing features
 
@@ -35,6 +32,7 @@ Mandatory todo items before 3.0 release:
 
 Items for 3.0 or 3.0.1
 
+* allow for separate hard-coded remailer and client defaults.
 * support a list of remailers not to be selected as *.
   - a user suggested allowing filtering regexen over chains.
     useful?  <20021001215010.28351.qmail@nym.alias.net>
