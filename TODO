@@ -20,7 +20,9 @@ Items that need to be completed before the next HEAD release:
 
 Mandatory todo items before 3.0 release:
 
+* Drop messages that have no recipients left
 * disable Nym stuff
+* drop anything that goes to more than one remailer
 * autoconf installation script is needed
   - mostly done -- a few bugs still need fixing
 * post-install scripts need to be reworked
