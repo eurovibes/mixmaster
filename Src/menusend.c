@@ -180,8 +180,8 @@ redraw:
     printw("n)ym: %s", thisnym);
 #endif /* NYMSUPPORT */
     if (!strleft(thisnym, NONANON)) {
-      cl(4, 0);
       chain_reliability(chain, 0, reliability);   /* chaintype 0=mix */
+      cl(4, 0);
       printw("c)hain: %-35s (reliability: %s)", chain, reliability);
       cl(5, 0);
       printw("r)edundancy: %3d copies ", numcopies);
