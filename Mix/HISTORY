@@ -283,7 +283,7 @@
                            Minor code formating cleanup and Install script
                              fixes.
 
-2002-12-14      2.0b41     The Mixmaster protocol version is now prepended 
+2002-12-15      2.0b41     The Mixmaster protocol version is now prepended 
                              to the software version in the Mixmaster cap-
                              string.
                            Minor configuration default changes and Install 
