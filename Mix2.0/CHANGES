@@ -1,5 +1,9 @@
 Version history.
 
+2.0.4b47 xxxx-xx-xx rabbi
+        Documentation updates, key version string format changes, and a 
+        DOS Makefile fix.
+
 2.0.4b46 2002-09-23 rabbi
         Security fixes for zlib and SSLeay. Now requires OpenSSL instead
         of SSLeay.

@@ -1,7 +1,15 @@
-/* $Id: mix.h,v 1.1 2002/08/28 20:06:50 rabbi Exp $
+/* $Id: mix.h,v 1.2 2002/10/18 22:37:50 rabbi Exp $
  * $Log: mix.h,v $
- * Revision 1.1  2002/08/28 20:06:50  rabbi
- * Initial revision
+ * Revision 1.2  2002/10/18 22:37:50  rabbi
+ * We prepend the protocol version string to the software version number in
+ * the type 2 capstring. This is necessary to allow existing Mixmaster
+ * versions to interoperate with future versions of Mixmaster.
+ *
+ * This isn't strictly necessary with versions 2.x, but I'm making this
+ * change for consistency.
+ *
+ * Revision 1.1.1.1  2002/08/28 20:06:50  rabbi
+ * Mixmaster 2.0.4 source.
  *
  * Revision 2.8  1999/01/19  02:28:13  um
  * *** empty log message ***
@@ -132,6 +140,7 @@ typedef unsigned char byte;
 
 extern char VERSION[];
 extern char remailer_type[];
+extern char mixmaster_protocol[];
 extern char begin_remailer[];
 extern char end_remailer[];
 extern char begin_signed[];

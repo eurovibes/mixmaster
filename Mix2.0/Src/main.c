@@ -1,6 +1,14 @@
-/* $Id: main.c,v 1.2 2002/08/29 19:54:47 rabbi Exp $
+/* $Id: main.c,v 1.3 2002/10/18 22:37:50 rabbi Exp $
  * 
  * $Log: main.c,v $
+ * Revision 1.3  2002/10/18 22:37:50  rabbi
+ * We prepend the protocol version string to the software version number in
+ * the type 2 capstring. This is necessary to allow existing Mixmaster
+ * versions to interoperate with future versions of Mixmaster.
+ *
+ * This isn't strictly necessary with versions 2.x, but I'm making this
+ * change for consistency.
+ *
  * Revision 1.2  2002/08/29 19:54:47  rabbi
  * Fixed compilation error in main.c. The value of errlog is now assigned in
  * main().
@@ -147,6 +155,7 @@
 #include <ctype.h>
 
 char remailer_type[] = "Remailer-Type: Mixmaster ";
+char mixmaster_protocol[] = "2:";
 char begin_remailer[] = "-----BEGIN REMAILER MESSAGE-----";
 char end_remailer[] = "-----END REMAILER MESSAGE-----";
 char begin_key[] = "-----Begin Mix Key-----";

@@ -1,7 +1,15 @@
-/* $Id: keymgt.c,v 1.1 2002/08/28 20:06:50 rabbi Exp $
+/* $Id: keymgt.c,v 1.2 2002/10/18 22:37:50 rabbi Exp $
  * $Log: keymgt.c,v $
- * Revision 1.1  2002/08/28 20:06:50  rabbi
- * Initial revision
+ * Revision 1.2  2002/10/18 22:37:50  rabbi
+ * We prepend the protocol version string to the software version number in
+ * the type 2 capstring. This is necessary to allow existing Mixmaster
+ * versions to interoperate with future versions of Mixmaster.
+ *
+ * This isn't strictly necessary with versions 2.x, but I'm making this
+ * change for consistency.
+ *
+ * Revision 1.1.1.1  2002/08/28 20:06:50  rabbi
+ * Mixmaster 2.0.4 source.
  *
  * Revision 2.7  1998/08/21  13:26:08  um
  * *** empty log message ***
@@ -959,6 +967,7 @@ write_keyfile (void)
 	  str_to_buffer (buff, line);
 	  str_to_buffer (buff, IDstr);
 	  str_to_buffer (buff, " ");
+	  str_to_buffer (buff, mixmaster_protocol);
 	  str_to_buffer (buff, VERSION);
 	  str_to_buffer (buff, " ");
 	  str_to_buffer (buff, abilities);
