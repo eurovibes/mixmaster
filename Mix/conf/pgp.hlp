@@ -1,0 +1,73 @@
+You can use PGP to encrypt the messages you send the remailer.
+Send mail with Subject: remailer-key to <%RMA>
+to get the public key.
+
+First, create a file with your message, and prepend it with "::" and
+the "Anon-To:" line. Then, encrypt it with the PGP key of this remailer.
+Finally, send it to <%RMA>. The line "Encrypted: PGP"
+tells the remailer to decrypt the message and process its contents.
+
+==================================================================
+From: joe@test.com
+To: %RMA
+Subject: anonymous message
+
+::
+Encrypted: PGP
+
+-----BEGIN PGP MESSAGE-----
+Version: 2.6.3i
+
+owE1jMsNwjAUBH3gZMk9PClnUoBPUANpwElW2OBPZD8H0gd1UCP2gduuNDNfIcSH
+T4zCbQmtlbzGFM9T0jSD7QVvEzaPcUlBSSWHQclbnR9YWJNp5BFSLdR9CijF3NGx
+ybry/1Rsqn4la3a0JiIhLvnYGCu9HFtiC8oIxnlkeuIYe+EH
+=HgDq
+-----END PGP MESSAGE-----
+==================================================================
+
+Even though PGP encryption is very secure, this still leaves some
+information open to attackers. For example, if someone gets an
+anonymous message whenever you have sent an encrypted message to a
+remailer, it is likely that you are the sender of those messages.
+You can instruct the remailer to delay your messages for some time
+or send it empty messages to make such analysis harder:
+
+If you use the line "Null:" instead of "Anon-To:", the remailer will
+discard your message. The "Latent-Time:" header causes the remailer
+to keep your message for some time before forwarding it.
+"Latent-Time: +2:00" would delay the message for two hours. You
+can use a random delay by adding "r", for example
+"Latent-Time: +5:00r" would delay the message for up to five hours.
+
+You can, of course, use another remailer to send the message to
+<%RMA> anonymously. For example, take the message
+
+==================================================================
+::
+Anon-To: %RMA
+
+::
+Encrypted: PGP
+
+-----BEGIN PGP MESSAGE-----
+Version: 2.6.3i
+
+owE1jMsNwjAUBH3gZMk9PClnUoBPUANpwElW2OBPZD8H0gd1UCP2gduuNDNfIcSH
+T4zCbQmtlbzGFM9T0jSD7QVvEzaPcUlBSSWHQclbnR9YWJNp5BFSLdR9CijF3NGx
+ybry/1Rsqn4la3a0JiIhLvnYGCu9HFtiC8oIxnlkeuIYe+EH
+=HgDq
+-----END PGP MESSAGE-----
+==================================================================
+
+encrypt it with the PGP key of the Replay remailer and send the
+double-encrypted message to <remailer@replay.com>.
+
+If you send your messages through a chain of several independent
+remailers, it will be hard to trace the anonymous message back to
+you. A much more secure solution, however, is to use Mixmaster for
+sending anonymous mail.
+
+PGP encryption can also be used to receive mail at an anonymous
+address. Please see <http://www.publius.net/n.a.n.html>, the home page
+of the nym.alias.net pseudonym server, for more information.
+

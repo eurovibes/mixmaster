@@ -1,0 +1,45 @@
+The remailer can also post articles to Usenet newsgroups. To send a
+Usenet message, use the header "Anon-Post-To:" instead of "Anon-To".
+
+==================================================================
+To: %RMA
+
+::
+Anon-Post-To: alt.test,misc.test
+
+##
+Subject: anonymous post
+
+This message is anonymous.
+==================================================================
+
+
+When posting test messages, please use the appropriate groups such as
+alt.test. The newsgroup alt.privacy.anon-server is not a test group.
+
+To post a follow-up to a Usenet article, you must insert a "References:"
+header. For example if you want to reply to a message which contains
+these headers:
+==================================================================
+Newsgroups: alt.privacy.anon-server
+Subject: Re: posting to alt.anonymous?
+Message-ID: <6643215551.110344173@news.stray.cat.edu>
+References: <19990101182004.17714.qmail@nym.alias.net>
+==================================================================
+
+your anonymous follow-up message should begin like this:
+
+==================================================================
+To: %RMA
+
+::
+Anon-Post-To: alt.privacy.anon-server
+
+##
+Subject: Re: posting to alt.anonymous?
+References: <6643215551.110344173@news.stray.cat.edu>
+
+your message here
+==================================================================
+
+
