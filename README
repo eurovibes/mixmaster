@@ -8,9 +8,8 @@ This program consists of
 * a remailer client:
 
   The remailer client supports sending anonymous mail using Cypherpunk
-  and Mixmaster remailers, managing pseudonyms at Newnym nym servers
-  and receiving mail anonymously from Cypherpunk remailers. It supports
-  OpenPGP encryption (compatible with PGP 2, PGP 5 and up, and GnuPG).
+  and Mixmaster remailers. It supports OpenPGP encryption (compatible 
+  with PGP 2, PGP 5 and up, and GnuPG).
 
   The client can be used with a menu-based user interface and with
   command line options.
@@ -31,16 +30,21 @@ Installation:
 
 Libraries:
 
-  Mixmaster uses the cryptographic library OpenSSL. If you want to use
-  the menu-based user interface, you also need the ncurses library. If
-  these libraries are not installed on your system, get them from
-  ftp://mixmaster.anonymizer.com/ and extract them in the Src
-  directory first.
+  Mixmaster requires the libraries OpenSSL, zlib, and pcre. 
+  
+  If you want to use the menu-based user interface, you also need the
+  ncurses library. If these libraries are not installed on your
+  system, you will need to obtain the latest versions from the
+  sources below and extract them in the the Src/ directory first.
+
+  OpenSSL is available from http://www.openssl.org/source/
+
+  Ncurses can be obtained from http://ftp.gnu.org/pub/gnu/ncurses/
 
   The Perl Compatable Regular Expressions library can be obtained from
   ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/
 
-  The zlib compression libraries can be obtained at
+  The zlib compression libraries can be obtained from
   http://www.gzip.org/zlib/
 
 To install or upgrade Mixmaster, type `./Install'.
@@ -56,7 +60,7 @@ finger from nym.alias.net:
   mlist.txt      List of reliable type 2 remailers
   type2.list     List of known type 2 remailers (optional)
 
-If you wish to participate in the Remailer Abuse Blocklist, you will need
+If you wish to participate in the Remailer Abuse Blocklist[1], you will need
 to obtain the blocklist file from http://www.paracrypt.com/remailerabuse/
 and place it in your Mix directory. This may be automated with cron.
 
@@ -69,23 +73,24 @@ Note that only the first file should the the local block list, as it is the
 only file mix will open for writing. Most users will not need to edit
 config.h.
 
+[1] Update: As of the release of Mixmaster 3.0, the Paracrypt RAB site is 
+defunct. This information has been left in the documentation should 
+another service take its place.
 
 Using the remailer client:
 -------------------------
 
-To use the menu-based user interface, simply run `mix'. To send an
+To use the menu-based user interface, simply run `mixmaster'. To send an
 anonymous or pseudonymous reply to a message from within your mail or
-news reader, you can pipe it to `mix'.
+news reader, you can pipe it to `mixmaster'.
 
-The interactive mode supports sending mail, manages pseudonymous
-accounts at nym servers and contains a simple mail reading function.
-OpenPGP messages are encrypted and decrypted automatically. It can
-also decrypt messages encrypted to ordinary non-anonymous OpenPGP keys
-if you use the same passphrase for the nyms as for the OpenPGP key.
+The interactive mode supports sending mail and contains a simple
+mail reading function. OpenPGP messages are encrypted and decrypted
+automatically. 
 
 In the non-interactive mode, Mixmaster reads a message from a file or
 from its standard input. The command line options are described in the
-manual page (mix.1).
+manual page (mixmaster.1).
 
 
 Mixmaster as a remailer:
@@ -98,17 +103,14 @@ you have root access, you may want to create a new user (e.g.,
 
 The Install script provides a simple way to set up the remailer. More
 information about configuring Mixmaster can be found in the manual
-page. Typically, incoming mail is piped to "mix -RM". In a UUCP
-setting, it may be useful to use just "mix -R", and run "mix -S" once
-all messages have arrived.
+page. Typically, incoming mail is piped to "mixmaster -RM". In a UUCP
+setting, it may be useful to use just "mixmaster -R", and run 
+"mixmaster -S" once all messages have arrived.
 
 Announcing a new remailer to the public is most commonly done by posting
 the remailer keys and capabilities to alt.privacy.anon-server as well as
 the "remops" mailing list. Information about the remops list can be found
 here: http://lexx.shinn.net/mailman/listinfo/remops
-
-To upgrade from a Mixmaster 2.0.* remailer installation, make a
-backup of your keys and configuration files before you run Install.
 
 
 Installation problems:
@@ -116,7 +118,7 @@ Installation problems:
 
 In case one of the libraries Mixmaster uses is installed incorrectly
 on your system, place the library source code (available from
-ftp://mixmaster.anonymizer.com) in the Src directory, remove the old
+the locations listed above) in the Src directory, remove the old
 Makefile, run the Install script again and answer `y' when asked
 whether to use the source code.
 
