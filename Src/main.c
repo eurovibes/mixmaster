@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.33 2003/08/17 19:15:29 weaselp Exp $ */
+   $Id: main.c,v 1.34 2003/08/17 19:16:43 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
 	  buf_appendf(msg, "Latency: %s\n", q);
 	} else if ((q = largopt(p, "attachment", argv[0], &error)) != NULL) {
 	  buf_appendf(attachments, "%s\n", q);
-#endif /* NYMSUPPORT */
+#ifdef NYMSUPPORT
 	} else if ((q = largopt(p, "nym-config", argv[0], &error)) != NULL) {
 	  deflt = 0;
 	  strncpy(nym, q, sizeof(nym));
@@ -159,8 +159,8 @@ int main(int argc, char *argv[])
 	    buf_appends(nymopt, argv[++i] + 5);
 	} else if ((q = largopt(p, "nym", argv[0], &error)) != NULL) {
 	  buf_appendf(msg, "Nym: %s\n", q);
-	}
 #endif /* NYMSUPPORT */
+	}
 #endif /* USE_PGP */
 	else if ((q = largopt(p, "copies", argv[0], &error)) != NULL) {
 	  sscanf(q, "%d", &numcopies);
