@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.12 2002/08/22 05:18:26 weaselp Exp $ */
+   $Id: main.c,v 1.13 2002/08/25 07:47:23 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
 {
   int error = 0, deflt = 1, help = 0, readmail = 0, send = -1, sendpool = 0,
   header = 1, maint = 0, keygen = 0, verbose = 2, sign = 0, encrypt = 0;
-  int daemon = 0, type_list = 0;
+  int daemon = 0, type_list = 0, nodetach = 0;
 
 #ifdef USE_SOCK
   int pop3 = 0;
@@ -110,6 +110,8 @@ int main(int argc, char *argv[])
 #endif
 	else if (streq(p, "daemon"))
 	  daemon = 1, deflt = 0;
+	else if (streq(p, "no-detach"))
+	  nodetach = 1;
 	else if (streq(p, "post"))
 	  send = MSG_POST;
 	else if (streq(p, "mail"))
@@ -356,7 +358,8 @@ Remailer:\n\
 -R, --read-mail                   read remailer message from stdin\n\
 -I, --store-mail                  read remailer msg from stdin, do not decrypt\n\
 -M, --remailer                    process the remailer pool\n\
--D, --daemon                      remailer as background process\n"
+-D, --daemon                      remailer as background process\n
+    --no-detach                   do not detach from terminal as daemon\n"
 #ifdef USE_SOCK
 	   "-S, --send                        force sending messages from the pool\n"
 #endif
@@ -572,28 +575,30 @@ end:
 #ifdef UNIX
     int pid;
 
-    fprintf(stderr, "Detaching.\n");
-    /* Detach as suggested by the Unix Programming FAQ */
-    pid = fork();
-    if (pid > 0)
-      exit(0);
-    if (setsid() < 0) {
-      /* This should never happen. */
-      fprintf(stderr, "setsid() failed.\n");
-      exit(1);
-    };
-    pid = fork();
-    if (pid > 0)
-      exit(0);
-    if (chdir(MIXDIR) < 0) {
-      if (chdir("/") < 0) {
-        fprintf(stderr, "Cannot chdir to mixdir or /.\n");
-        exit(1);
+    if (! nodetach) {
+      fprintf(stderr, "Detaching.\n");
+      /* Detach as suggested by the Unix Programming FAQ */
+      pid = fork();
+      if (pid > 0)
+	exit(0);
+      if (setsid() < 0) {
+	/* This should never happen. */
+	fprintf(stderr, "setsid() failed.\n");
+	exit(1);
       };
-    };
-    freopen ("/dev/null", "r", stdin);
-    freopen ("/dev/null", "w", stdout);
-    freopen ("/dev/null", "w", stderr);
+      pid = fork();
+      if (pid > 0)
+	exit(0);
+      if (chdir(MIXDIR) < 0) {
+	if (chdir("/") < 0) {
+	  fprintf(stderr, "Cannot chdir to mixdir or /.\n");
+	  exit(1);
+	};
+      };
+      freopen ("/dev/null", "r", stdin);
+      freopen ("/dev/null", "w", stdout);
+      freopen ("/dev/null", "w", stderr);
+    }
 #endif
     mix_daemon();
   }
