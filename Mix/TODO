@@ -3,6 +3,7 @@ Todo items before 2.9.1 release:
 * permit CRAM-MD5 SMTP AUTH in addition to LOGIN.
 * Check and enforce expiration/revocation of OpenPGP keys (?)
 * Apply fixes for any new bugs based on existing features
+* Update the nymservers in default dest.alw
 
 
 Items that need to be completed before the next HEAD release:
