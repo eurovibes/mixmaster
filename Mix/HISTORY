@@ -448,7 +448,7 @@
                              known) exceeds 20 the message is damanged
                              and will fail at the 20th node.
 
-2004-04-06      3.0b2
+2004-05-06      3.0b2
                            Use /dev/arandom instead of /dev/srandom on 
                              OpenBSD (Nikolay Sturm).
                            Fall back to 3DES as Encrypt-Key cipher if we don't
