@@ -6,11 +6,13 @@ Todo items before 3.0 release:
 * further mpgp testing of AES/MDC packet support
 * Windows build instructions/files
 * documentation issues resolved
-* futher debugging
+  + mpgp man page
+* allow for verification of clearsigned OpenPGP messages
 * set an expiration date on OpenPGP keys
 * check and enforce expiration date
 * Apply --store|queue|get-mail patch
 * Implement mbox/Maildir mail input (597043)
+* futher debugging
 
 Further wishlist:
 * Allow sending with middlemen remailers last
@@ -30,3 +32,4 @@ Further wishlist:
   + Automatically announce new keys?
     - implement remailer-key signing?
     - if yes, which key?
+* make mpgp friendlier
