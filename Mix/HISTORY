@@ -283,7 +283,13 @@
                            Minor code formating cleanup and Install script
                              fixes.
 
-2002-??-??      MAIN       Applied Maildir feature patch by drt@un.bewaff.net,
+2002-xx-xx      STABLE     The Mixmaster protocol version is now prepended 
+                             to the software version in the Mixmaster cap-
+                             string.
+                           Minor configuration default changes and Install 
+                             script fixes.
+
+2002-10-18      3.0a1      Applied Maildir feature patch by drt@un.bewaff.net,
                              with some changes by PP:
                              MAILBOX can now be a Maildir (closes: #586223).
                            Mixmaster in daemon mode reloads configuration on
