@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.6 2002/07/10 01:58:49 rabbi Exp $ */
+   $Id: mix.c,v 1.7 2002/07/21 16:28:14 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -381,7 +381,8 @@ static int mix_config(void)
 
 #ifdef POSIX
   if (err == -1 && pw != NULL) {
-    strcatn(line, pw->pw_dir, PATHMAX);
+    strncpy(line, pw->pw_dir, PATHMAX);
+    line[PATHMAX-1] = '\0';
     if (line[strlen(line) - 1] != DIRSEP)
       strcatn(line, DIRSEPSTR, PATHMAX);
     strcatn(line, "Mix", PATHMAX);
