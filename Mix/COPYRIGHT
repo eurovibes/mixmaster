@@ -27,9 +27,9 @@ MIXMASTER LICENSE AGREEMENT
        notices and disclaimer of warranty on any copy; and
 
        (iii) provide Anonymizer Inc. with a copy of the Source Code of
-       such modifications or work via electronic mail to the address 
-       mixmaster@anonymizer.com, and grant Anonymizer Inc. a perpetual, 
-       royalty-free license to use and distribute the modifications or 
+       such modifications or work via electronic mail to the address
+       mixmaster@anonymizer.com, and grant Anonymizer Inc. a perpetual,
+       royalty-free license to use and distribute the modifications or
        work in its products.
 
        "Source Code" means the preferred form of a work for making
@@ -39,34 +39,34 @@ MIXMASTER LICENSE AGREEMENT
 
  c) Should Anonymizer Inc. be acquired by another entity, you:
 
-       (i) will grant to the acquiring entity the items in section 
+       (i) will grant to the acquiring entity the items in section
        1.b.(iii) in leiu of Anonymizer, Inc.;
 
- d) Should Anonymizer Inc. cease to exist, and no aquiring entity be 
+ d) Should Anonymizer Inc. cease to exist, and no aquiring entity be
     available to accept Source Code modifications, you:
-       
-       (i) will grant Lance Cottrell the items in section 1.b.(iii) in leiu 
+
+       (i) will grant Lance Cottrell the items in section 1.b.(iii) in leiu
        of Anonymizer, Inc.
 
-       (ii) should Mr. Cottrell be deceased, section 1.b.(iii) of this 
+       (ii) should Mr. Cottrell be deceased, section 1.b.(iii) of this
        license will be rendered null and void.
 
- e) In the case that the electronic mail address mixmaster@anonymizer.com 
-    ceases to accept electronic mail, 
+ e) In the case that the electronic mail address mixmaster@anonymizer.com
+    ceases to accept electronic mail,
 
        (i) submission of changes to the Mixmaster project at SourceForge
        will be accceptable;
-     
-       (ii) if Mixmaster development is no longer hosted by SourceForge, 
-       submission of changes to any open source repository similar to 
-       SourceForge, or 
+
+       (ii) if Mixmaster development is no longer hosted by SourceForge,
+       submission of changes to any open source repository similar to
+       SourceForge, or
 
        (iii) submission to the Internet news group alt.privacy.anon-server
-       will be acceptable. 
+       will be acceptable.
 
- f) Submission of changes is required as a "best effort". If it is not 
+ f) Submission of changes is required as a "best effort". If it is not
     possible for you to access any of the notification locations, a notation
-    in the modified code stating that the modifications should be submitted by 
+    in the modified code stating that the modifications should be submitted by
     any capable parties who subsequently make use of the modified code will
     be acceptable in lieu of code submission.
 
