@@ -198,4 +198,4 @@
                              sending (wrt header/body seperation;
                              Closes: #482052).
                            Add X-Loop header on mailbox forwarded messages.
-                           Several small fixes.
+                           Several small fixes by Sami Farin et al.

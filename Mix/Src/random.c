@@ -6,7 +6,7 @@
    details.
 
    Randomness
-   $Id: random.c,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: random.c,v 1.2 2002/08/03 17:08:02 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -23,6 +23,7 @@
 #include <windows.h>
 #endif
 #include <assert.h>
+#include <string.h>
 
 int rnd_state = RND_NOTSEEDED;
 
@@ -110,8 +111,12 @@ void rnd_update(byte *seed, int l)
 #ifdef DEV_URANDOM
   fd = open(DEV_URANDOM, O_RDONLY);
   if (fd != -1) {
-    read(fd, b, sizeof(b));
-    rnd_add(b, sizeof(b));
+    ssize_t ret;
+
+    ret = read(fd, b, sizeof(b));
+    if (ret > 0) {
+      rnd_add(b, ret);
+    }
     close(fd);
   }
 #endif

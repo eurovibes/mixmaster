@@ -6,11 +6,12 @@
    details.
 
    MIME functions
-   $Id: mime.c,v 1.2 2001/12/12 19:29:52 rabbi Exp $ */
+   $Id: mime.c,v 1.3 2002/08/03 17:08:02 weaselp Exp $ */
 
 
 #include "mix3.h"
 #include <ctype.h>
+#include <string.h>
 
 #define hex(i) (isdigit(i) ? (i) - '0' : tolower(i) - 'a' + 10)
 

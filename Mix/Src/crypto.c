@@ -6,12 +6,13 @@
    details.
 
    Interface to cryptographic library
-   $Id: crypto.c,v 1.4 2002/07/24 07:48:50 rabbi Exp $ */
+   $Id: crypto.c,v 1.5 2002/08/03 17:08:01 weaselp Exp $ */
 
 
 #include "mix3.h"
 #include "crypto.h"
 #include <assert.h>
+#include <string.h>
 
 #ifdef USE_OPENSSL
 int digestmem_md5(byte *b, int n, BUFFER *md)

@@ -6,7 +6,7 @@
    details.
 
    Read OpenPGP packets
-   $Id: pgpget.c,v 1.5 2002/07/26 23:29:45 rabbi Exp $ */
+   $Id: pgpget.c,v 1.6 2002/08/03 17:08:02 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -15,6 +15,7 @@
 #include "crypto.h"
 #include <time.h>
 #include <assert.h>
+#include <string.h>
 
 int pgp_getmsg(BUFFER *in, BUFFER *key, BUFFER *sig, char *pubring,
 	       char *secring)
@@ -23,7 +24,7 @@ int pgp_getmsg(BUFFER *in, BUFFER *key, BUFFER *sig, char *pubring,
   BUFFER *out;
   int type, algo = 0;
   int err = PGP_NOMSG;
-  pgpsig signature = {0, NULL};
+  pgpsig signature = {0, NULL, 0, 0, {0,} };
 
   p = buf_new();
   out = buf_new();

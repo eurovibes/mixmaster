@@ -6,7 +6,7 @@
    details.
 
    Dynamically allocated buffers
-   $Id: buffers.c,v 1.2 2002/07/29 23:52:00 weaselp Exp $ */
+   $Id: buffers.c,v 1.3 2002/08/03 17:08:01 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -19,6 +19,9 @@
 #include <io.h>
 #endif
 #include <assert.h>
+#ifdef POSIX
+#include <unistd.h>
+#endif
 
 static void fail(void)
 {
@@ -341,6 +344,30 @@ int buf_write(BUFFER *buffer, FILE *out)
 
   return (fwrite(buffer->data, 1, buffer->length, out) == buffer->length
 	  ? 0 : -1);
+}
+
+int buf_write_sync(BUFFER *buffer, FILE *out)
+{
+    int ret = 0;
+
+    if (buf_write(buffer, out) == -1) {
+      fclose(out);
+      return -1;
+    }
+
+    if (fflush(out) != 0)
+      ret = -1;
+
+#ifdef POSIX
+    /* dir entry not synced */
+    if (fsync(fileno(out)) != 0)
+      ret = -1;
+#endif
+
+    if (fclose(out) != 0)
+      ret = -1;
+
+    return ret;
 }
 
 int buf_rewind(BUFFER *buffer)

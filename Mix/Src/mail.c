@@ -6,7 +6,7 @@
    details.
 
    Socket-based mail transport services
-   $Id: mail.c,v 1.4 2002/07/29 23:52:00 weaselp Exp $ */
+   $Id: mail.c,v 1.5 2002/08/03 17:08:01 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -15,7 +15,6 @@
 #include <string.h>
 
 #if defined(UNIX) && defined(USE_SOCK)
-#include <unistd.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>

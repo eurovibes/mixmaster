@@ -98,6 +98,14 @@ int buf_write(BUFFER *message, FILE *outfile);
    0 if the buffer could be written completely,
   -1 otherwise.
 
+int buf_write_sync(BUFFER *message, FILE *outfile);
+
+  This function does the same as buf_write but also does
+  checks for return values of fflush, fsync and ***fclose***.
+
+  Return values:
+   0 if the buffer could be written, synced and closed completely,
+  -1 otherwise.
 
 Remailer Messages
 =================
@@ -821,6 +829,7 @@ BUFFER *buf_new(void);
 int buf_free(BUFFER *buf);
 int buf_read(BUFFER *message, FILE *infile);
 int buf_write(BUFFER *message, FILE *outfile);
+int buf_write_sync(BUFFER *message, FILE *outfile);
 
 #define MSG_MAIL 1
 #define MSG_POST 2

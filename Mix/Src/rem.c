@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.19 2002/07/29 23:52:00 weaselp Exp $ */
+   $Id: rem.c,v 1.20 2002/08/03 17:08:02 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -255,8 +255,7 @@ int mix_pool(BUFFER *msg, int type, long latent)
       fprintf(f, "%d %ld\n", type, latent + time(NULL));
     else
       fprintf(f, "%d 0\n", type);
-    err = buf_write(msg, f);
-    fclose(f);
+    err = buf_write_sync(msg, f);
   }
   if (err == 0) {
     rename(pathtmp, path);

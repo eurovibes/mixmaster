@@ -6,13 +6,14 @@
    details.
 
    OpenPGP messages
-   $Id: pgp.c,v 1.2 2002/08/01 14:24:24 weaselp Exp $ */
+   $Id: pgp.c,v 1.3 2002/08/03 17:08:02 weaselp Exp $ */
 
 
 #include "mix3.h"
 #ifdef USE_PGP
 #include "pgp.h"
 #include <ctype.h>
+#include <string.h>
 
 int pgp_decrypt(BUFFER *in, BUFFER *pass, BUFFER *sig, char *pubring,
 		char *secring)
