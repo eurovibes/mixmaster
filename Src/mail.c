@@ -6,7 +6,7 @@
    details.
 
    Socket-based mail transport services
-   $Id: mail.c,v 1.6 2002/08/03 17:53:47 weaselp Exp $ */
+   $Id: mail.c,v 1.7 2002/08/07 17:27:01 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -26,7 +26,7 @@
 
 int sendinfofile(char *name, char *logname, BUFFER *address, BUFFER *header)
 {
-  FILE *f, *log = NULL;
+  FILE *f = NULL, *log = NULL;
   BUFFER *msg, *addr;
   char line[LINELEN];
   int ret = -1;
@@ -65,9 +65,10 @@ int sendinfofile(char *name, char *logname, BUFFER *address, BUFFER *header)
       buf_appends(msg, line);
   }
   ret = sendmail(msg, REMAILERNAME, address);
-  fclose(f);
   buf_free(msg);
 end:
+  if (f)
+    fclose(f);
   if (log)
     fclose(log);
   buf_free(addr);
