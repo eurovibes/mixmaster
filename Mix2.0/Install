@@ -464,7 +464,7 @@ It is usually a good idea to allow sending mail to nym servers and to yourself.
 This list will be sent to users in reponse to a \"remailer-conf\" request.
 Specify the addresses or \`none'."
     echo "@`echo $_RMA | sed 's/.*@//'`" >destination.allow
-    echo "@redneck.gacracker.org @nym.xganon.com @hod.aarg.net @nym.gmsociety.org @nym.alias.net @alias.cyberpass.net @anon.nymserver.com @mailanon.com @anon.efga.org" >>destination.allow
+    echo "@nym.xganon.com @hod.aarg.net @nym.gmsociety.org @nym.alias.net @alias.cyberpass.net @nym.cryptofortress.com @rodent.frell.eu.org @blackhole.riot.eu.org" >destination.allow
     readln "Allow mailing to:" "`tr '
 ' ' ' <destination.allow`"
     if echo "$ans" | grep none >/dev/null
