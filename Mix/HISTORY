@@ -375,3 +375,7 @@
                            In the curses interface chain selection it was not
                              possible to select a random last hop with a usenet
                              post message.  Fixed (closes: #719165).
+                           If remix was enabled and we had a Type-I Anon-Post-To
+                             request we accidently randhoped it via the configured
+                             default remailing chain (default: *,*,*,*).
+                             Fixed (closes: #729494).

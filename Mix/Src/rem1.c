@@ -6,7 +6,7 @@
    details.
 
    Process Cypherpunk remailer messages
-   $Id: rem1.c,v 1.8 2003/02/15 00:29:36 weaselp Exp $ */
+   $Id: rem1.c,v 1.9 2003/04/29 12:03:32 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -544,7 +544,7 @@ end:
       remix = 0;
     if (remix && remixto->length == 0)
       buf_set(remixto, to);
-    if (remix && !repgp)
+    if (remix && !repgp && remixto->length != 0)
       err = mix_encrypt(type, out, remixto->data, 1, line);
     if (err != 0) {
       if (remix == 1 && !repgp)
