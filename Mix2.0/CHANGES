@@ -1,8 +1,17 @@
 Version history.
 
-2.0.4b47 xxxx-xx-xx rabbi
+2.0.5    2004-xx-xx rabbi
+        Drop messages without timestamps and ignore messages with 
+        timestamps from the future. This abandons backwards compatibility 
+        with Mixmaster versions 2.0.4b36 and earlier, but makes behavior 
+        consistent with Mixmaster 3.0.
+
+2.0.4    2004-05-17 rabbi
+        Version 2.0.4 skipped.
+
+2.0.4b47 2002-10-19 rabbi
         Documentation updates, key version string format changes, and a 
-        DOS Makefile fix.
+        DOS Makefile fix. (internal release).
 
 2.0.4b46 2002-09-23 rabbi
         Security fixes for zlib and SSLeay. Now requires OpenSSL instead
