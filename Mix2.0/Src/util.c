@@ -1,8 +1,11 @@
 
-/* $Id: util.c,v 1.1 2002/08/28 20:06:50 rabbi Exp $
+/* $Id: util.c,v 1.2 2002/09/10 05:24:14 rabbi Exp $
  * $Log: util.c,v $
- * Revision 1.1  2002/08/28 20:06:50  rabbi
- * Initial revision
+ * Revision 1.2  2002/09/10 05:24:14  rabbi
+ * replaced an mktemp() to make OpenBSD happy.
+ *
+ * Revision 1.1.1.1  2002/08/28 20:06:50  rabbi
+ * Mixmaster 2.0.4 source.
  *
  * Revision 2.8  1999/01/19  02:28:13  um
  * *** empty log message ***
@@ -180,6 +183,7 @@ tempfile (char *rootname)
 {
   char tmp[256];
   FILE *f;
+  int fptr;
 
 #ifdef SHORTNAMES
   if (strlen (rootname) > 2)
@@ -187,8 +191,11 @@ tempfile (char *rootname)
 #endif
   sprintf (tmp, "%sXXXXXX", rootname);
   strcpy (rootname, tmp);
-  if (!mktemp (rootname))
-    return (NULL);
+  fptr = mkstemp(rootname);
+  if (fptr > 0)
+    close(fptr);
+  else
+    exit(-1);
   f = open_mix_file (rootname, "w+");
   if (f == NULL)
     exit (-1);			/* we are in deep trouble and may as well exit */
@@ -205,6 +212,7 @@ tempfileb (char *rootname)
 {
   char tmp[256];
   FILE *f;
+  int fptr;
 
 #ifdef SHORTNAMES
   if (strlen (rootname) > 2)
@@ -212,8 +220,11 @@ tempfileb (char *rootname)
 #endif
   sprintf (tmp, "%sXXXXXX", rootname);
   strcpy (rootname, tmp);
-  if (!mktemp (rootname))
-    return (NULL);
+  fptr = mkstemp(rootname);
+  if (fptr > 0)
+    close(fptr);
+  else
+    exit(-1);
   f = open_mix_file (rootname, "wb+");
   if (f == NULL)
     exit (-1);			/* we are in deep trouble and may as well exit */
