@@ -1,5 +1,5 @@
 /* Modified for Mixmaster.
- * $Id: bsafeeay.c,v 1.2 2002/09/10 05:25:50 rabbi Exp $
+ * $Id: bsafeeay.c,v 1.3 2002/09/10 18:29:40 rabbi Exp $
  */
 
 /* Copyright (c) 1997
@@ -979,7 +979,7 @@ B_SetKeyInfo( B_KEY_OBJ obj, int type, POINTER info )
        */
       p += 22;
 
-      rsa = d2i_RSAPublicKey( NULL, &p, item->len-22 );
+      rsa = d2i_RSAPublicKey( NULL, (const unsigned char * *)&p, item->len-22 );
       if( !rsa ) {
 	return (-1);
       }
@@ -1031,7 +1031,7 @@ B_SetKeyInfo( B_KEY_OBJ obj, int type, POINTER info )
        */
       p += 26;
       
-      rsa = d2i_RSAPrivateKey( NULL, &p, item->len-26 );
+      rsa = d2i_RSAPrivateKey( NULL, (const unsigned char * *)&p, item->len-26 );
       if( !rsa ) {
 	return (-1);
       }
