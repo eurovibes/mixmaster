@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.40 2002/12/08 00:56:23 weaselp Exp $ */
+   $Id: mix.c,v 1.41 2003/02/15 00:29:36 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -57,6 +57,7 @@ char SECRING[PATHMAX];
 char PUBRING[PATHMAX];
 char IDLOG[PATHMAX];
 char STATS[PATHMAX];
+char PGPMAXCOUNT[PATHMAX];
 char DESTBLOCK[PATHMAX];
 char DESTALLOW[PATHMAX];
 char SOURCEBLOCK[PATHMAX];
@@ -377,6 +378,7 @@ static void mix_setdefaults()
 	strnncpy(PUBRING      , DEFAULT_PUBRING);
 	strnncpy(IDLOG        , DEFAULT_IDLOG);
 	strnncpy(STATS        , DEFAULT_STATS);
+	strnncpy(PGPMAXCOUNT  , DEFAULT_PGPMAXCOUNT);
 	strnncpy(DESTBLOCK    , DEFAULT_DESTBLOCK);
 	strnncpy(DESTALLOW    , DEFAULT_DESTALLOW);
 	strnncpy(SOURCEBLOCK  , DEFAULT_SOURCEBLOCK);
@@ -559,6 +561,7 @@ int mix_configline(char *line)
 	  read_conf(MIXRAND) || read_conf(SECRING) ||
 	  read_conf(PUBRING) || read_conf(IDLOG) ||
 	  read_conf(STATS) || read_conf(DESTBLOCK) ||
+	  read_conf(PGPMAXCOUNT) ||
 	  read_conf(DESTALLOW) || read_conf(SOURCEBLOCK) ||
 	  read_conf(STAREX) ||
 	  read_conf(HDRFILTER) || read_conf(REGULAR) ||
@@ -889,6 +892,7 @@ int mix_regular(int force)
 int mix_daily(void)
 {
   idexp();
+  pgpmaxexp();
   pool_packetexp();
   stats(NULL);
   keymgt(0);

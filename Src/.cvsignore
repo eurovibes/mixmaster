@@ -5,3 +5,5 @@ remailer
 test 
 core
 gmon.out
+parsedate.tab.c
+parsedate

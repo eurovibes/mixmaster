@@ -6,13 +6,15 @@
    details.
 
    Process Cypherpunk remailer messages
-   $Id: rem1.c,v 1.7 2002/09/18 23:26:17 rabbi Exp $ */
+   $Id: rem1.c,v 1.8 2003/02/15 00:29:36 weaselp Exp $ */
 
 
 #include "mix3.h"
 #include <ctype.h>
 #include <time.h>
 #include <string.h>
+#include <assert.h>
+#include <stdlib.h>
 
 static int t1msg(BUFFER *in, int hdr);
 
@@ -88,6 +90,51 @@ static int readnum(BUFFER *b, int f)
   return (num);
 }
 
+static int readdate(BUFFER *b)
+{
+  int num = -1;
+
+  if (b->length > 0)
+    num = parsedate(b->data);
+  return (num);
+}
+
+static int reached_maxcount(BUFFER *md, int maxcount)
+{
+  FILE *f;
+  char temp[LINELEN];
+  int count = 0;
+  int err = 0;
+  long then;
+  time_t now = time(NULL);
+
+  assert(md->length > 0);
+
+  encode(md, 0);
+
+  f = mix_openfile(PGPMAXCOUNT, "a+"); /* create file if it does not exist */
+  fseek(f,0,SEEK_SET);
+  if (f == NULL) {
+    errlog(ERRORMSG, "Can't open %s!\n", PGPMAXCOUNT);
+    return (-1);
+  }
+  lock(f);
+  while (fgets(temp, sizeof(temp), f) != NULL)
+    if (sscanf(temp, "%ld", &then) &&
+	(then >= now - SECONDSPERDAY) &&
+	strstr (temp, md->data))
+      count++;
+
+  if (count > maxcount)
+    err = 1;
+  else
+    fprintf(f, "%ld %s\n", (long) time(NULL), md->data);
+
+  unlock(f);
+  fclose(f);
+  return (err);
+}
+
 static int t1msg(BUFFER *in, int hdr)
      /* hdr = 1: mail header, hdr = 2: pasted header, hdr = 0: ignore */
 {
@@ -95,12 +142,16 @@ static int t1msg(BUFFER *in, int hdr)
   BUFFER *cutmarks, *to, *newsgroups, *ek, *ekdes, *ekcast, *esub, *subject;
   BUFFER *temp, *header, *out;
   BUFFER *test, *testto, *remixto;
+  BUFFER *digest;
   int err = 0;
   int encrypted = 0;
   int type = -1;
   int latent = 0;
   int remix = 0, repgp = 0;
   int inflate = 0;
+  int maxsize = -1;
+  int maxcount = -1;
+  int maxdate = -2; /* -2 not used, -1 parse error */
 
   field = buf_new();
   content = buf_new();
@@ -119,6 +170,7 @@ static int t1msg(BUFFER *in, int hdr)
   out = buf_new();
   test = buf_new();
   testto = buf_new();
+  digest = buf_new();
 
   if (REMIX == 1)
     remix = 2;
@@ -218,7 +270,12 @@ header:
 	buf_appendc(remixto, ',');
 	buf_cat(remixto, temp);
       }
-    }
+    } else if (bufieq(field, "max-size") || bufieq(field, "maxsize"))
+      maxsize = readnum(content, 1024);
+    else if (bufieq(field, "max-count") || bufieq(field, "maxcount"))
+      maxcount = readnum(content, 1);
+    else if (bufieq(field, "max-date") || bufieq(field, "maxdate"))
+      maxdate = readdate(content);
 #if USE_NSUB
     else if (bufieq(field, "subject"))
       buf_set(subject, content);
@@ -253,6 +310,7 @@ header:
     err = pgp_dearmor(in, temp);
     if (err == 0) {
       BUFFER *pass;
+      digest_sha1(temp, digest);
 
       pass = buf_new();
       buf_sets(pass, PASSPHRASE);
@@ -307,6 +365,43 @@ header:
     err = -2;
     goto end;
   }
+  if (maxdate == -1) {
+    if (testto->length == 0)
+      errlog(LOG, "Could not parse Max-Date: header.\n");
+    buf_appends(test, "Could not parse Max-Date: header.\n");
+    err = -2;
+    goto end;
+  } else if (maxdate >= 0 && maxdate <= time(NULL)) {
+    if (testto->length == 0)
+      errlog(LOG, "Message is expired.\n");
+    buf_appends(test, "Message is expired.\n");
+    err = -2;
+    goto end;
+  }
+  if (maxsize >= 0 && in->length >= maxsize) {
+    if (testto->length == 0)
+      errlog(LOG, "Message Size exceeds Max-Size.\n");
+    buf_appends(test, "Message Size exceeds Max-Size.\n");
+    err = -2;
+    goto end;
+  }
+  if (maxcount >= 0) {
+    if (digest->length == 0) {
+      if (testto->length == 0)
+	errlog(LOG, "Max-Count yet not encrypted.\n");
+      buf_appends(test, "Max-Count yet not encrypted.\n");
+      err = -2;
+      goto end;
+    }
+    if (reached_maxcount(digest, maxcount)) {
+      if (testto->length == 0)
+	errlog(LOG, "Max-Count reached - discarding message.\n");
+      buf_appends(test, "Max-Count reached - discarding message.\n");
+      err = -2;
+      goto end;
+    }
+  }
+
   if (type == MSG_POST && subject->length == 0)
     buf_sets(subject, "(no subject)");
 
@@ -482,5 +577,6 @@ end:
   buf_free(header);
   buf_free(test);
   buf_free(testto);
+  buf_free(digest);
   return (err);
 }

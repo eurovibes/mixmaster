@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.32 2002/12/17 10:41:44 weaselp Exp $ */
+   $Id: rem.c,v 1.33 2003/02/15 00:29:36 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -529,7 +529,6 @@ end:
 int idexp(void)
 {
   FILE *f;
-  BUFFER *b;
   long now, then;
   LOCK *i;
   idlog_t idbuf;
@@ -538,7 +537,6 @@ int idexp(void)
   if (IDEXP == 0)
     return (0);
 
-  b = buf_new();
   f = mix_openfile(IDLOG, "rb+");
   if (f == NULL)
     return (-1);
@@ -575,6 +573,42 @@ int idexp(void)
 #else /* end of _MSC */
     ftruncate(fileno(f),fpo);
 #endif /* else if not _MSC */
+  fclose(f);
+  unlockfile(i);
+  return (0);
+}
+
+
+int pgpmaxexp(void)
+{
+  FILE *f;
+  BUFFER *b;
+  long now, then;
+  LOCK *i;
+  char temp[LINELEN];
+
+  f = mix_openfile(PGPMAXCOUNT, "rb+");
+  if (f == NULL)
+    return (-1);
+  i = lockfile(PGPMAXCOUNT);
+  b = buf_new();
+  now = time(NULL);
+
+  while (fgets(temp, sizeof(temp), f) != NULL)
+    if (sscanf(temp, "%ld", &then) &&
+	then >= now - SECONDSPERDAY)
+      buf_appends(b, temp);
+
+  fseek(f,0,SEEK_SET);
+
+  buf_write(b, f);
+
+#ifdef _MSC
+    chsize(fileno(f),b->length);
+#else /* end of _MSC */
+    ftruncate(fileno(f),b->length);
+#endif /* else if not _MSC */
+
   fclose(f);
   unlockfile(i);
   buf_free(b);
