@@ -6,7 +6,7 @@
    details.
 
    Read OpenPGP packets
-   $Id: pgpget.c,v 1.7 2002/08/16 19:03:37 rabbi Exp $ */
+   $Id: pgpget.c,v 1.8 2002/08/23 00:21:54 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -741,7 +741,7 @@ int pgp_getsessionkey(BUFFER *in, BUFFER *pass, char *secring)
   BUFFER *keyid;
   int type;
   int i, csum = 0;
-  int algo;
+  int algo = 0;
   int err = -1;
 
   out = buf_new();
