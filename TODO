@@ -4,6 +4,7 @@ Todo items before 3.0 release:
 * post-install scripts need to be reworked
 * Macintosh OS/X support
 * further mpgp testing of AES/MDC packet support
+* honor key preferences when encrypting to multiple keys
 * Windows build instructions/files
 * documentation issues resolved
   + mpgp man page
