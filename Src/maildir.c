@@ -2,7 +2,7 @@
    http://www.qmail.org/man/man5/maildir.html and
    http://cr.yp.to/proto/maildir.html
    
-   hacked by drt@un.bewaff.net - http://c0re.jp/
+   Added by drt@un.bewaff.net - http://c0re.jp/
 
    To test it try:
    $ gcc maildir.c -DUNITTEST -o test_maildir

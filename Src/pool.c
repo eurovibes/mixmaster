@@ -6,7 +6,7 @@
    details.
 
    Send messages from pool
-   $Id: pool.c,v 1.16 2002/09/06 21:04:16 rabbi Exp $ */
+   $Id: pool.c,v 1.17 2002/09/06 22:45:06 rabbi Exp $ */
 
 #include "mix3.h"
 #include <stdlib.h>
@@ -251,7 +251,9 @@ int mailin_mbox(char *path)
 	  if (eof)
 	    goto end_state;
 	  if (strleft(line, "From ")) {
-	    // buf_appends(msg, line);
+#if 0
+	    buf_appends(msg, line);
+#endif
 	    state = 2;
 	    break;
 	  };
