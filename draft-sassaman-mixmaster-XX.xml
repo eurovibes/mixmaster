@@ -607,7 +607,7 @@ Remailer-Type: Mixmaster [version number]
   </section>
 
 
-  <section anchor="implementation" title="Implementation Nodes">
+  <section anchor="implementation" title="Implementation Notes">
 
     <t>This section discusses various implementation issues.</t>
 
