@@ -6,7 +6,7 @@
    details.
 
    OpenPGP data
-   $Id: pgpdata.c,v 1.10 2002/08/15 16:52:12 weaselp Exp $ */
+   $Id: pgpdata.c,v 1.11 2002/08/16 19:03:37 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -420,13 +420,13 @@ static int pgp_iskeyid(BUFFER *key, BUFFER *keyid)
   return(ret);
 }
 
-int pgp_getkey(int mode, int algo, int *psym, BUFFER *keypacket, BUFFER *key,
+int pgp_getkey(int mode, int algo, int *psym, int *pmdc, BUFFER *keypacket, BUFFER *key,
 	       BUFFER *keyid, BUFFER *userid, BUFFER *pass)
 {
   int tempbuf = 0;
   int keytype = -1, type, j;
   int thisalgo = 0, version, skalgo;
-  int needsym = 0, symfound = 0;
+  int needsym = 0, symfound = 0, mdcfound = 0;
   BUFFER *p1, *iv, *sk, *i, *thiskeyid;
   int ivlen;
   int csstart;
@@ -464,23 +464,32 @@ int pgp_getkey(int mode, int algo, int *psym, BUFFER *keypacket, BUFFER *key,
 	      len = buf_getl(p1);
 	    type = buf_getc(p1);
 	    if (len)
-	      buf_get(p1, i, len-1); /* len-1 - exclude type */
+	      buf_get(p1, i, len-1); // len-1 - exclude type
 	    else
 	      buf_clear(i);
-	    if (type == PGP_SUB_PSYMMETRIC)
+	    if (type == PGP_SUB_PSYMMETRIC) {
 	      while ((a = buf_getc(i)) != -1)
-		if ((a == PGP_K_3DES || a == PGP_K_CAST5
+		if ((a == PGP_K_3DES || a == PGP_K_CAST5 || a == PGP_K_BF
 #ifdef USE_IDEA
 		     || a == PGP_K_IDEA
 #endif
+#ifdef USE_AES
+		     || a ==  PGP_K_AES128 || a ==  PGP_K_AES192 || a ==  PGP_K_AES256
+#endif
 		     ) && (a == needsym || needsym == 0)) {
 		  symfound = a;
-		  break;
-		}
-	  }
-	}
-      }
-      break;
+		  break; // while ((a = buf_getc(i)) != -1)
+		} // if ((a == PGP_K_3DES)...
+	    } // if (type == PGP_SUB_PSYMMETRIC)
+	    else if (type == PGP_SUB_FEATURES) {
+	      if ((a = buf_getc(i)) != -1)
+		if (a & 0x01)
+		  mdcfound = 1;
+	    } // if (type == PGP_SUB_FEATURES)
+	  } // while (p1->ptr < j)
+	} // if (buf_getc(p1) == PGP_SIG_CERT)
+      } // if (buf_getc(p1) == 4)
+      break; // switch (type)
     case PGP_USERID:
       if (userid)
 	buf_move(userid, p1);
@@ -507,6 +516,7 @@ int pgp_getkey(int mode, int algo, int *psym, BUFFER *keypacket, BUFFER *key,
 	  goto end;
 	}
 	symfound = PGP_K_IDEA;
+    mdcfound = 0;
 	break;
       case 4:
 	buf_appendc(key, version);
@@ -579,8 +589,8 @@ int pgp_getkey(int mode, int algo, int *psym, BUFFER *keypacket, BUFFER *key,
      default:
       /* ignore trust packets etc */
       break;
-    }
-  }
+    } // switch (type)
+  } // while ((type = pgp_getpacket(keypacket, p1)) > 0)
  end:
   if (keyid) buf_set(keyid, thiskeyid);
   if (tempbuf) {
@@ -600,6 +610,8 @@ int pgp_getkey(int mode, int algo, int *psym, BUFFER *keypacket, BUFFER *key,
     keytype = -1;
   else if (psym && *psym == 0)
     *psym = symfound;
+  if (pmdc)
+    *pmdc = mdcfound;
 
   return (keytype <= 0 ? keytype : thisalgo);
 }

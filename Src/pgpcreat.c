@@ -6,7 +6,7 @@
    details.
 
    Create OpenPGP packets
-   $Id: pgpcreat.c,v 1.4 2002/08/03 17:08:02 weaselp Exp $ */
+   $Id: pgpcreat.c,v 1.5 2002/08/16 19:03:37 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -23,6 +23,20 @@ int pgp_packet(BUFFER *in, int type)
   BUFFER *out;
 
   out = buf_new();
+ if (type > 15) {
+    ctb = 0xC0 | type; // make v4 packet
+    buf_setc(out, ctb);
+    if (in->length > 8383) {
+      buf_appendc(out, 0xFF);
+      buf_appendl(out, in->length);
+    } else if (in->length > 191) {
+      //buf_appendc(out, ((in->length-192) >> 8) + 192);
+      //buf_appendc(out,  (in->length-192) & 0xFF);
+      buf_appendi(out, in->length - 0xC0 + 0xC000);
+    } else {
+      buf_appendc(out, in->length);
+    }
+ } else {
   ctb = 128 + (type << 2);
   if (in->length < 256 && type != PGP_PUBKEY && type != PGP_SECKEY &&
       type != PGP_SIG && type != PGP_PUBSUBKEY && type != PGP_SECSUBKEY
@@ -47,6 +61,7 @@ int pgp_packet(BUFFER *in, int type)
     buf_appendc(out, ctb | 2);
     buf_appendl(out, in->length);
   }
+ }
   buf_cat(out, in);
   buf_move(in, out);
   buf_free(out);
@@ -92,11 +107,12 @@ int pgp_packet3(BUFFER *in, int type)
 }
 
 #ifdef USE_IDEA
-static int pgp_ideaencrypt(BUFFER *in, BUFFER *out, BUFFER *key)
+static int pgp_ideaencrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
 {
   byte iv[8];
   int i, n = 0;
   IDEA_KEY_SCHEDULE ks;
+  SHA_CTX c;
 
   assert(key->length == 17);
 
@@ -105,26 +121,46 @@ static int pgp_ideaencrypt(BUFFER *in, BUFFER *out, BUFFER *key)
 
   idea_set_encrypt_key(key->data + 1, &ks);
 
-  rnd_bytes(out->data, 8);
-  out->data[8] = out->data[6], out->data[9] = out->data[7];
+  if (mdc) {
+    mdc = 1;
+    out->data[0] = 1;
+  }
+  rnd_bytes(out->data + mdc, 8);
+  out->data[8 + mdc] = out->data[6 + mdc], out->data[9 + mdc] = out->data[7 + mdc];
+  if (mdc) {
+    SHA1_Init(&c);
+    SHA1_Update(&c, out->data + 1, 10);
+    SHA1_Update(&c, in->data, in->length);
+  }
   n = 0;
-  idea_cfb64_encrypt(out->data, out->data, 10, &ks, iv, &n, IDEA_ENCRYPT);
-  iv[6] = iv[0], iv[7] = iv[1];
-  memcpy(iv, out->data + 2, 6);
-  n = 0;
-  idea_cfb64_encrypt(in->data, out->data + 10, in->length, &ks, iv, &n,
+  idea_cfb64_encrypt(out->data + mdc, out->data + mdc, 10, &ks, iv, &n, IDEA_ENCRYPT);
+  if (!mdc) {
+    iv[6] = iv[0], iv[7] = iv[1];
+    memcpy(iv, out->data + 2, 6);
+    n = 0;
+  }
+  idea_cfb64_encrypt(in->data, out->data + 10 + mdc, in->length, &ks, iv, &n,
 		     IDEA_ENCRYPT);
+  if (mdc) {
+    SHA1_Update(&c, "\xD3\x14", 2); // 0xD3 = 0xC0 | PGP_MDC
+    idea_cfb64_encrypt("\xD3\x14", out->data + 11 + in->length, 2, &ks, iv, &n,
+		       IDEA_ENCRYPT);
+    SHA1_Final(out->data + 13 + in->length, &c);
+    idea_cfb64_encrypt(out->data + 13 + in->length, out->data + 13 + in->length, 20, &ks, iv, &n,
+		       IDEA_ENCRYPT);
+  }
   return (0);
 }
 #endif
 
-static int pgp_3desencrypt(BUFFER *in, BUFFER *out, BUFFER *key)
+static int pgp_3desencrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
 {
   des_cblock iv;
   int i, n = 0;
   des_key_schedule ks1;
   des_key_schedule ks2;
   des_key_schedule ks3;
+  SHA_CTX c;
 
   assert(key->length == 25);
 
@@ -135,24 +171,44 @@ static int pgp_3desencrypt(BUFFER *in, BUFFER *out, BUFFER *key)
   des_set_key((const_des_cblock *) (key->data + 9), ks2);
   des_set_key((const_des_cblock *) (key->data+ 17), ks3);
 
-  rnd_bytes(out->data, 8);
-  out->data[8] = out->data[6], out->data[9] = out->data[7];
+  if (mdc) {
+    mdc = 1;
+    out->data[0] = 1;
+  }
+  rnd_bytes(out->data + mdc, 8);
+  out->data[8 + mdc] = out->data[6 + mdc], out->data[9 + mdc] = out->data[7 + mdc];
+  if (mdc) {
+    SHA1_Init(&c);
+    SHA1_Update(&c, out->data + 1, 10);
+    SHA1_Update(&c, in->data, in->length);
+  }
   n = 0;
-  des_ede3_cfb64_encrypt(out->data, out->data, 10, ks1, ks2, ks3, &iv, &n,
+  des_ede3_cfb64_encrypt(out->data + mdc, out->data + mdc, 10, ks1, ks2, ks3, &iv, &n,
 			 ENCRYPT);
-  iv[6] = iv[0], iv[7] = iv[1];
-  memcpy(iv, out->data + 2, 6);
-  n = 0;
-  des_ede3_cfb64_encrypt(in->data, out->data + 10, in->length, ks1, ks2, ks3,
+  if (!mdc) {
+    iv[6] = iv[0], iv[7] = iv[1];
+    memcpy(iv, out->data + 2, 6);
+    n = 0;
+  }
+  des_ede3_cfb64_encrypt(in->data, out->data + 10 + mdc, in->length, ks1, ks2, ks3,
 			 &iv, &n, ENCRYPT);
+  if (mdc) {
+    SHA1_Update(&c, "\xD3\x14", 2); // 0xD3 = 0xC0 | PGP_MDC
+    des_ede3_cfb64_encrypt("\xD3\x14", out->data + 11 + in->length, 2, ks1, ks2, ks3,
+		       &iv, &n, ENCRYPT);
+    SHA1_Final(out->data + 13 + in->length, &c);
+    des_ede3_cfb64_encrypt(out->data + 13 + in->length, out->data + 13 + in->length, 20, ks1, ks2, ks3,
+		       &iv, &n, ENCRYPT);
+  }
   return (0);
 }
 
-static int pgp_castencrypt(BUFFER *in, BUFFER *out, BUFFER *key)
+static int pgp_castencrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
 {
   byte iv[8];
   int i, n = 0;
   CAST_KEY ks;
+  SHA_CTX c;
 
   assert(key->length == 17);
 
@@ -161,40 +217,164 @@ static int pgp_castencrypt(BUFFER *in, BUFFER *out, BUFFER *key)
 
   CAST_set_key(&ks, 16, key->data + 1);
 
-  rnd_bytes(out->data, 8);
-  out->data[8] = out->data[6], out->data[9] = out->data[7];
+  if (mdc) {
+    mdc = 1;
+    out->data[0] = 1;
+  }
+  rnd_bytes(out->data + mdc, 8);
+  out->data[8 + mdc] = out->data[6 + mdc], out->data[9 + mdc] = out->data[7 + mdc];
+  if (mdc) {
+    SHA1_Init(&c);
+    SHA1_Update(&c, out->data + 1, 10);
+    SHA1_Update(&c, in->data, in->length);
+  }
   n = 0;
-  CAST_cfb64_encrypt(out->data, out->data, 10, &ks, iv, &n, CAST_ENCRYPT);
-  iv[6] = iv[0], iv[7] = iv[1];
-  memcpy(iv, out->data + 2, 6);
-  n = 0;
-  CAST_cfb64_encrypt(in->data, out->data + 10, in->length, &ks, iv, &n,
+  CAST_cfb64_encrypt(out->data + mdc, out->data + mdc, 10, &ks, iv, &n, CAST_ENCRYPT);
+  if (!mdc) {
+    iv[6] = iv[0], iv[7] = iv[1];
+    memcpy(iv, out->data + 2, 6);
+    n = 0;
+  }
+  CAST_cfb64_encrypt(in->data, out->data + 10 + mdc, in->length, &ks, iv, &n,
 		     CAST_ENCRYPT);
+  if (mdc) {
+    SHA1_Update(&c, "\xD3\x14", 2); // 0xD3 = 0xC0 | PGP_MDC
+    CAST_cfb64_encrypt("\xD3\x14", out->data + 11 + in->length, 2, &ks, iv, &n,
+		       CAST_ENCRYPT);
+    SHA1_Final(out->data + 13 + in->length, &c);
+    CAST_cfb64_encrypt(out->data + 13 + in->length, out->data + 13 + in->length, 20, &ks, iv, &n,
+		       CAST_ENCRYPT);
+  }
   return (0);
 }
 
-int pgp_symmetric(BUFFER *in, BUFFER *key)
+static int pgp_bfencrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
+{
+  byte iv[8];
+  int i, n = 0;
+  BF_KEY ks;
+  SHA_CTX c;
+
+  assert(key->length == 17);
+
+  for (i = 0; i < 8; i++)
+    iv[i] = 0;
+
+  BF_set_key(&ks, 16, key->data + 1);
+
+  if (mdc) {
+    mdc = 1;
+    out->data[0] = 1;
+  }
+  rnd_bytes(out->data + mdc, 8);
+  out->data[8 + mdc] = out->data[6 + mdc], out->data[9 + mdc] = out->data[7 + mdc];
+  if (mdc) {
+    SHA1_Init(&c);
+    SHA1_Update(&c, out->data + 1, 10);
+    SHA1_Update(&c, in->data, in->length);
+  }
+  n = 0;
+  BF_cfb64_encrypt(out->data + mdc, out->data + mdc, 10, &ks, iv, &n, BF_ENCRYPT);
+  if (!mdc) {
+    iv[6] = iv[0], iv[7] = iv[1];
+    memcpy(iv, out->data + 2, 6);
+    n = 0;
+  }
+  BF_cfb64_encrypt(in->data, out->data + 10 + mdc, in->length, &ks, iv, &n,
+		     BF_ENCRYPT);
+  if (mdc) {
+    SHA1_Update(&c, "\xD3\x14", 2); // 0xD3 = 0xC0 | PGP_MDC
+    BF_cfb64_encrypt("\xD3\x14", out->data + 11 + in->length, 2, &ks, iv, &n,
+		       BF_ENCRYPT);
+    SHA1_Final(out->data + 13 + in->length, &c);
+    BF_cfb64_encrypt(out->data + 13 + in->length, out->data + 13 + in->length, 20, &ks, iv, &n,
+		       BF_ENCRYPT);
+  }
+  return (0);
+}
+
+#ifdef USE_AES
+static int pgp_aesencrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
+{
+  byte iv[16];
+  int i, n = 0;
+  AES_KEY ks;
+  SHA_CTX c;
+
+  assert(key->length == 17 || key->length == 25 || key->length == 33);
+
+  for (i = 0; i < 16; i++)
+    iv[i] = 0;
+
+  AES_set_encrypt_key(key->data + 1, (key->length-1)<<3, &ks);
+
+  if (mdc) {
+    mdc = 1;
+    out->data[0] = 1;
+  }
+  rnd_bytes(out->data + mdc, 16);
+  out->data[16 + mdc] = out->data[14 + mdc], out->data[17 + mdc] = out->data[15 + mdc];
+  if (mdc) {
+    SHA1_Init(&c);
+    SHA1_Update(&c, out->data + 1, 18);
+    SHA1_Update(&c, in->data, in->length);
+  }
+  n = 0;
+  AES_cfb128_encrypt(out->data + mdc, out->data + mdc, 18, &ks, iv, &n, AES_ENCRYPT);
+  if (!mdc) {
+    iv[14] = iv[0], iv[15] = iv[1];
+    memcpy(iv, out->data + 2, 14);
+    n = 0;
+  }
+  AES_cfb128_encrypt(in->data, out->data + 18 + mdc, in->length, &ks, iv, &n,
+		     AES_ENCRYPT);
+  if (mdc) {
+    SHA1_Update(&c, "\xD3\x14", 2); // 0xD3 = 0xC0 | PGP_MDC
+    AES_cfb128_encrypt("\xD3\x14", out->data + 19 + in->length, 2, &ks, iv, &n,
+		       AES_ENCRYPT);
+    SHA1_Final(out->data + 21 + in->length, &c);
+    AES_cfb128_encrypt(out->data + 21 + in->length, out->data + 21 + in->length, 20, &ks, iv, &n,
+		       AES_ENCRYPT);
+  }
+  return (0);
+}
+#endif
+
+int pgp_symmetric(BUFFER *in, BUFFER *key, int mdc)
 {
   BUFFER *out;
+  int sym;
 
   out = buf_new();
-  buf_prepare(out, in->length + 10);
-  switch (buf_getc(key)) {
+  if (pgp_blocklen(sym = buf_getc(key)) > 8)
+    mdc = 1; // force MDC for AES
+  buf_prepare(out, in->length + (mdc?(1+2+22):2) + pgp_blocklen(sym));
+  switch (sym) {
 #ifdef USE_IDEA
    case PGP_K_IDEA:
-    pgp_ideaencrypt(in, out, key);
+    pgp_ideaencrypt(in, out, key, mdc);
+    break;
+#endif
+#ifdef USE_AES
+   case PGP_K_AES128:
+   case PGP_K_AES192:
+   case PGP_K_AES256:
+    pgp_aesencrypt(in, out, key, mdc);
     break;
 #endif
    case PGP_K_3DES:
-    pgp_3desencrypt(in, out, key);
+    pgp_3desencrypt(in, out, key, mdc);
     break;
   case PGP_K_CAST5:
-    pgp_castencrypt(in, out, key);
+    pgp_castencrypt(in, out, key, mdc);
+    break;
+  case PGP_K_BF:
+    pgp_bfencrypt(in, out, key, mdc);
     break;
    default:
     errlog(ERRORMSG, "Unknown symmetric algorithm.\n");
   }
-  pgp_packet(out, PGP_ENCRYPTED);
+  pgp_packet(out, mdc?PGP_ENCRYPTEDMDC:PGP_ENCRYPTED);
 
   buf_move(in, out);
   buf_free(out);
@@ -271,7 +451,7 @@ int pgp_sessionkey(BUFFER *out, BUFFER *user, BUFFER *keyid, BUFFER *seskey,
     tempbuf = 1;
   }
   sym = seskey->data[0];
-  if ((algo = pgpdb_getkey(PK_ENCRYPT, PGP_ANY, &sym, key, user, NULL, keyid,
+  if ((algo = pgpdb_getkey(PK_ENCRYPT, PGP_ANY, &sym, NULL, key, user, NULL, keyid,
 			   pubring, NULL)) == -1)
     goto end;
 
@@ -445,7 +625,7 @@ int pgp_signhashalgo(BUFFER *algo, BUFFER *userid, char *secring, BUFFER *pass)
 {
   int pkalgo;
 
-  pkalgo = pgpdb_getkey(PK_SIGN, PGP_ANY, NULL, NULL, userid, NULL, NULL,
+  pkalgo = pgpdb_getkey(PK_SIGN, PGP_ANY, NULL, NULL, NULL, userid, NULL, NULL,
 			secring, pass);
   if (pkalgo == PGP_S_DSA)
     buf_sets(algo, "sha1");
@@ -487,9 +667,9 @@ int pgp_sign(BUFFER *msg, BUFFER *msg2, BUFFER *sig, BUFFER *userid,
   }
   if (keypacket) {
     buf_rewind(keypacket);
-    algo = pgp_getkey(PK_SIGN, PGP_ANY, NULL, keypacket, key, id, NULL, pass);
+    algo = pgp_getkey(PK_SIGN, PGP_ANY, NULL, NULL, keypacket, key, id, NULL, pass);
   } else
-    algo = pgpdb_getkey(PK_SIGN, PGP_ANY, NULL, key, userid, NULL, id, secring,
+    algo = pgpdb_getkey(PK_SIGN, PGP_ANY, NULL, NULL, key, userid, NULL, id, secring,
 			pass);
   if (algo <= -1) {
     err = algo;
@@ -581,8 +761,16 @@ int pgp_sign(BUFFER *msg, BUFFER *msg2, BUFFER *sig, BUFFER *userid,
     buf_cat(sub, d);
 
     if (self) {
-      buf_setc(d, PGP_K_3DES);
+      buf_setc(d, PGP_K_CAST5);
+#ifdef USE_AES 
+      buf_appendc(d, PGP_K_AES128);
+#endif
+      buf_appendc(d, PGP_K_3DES);
       pgp_subpacket(d, PGP_SUB_PSYMMETRIC);
+      buf_cat(sub, d);
+
+      buf_setc(d, 0x01); // now we support MDC, so we can add MDC flag
+      pgp_subpacket(d, PGP_SUB_FEATURES);
       buf_cat(sub, d);
     }
 

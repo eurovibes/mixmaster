@@ -6,7 +6,7 @@
    details.
 
    OpenPGP messages
-   $Id: pgp.c,v 1.4 2002/08/15 16:52:11 weaselp Exp $ */
+   $Id: pgp.c,v 1.5 2002/08/16 19:03:37 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -176,7 +176,7 @@ int pgp_encrypt(int mode, BUFFER *in, BUFFER *to, BUFFER *sigid,
 		BUFFER *pass, char *pubring, char *secring)
 {
   BUFFER *dek, *out, *sig, *dest, *tmp;
-  int err = 0, sym = 0;
+  int err = 0, sym = 0, mdc = 0;
   int text;
 
   out = buf_new();
@@ -207,7 +207,7 @@ int pgp_encrypt(int mode, BUFFER *in, BUFFER *to, BUFFER *sigid,
     if (err == -1)
       goto end;
     if (to->ptr == to->length) {
-      if ((err = pgpdb_getkey(PK_ENCRYPT, PGP_ANY, &sym, NULL, dest, NULL,
+      if ((err = pgpdb_getkey(PK_ENCRYPT, PGP_ANY, &sym, &mdc, NULL, dest, NULL,
 			      NULL, pubring, NULL)) < 0)
 	goto end;
       pgp_setkey(dek, sym);
@@ -257,7 +257,7 @@ int pgp_encrypt(int mode, BUFFER *in, BUFFER *to, BUFFER *sigid,
   }
   pgp_compress(in);
   if (mode & (PGP_ENCRYPT | PGP_CONVENTIONAL | PGP_NCONVENTIONAL))
-    pgp_symmetric(in, dek);
+    pgp_symmetric(in, dek, mdc);
   if (mode & (PGP_ENCRYPT | PGP_NCONVENTIONAL)) {
     buf_cat(out, in);
     buf_move(in, out);

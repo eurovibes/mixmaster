@@ -6,7 +6,7 @@
    details.
 
    OpenPGP key database
-   $Id: pgpdb.c,v 1.5 2002/07/29 23:50:04 weaselp Exp $ */
+   $Id: pgpdb.c,v 1.6 2002/08/16 19:03:37 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -218,7 +218,7 @@ int pgpdb_append(KEYRING *keydb, BUFFER *p)
 
 #define pgp_preferredalgo PGP_ES_RSA
 
-int pgpdb_getkey(int mode, int algo, int *sym, BUFFER *key, BUFFER *userid,
+int pgpdb_getkey(int mode, int algo, int *sym, int *mdc, BUFFER *key, BUFFER *userid,
 		 BUFFER *founduid, BUFFER *keyid, char *keyring, BUFFER *pass)
 {
   KEYRING *r;
@@ -257,7 +257,7 @@ int pgpdb_getkey(int mode, int algo, int *sym, BUFFER *key, BUFFER *userid,
       break;
     if (keyid) /* pgp_getkey has to chose subkey with given keyid */
       buf_set(thisid, keyid);
-    thisalgo = pgp_getkey(mode, algo, sym, thiskey, thiskey, thisid, founduid,
+    thisalgo = pgp_getkey(mode, algo, sym, mdc, thiskey, thiskey, thisid, founduid,
 			  pass);
     if (thisalgo == PGP_PASS)
       needpass = 1;
@@ -330,20 +330,20 @@ int pgp_keymgt(int force)
    * with IDEA.
    */
 #ifdef USE_IDEA
-  if (force == 2 || (pgpdb_getkey(PK_DECRYPT, PGP_ES_RSA, NULL, NULL, NULL,
+  if (force == 2 || (pgpdb_getkey(PK_DECRYPT, PGP_ES_RSA, NULL, NULL, NULL, NULL,
 				  NULL, NULL, NULL, pass) < 0))
     pgp_keygen(PGP_ES_RSA, 0, userid, pass, PGPKEY, PGPREMSECRING, 0);
 
-  if (force == 0 && (pgpdb_getkey(PK_ENCRYPT, PGP_ES_RSA, NULL, NULL, NULL,
+  if (force == 0 && (pgpdb_getkey(PK_ENCRYPT, PGP_ES_RSA, NULL, NULL, NULL, NULL,
 				  NULL, NULL, PGPKEY, NULL) < 0))
     goto end;
 #endif
 #endif
-  if (force == 2 || (pgpdb_getkey(PK_DECRYPT, PGP_E_ELG, NULL, NULL, NULL,
+  if (force == 2 || (pgpdb_getkey(PK_DECRYPT, PGP_E_ELG, NULL, NULL, NULL, NULL,
 				  NULL, NULL, NULL, pass) < 0))
     pgp_keygen(PGP_E_ELG, 0, userid, pass, PGPKEY, PGPREMSECRING, 0);
 
-  if (force == 0 && (pgpdb_getkey(PK_ENCRYPT, PGP_E_ELG, NULL, NULL, NULL,
+  if (force == 0 && (pgpdb_getkey(PK_ENCRYPT, PGP_E_ELG, NULL, NULL, NULL, NULL,
 				  NULL, NULL, PGPKEY, NULL) > 0))
     goto end;
 
