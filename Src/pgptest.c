@@ -49,6 +49,8 @@ int pass(BUFFER *b)
 
 #else
   fgets(p, LINELEN, stdin);
+  if (p[strlen(p)-1]=='\n')
+    p[strlen(p)-1] = 0;
 #endif
 
   fprintf(stderr, "\n");
