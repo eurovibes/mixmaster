@@ -29,12 +29,12 @@ pcretest:       libpcre.a libpcreposix.a pcretest.o
 		$(CC) $(CFLAGS) -o pcretest pcretest.o libpcre.a libpcreposix.a
 
 libpcre.a:      $(OBJ)
-		/bin/rm -f libpcre.a
+		rm -f libpcre.a
 		ar cq libpcre.a $(OBJ)
 		$(RANLIB) libpcre.a
 
 libpcreposix.a: pcreposix.o
-		/bin/rm -f libpcreposix.a
+		rm -f libpcreposix.a
 		ar cq libpcreposix.a pcreposix.o
 		$(RANLIB) libpcreposix.a
 
