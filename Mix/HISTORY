@@ -167,3 +167,6 @@
 
 2002-07-10                 Call RSA_free at the end of pgp_rsakeygen() in pgpdata.c (by Disastry).
                            Fix use of global vars in mpi_bitcount() (by Disastry).
+                           Include destination allow in remailer-conf reply;
+                             Closes: #482203 dest.alw info in remailer-conf data;
+                             Patch: #483536 by Katherine, slightly modified by Peter Palfrader.
