@@ -6,7 +6,7 @@
    details.
 
    OpenPGP data
-   $Id: pgpdata.c,v 1.25 2002/10/02 07:54:12 weaselp Exp $ */
+   $Id: pgpdata.c,v 1.26 2002/10/09 20:53:30 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -521,7 +521,7 @@ int pgp_getkey(int mode, int algo, int *psym, int *pmdc, long *pexpires, BUFFER 
       int sigtype = 0, sigver = buf_getc(p1);
       created = 0, expires = 0, primary = 0;
       if (sigver == 4) {
-         sigtype = buf_getc(p1);
+	 sigtype = buf_getc(p1);
 	if (isPGP_SIG_CERT(sigtype) || sigtype == PGP_SIG_BINDSUBKEY || sigtype == PGP_SIG_CERTREVOKE) {
 	  int revoked = (sigtype == PGP_SIG_CERTREVOKE), sym = PGP_K_3DES, mdc = 0;
 	  buf_getc(p1); /* pk algo */
@@ -624,11 +624,11 @@ int pgp_getkey(int mode, int algo, int *psym, int *pmdc, long *pexpires, BUFFER 
 	} /* if (isPGP_SIG_CERT(sigtype) || sigtype == PGP_SIG_BINDSUBKEY || sigtype == PGP_SIG_CERTREVOKE) */
       } /* if (sigver == 4) */
       else if (sigver == 2 || sigver == 3) {
-        buf_getc(p1); /* One-octet length of following hashed material.  MUST be 5 */
-        sigtype = buf_getc(p1);
+	buf_getc(p1); /* One-octet length of following hashed material.  MUST be 5 */
+	sigtype = buf_getc(p1);
       } /* if (sigver == 2 || sigver == 3) */
       if (sigtype == PGP_SIG_KEYREVOKE) {
-        /* revocation can be either v3 or v4. if v4 we could check issuer, but we don't do it... */
+	/* revocation can be either v3 or v4. if v4 we could check issuer, but we don't do it... */
 	if (mode == PK_SIGN || mode == PK_ENCRYPT) { /* allow verify and decrypt with revokeded keys, but not sign and encrypt */
 	  keytype = -1;
 	}
@@ -657,7 +657,7 @@ int pgp_getkey(int mode, int algo, int *psym, int *pmdc, long *pexpires, BUFFER 
     case PGP_SECSUBKEY:
       subkeyno++;
       if (keytype != -1 && subkeyno > 1) {
-        /* usable subkey already found, don't bother to check other */
+	/* usable subkey already found, don't bother to check other */
 	continue;
       }
       if (keytype != -1 && (mode == PK_SIGN || mode == PK_VERIFY))
@@ -809,7 +809,7 @@ int pgp_getkey(int mode, int algo, int *psym, int *pmdc, long *pexpires, BUFFER 
     }
     if (expires && ((created + expires < now) || (created + expires < 0))) {
       if (mode == PK_SIGN || mode == PK_ENCRYPT) { /* allow verify and decrypt with expired keys, but not sign and encrypt */
-        keytype = -1;
+	keytype = -1;
       }
     }
   } /* if (uidd_1) */
@@ -906,9 +906,9 @@ int pgp_makepkpacket(int type, BUFFER *p, BUFFER *outtxt, BUFFER *out,
       algoid = '?';
     }
     buf_appendf(outtxt, "%s %5d%c/%02X%02X%02X%02X ",
-		type == PGP_PUBSUBKEY ?  "sub" : 
+		type == PGP_PUBSUBKEY ?  "sub" :
 		type == PGP_PUBKEY ? "pub" :
-		type == PGP_SECKEY ? "sec" : 
+		type == PGP_SECKEY ? "sec" :
 		type == PGP_SECSUBKEY ? "ssb" :
 		"???", len, algoid,
 		id->data[4], id->data[5], id->data[6], id->data[7]);
@@ -989,7 +989,7 @@ int pgp_makekeyheader(int type, BUFFER *keypacket, BUFFER *outtxt,
   time_t created;
 
   assert(type == PGP_SECKEY || type == PGP_PUBKEY);
-  
+
   p = buf_new();
   seckey = buf_new();
   pubkey = buf_new();
@@ -1397,7 +1397,7 @@ int pgp_dosign(int algo, BUFFER *data, BUFFER *key)
 {
   int err;
   BUFFER *out, *r, *s;
-  
+
   out = buf_new();
   r = buf_new();
   s = buf_new();
@@ -1429,14 +1429,14 @@ int pgp_dosign(int algo, BUFFER *data, BUFFER *key)
 int pgp_elgdecrypt(BUFFER *in, BUFFER *key)
 {
   BIGNUM *a = NULL, *b = NULL, *c = NULL,
-         *p = NULL, *g = NULL, *x = NULL;
+	 *p = NULL, *g = NULL, *x = NULL;
   BN_CTX *ctx;
   BUFFER *i;
   int err = -1;
 
   i = buf_new();
   ctx = BN_CTX_new();
-  if (ctx == NULL) goto end;  
+  if (ctx == NULL) goto end;
   mpi_get(key, i);
   p = BN_bin2bn(i->data, i->length, NULL);
   mpi_get(key, i);
@@ -1486,10 +1486,10 @@ int pgp_elgencrypt(BUFFER *in, BUFFER *key)
   BN_CTX *ctx;
   BUFFER *i;
   int err = -1;
-  
+
   i = buf_new();
   ctx = BN_CTX_new();
-  if (ctx == NULL) goto end;  
+  if (ctx == NULL) goto end;
   mpi_get(key, i);
   p = BN_bin2bn(i->data, i->length, NULL);
   mpi_get(key, i);
@@ -1520,7 +1520,7 @@ int pgp_elgencrypt(BUFFER *in, BUFFER *key)
   mpi_put(in, i);
   i->length = BN_bn2bin(b, i->data);
   mpi_put(in, i);
-  
+
   err = 0;
 
   BN_free(a);

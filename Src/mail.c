@@ -6,7 +6,7 @@
    details.
 
    Socket-based mail transport services
-   $Id: mail.c,v 1.14 2002/09/25 23:02:44 ulfm Exp $ */
+   $Id: mail.c,v 1.15 2002/10/09 20:53:28 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -342,9 +342,9 @@ SOCKET smtp_open(void)
     } else {
       errlog(DEBUGINFO, "Opening SMTP connection.\n");
       if (esmtp)
-        buf_sets(line, "EHLO ");
+	buf_sets(line, "EHLO ");
       else
-        buf_sets(line, "HELO ");
+	buf_sets(line, "HELO ");
       if (HELONAME[0])
 	buf_appends(line, HELONAME);
       else if (strchr(ENVFROM, '@'))
@@ -372,29 +372,29 @@ SOCKET smtp_open(void)
 	closesocket(s);
 	s = INVALID_SOCKET;
       } else if (SMTPUSERNAME[0] && esmtp && bufifind(line, "AUTH") && bufifind(line, "LOGIN")) {
-        buf_sets(line, "AUTH LOGIN\r\n");
-        sock_cat(s, line);
-        sock_getsmtp(s, line);
-        if (!bufleft(line, "334")) {
-          errlog(ERRORMSG, "SMTP AUTH fails: %b\n", line);
-          goto err;
-        }
-        buf_sets(line, SMTPUSERNAME);
-        encode(line, 0);
-        buf_appends(line, "\r\n");
-        sock_cat(s, line);
-        sock_getsmtp(s, line);
-        if (!bufleft(line, "334")) {
-          errlog(ERRORMSG, "SMTP username rejected: %b\n", line);
-          goto err;
-        }
-        buf_sets(line, SMTPPASSWORD);
-        encode(line, 0);
-        buf_appends(line, "\r\n");
-        sock_cat(s, line);
-        sock_getsmtp(s, line);
-        if (!bufleft(line, "235"))
-          errlog(ERRORMSG, "SMTP authentication failed: %b\n", line); 
+	buf_sets(line, "AUTH LOGIN\r\n");
+	sock_cat(s, line);
+	sock_getsmtp(s, line);
+	if (!bufleft(line, "334")) {
+	  errlog(ERRORMSG, "SMTP AUTH fails: %b\n", line);
+	  goto err;
+	}
+	buf_sets(line, SMTPUSERNAME);
+	encode(line, 0);
+	buf_appends(line, "\r\n");
+	sock_cat(s, line);
+	sock_getsmtp(s, line);
+	if (!bufleft(line, "334")) {
+	  errlog(ERRORMSG, "SMTP username rejected: %b\n", line);
+	  goto err;
+	}
+	buf_sets(line, SMTPPASSWORD);
+	encode(line, 0);
+	buf_appends(line, "\r\n");
+	sock_cat(s, line);
+	sock_getsmtp(s, line);
+	if (!bufleft(line, "235"))
+	  errlog(ERRORMSG, "SMTP authentication failed: %b\n", line);
       }
     }
 err:
@@ -438,9 +438,9 @@ int smtp_send(SOCKET relay, BUFFER *head, BUFFER *message, char *from)
   while (buf_getheader(head, field, content) == 0)
     if (bufieq(field, "to"))
 #ifdef BROKEN_MTA
-      if (!bufifind(rcpt, content->data)) 
-      /* Do not add the same recipient twice. 
-         Needed for brain-dead MTAs.      */
+      if (!bufifind(rcpt, content->data))
+      /* Do not add the same recipient twice.
+	 Needed for brain-dead MTAs.      */
 #endif /* BROKEN_MTA */
 	rfc822_addr(content, rcpt);
   buf_rewind(head);
@@ -448,9 +448,9 @@ int smtp_send(SOCKET relay, BUFFER *head, BUFFER *message, char *from)
   while (buf_isheader(message) && buf_getheader(message, field, content) == 0) {
     if (bufieq(field, "to") || bufieq(field, "cc") || bufieq(field, "bcc")) {
 #ifdef BROKEN_MTA
-      if (!bufifind(rcpt, content->data)) 
-      /* Do not add the same recipient twice. 
-         Needed for brain-dead MTAs.      */
+      if (!bufifind(rcpt, content->data))
+      /* Do not add the same recipient twice.
+	 Needed for brain-dead MTAs.      */
 #endif /* BROKEN_MTA */
 	rfc822_addr(content, rcpt);
     }
@@ -753,7 +753,7 @@ void pop3get(void)
   if (f != NULL)
     while (fgets(cfg, sizeof(cfg), f) != NULL) {
       if (cfg[0] == '#')
-        continue;
+	continue;
       if (strchr(cfg, '@'))
 	strchr(cfg, '@')[0] = ' ';
       if (sscanf(cfg, "%127s %127s %127s %4s", user, host, pass, auth) < 3)

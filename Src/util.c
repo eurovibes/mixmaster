@@ -6,7 +6,7 @@
    details.
 
    Utility functions
-   $Id: util.c,v 1.10 2002/10/02 22:23:35 rabbi Exp $ */
+   $Id: util.c,v 1.11 2002/10/09 20:53:32 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -271,7 +271,7 @@ int encode(BUFFER *in, int linelen)
   e = out->data;
   m = in->length - 2;
   for (i = 0, l = 0; i < m; i += 3) {
-    u = ((unsigned long) b[i] << 16) | ((unsigned long) b[i + 1] << 8) | 
+    u = ((unsigned long) b[i] << 16) | ((unsigned long) b[i + 1] << 8) |
 	b[i + 2];
     *e++ = bintoasc[(u >> 18) & 0x3f];
     *e++ = bintoasc[(u >> 12) & 0x3f];
@@ -554,7 +554,7 @@ int write_pidfile(char *pidfile)
     if (assigned == 2) {
       if (strcmp(host, myhostname) == 0) {
 	if (kill (pid, 0) == -1) {
-          if (errno == ESRCH) {
+	  if (errno == ESRCH) {
 	    fprintf(stderr, "Ignoring stale pid file.\n");
 	    rewind(f);
 	    ftruncate(fileno(f), 0);
@@ -576,7 +576,7 @@ int write_pidfile(char *pidfile)
       fprintf(stderr, "Pid file exists and and could not be parsed.\n");
       err = -1;
     }
-  } else { 
+  } else {
     if (errno == ENOENT) {
       f = mix_openfile(pidfile, "w+");
       if (f != NULL) {

@@ -6,7 +6,7 @@
    details.
 
    OpenPGP messages
-   $Id: pgp.c,v 1.15 2002/09/30 21:26:28 weaselp Exp $ */
+   $Id: pgp.c,v 1.16 2002/10/09 20:53:30 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -126,7 +126,7 @@ int pgp_mailenc(int mode, BUFFER *msg, char *sigid,
 
     /* Use the user keyring if pubring == NULL */
     err = pgp_encrypt(mode, body, to, uid, pass,
-                      pubring ? pubring : PGPPUBRING, secring);
+	              pubring ? pubring : PGPPUBRING, secring);
     buf_free(plainhdr);
     buf_free(encrhdr);
     buf_free(to);
@@ -344,7 +344,7 @@ int pgp_dearmor(BUFFER *in, BUFFER *out)
   crc1 = crc24(out);
   err = buf_getline(in, line);
   if (line->length == 5 && line->data[0] == '=') {	/* CRC */
-    line->ptr = 1;    
+    line->ptr = 1;
     err = decode(line, temp);
     crc2 = (((unsigned long)temp->data[0])<<16) | (((unsigned long)temp->data[1])<<8) | temp->data[2];
     if (crc1 == crc2)

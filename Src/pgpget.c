@@ -6,7 +6,7 @@
    details.
 
    Read OpenPGP packets
-   $Id: pgpget.c,v 1.11 2002/09/26 07:01:13 disastry Exp $ */
+   $Id: pgpget.c,v 1.12 2002/10/09 20:53:31 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -235,7 +235,7 @@ int pgp_getpacket(BUFFER *in, BUFFER *p)
       buf_cat(p, tmp);
     }
   }
-  
+
   buf_free(tmp);
   return (type);
 }
@@ -385,12 +385,12 @@ static int pgp_ideadecrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
     if (out->length > 22) {
       out->length -= 22;
       if (out->data[out->length] == 0xD3 && out->data[out->length + 1] == 0x14) {
-        SHA1_Update(&c, out->data, out->length + 2);
-        SHA1_Final(md, &c);
-        if (memcmp(out->data + out->length + 2, md, 20))
-          err = -1;
+	SHA1_Update(&c, out->data, out->length + 2);
+	SHA1_Final(md, &c);
+	if (memcmp(out->data + out->length + 2, md, 20))
+	  err = -1;
       } else
-        err = -1;
+	err = -1;
     } else
       err = -1;
   }
@@ -449,12 +449,12 @@ static int pgp_3desdecrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
     if (out->length > 22) {
       out->length -= 22;
       if (out->data[out->length] == 0xD3 && out->data[out->length + 1] == 0x14) {
-        SHA1_Update(&c, out->data, out->length + 2);
-        SHA1_Final(md, &c);
-        if (memcmp(out->data + out->length + 2, md, 20))
-          err = -1;
+	SHA1_Update(&c, out->data, out->length + 2);
+	SHA1_Final(md, &c);
+	if (memcmp(out->data + out->length + 2, md, 20))
+	  err = -1;
       } else
-        err = -1;
+	err = -1;
     } else
       err = -1;
   }
@@ -509,12 +509,12 @@ static int pgp_castdecrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
     if (out->length > 22) {
       out->length -= 22;
       if (out->data[out->length] == 0xD3 && out->data[out->length + 1] == 0x14) {
-        SHA1_Update(&c, out->data, out->length + 2);
-        SHA1_Final(md, &c);
-        if (memcmp(out->data + out->length + 2, md, 20))
-          err = -1;
+	SHA1_Update(&c, out->data, out->length + 2);
+	SHA1_Final(md, &c);
+	if (memcmp(out->data + out->length + 2, md, 20))
+	  err = -1;
       } else
-        err = -1;
+	err = -1;
     } else
       err = -1;
   }
@@ -569,12 +569,12 @@ static int pgp_bfdecrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
     if (out->length > 22) {
       out->length -= 22;
       if (out->data[out->length] == 0xD3 && out->data[out->length + 1] == 0x14) {
-        SHA1_Update(&c, out->data, out->length + 2);
-        SHA1_Final(md, &c);
-        if (memcmp(out->data + out->length + 2, md, 20))
-          err = -1;
+	SHA1_Update(&c, out->data, out->length + 2);
+	SHA1_Final(md, &c);
+	if (memcmp(out->data + out->length + 2, md, 20))
+	  err = -1;
       } else
-        err = -1;
+	err = -1;
     } else
       err = -1;
   }
@@ -630,12 +630,12 @@ static int pgp_aesdecrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
     if (out->length > 22) {
       out->length -= 22;
       if (out->data[out->length] == 0xD3 && out->data[out->length + 1] == 0x14) {
-        SHA1_Update(&c, out->data, out->length + 2);
-        SHA1_Final(md, &c);
-        if (memcmp(out->data + out->length + 2, md, 20))
-          err = -1;
+	SHA1_Update(&c, out->data, out->length + 2);
+	SHA1_Final(md, &c);
+	if (memcmp(out->data + out->length + 2, md, 20))
+	  err = -1;
       } else
-        err = -1;
+	err = -1;
     } else
       err = -1;
   }
@@ -839,7 +839,7 @@ int pgp_getsk(BUFFER *p, BUFFER *pass, BUFFER *key)
   }
   if (pgp_expandsk(key, skalgo, hashalgo, salted) == -1)
     skalgo = -1;
-  
+
  end:
   buf_free(salted);
   return (skalgo);

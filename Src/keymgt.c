@@ -6,7 +6,7 @@
    details.
 
    Key management
-   $Id: keymgt.c,v 1.17 2002/10/02 07:54:12 weaselp Exp $ */
+   $Id: keymgt.c,v 1.18 2002/10/09 20:53:28 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -262,31 +262,31 @@ int key(BUFFER *out)
 
 int adminkey(BUFFER *out)
 {
-        int err = -1;
-        FILE *f;
+	int err = -1;
+	FILE *f;
 
-        buf_sets( out, "Subject: Admin key for the " );
-        buf_appends( out, SHORTNAME );
-        buf_appends( out, " remailer\n\n" );
+	buf_sets( out, "Subject: Admin key for the " );
+	buf_appends( out, SHORTNAME );
+	buf_appends( out, " remailer\n\n" );
 
-        if ( (f = mix_openfile( ADMKEYFILE, "r" )) != NULL ) {
-                buf_read( out, f );
-                buf_nl( out );
-                fclose( f );
-                err = 0;
-        }
+	if ( (f = mix_openfile( ADMKEYFILE, "r" )) != NULL ) {
+	        buf_read( out, f );
+	        buf_nl( out );
+	        fclose( f );
+	        err = 0;
+	}
 
-        if ( err == -1 )
-                errlog( ERRORMSG, "Can not read admin key file!\n" );
+	if ( err == -1 )
+	        errlog( ERRORMSG, "Can not read admin key file!\n" );
 
-        return err;
+	return err;
 }
 
 #ifdef USE_RSA
 int v2keymgt(int force)
 /*
  * Mixmaster v2 Key Management
- * 
+ *
  * This function triggers creation of mix keys (see parameter force) which are
  * stored in secring.mix. One public mix key is also written to key.txt. This
  * is the key with the latest expire date (keys with no expiration date are
@@ -390,12 +390,12 @@ int v2keymgt(int force)
       }
       fclose(keyring);
     }
-    
+
     if (!foundnonexpiring || (force == 2)) {
       v2createkey();
       foundnonexpiring = 1;
       force = 1;
-    } else 
+    } else
       break;
   };
 

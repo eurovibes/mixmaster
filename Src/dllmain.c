@@ -6,7 +6,7 @@
    details.
 
    Mixmaster DLL startup
-   $Id: dllmain.c,v 1.4 2002/09/18 23:26:16 rabbi Exp $ */
+   $Id: dllmain.c,v 1.5 2002/10/09 20:53:28 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -19,7 +19,7 @@ int WINAPI DllMain(HINSTANCE hInstance, DWORD fdwReason, PVOID pvReserved)
       rnd_state = RND_WILLSEED;
       mix_init(NULL);
       if (rnd_state == RND_WILLSEED)
-        rnd_state = RND_NOTSEEDED;
+	rnd_state = RND_NOTSEEDED;
     }
     break;
   case DLL_PROCESS_DETACH:

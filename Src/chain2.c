@@ -6,7 +6,7 @@
    details.
 
    Encrypt message for Mixmaster chain
-   $Id: chain2.c,v 1.5 2002/09/18 23:26:16 rabbi Exp $ */
+   $Id: chain2.c,v 1.6 2002/10/09 20:53:28 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -48,22 +48,22 @@ int prepare_type2list(BUFFER *out)
 	if (created == 0 || created == -1) {
 	  errlog(WARNING, "Cannot parse creation date of key %s.\n", keyid);
 	  continue;
-        };
+	};
 	if (created > time(NULL)) {
 	  errlog(WARNING, "Key %s created in the future.\n", keyid);
 	  continue;
-        };
+	};
       }
       if (assigned >= 7) {
 	expires = parse_yearmonthday(expiresstr);
 	if (expires == 0 || expires == -1) {
 	  errlog(WARNING, "Cannot parse expiration date of key %s.\n", keyid);
 	  continue;
-        };
+	};
 	if (expires < time(NULL)) {
 	  errlog(WARNING, "Key %s has expired.\n", keyid);
 	  continue;
-        };
+	};
       }
       buf_appends(out, line);
     }
@@ -103,22 +103,22 @@ int mix2_rlist(REMAILER remailer[])
 	if (created == 0 || created == -1) {
 	  errlog(WARNING, "Cannot parse creation date of key %s.\n", keyid);
 	  continue;
-        };
+	};
 	if (created > time(NULL)) {
 	  errlog(WARNING, "Key %s created in the future.\n", keyid);
 	  continue;
-        };
+	};
       }
       if (assigned >= 7) {
 	expires = parse_yearmonthday(expiresstr);
 	if (expires == 0 || expires == -1) {
 	  errlog(WARNING, "Cannot parse expiration date of key %s.\n", keyid);
 	  continue;
-        };
+	};
 	if (expires < time(NULL)) {
 	  errlog(WARNING, "Key %s has expired.\n", keyid);
 	  continue;
-        };
+	};
       }
       strncpy(remailer[n].name, name, sizeof(remailer[n].name));
       remailer[n].name[sizeof(remailer[n].name) - 1] = '\0';

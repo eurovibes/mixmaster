@@ -246,7 +246,7 @@ OpenPGP encryption
 int pgp_encrypt(int mode, BUFFER *message, BUFFER *encr,
                BUFFER *sigid, BUFFER *pass, char *pubring,
 	       char *secring);
-	
+
   This function encrypts and signs a message according to OpenPGP (RFC 2440).
 
   mode is the bitwise or of one of PGP_ENCRYPT, PGP_CONVENTIONAL and PGP_SIGN,

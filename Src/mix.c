@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.32 2002/10/02 07:57:32 weaselp Exp $ */
+   $Id: mix.c,v 1.33 2002/10/09 20:53:29 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -441,7 +441,7 @@ static void mix_setdefaults()
 	INDUMMYP      = 3;	/* add dummy messages with probability p for each message added to the pool */
 	OUTDUMMYP     = 10;	/* add dummy messages with probability p each time we send from the pool */
 	INDUMMYMAXP   = 84;	/* for both of the above:  while (rnd < p) { senddummy(); }  */
-        OUTDUMMYMAXP  = 96;     /* set max INDUMMYP and OUTDUMMYP such that 24 and 5.25 dummy messages will */
+	OUTDUMMYMAXP  = 96;     /* set max INDUMMYP and OUTDUMMYP such that 24 and 5.25 dummy messages will */
 	MIDDLEMAN     = 0;      /* be generated on average. More than this is insane. */
 	AUTOBLOCK     = 1;
 	strnncpy(FORWARDTO, "*");
@@ -507,7 +507,7 @@ int mix_configline(char *line)
 	  read_conf(ANONADDR) || read_conf(REMAILERNAME) ||
 	  read_conf(ANONNAME) || read_conf(COMPLAINTS) ||
 	  read_conf_i(AUTOREPLY) || read_conf(SMTPRELAY) ||
-          read_conf(SMTPUSERNAME) || read_conf(SMTPPASSWORD) ||
+	  read_conf(SMTPUSERNAME) || read_conf(SMTPPASSWORD) ||
 #ifdef USE_SOCK
 	  read_conf(HELONAME) || read_conf(ENVFROM) ||
 #endif /* USE_SOCK */
@@ -520,7 +520,7 @@ int mix_configline(char *line)
 	  read_conf(ORGANIZATION) || read_conf(MID) ||
 	  read_conf(TYPE1) || read_conf_i(POOLSIZE) ||
 	  read_conf_i(RATE) || read_conf_i(MIDDLEMAN) ||
-	  read_conf_i(INDUMMYP) || 
+	  read_conf_i(INDUMMYP) ||
 	  read_conf_i(OUTDUMMYP) ||
 	  read_conf_i(AUTOBLOCK) || read_conf(FORWARDTO) ||
 	  read_conf_i(SIZELIMIT) || read_conf_i(INFLATEMAX) ||
@@ -714,7 +714,7 @@ int mix_config(void)
 #endif /* not USE_RSA */
 
 #ifdef WIN32
-  if (RegOpenKeyEx(regsw, "PGP", 0, KEY_ALL_ACCESS, &regpgp) == 0) 
+  if (RegOpenKeyEx(regsw, "PGP", 0, KEY_ALL_ACCESS, &regpgp) == 0)
     rkey++;
   if (rkey && RegOpenKeyEx(regpgp, "PGPlib", 0, KEY_QUERY_VALUE, &reg) == 0)
     rkey++;
@@ -917,12 +917,12 @@ void sighandler(int signal) {
     pool run before it terminates.
 
     @param restart  Whether or not system calls should be
-                    restarted. Usually we want this, the
+	            restarted. Usually we want this, the
 		    only excetion is the sleep() in the
 		    daemon mail loop.
     @author         PP
     @return         -1 if calling sigaction failed, 0 on
-                    no error
+	            no error
   */
 int setsignalhandler(int restart)
 {
@@ -933,7 +933,7 @@ int setsignalhandler(int restart)
   memset(&hdl, 0, sizeof(hdl));
   hdl.sa_handler = sighandler;
   hdl.sa_flags = restart ? SA_RESTART : 0;
-  
+
   if (sigaction(SIGHUP, &hdl, NULL))
     err = -1;
   if (sigaction(SIGINT, &hdl, NULL))
@@ -947,10 +947,10 @@ int setsignalhandler(int restart)
 }
 
 #ifdef WIN32
-/* Try to detect if we are the service or not... 
+/* Try to detect if we are the service or not...
    seems there is no easy reliable way        */
 int is_nt_service(void)
-{ 
+{
     static int issvc = -1;
 #ifdef WIN32SERVICE
     STARTUPINFO StartupInfo;
@@ -958,16 +958,16 @@ int is_nt_service(void)
     DWORD dwsize;
 
     if (issvc != -1)    /* do it only once */
-        return issvc;
+	return issvc;
 
     VersionInfo.dwOSVersionInfoSize = sizeof(VersionInfo);
     if (GetVersionEx(&VersionInfo))
-        if (VersionInfo.dwPlatformId != VER_PLATFORM_WIN32_NT)
-            return issvc = 0; /* not NT - not the service */
+	if (VersionInfo.dwPlatformId != VER_PLATFORM_WIN32_NT)
+	    return issvc = 0; /* not NT - not the service */
 
     GetStartupInfo(&StartupInfo);
     if (StartupInfo.lpDesktop[0] == 0)
-        return issvc = 1; /* have no desktop - we are the service probably */
+	return issvc = 1; /* have no desktop - we are the service probably */
 #endif /* WIN32SERVICE */
 
     return issvc = 0; /* assume not the service */
