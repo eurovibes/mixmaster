@@ -1,5 +1,5 @@
 .TH MIX 1 "Mixmaster Version 3.0 beta"
-.\" $Id: mix.1,v 1.17 2002/09/25 23:02:44 ulfm Exp $
+.\" $Id: mix.1,v 1.18 2002/09/26 22:13:53 rabbi Exp $
 .SH NAME
 mix \- anonymous remailer software
 .SH SYNOPSIS
@@ -41,6 +41,9 @@ header rather than
 .TP
 .B "\-h, \-\-help"
 Print a summary of command line options.
+.TP
+.B "\-\-config=\fIfilename"
+Read configuration from an alternate file.
 .TP
 .B "\-t, \-\-to=\fIuser@host"
 Add the destination address(es) to the message header. The input file
@@ -140,6 +143,9 @@ Reply chain latency.
 .B "\-\-reply\-chain=\fIrem1,rem2,..."
 Reply chain for the pseudonym.
 .SS Remailer options:
+.TP
+.B "\-\-config=\fIfilename"
+Read configuration from an alternate file.
 .TP
 .B \-R, \-\-read\-mail
 Read a remailer message from standard input and store it in the pool.
@@ -942,8 +948,11 @@ Public Diffie-Hellman parameters used for El-Gamal key generation (\fBDHPARAMS\f
 .B dsaparam.mix
 Public DSA parameters used for DSA key generation (\fBDSAPARAMS\fP).
 .TP
+.BI pool/
+Message pool directory (\fBPOOL\fP).
+.TP
 .BI pool/m *
-Message pool.
+Message pool files.
 .TP
 .BI pool/p *
 Partial messages.
