@@ -27,8 +27,6 @@ Mandatory todo items before 3.0 release:
 
 Items for 3.0 or 3.0.1
 
-* expire ancient e* and t* files
-  + find bug that is causing t* file to linger
 * support a list of remailers not to be selected as *.
 * allow for verification of clearsigned OpenPGP messages
 * AES support -- requires OpenSSL 0.9.7
@@ -39,6 +37,7 @@ Items for 3.0 or 3.0.1
 * documentation issues resolved
   + mpgp man page
 * check and enforce OpenPGP key expiration date
+* find bug that is causing t* files to linger
 * further debugging
 
 Further wishlist:
