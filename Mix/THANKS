@@ -19,7 +19,7 @@ OpenSSL (based on work by Eric Young and Tim Hudson.)
 
 Thanks also to all the remailer operators, who give their time and service
 (and perform what is too often a thankless job) to ensure that our right
-of anonymity is preserved.
+to anonymous speech is preserved.
 
 
 Len Sassaman
@@ -44,6 +44,7 @@ Dingo Admin
 Andy Dustman
 Sami Farin
 John B. Fleming
+Bryan Fordham
 Ron Fritz
 Mark Grant
 Lucky Green
@@ -61,6 +62,7 @@ Christian Mock
 Ulf Möller
 noise
 Bill O'Hanlon
+Peter Palfrader
 John A. Perry
 Scott Renfro
 RProcess
@@ -71,5 +73,5 @@ Nikolay Sturm
 Trek
 Rodney Thayer
 Colin Tuckley
-Andre' M. VanKlaveren
+André M. VanKlaveren
 Michael Young
