@@ -460,3 +460,7 @@
                            Added new options -V, --version, and --about.
                            Made manpage corrections.
                            Minor ncurses display tweaks.
+                           On Win32, default to Application Data/Mixmaster for
+                             mixmaster's basedirectory.  This can still be
+                             overridden by MIXPATH or the registry entry
+                             HKEY_CURRENT_USER\Software\Mixmaster\MixDir
