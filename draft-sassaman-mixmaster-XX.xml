@@ -258,8 +258,8 @@
 
       <t>Dummy messages (see <xref target="payload-format"/>) are multi-hop
         messages with four randomly selected remailers as the chain. The
-        chain be must selected such that no remailer will appear twice unless
-        two other remailers separate them.</t>
+        chain must be selected such that no remailer will appear twice 
+        unless two other remailers separate them.</t>
 
       <t>Every time a message is placed in the pool, the remailer chooses
         a random number from a geometric distribution and creates that
