@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.20.2.8 2002/12/17 10:39:16 weaselp Exp $ */
+   $Id: rem.c,v 1.20.2.9 2003/03/31 18:24:15 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -396,6 +396,11 @@ int blockrequest(BUFFER *message)
   remailer_addr = buf_new();
   copy_addr = buf_new();
 
+  if (destblklst == NULL) {
+    errlog(ERRORMSG, "Can't malloc %n bytes for destblklst.\n", strlen(DESTBLOCK)+1);
+    goto end;
+  };
+
   buf_rewind(message);
   while (buf_getheader(message, field, content) == 0)
     if (bufieq(field, "from"))
@@ -473,7 +478,6 @@ int blockrequest(BUFFER *message)
 	      strcpy( destblklst, DESTBLOCK );
 	      destblk = strtok( destblklst, " " );
 	      f = mix_openfile( destblk, "a" );
-	      free( destblklst );
 	      if (f != NULL) {
 		lock(f);
 
@@ -495,6 +499,7 @@ int blockrequest(BUFFER *message)
     }
 
 end:
+  free( destblklst );
   buf_free(from);
   buf_free(line);
   buf_free(field);

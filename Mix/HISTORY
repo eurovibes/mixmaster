@@ -319,3 +319,6 @@
 
                            Several changes for the windows build
                            Some Install script fixes
+                           Fix a problem in blockrequest() where a buffer
+                             could have been used after it was free()d which
+                             resulted in segfaults.
