@@ -29,6 +29,7 @@
 #endif /* else if not POSIX */
 #ifdef WIN32
 #include <windows.h>
+#include <shlobj.h>
 #endif /* WIN32 */
 #include <assert.h>
 #include "menu.h"
@@ -626,6 +627,21 @@ int mix_config(void)
   pw = getpwuid(getuid());
 #endif /* POSIX */
 
+ /* find our base directory
+  *
+  * first match wins.
+  *
+  *  - what the MIXPATH environment variable points to, if it is set.
+  *  - On WIN32, HKEY_CURRENT_USER\Software\Mixmaster\MixDir, if it exists
+  *  - whatever is compiled in with -DSPOOL
+  *  - On Win32 %APPDATA%\Mixmaster
+  *  - on POSIX, ~/Mix  (or ~/<HOMEMIXDIR>)
+  *  - the current working directory
+  */
+
+  if (err == -1 && (d = getenv("MIXPATH")) != NULL)
+    err = mixdir(d, 1);
+
 #ifdef WIN32
   RegOpenKeyEx(HKEY_CURRENT_USER, "Software", 0, KEY_ALL_ACCESS, &regsw);
   len=sizeof(line);
@@ -637,13 +653,28 @@ int mix_config(void)
   }
 #endif /* WIN32 */
 
-  if (err == -1 && (d = getenv("MIXPATH")) != NULL)
-    err = mixdir(d, 1);
-
 #ifdef SPOOL
   if (err == -1 && strlen(SPOOL) > 0)
     err = mixdir(SPOOL, 0);
 #endif /* SPOOL */
+
+#ifdef WIN32
+    if (err == -1) {
+      LPMALLOC *lpmalloc;
+      ITEMIDLIST *itemidlist;
+      if (SUCCEEDED(SHGetMalloc(&lpmalloc)))
+      {
+	SHGetSpecialFolderLocation(0,CSIDL_APPDATA,&itemidlist);
+	SHGetPathFromIDList(itemidlist,line);
+	lpmalloc->lpVtbl->Free(lpmalloc,&itemidlist);
+	lpmalloc->lpVtbl->Release(lpmalloc)
+
+	strcatn(line, "\\Mixmaster", PATHMAX);
+	err = mixdir(line, 1);
+
+      }
+    }
+#endif /* WIN32 */
 
 #ifdef POSIX
   if (err == -1 && pw != NULL) {
