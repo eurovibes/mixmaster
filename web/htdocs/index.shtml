@@ -42,7 +42,9 @@ pub  1024D/E99872D3 2002-07-01 Mixmaster Code Release Signing Key 2002
 </pre>
 
 This key is signed by Len Sassaman's key <a href="keys/5DE480FC.asc"><code>5DE480FC</code></a>
-(<code>B115 73A8 91A8 05DC B26D  CBEB 4A0A 8149 5DE4 80FC</code>).
+(<code>B115 73A8 91A8 05DC B26D  CBEB 4A0A 8149 5DE4 80FC</code>) and Lance Cottrell's key
+<a href="keys/4F68DD91.asc"><code>4F68DD91</code></a>
+(<code>5327 8E77 666A 91F3 7007  B357 844B 9659 4F68 DD91</code>).
 
 <h2>Current developers</h2>
 <ul>
