@@ -6,7 +6,7 @@
    details.
 
    Create OpenPGP packets
-   $Id: pgpcreat.c,v 1.7 2002/09/06 22:45:05 rabbi Exp $ */
+   $Id: pgpcreat.c,v 1.8 2002/09/07 11:27:22 disastry Exp $ */
 
 
 #include "mix3.h"
@@ -33,8 +33,9 @@ int pgp_packet(BUFFER *in, int type)
 #if 0
       buf_appendc(out, ((in->length-192) >> 8) + 192);
       buf_appendc(out,  (in->length-192) & 0xFF);
-#endif
+#else
       buf_appendi(out, in->length - 0xC0 + 0xC000);
+#endif
     } else {
       buf_appendc(out, in->length);
     }
