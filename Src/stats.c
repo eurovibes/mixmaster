@@ -6,7 +6,7 @@
    details.
 
    Remailer statistics
-   $Id: stats.c,v 1.7 2002/08/18 06:08:27 weaselp Exp $ */
+   $Id: stats.c,v 1.8 2002/08/20 18:46:33 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -242,7 +242,9 @@ int conf(BUFFER *out)
   if (SIZELIMIT)
     buf_appendf(out, "Maximum message size: %d kB\n", SIZELIMIT);
 
-  /* read in dest.alw if middleman (added by Kat 11/19/2001) */
+  /* display destinations to which delivery is explicitly permitted
+     when in middleman mode (contents of DESTALLOWf file.)  */
+
   if (MIDDLEMAN) {
     f = mix_openfile(DESTALLOW, "r");
     if (f != NULL) {
@@ -251,7 +253,7 @@ int conf(BUFFER *out)
       while(buf_getline(b, line) != -1) {
         if (line->length > 0 && line->data[0] != '#') {
           if (flag == 0) {
-            buf_appends(out, "In addition to other remailers, this Mixmaster also sends mail to these\n addresses directly:\n");
+            buf_appends(out, "In addition to other remailers, this remailer also sends mail to these\n addresses directly:\n");
             flag = 1;
           }
           buf_appendf(out, "   %b\n", line);
