@@ -249,10 +249,10 @@
 
     <section anchor="dummy-traffic" title="Dummy Traffic">
 
-      <t>Dummy messages are multi-hop messages with four randomly
-        selected remailers as the chain. The chain must selected
-        such that no remailer will appear twice unless two other remailers
-        separate them.</t>
+      <t>Dummy messages (see <xref target="payload-format"/>) are multi-hop
+        messages with four randomly selected remailers as the chain. The
+        chain must selected such that no remailer will appear twice unless
+        two other remailers separate them.</t>
 
       <t>Every time a message is placed in the pool, the remailer chooses
         a random number from a geometric distribution and creates that
@@ -462,7 +462,7 @@ Packet type 2 (final hop, partial message):
               the IV is used to symmetrically encrypt the packet body. For
               packet type 0, there is one IV for each of the 19 following
               header sections. The IV for the last header section is also
-              used for the packet body.
+              used for the packet body.</t>
             <t hangText="Remailer address:">E-mail address of next hop.</t>
             <t hangText="Message ID:">Identifier unique to
               (all chunks of) this message.</t>
