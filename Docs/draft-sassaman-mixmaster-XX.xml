@@ -355,7 +355,7 @@ User data section              [ up to ~2.5 MB]</artwork></figure>
         and the PKCS #1 v1.5 (RSAES-PKCS1-v1_5) padding format <xref
           target="RFC2437"/>. The symmetric encryption mechanism is EDE
         3DES with cipher block chaining (24-byte key, 8-byte initialization
-        vector) <xref target="Schneier96"/>. MD5 <xref target="RFC1321"/>
+        vector) <xref target="MENEZES"/>. MD5 <xref target="RFC1321"/>
         is used as the message digest algorithm.</t>
     </section>
 
@@ -912,12 +912,17 @@ Remailer-Type: Mixmaster [version number]
     </reference>
 
 
-    <reference anchor="Schneier96">
+    <reference anchor="MENEZES">
       <front>
-        <title>Applied Cryptography (second edition)</title>
-        <author initials="B." surname="Schneier" fullname="Bruce Schneier">
-          <organization>Wiley</organization>
-          <address/>
+        <title>"Handbook of Applied Cryptography", CRC Press</title>
+        <author initials="A." surname="Menezes" fullname="Alfred Menezes">
+          <organization/><address/>
+        </author>
+        <author initials="P." surname="van Oorschot" fullname="Paul van Oorschot">
+          <organization/><address/>
+        </author>
+        <author initials="S." surname="Vanstone" fullname="Scott Vanstone">
+          <organization/><address/>
         </author>
         <date year="1996"/>
       </front>
