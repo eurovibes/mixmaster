@@ -174,10 +174,10 @@
         checking the packet length and verifying the message digest
         in the packet header.</t>
 
-      <t>All header sections, and the packet body, are decrypted with
+      <t>All header sections, as well as the packet body, are decrypted with
         the symmetric key found in the header. This reveals a public
         key-encrypted header section for the next remailer.</t>
-      
+
       <t>The first header section is now removed, the others are shifted
         up, and the last section is replaced with random bytes. Transport
         encoding is applied to the new message as described in <xref
@@ -817,17 +817,17 @@ Remailer-Type: Mixmaster [version number]
   <section anchor="acknowledgements" title="Acknowledgements">
 
     <t>Several people contributed ideas and source code to the Mixmaster v2
-      software, including:
-      <list>
-        <t>"Antonomasia" &lt;ant@notatla.org.uk&gt;</t>
-        <t>Adam Back &lt;adam@cypherspace.org&gt;</t>
-        <t>Bodo Moeller &lt;bmoeller@acm.org&gt;</t>
-        <t>Marco A. Calamari &lt;marcoc@dada.it&gt;</t>
-      </list>
-    </t>
+      software.<,/t>
 
-    <t>Myles &lt;myles@tenhand.com&gt; suggested improvements to this
-      document.</t>
+    <t>"Antonomasia" &lt;ant@notatla.org.uk&gt;,
+      Adam Back &lt;adam@cypherspace.org&gt;,
+      Marco A. Calamari &lt;marcoc@dada.it&gt;,
+      Bodo Moeller &lt;bmoeller@acm.org&gt;,
+      Jon Orbeton &lt;jono@networkcommand.com&gt;, and
+      Myles &lt;myles@tenhand.com&gt; suggested improvements to this
+      document.  Rich Salz &lt;rsalz@datapower.com&gt; contributed
+      significantly to this document by XMLifying it and rewording
+      many ambiguous sections.</t>
 
   </section>
 
