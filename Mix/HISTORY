@@ -406,7 +406,8 @@
                              and will fail at the 20th node.
 
 
-2003-           CVS       Don't send messages to ourselves via the mailsystem
+2003-06-27      3.0a6     Don't send messages to ourselves via the mailsystem
                             but instead place them in the pool as incoming
                             messages so that they will get processed with the
                             next pool run.
+                          Hopefully fix a bug with pool stats.
