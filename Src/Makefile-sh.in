@@ -5,7 +5,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Makefile-sh.in,v 1.2 2003/03/28 16:12:46 weaselp Exp $
+# $Id: Makefile-sh.in,v 1.3 2003/03/31 17:16:13 weaselp Exp $
 
 # Edit according to the libraries you want to use:
 INC = %INC
@@ -72,10 +72,10 @@ ci: clean
 
 parsedate.tab.c: parsedate.y
 	@echo Expect 6 shift/reduce conflicts
-	bison $<
+	bison parsedate.y
 
 parsedate: parsedate.tab.c
-	gcc -DTEST $< -o $@
+	gcc -DTEST parsedate.tab.c -o parsedate
 
 
 include Makefile.deps
