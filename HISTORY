@@ -269,6 +269,13 @@
                            The files created with "SENDMAIL outfile" have
                              different names now to scale beyond 10k files
                              (closes: #587593).
+                           Mixmaster checks expiration and revocation status of
+                             pgp keys, userids, and subkeys.
+                           Mixmaster will not encrypt or sign with a revoked
+                             or expired key.
+                           When encrypting, Mixmaster uses preferences from 
+                            the primary userid (or the latest userid, if zero
+                            or more than one primary userid is present.)
                            Mixmaster keys now have creation and expiration date.
                              It is not secured by any crypto voodoo, it's only
                              informational for clients to decide which keys to
@@ -286,4 +293,16 @@
                                seemed sensible.
                            Mixmaster now generates dummy messages automatically
                              as mail enters and exits the pool.
-                           Mixmaster now handles CRLF in pubring.mix.
+                           Fixed the "is a mailfolder" checking for -f.
+                           Various fixes for Mixmaster when not using ncurses.
+                           Added new option --config to allow loading of 
+                             configuration information from an alternate file.
+                           POOL is now used correctly if set in mix.cfg.
+                           ASCII armor checksum is now verified on PGP keys.
+                           Corrected a bug where 1/4096 of pgp messages was 
+                             destroyed due an improper armor checksum 
+                             interpretation.
+                           Added password-based authenticated SMTP for mix.
+                             Currently, only AUTH LOGIN is supported.
+                           Mixmaster now handles <CR><LF> in pubring.mix.
+                           Removed incorrect NT service checks in mix.c.

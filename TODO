@@ -1,12 +1,14 @@
 Mandatory todo items before 3.0 release:
 
 * autoconf installation script is needed
+  - mostly done -- Erik needs to check this in to CVS.
 * post-install scripts need to be reworked
+  - follows item above.
 * provide a packaged Windows build to be used with QuickSilver
-* clean up documentation and tarball contents
+  - Richard has an Installer we can use for this purpose.
 * do full regression tests on as many platforms possible
   + list only these platforms as supported
-* resolve any new critical issues
+  + test on Solaris 9 on SPARC.
 * keylifetime and key{grace,overlap}period needs to be documented once
   it's finished; seems to work nicely for mixmaster keys so far, pgp
   still giving problems
@@ -18,13 +20,16 @@ Mandatory todo items before 3.0 release:
   - only list the latest key of each type in pgpkeys.txt
     (similar to how weasel's patch does it with mix keys)
 * saner usage of /dev/[u]random is required
-* ship with a CVS ChangeLog in addition to the current
-  HISTORY file. It can be created using Karl Fogel's cvs2cl
-  script at <http://www.red-bean.com/cvs2cl/>.
-  The command to use is: cvs2cl -w -S --no-wrap
+* clean up documentation and tarball contents
+  + ship with CVS ChangeLog
+  + reorganize directory structure
+  + add a CONTRIBUTORS or THANKS file.
+* resolve any new critical issues
+
 
 Items for 3.0 or 3.0.1
 
+* permit CRAM-MD5 SMTP AUTH in addition to LOGIN.
 * support a list of remailers not to be selected as *.
 * allow for verification of clearsigned OpenPGP messages
 * AES support -- requires OpenSSL 0.9.7
@@ -35,7 +40,9 @@ Items for 3.0 or 3.0.1
 * documentation issues resolved
   + mpgp man page
 * find bug that is causing t* files to linger
-* further debugging
+  + rabbi thinks this might have been fixed.
+* further debugging (if needed).
+
 
 Further wishlist:
 
@@ -46,4 +53,5 @@ Further wishlist:
     - if yes, which key?
 * make mpgp friendlier
 * store nym public keys locally
+* nym client needs major work.
 * support for Borland compiler on Windows.
