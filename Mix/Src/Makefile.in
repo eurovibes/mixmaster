@@ -5,7 +5,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Makefile.in,v 1.1 2001/10/31 08:19:53 rabbi Exp $
+# $Id: Makefile.in,v 1.2 2002/07/08 17:29:10 rabbi Exp $
 
 # Edit according to the libraries you want to use:
 INC = %INC
@@ -38,7 +38,7 @@ libmix.a: $(OBJ) $(MIXOBJ) dllmain.o
 	$(AR) libmix.a $(OBJ) $(MIXOBJ) dllmain.o
 
 libmix32.a: libmix.a mixlib.def
-	dllwrap --dllname mixlib.dll --def mixlib.def --output-lib libmix32.a libmix.a zlib-1.1.3/libz.a pcre-2.08/libpcre.a openssl/libeay32.a -lwsock32
+	dllwrap --dllname mixlib.dll --def mixlib.def --output-lib libmix32.a libmix.a zlib-1.1.4/libz.a pcre-2.08/libpcre.a openssl/libeay32.a -lwsock32
 
 dllmix: main.o libmix32.a
 	$(CC) main.o libmix32.a -o dllmix
