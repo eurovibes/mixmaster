@@ -6,7 +6,7 @@
    details.
 
    Prepare messages for remailer chain
-   $Id: chain.c,v 1.6 2003/04/02 13:14:13 weaselp Exp $ */
+   $Id: chain.c,v 1.7 2003/05/03 05:08:53 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -128,7 +128,7 @@ int chain_randfinal(int type, REMAILER *remailer, int maxrem, int rtype)
     i = -1;
   else {
     do
-      i = rnd_number(maxrem) + 1;
+      i = rnd_number(maxrem - 1) + 1;
     while (!(((remailer[i].flags.mix && rtype == 0) ||
 	      (remailer[i].flags.pgp && remailer[i].flags.ek && rtype == 1) ||
 	      (remailer[i].flags.newnym && rtype == 2)) &&
