@@ -11,8 +11,6 @@ Items that need to be completed before the next MAIN release:
   (Should this just be a call to an external program? I.e., 
   "/bin/rm -P" or "/usr/bin/shred -fz -n3")? Does this even
   serve a purpose now that journaled FSes are the norm?
-- implement time-skew sanity checks so that the timestamp, 
-  key rotation and key deletion features don't cause havok.
 
 Packaging:
 - Modify release tarball generation script to build the .tab.c file from
@@ -25,10 +23,8 @@ Packaging:
 - Macintosh OS/X support  (rabbi)
 - Update Install script to put files in global system locations if
   invoked by root. Also update to be smart about AES support.
-- The main binary should be called "mixmaster", not "mix".
 
 Wishlist:
-- don't drop messages if there are not enough reliable remailers.
 - permit CRAM-MD5 SMTP AUTH in addition to LOGIN.  n/a (patch welcome)
 - do full regression tests on as many platforms possible
   - list only these platforms as supported
