@@ -6,7 +6,7 @@
    details.
 
    Remailer statistics
-   $Id: stats.c,v 1.3 2002/01/18 09:57:05 rabbi Exp $ */
+   $Id: stats.c,v 1.4 2002/07/09 08:02:02 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -59,6 +59,7 @@ int stats(BUFFER *b)
   int msgd[3][24], msg[3][80];
   int poold[2][24], pool[2][80];
   int i, num, type;
+  idlog_t idbuf;
 
   now = (time(NULL) / (60 * 60) + 1) * 60 * 60;
   today = (now / SECONDSPERDAY) * SECONDSPERDAY;
@@ -107,9 +108,10 @@ int stats(BUFFER *b)
     unlock(s);
     fclose(s);
   }
-  f = mix_openfile(IDLOG, "r");
+  f = mix_openfile(IDLOG, "rb");
   if (f != NULL) {
-    while (fscanf(f, "%*s %ld", &then) != EOF) {
+    while (fread(&idbuf, 1, sizeof(idlog_t), f) == sizeof(idlog_t)) {
+      then = idbuf.time;
       if (then < updated || now - then < 0)
 	continue;
       if (now - then < SECONDSPERDAY)

@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.16 2002/03/13 01:46:52 rabbi Exp $ */
+   $Id: rem.c,v 1.17 2002/07/09 08:02:02 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -466,31 +466,47 @@ int idexp(void)
   FILE *f;
   BUFFER *b;
   long now, then;
-  char line[LINELEN];
   LOCK *i;
+  idlog_t idbuf;
+  long fpi = sizeof(idlog_t), fpo = sizeof(idlog_t);
 
   if (IDEXP == 0)
     return (0);
 
   b = buf_new();
-  f = mix_openfile(IDLOG, "r");
+  f = mix_openfile(IDLOG, "rb+");
   if (f == NULL)
     return (-1);
   i = lockfile(IDLOG);
   now = time(NULL);
-  fgets(line, sizeof(line), f);	/* replace first line */
-  while (fgets(line, sizeof(line), f) != NULL) {
-    sscanf(line, "%*s %ld", &then);
-    if (now - then < IDEXP)
-      buf_appends(b, line);
-  }
-  fclose(f);
-  f = mix_openfile(IDLOG, "w");
-  if (f != NULL) {
-    fprintf(f, "expired %ld\n", now - IDEXP);
-    buf_write(b, f);
+  if (fread(&idbuf, 1, sizeof(idlog_t), f) != sizeof(idlog_t)) { /* replace first line */
     fclose(f);
+    unlockfile(i);
+    return (-1);
   }
+  then = idbuf.time;
+  memset(idbuf.id,0,sizeof(idbuf.id));
+  idbuf.time = now - IDEXP;
+  fseek(f,0,SEEK_SET);
+  fwrite(&idbuf,1,sizeof(idlog_t),f);
+  fseek(f,fpi,SEEK_SET); /* this fseek does nothing, but MSVC CRT happilly reads past EOF (!!!) if we do not fseek here :-/ */
+  while (fread(&idbuf, 1, sizeof(idlog_t), f) == sizeof(idlog_t)) {
+    fpi+=sizeof(idlog_t);
+    then = idbuf.time;
+    if (now - then < IDEXP)
+    {
+      fseek(f,fpo,SEEK_SET);
+      fwrite(&idbuf,1,sizeof(idlog_t),f);
+      fpo += sizeof(idlog_t);
+      fseek(f,fpi,SEEK_SET);
+    }
+  }
+#ifdef _MSC
+    chsize(fileno(f),fpo);
+#else
+    ftruncate(fileno(f),fpo);
+#endif
+  fclose(f);
   unlockfile(i);
   buf_free(b);
   return (0);

@@ -6,7 +6,7 @@
    details.
 
    Process Mixmaster remailer messages
-   $Id: rem2.c,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: rem2.c,v 1.2 2002/07/09 08:02:02 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -83,25 +83,30 @@ end:
 static int isnewid(BUFFER *id, long timestamp)
 {
   FILE *f;
-  char idstr[33], line[LINELEN];
   int ret = 1;
   long now, old = 0;
   LOCK *i = NULL;
+  idlog_t idbuf;
 
   now = time(NULL);
-  id_encode(id->data, idstr);
 
-  if ((f = mix_openfile(IDLOG, "r+")) != NULL)
-    fscanf(f, "%*s %ld", &old);
-  else {
+  if ((f = mix_openfile(IDLOG, "rb+")) != NULL) {
+    fread(&idbuf,1,sizeof(idlog_t),f);
+    old = idbuf.time;
+  } else {
     if (IDEXP == 0) {
       if (timestamp > 0 && timestamp <= now - 7 * SECONDSPERDAY) {
 	errlog(LOG, "Ignoring old message.\n");
 	return (0);
       }
     } else {
-      if ((f = mix_openfile(IDLOG, "w")) != NULL) {
-	fprintf(f, "new %ld\n%s %ld\n", now, idstr, now);
+      if ((f = mix_openfile(IDLOG, "wb")) != NULL) {
+	memset(idbuf.id,0,sizeof(idbuf.id));
+	idbuf.time = now;
+	fwrite(&idbuf,1,sizeof(idlog_t),f);
+	memcpy(idbuf.id,id->data,sizeof(idbuf.id));
+	idbuf.time = now;
+	fwrite(&idbuf,1,sizeof(idlog_t),f);
 	fclose(f);
 	errlog(NOTICE, "Creating %s\n", IDLOG);
       } else {
@@ -120,14 +125,17 @@ static int isnewid(BUFFER *id, long timestamp)
     goto end;
   }
   i = lockfile(IDLOG);
-  while (fgets(line, sizeof(line), f) != NULL) {
-    if (strleft(line, idstr)) {
+  while (fread(&idbuf, 1, sizeof(idlog_t), f) == sizeof(idlog_t)) {
+    if (!memcmp(idbuf.id, id->data, sizeof(idbuf.id))) {
       errlog(LOG, "Ignoring redundant message.\n");
       ret = 0;
       goto end;
     }
   }
-  fprintf(f, "%s %ld\n", idstr, now);
+  if (ftell(f)%sizeof(idlog_t)) fseek(f,0-(ftell(f)%sizeof(idlog_t)),SEEK_CUR); /* make sure that we're on sizeof(idlog_t) byte boundary */
+  memcpy(idbuf.id,id->data,sizeof(idbuf.id));
+  idbuf.time = now;
+  fwrite(&idbuf,1,sizeof(idlog_t),f);
 end:
   if (i)
     unlockfile(i);
