@@ -1,5 +1,9 @@
 Version history.
 
+2.0.4b46 2002-09-01 rabbi
+        Security fixes for zlib and SSLeay. Now requires OpenSSL instead
+        of SSLeay.
+
 2.0.4b45 1999-01-19 um
         Bug fixes for DOS.
 

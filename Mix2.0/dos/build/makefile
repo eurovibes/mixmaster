@@ -1,11 +1,11 @@
-# $Id: makefile,v 1.1 2002/08/28 20:06:52 rabbi Exp $
+# $Id: makefile,v 1.2 2002/08/29 20:52:43 rabbi Exp $
 
 MIXPATH=.
 
 #Set these definitions according to the libraries you want to use:
 DEF=-DUSE_ZLIB -DSHORTNAMES -DUSE_BSAFE
 INC=-Izlib -Irsaref/source -Ibsafe
-LIBS=zlib/libz.a bsafe/libbsafe.a ssleay/crypto.a
+LIBS=zlib/libz.a bsafe/libbsafe.a ssleay/lib/libcrypto.a
 LDFLAGS=-lm
 
 #Use the other CFLAGS if you want debugging information

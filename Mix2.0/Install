@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# $Id: Install,v 1.1 2002/08/28 20:06:49 rabbi Exp $
+# $Id: Install,v 1.2 2002/08/29 20:52:43 rabbi Exp $
 #
 #      Mixmaster installation script, using many ideas from
 #      Adam Shostack's Install-Mix.
@@ -12,7 +12,7 @@ then
 fi
 MIXSRC=$MIXDIR/Src
 
-MIXDEST0=${MIXPATH:-$HOME/Mix}
+MIXDEST0=${MIXPATH:-$HOME/Mix2.0}
 if [ ! -z "$1" ]
 then
   if [ "$1" = "-v" ]
@@ -177,7 +177,7 @@ else
   if [ -r /usr/local/ssl/lib/libcrypto.a ]
   then
    mkdir $MIXSRC/ssleay
-   ln -s /usr/local/ssl/lib/libcrypto.a $MIXSRC/ssleay/libcrypto.a
+   ln -s /usr/local/ssl/lib $MIXSRC/ssleay/lib
    ln -s /usr/local/ssl/include $MIXSRC/ssleay/include
   elif [ -d $MIXDIR/SSLeay-* ]
   then
@@ -188,13 +188,13 @@ else
   else 
    echo "Error: No cryptographic library found."
    echo
-   echo "Please install the RSAREF or SSLeay source code in $MIXSRC,"
-   echo "install SSLeay in /usr/local/ssl, or link your SSLeay directory to"
+   echo "Please install the RSAREF or OpenSSL source code in $MIXSRC,"
+   echo "install OpenSSL in /usr/local/ssl, or link your OpenSSL directory to"
    echo "$MIXSRC/ssleay."
    exit 1
   fi
  fi
- if [ ! -f $MIXSRC/ssleay/libcrypto.a ]
+ if [ ! -f $MIXSRC/ssleay/lib/libcrypto.a ]
  then
   (cd $MIXSRC/ssleay
    if [ ! -x ./Configure ]
@@ -208,7 +208,7 @@ else
    cd crypto
    make)
  fi
- echo "Using SSLeay."
+ echo "Using OpenSSL."
  cp $MIXSRC/Makefile-bsafe $MIXSRC/Makefile
 fi
 

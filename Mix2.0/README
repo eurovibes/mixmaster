@@ -2,10 +2,10 @@ This software is being distributed under the GNU Public License, see
 the file GNU.license for more details.
 
 Mixmaster can be used with either of the cryptographic libraries
-RSAREF and SSLeay.  The Src directory should contain a directory (or
-symbolic link) named `rsaref' or `ssleay'. Mixmaster also checks for
-SSLeay in /usr/local/ssl.  SSLeay is available from
-<URL:ftp://ftp.psy.uq.oz.au/pub/Crypto/SSL/SSLeay-0.9.0.tar.gz>.
+RSAREF or OpenSSL. The Src directory should contain a directory (or
+symbolic link) named `rsaref' or `ssleay' (for legacy reasons). Mixmaster 
+also checks for OpenSSL in /usr/local/ssl. OpenSSL is available from
+<URL:http://www.openssl.org/source/openssl-0.9.6e.tar.gz>.
 
 Installation:
 -------------
@@ -69,4 +69,4 @@ Thanks for help and valuable suggestions to:
   Mixmaster uses Jean-loup Gailly and Mark Adler's free compression library
   zlib and Philip Hazel's free regex library.
 
-$Id: README,v 1.1 2002/08/28 20:06:49 rabbi Exp $
+$Id: README,v 1.2 2002/08/29 20:52:43 rabbi Exp $
