@@ -6,7 +6,7 @@
    details.
 
    Key management
-   $Id: keymgt.c,v 1.21 2002/10/18 05:23:25 rabbi Exp $ */
+   $Id: keymgt.c,v 1.22 2002/12/27 20:43:40 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -179,7 +179,7 @@ done:
   fclose(keyring);
 
   if (key->length == 0) {
-    errlog(ERRORMSG, "No such public key: %s", idstr);
+    errlog(ERRORMSG, "No such public key: %s\n", idstr);
     err = -1;
     goto end;
   }
@@ -187,7 +187,7 @@ done:
   if (err != -1)
     err = check_pubkey(key, keyid);
   if (err == -1)
-    errlog(ERRORMSG, "Corrupt public key %s", idstr);
+    errlog(ERRORMSG, "Corrupt public key %s\n", idstr);
 end:
   buf_free(b);
   buf_free(iv);
