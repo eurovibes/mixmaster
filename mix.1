@@ -1,5 +1,5 @@
 .TH MIX 1 "Mixmaster Version 3.0 beta"
-.\" $Id: mix.1,v 1.6 2002/07/25 15:07:39 weaselp Exp $
+.\" $Id: mix.1,v 1.7 2002/08/20 20:15:33 weaselp Exp $
 .SH NAME
 mix \- anonymous remailer software
 .SH SYNOPSIS
@@ -143,6 +143,11 @@ Reply chain for the pseudonym.
 .TP
 .B \-R, \-\-read\-mail
 Read a remailer message from standard input and store it in the pool.
+.TP
+.B \-I, \-\-store\-mail
+Read a remailer message from standard input and store it in the pool
+without decrypting it immediately. It will be processed the next time
+Mixmaster processes the queue (called with \fP-M\fP or in daemon mode).
 .TP
 .B \-P, \-\-pop-mail
 Read mail from the POP3 servers listed in
