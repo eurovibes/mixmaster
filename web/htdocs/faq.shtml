@@ -11,7 +11,9 @@
 <h1><div align="center">Official Mixmaster Remailer FAQ</div></h1>
 <br><br>
 
-This FAQ is maintained by Alex Kirk <a href="mailto:alex@schnarff.com">< alex@schnarff.com ></a>. It is currently (11/26/02) being written for the first time. If you find an error, have a further question, or wish to make modifications/updates/additions, please notify him.
+This FAQ is maintained by Alex Kirk <a href="mailto:alex@schnarff.com">< alex@schnarff.com ></a>. It is currently (1/7/03) being written for the first time. If you find an error, have a further question, or wish to make modifications/updates/additions, please notify him.<br><br>
+First Pieces Posted: 11/26/02<br>
+Last Update: 1/7/03
 <br>
 <h2>Table of Contents</h2><br>
 <a href=#1>1. Introduction<br></a>
@@ -43,7 +45,7 @@ This FAQ is maintained by Alex Kirk <a href="mailto:alex@schnarff.com">< alex@sc
 3.1.3 Qmail<br>
 3.1.4 Sendmail<br>
 3.1.5 Add-Ons<br>
-3.1.5.1 TLS-SSL<br>
+<a href=#3.1.5.1>3.1.5.1 TLS-SSL</a><br>
 3.1.5.2 RBLs<br>
 <a href=#3.2>3.2 Downloading Software<br></a>
 <a href=#3.2.1>3.2.1 Remailers<br></a>
@@ -53,10 +55,9 @@ This FAQ is maintained by Alex Kirk <a href="mailto:alex@schnarff.com">< alex@sc
 <a href=#3.2.2.1>3.2.2.1 UNIX/Linux/BSD<br></a>
 <a href=#3.2.3>3.2.3 Pingers<br></a>
 <a href=#3.2.3.1>3.2.3 UNIX/Linux/BSD<br></a>
-3.3 Installing Software<br>
-3.3.1 Mixmaster Remailer<br>
-3.3.2 mail2news Gateway<br>
-3.3.3 Pinger<br>
+<a href=#3.3>3.3 Installing Software</a><br>
+<a href=#3.3.1>3.3.1 Mixmaster Remailer</a><br>
+3.3.2 Pinger<br>
 3.4 Useful System Tools<br>
 <a href=#3.5>3.5 Bounce Re-Inject Script</a>
 <br>
@@ -72,12 +73,10 @@ This FAQ is maintained by Alex Kirk <a href="mailto:alex@schnarff.com">< alex@sc
 4.4 Floods & Spam<br>
 4.4.1 MTA<br>
 <a href=#4.4.2>4.4.2 Asian ISPs & Subnet Filtering<br></a>
-4.4.3 Prevent Massive Crossposting<br>
-4.4.3.1 Remailers<br>
-4.4.3.2 mail2news<br>
-4.4.4 Flood Detection<br>
+<a href=#4.4.3>4.4.3 Prevent Massive Crossposting</a><br>
+<a href=#4.4.4>4.4.4 Flood Detection</a><br>
 4.4.5 Duplicate Detection<br>
-4.4.6 Blocking Obnoxious Hosts<br>
+<a href=#4.4.6>4.4.6 Blocking Obnoxious Hosts</a><br>
 <br>
 5. Policy<br>
 5.1 Always Have A Posted Policy!<br>
@@ -137,7 +136,6 @@ Papers of note include:<br>
 <a href=http://obscura.com/~loki/remailer/mixmaster-faq.html>Mixmaster FAQ</a> by Lance Cottrell.<br>
 <a href=http://obscura.com/~loki/remailer-essay.html>Mixmaster and remailer attacks</a>. An essay by Lance Cottrell, which motivates the original design of Mixmaster<br>
 <a href=http://www.andrebacard.com/remail.html>Anonymous Remailer FAQ</a> by Andre Bacard.
-<h3>
 <a name=2></a>
 <h3>2. Planning</h3>
 <a name=2.1></a>
@@ -214,7 +212,6 @@ All remamilers must have a name to identify themselves within the network. This 
 <h3>2.2.5 Policy</h3>
 Before putting your remailer into action, you need to have a clearly articulated policy governing use and abuse of your system (even if you are a middleman, this is a good idea). It should be posted on your web site and be included in autoresponses to non-remailer generated messages (i.e. in abuse.txt). You should probably read <a href=http://mixmaster.shinn.net/abuse.txt>an example</a> before finalizing your own.<br>
 Reasons for doing this include: keeping unhappy end-users from escalating complaints by giving them an easy way to resolve problems; being a good netizen; making sure you really know what you're doing and why you're doing it before you start.
-<h3>
 <h3>3. Software Configuration</h3>
 <h3>3.1 MTA (Mail Transport Agent)</h3>
 <h3>3.1.1 MS Exchange</h3>
@@ -233,7 +230,8 @@ For those running Qmail, the procedure is rather straightforwrad. Download the <
 <h3>3.2.1 Remailers</h3>
 <a name=3.2.1.1></a>
 <h3>3.2.1.1 UNIX/Linux/BSD</h3>
-<a href=ftp://ftp.shinn.net/pub/remailer/mixmaster>Mixmaster</a> -- Type I & II remailer (ftp://ftp.shinn.net/pub/remailer/mixmaster)<br>
+<a href=http://sourceforge.net/project/showfiles.php?group_id=37891&release_id=129918>Mixmaster</a> -- Type I & II remailer (http://sourceforge.net/project/showfiles.php?group_id=37891&release_id=129918)<br>
+(Mirror) <a href=ftp://ftp.shinn.net/pub/remailer/mixmaster>Mixmaster</a> -- Type I & II remailer (ftp://ftp.shinn.net/pub/remailer/mixmaster)<br>
 <a href=ftp://ftp.shinn.net/pub/remailer/nymserv>Nymserv</a> -- Nym remailer (ftp://ftp.shinn.net/pub/remailer/nymserv)
 <a name=3.2.1.2></a>
 <h3>3.2.1.2 Web Frontends</h3>
@@ -251,10 +249,62 @@ For those running Qmail, the procedure is rather straightforwrad. Download the <
 <a href=ftp://ftp.shinn.net/pub/remailer/rlist-plus-pinger-1.0.tar.gz>rlist</a> (ftp://ftp.shinn.net/pub/remailer/rlist-plus-pinger-1.0.tar.gz)<br>
 <a href=http://www.tahina.priv.at/~cm/hacks/>remlist</a> (http://www.tahina.priv.at/~cm/hacks/)<br>
 <a href=http://lexx.shinn.net/cmeclax/pingstats.html>Pingstats</a> -- This pinger needs only a Unix account with gpg, Mix 2.9, a mail server, procmail, and a random device; it does not need a database or premail. Capstrings and keyrings are automatically updated and (if tmpwatch is installed) expired. It generates stats in both formats for both Mixmaster and Cypherpunk remailers (but no nymservers yet). To get the source, send a message with subject "get-pingstats" to cmeclax@ixazon.dynip.com. Please allow for the latency of this remailer for delivery (it may take a day or more on a busy day). (http://lexx.shinn.net/cmeclax/pingstats.html)
+<a name=3.3></a>
 <h3>3.3 Installing Software</h3>
+Getting Mixmaster software to function on your system is a straightforward task, much like installing any other piece of open-source software for your box. Making sure that you're set up to have a properly behaving remailer is another task altogether.
+<a name=3.3.1></a>
 <h3>3.3.1 Mixmaster Remailer</h3>
-<h3>3.3.2 mail2news Gateway</h3>
-<h3>3.3.3 Pinger</h3>
+Follow these steps to make sure you've set up your remailer properly:
+<ul>
+<li>Ensure that you have a user "mix" on your system, or some other user that the remailer will run as. You'll want to make sure that this account is particularly difficult to compromise, as any breaches here can lead to serious problems with your remailer. It is suggested that you have either a particularly difficult password or no login capability at all for this account (obviously, the latter would be implemented after installation).</li>
+<li>Download the latest sources from <a href=http://sourceforge.net/project/showfiles.php?group_id=37891&release_id=129918>the SourceForge download section</a>. You'll wan to verify that you didn't get a Trojan horse by grabbing the release-signing key from <a href=http://mixmaster.sourceforge.net>mixmaster.sourceforge.net</a>, adding it to your keyring, and using GPG to verify the file's signature (which you should have downloaded at the same time as the source distribution). Doing this check is as simple as "gpg --verify mixmaster-2.x.tar.gz.sig"; note that this will only work if your signature file is named <checkfile.sig>, otherwise you'll have to specify the file you're checking. (Note to Lynx users: make sure that Lynx doesn't append a .gz to your sigfile -- it did to mine, and caused me quite a bit of consternation.)</li>
+<li>Unpack them somewhere handy, and then cd over to that directory. (Note that you will want to do the following either as root, to make sure you have proper permissions.) To build the binaries, type "./Install" in the directory you unpacked to and follow the prompts:
+<ul>
+<li><tt>Mixmaster directory?</tt>: Where you want all of the Mixmaster files, along with your remailing pool, to live. Probably /home/mix/Mix; make sure that this directory lives on a partition with space as discussed <a href=#2.1.5>above</a>, and that any parent directories are created (i.e. don't put it in /home/mix if you've not created the mix user).</li>
+<li><tt>Do you want to set up a remailer?</tt>: If you're reading this document, the answer is yes.</li>
+<li><tt>Do you want to compile the passphrase into the binary?</tt>: As the prompt that accompanies this question states, it doesn't make a lot of sense to compile in the passphrase; not only is doing so not more secure than putting it in a configuration file, it causes you to have to recompile Mixmaster if you ever need to change the passphrase. While this is your decision, I would recommend against it.</li>
+<li><tt>Use source?</tt>: If this is your first time installing on this particular system, always answer no; it's best to use pre-installed helper programs. If you've already encountered errors during a previous install (which is much more likely to happen on an odd platform, such as my NetBSD/Dreamcast remailer), select yes and point Mixmaster to the appropriate directory containing the sources you want to use.</li>
+<li><tt>Install as middleman?</tt>: See the <a href=#2.2.2>middleman section</a> to determine your answer to this question.</li>
+<li><tt>The e-mail address of your remailer</tt>: Self-explanatory.</li>
+<li><tt>Do you want Mixmaster to send auto-replies to messages it does not understand?</tt>: As stated by the propmt, answer No if a human will use the same address as the remailer, Yes otherwise.</li>
+<li><tt>An address to appear in the `From:' line of anonymous messages</tt>: This can be set to any value @your.domain, since mail should never be sent to this address. It is suggested that you use anonymous@, remailer@, nobody@, or some other non-offensive value.</li>
+<li><tt>Address for complaints to be sent to</tt>: This address, on the other hand, <b>must</b> exist, and should be monitored very frequently by a human (or, optimally, forwarded to your primary address).</li>
+<li><tt>Long name</tt>: Simply a descriptive name for your remailer, to appear in log and status messages.</li>
+<li><tt>Anon long name</tt>: The name that appears as the "human" part of the From: in messages from your remailer.</li>
+<li><tt>A short name to appear in lists</tt>: The eight-character-maximum name of your remailer for official lists, such as your mlist.txt, which will be used by other remailers to communicate with you.</li>
+<li><tt>Accept Mixmaster (Type II) messages?</tt>: Unless you have a specific reason otherwise, answer Yes here.</li>
+<li><tt>Accept PGP (Type I) remailer messages?</tt>: This is mainly for backwards compatibility; it is up to you whether to accept old-style messages.</li>
+<li><tt>Mixmaster will log error messages and warnings. Do you want to log informational messages about normal operation as well?</tt>: The answer here is probably yes, particularly if you don't plan on having logs for your MTA, as it is good to have some insight into the operations of your remailer, and these messages will not compromise security.</li>
+<li><tt>Filter binary attachments?</tt>: This is, for the most part, a matter of personal philosophy. Some binary attachments, such as videos, sound files, etc., are good; others, such as malicious executables, are bad. The question you as a remailer operator face is whether you want to attempt to police your service, at the risk of being overly restrictive, or run a free and open service, at the risk of letting harm be done through you. This question is moot if you run a middleman-only remailer, however, as you should then always allow binary attachments, so as not to infringe on those remailers who have chosen to allow them.</li>
+<li><tt>Allow users to add themselves to the list of blocked addresses?</tt>: It is almost always a good idea to answer Yes here, as this allows you to handle abuse complaints more easily and with a greater measure of self-protection (as you can say, "If you don't like my service, simply block yourself from it.").</li>
+<li><tt>Allow posting to Usenet?</tt>: Whether or not you allow newsgroup posting is up to you. Answering "y" causes your remailer to do the posting; "m" sends messages through a mail-to-news gateway; and "n" blocks all newsgroup posting through your remailer.</li>
+<li><tt>Pool size</tt>: As a remailer administrator, you need to decide if you want to lean towards ultra-high-security or speedy service; if you feel like doing neither, simply accept the default of 20. Thankfully, you can change this later to suit your experiences. Note that, in reality, your pool will often exceed the size you specify here; this is not a cause for concern, as long as it does not exceed it greatly (i.e. you do not have 100 messages when you specified 20) such a mismatch might signal a malfunction in your remailer.</li>
+<li><tt>Mailbox for non-remailer messages</tt>: This needs to be set according to the demands of your MTA.</li>
+<li><tt>Set .forward to the following line: "|/home/alex/Mix/mix -RM" Do that now?</tt>: If you are running an MTA which uses the .forward file, answer Yes unless you need to do manual tweaking. If you are running Qmail, set the appropriate .qmail file to this value.</li>
+<li>Installation should be complete at this point.</li>
+</ul>
+</li>
+<li>Configure mix.cfg
+<li>Setup your abuse.txt file</li>
+<li>Setup your help.txt file</li>
+<li>Sign your remailers public key</li>
+<li>backup the mix binary to removeable media</li>
+<li>Secure the backup of the mix binary</li>
+<li>Sign your abuse.txt file</li>
+<li>Sign your help.txt file</li>
+<li>Allowing auto blocks or not?</li>
+<li>Blocking binaries, or not?</li>
+<li>Setup your remailing strategy</li>
+<li>Setup your MTA </li>
+<li>Setup your input throttling system (if any)</li>
+<li>Setup your output throttling system (if any)</li>
+<li>How to allow full from: line forging</li>
+<li>How to just configure mix to allow from: nick names (not full from line: forging)</li>
+<li>How to add in a disclaimer to the body of the message if allowing user defined from: lines</li>
+<li>How to prevent any mucking around of the from lines</li>
+<li>How to block headers </li>
+</ul>
+<h3>3.3.2 Pinger</h3>
 <h3>3.4 Useful System Tools</h3>
 <a name=3.5></a>
 <h3>3.5 Bounce Re-Inject Script</h3>
@@ -264,7 +314,6 @@ To use it, you need to first put the entireity of the bounced messages into one 
 <br><br>
 Once you have your messages in this file, simply run "resend <filename> <remailer@domain>", prefereably as the "mix" user (since, if you were to run this as example_user, messages appear to be coming from example_user@yourdomain). You should probably pick a remailer besides the one that has ben bouncing messages to you, and probably go with one that has a good uptime/statistics history.<br><br>
 Keep in mind that this procedure should be repeated regularly, so that a) messages actually get through with some sense of timeliness, and b) you don't end up shooting out hundreds of messages to a particular remailer in one go.
-<h3>
 <h3>4. Security</h3>
 <a name=4.1></a>
 <h3>4.1 Host System Security</h3>
@@ -292,13 +341,19 @@ If you are serious about protecting the identities of those who mail through you
 Many systems administrators of late have noted that a the vast majority of spam being sent these days comes from severs in Asia. A good number of them have taken to blocking off the entire continent at their firewalls in an effort to stop this flood of spam.<br><br>
 While reading <a href=http://slashdot.org>Slashdot</a> recently, I came across an <a href=http://slashdot.org/articles/02/11/13/2312228.shtml>article</a> referencing Andy McFadden's <a href=http://www.fadden.com/techmisc/asian-spam.htm>proposal</a> of a slightly less drastic way of slowing this sort of spam. After conducting a study of spam he received, he compiled a list of particularly bad subnets in Asia -- ones whose owners eitehr were not competent to stop spam or simply did not care about it. He suggested that administrators use <a href=http://okean.com/asianspamblocks.html>the lists he compiled</a> to slow spam instead of blocking off an entire continent.<br><br>
 Eager to receive less spam, I tried this myself. I am please to report that blocking off these subnets drastically reduced the flow of spam into my inbox, though without measurements from before installing the list I have no scientific evidence of such.
+<a name=4.4.3></a>
 <h3>4.4.3 Prevent Massive Crossposting</h3>
-<h3>4.4.3.1 Remailers</h3>
-<h3>4.4.3.2 mail2news</h3>
+To prevent cross-posting to an unreasonably large number of lists, add these lines to your header.blk file:<br>
+/^Newsgroups:([^,]*,){X,}/q<br>
+/^Followup-To:([^,]*,){X,}/q<br>
+where X is the maximum number of groups a message can be cross-posted to. A reasonable limit here is probably about 5. This comes by default in current versions of Mixmaster.
+<a name=4.4.4></a>
 <h3>4.4.4 Flood Detection</h3>
+You can use Michael Shinn's <a href=ftp://ftp.shinn.net/pub/spamshield/output/spamshield.tar.gz>Spamshield</a> (ftp://ftp.shinn.net/pub/spamshield/output/spamshield.tar.gz) to help detect and deter floods on your box.
 <h3>4.4.5 Duplicate Detection</h3>
+<a name=4.4.6></a>
 <h3>4.4.6 Blocking Obnoxious Hosts</h3>
-<h3>
+While it is probably best to block abusive hosts at the firewall, in that this method uses up the smallest amount of system resources, there are cases where this is not possible -- when one does not have access to modify the firewall, or when an abusive address lives at a domain so widely used that it cannot be blocked (i.e. yahoo.com, hotmail.com). In these cases, you should add the abusive address(es) to your source.blk file. If this file does not exist, simply create a textfile of that name, listing addresses one per line. Regular expressions are permitted, so if you want to block off an entire domain, you could use *@domain.com.
 <h3>5. Policy</h3>
 <h3>5.1 Always Have A Posted Policy!</h3>
 <h3>5.2 Responding to Abuse Complaints</h3>
@@ -405,9 +460,7 @@ Relevant Legal Citations or Historical Quotes:
  <br><br> 
                         --Chistopher Morley, ``The Haunted Bookshop'' 
  <br><br> 
-<h3>
 <h3>6. Announcing Your Remailer</h3>
-<h3>
 <h3>7. I'm Being Blocked!</h3>
 <h3>7.1 Static IP</h3>
 <h3>7.2 Dynamic IP</h3>
