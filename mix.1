@@ -1,5 +1,5 @@
 .TH MIX 1 "Mixmaster Version 3.0 beta"
-.\" $Id: mix.1,v 1.28 2003/02/15 00:29:35 weaselp Exp $
+.\" $Id: mix.1,v 1.29 2003/05/03 01:56:07 weaselp Exp $
 .SH NAME
 mix \- anonymous remailer software
 .SH SYNOPSIS
@@ -269,6 +269,14 @@ Path to your public PGP key ring. Default:
 Path to your secret PGP key ring. Default:
 .BR ~/.pgp/secring.skr .
 (Windows default: PGP registry value.)
+.TP
+.B CLIENTAUTOFLUSH
+If 
+.B REMAIL
+is set to
+.BR n
+automatically flush the pool every time mixmaster is run. Default:
+.BR n .
 .SS Remailer configuration:
 .TP
 .B SENDMAIL
