@@ -6,7 +6,7 @@
    details.
 
    Utility functions
-   $Id: util.c,v 1.12 2002/10/09 21:39:14 weaselp Exp $ */
+   $Id: util.c,v 1.13 2002/10/10 22:07:48 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -554,7 +554,7 @@ int write_pidfile(char *pidfile)
       if (strcmp(host, myhostname) == 0) {
 	if (kill (pid, 0) == -1) {
 	  if (errno == ESRCH) {
-	    fprintf(stderr, "Ignoring stale pid file.\n");
+	    fprintf(stderr, "Rewriting stale pid file.\n");
 	    rewind(f);
 	    ftruncate(fileno(f), 0);
 	    fprintf(f, "%d %s\n", mypid, myhostname);
@@ -598,7 +598,10 @@ int write_pidfile(char *pidfile)
 int clear_pidfile(char *pidfile)
 {
 #ifdef POSIX
-  return (unlink(pidfile));
+  char path[PATHMAX];
+
+  mixfile(path, pidfile);
+  return (unlink(path));
 #else /* end of POSIX */
   return (0);
 #endif /* else if not POSIX */
