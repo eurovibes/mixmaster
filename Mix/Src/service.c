@@ -44,19 +44,19 @@ int main(int argc, char *argv[])
         {NULL,    NULL} };
 
     if ((argc > 1) && ((argv[1][0] == '-') && (argv[1][1] == '-'))) {
-        if (!_stricmp("install", argv[1]+2))
+        if (!_stricmp("install-svc", argv[1]+2))
             return install_service();
-        else if (!_stricmp("remove", argv[1]+2))
+        else if (!_stricmp("remove-svc", argv[1]+2))
             return remove_service();
-        else if (_stricmp("runsvc", argv[1]+2) && !is_nt_service())
+        else if (_stricmp("run-svc", argv[1]+2) && !is_nt_service())
             return run_notservice(argc, argv);
     } else if (!is_nt_service()) {
         return run_notservice(argc, argv);
     }
-    printf("mix --install   to install the service\n");
-    printf("mix --remove    to remove the service\n");
-    printf("mix --runsvc    to run as a service\n");
-    printf("mix -h          to view a summary of the command line options.\n");
+    printf("mix --install-svc   install the service\n");
+    printf("mix --remove-svc    remove the service\n");
+    printf("mix --run-svc       run as a service\n");
+    printf("mix -h          view a summary of the command line options.\n");
 
     printf("\nStartServiceCtrlDispatcher being called.\n" );
     printf("This may take several seconds.  Please wait.\n" );
@@ -229,7 +229,7 @@ static int install_service()
         printf("Unable to install Mixmaster Service: %s\n", GetLastErrorText());
         return 1;
     }
-    strcat(filename, " --runsvc");
+    strcat(filename, " --run-svc");
 
     if (!(schSCManager = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS))) {
         printf("OpenSCManager failed: %s\n", GetLastErrorText());
@@ -306,7 +306,8 @@ static char *GetLastErrorText()
     if (!dwRet || (256 < (long)dwRet+14))
         sprintf(error_buf, "Error (0x%x)", err);
     else {
-        lpszTemp[lstrlen(lpszTemp)-2] = '\0';  //remove cr and newline character
+        lpszTemp[lstrlen(lpszTemp)-2] = '\0';  
+        //remove cr and newline character
         sprintf(error_buf, "%s (0x%x)", lpszTemp, err);
     }
 
