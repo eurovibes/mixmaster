@@ -12,7 +12,7 @@ Items that need to be completed before the next HEAD release:
 - Modify release tarball generation script to build the .tab.c file from
   parsedate.y, so we don't end up requiring bison on every system that
   wants to build mixmaster  (rabbi)
-- document experimental --redirect in mix.1  (weasel)
+o document experimental --redirect in mix.1  (weasel)
 o drop messages without timestamp (weasel)
   - document somewhere  (rabbi)
 o drop messages with future timestamp  (weasel)
