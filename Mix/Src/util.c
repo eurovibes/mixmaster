@@ -6,7 +6,7 @@
    details.
 
    Utility functions
-   $Id: util.c,v 1.2.2.6 2002/12/16 22:38:13 rabbi Exp $ */
+   $Id: util.c,v 1.2.2.7 2003/01/12 22:21:26 colintu Exp $ */
 
 
 #include "mix3.h"
@@ -147,8 +147,7 @@ FILE *openpipe(const char *prog)
   return p;
 }
 
-int
-file_to_out(const char *filename)
+int file_to_out(const char *filename)
 {
     int len;
     FILE *fp;
@@ -441,8 +440,10 @@ int unlock(FILE *f)
 static int getuserpass(BUFFER *b, int mode)
 {
   char p[LINELEN];
+#ifdef UNIX
   int fd;
   int n;
+#endif
 
 #ifdef HAVE_TERMIOS
   struct termios attr;

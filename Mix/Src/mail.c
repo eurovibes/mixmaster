@@ -6,7 +6,7 @@
    details.
 
    Socket-based mail transport services
-   $Id: mail.c,v 1.7.2.8 2002/12/16 22:38:05 rabbi Exp $ */
+   $Id: mail.c,v 1.7.2.9 2003/01/12 22:21:26 colintu Exp $ */
 
 
 #include "mix3.h"
@@ -153,7 +153,13 @@ int sendmail(BUFFER *message, char *from, BUFFER *address)
     /* Step 2:  Stat the file.  Wait for ENOENT as a response. */
     for (count = 0;; count++) {
       snprintf(path, PATHMAX, "%s%cout.%lu.%u_%lu.%s,S=%lu.txt",
-	POOLDIR, DIRSEP, time(NULL), getpid(), namecounter++, hostname, head->length + message->length);
+	POOLDIR, DIRSEP, time(NULL),
+ #ifdef POSIX
+	getpid(),
+ #else
+	0,
+#endif
+	namecounter++, hostname, head->length + message->length);
 
       if (stat(path, &statbuf) == 0)
 	errno = EEXIST;

@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.11.2.10 2002/12/16 22:38:07 rabbi Exp $ */
+   $Id: mix.c,v 1.11.2.11 2003/01/12 22:21:26 colintu Exp $ */
 
 
 #include "mix3.h"
@@ -788,7 +788,6 @@ int is_nt_service(void)
 #ifdef WIN32SERVICE
     STARTUPINFO StartupInfo;
     OSVERSIONINFO VersionInfo;
-    DWORD dwsize;
 
     if (issvc != -1)    /* do it only once */
 	return issvc;

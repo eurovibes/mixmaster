@@ -817,19 +817,19 @@ typedef struct {
   byte sensitive;
 } BUFFER;
 
-int mix_init(char *);
-void mix_exit(void);
+DllExport int mix_init(char *);
+DllExport void mix_exit(void);
 void rnd_update(byte *b, int n);
 void rnd_initialized(void);
 #ifdef WIN32
 int rnd_mouse(UINT i, WPARAM w, LPARAM l);
 #endif /* WIN32 */
 
-BUFFER *buf_new(void);
-int buf_free(BUFFER *buf);
-int buf_read(BUFFER *message, FILE *infile);
-int buf_write(BUFFER *message, FILE *outfile);
-int buf_write_sync(BUFFER *message, FILE *outfile);
+DllExport BUFFER *buf_new(void);
+DllExport int buf_free(BUFFER *buf);
+DllExport int buf_read(BUFFER *message, FILE *infile);
+DllExport int buf_write(BUFFER *message, FILE *outfile);
+DllExport int buf_write_sync(BUFFER *message, FILE *outfile);
 
 #define MSG_MAIL 1
 #define MSG_POST 2
@@ -837,17 +837,17 @@ int buf_write_sync(BUFFER *message, FILE *outfile);
 
 extern char MIXDIR[];
 
-int mix_encrypt(int type, BUFFER *message, char *chain, int numcopies,
+DllExport int mix_encrypt(int type, BUFFER *message, char *chain, int numcopies,
 		BUFFER *feedback);
-int mix_decrypt(BUFFER *message);
-int mix_send(void);
+DllExport int mix_decrypt(BUFFER *message);
+DllExport int mix_send(void);
 
 #define FORCE_POOL 1
 #define FORCE_POP3 2
 #define FORCE_DAILY 4
 #define FORCE_MAILIN 8
-int mix_regular(int force);
-int mix_daemon(void);
+DllExport int mix_regular(int force);
+DllExport int mix_daemon(void);
 int process_mailin(void);
 
 #ifdef USE_PGP
@@ -856,11 +856,11 @@ int process_mailin(void);
 #define NYM_MODIFY 1
 #define NYM_DELETE 2
 
-int nym_config(int mode, char *nym, char *nymserver, BUFFER *pseudonym,
+DllExport int nym_config(int mode, char *nym, char *nymserver, BUFFER *pseudonym,
 	       char *sendchain, int sendnumcopies, BUFFER *chains,
 	       BUFFER *options);
-int nym_encrypt(BUFFER *msg, char *nym, int type);
-int nym_decrypt(BUFFER *msg, char *nym, BUFFER *log);
+DllExport int nym_encrypt(BUFFER *msg, char *nym, int type);
+DllExport int nym_decrypt(BUFFER *msg, char *nym, BUFFER *log);
 
 #define PGP_SIGN 1
 #define PGP_ENCRYPT 2

@@ -6,12 +6,18 @@
    details.
 
    Function prototypes
-   $Id: mix3.h,v 1.8.2.5 2002/12/16 22:38:08 rabbi Exp $ */
+   $Id: mix3.h,v 1.8.2.6 2003/01/12 22:21:26 colintu Exp $ */
 
 
 #ifndef _MIX3_H
 #define _MIX3_H
 #define COPYRIGHT "Copyright Anonymizer Inc."
+
+#ifdef MIXLIB_EXPORTS
+#define DllExport	__declspec( dllexport )
+#else
+#define DllExport
+#endif
 
 #include "config.h"
 #include "mix.h"
@@ -36,70 +42,70 @@
 
 /* Dynamically allocated buffers */
 
-int buf_reset(BUFFER *buffer);
-int buf_clear(BUFFER *buffer);
-int buf_append(BUFFER *buffer, byte *mess, int len);
-int buf_cat(BUFFER *to, BUFFER *from);
-int buf_set(BUFFER *to, BUFFER *from);
-int buf_rest(BUFFER *to, BUFFER *from);
-int buf_appendrnd(BUFFER *to, int n);
-int buf_appendzero(BUFFER *to, int n);
-int buf_setc(BUFFER *buf, byte c);
-int buf_appendc(BUFFER *to, byte b);
-int buf_setrnd(BUFFER *b, int n);
-int buf_setf(BUFFER *buffer, char *fmt, ...);
-int buf_appendf(BUFFER *buffer, char *fmt, ...);
-int buf_sets(BUFFER *buf, char *s);
-int buf_appends(BUFFER *buffer, char *s);
-int buf_nl(BUFFER *buffer);
-int buf_pad(BUFFER *buffer, int size);
-int buf_prepare(BUFFER *buffer, int size);
-int buf_rewind(BUFFER *buffer);
-int buf_getc(BUFFER *buffer);
-void buf_ungetc(BUFFER *buffer);
-int buf_get(BUFFER *buffer, BUFFER *to, int n);
-int buf_getline(BUFFER *buffer, BUFFER *line);
-int buf_chop(BUFFER *b);
-void buf_move(BUFFER *dest, BUFFER *src);
-byte *buf_data(BUFFER *buffer);
-int buf_isheader(BUFFER *buffer);
-int buf_getheader(BUFFER *buffer, BUFFER *field, BUFFER *content);
-int buf_appendheader(BUFFER *buffer, BUFFER *field, BUFFER *contents);
-int buf_lookahead(BUFFER *buffer, BUFFER *line);
-int buf_eq(BUFFER *b1, BUFFER *b2);
-int buf_ieq(BUFFER *b1, BUFFER *b2);
-void buf_cut_out(BUFFER *buffer, BUFFER *cut_out, BUFFER *rest,
+DllExport int buf_reset(BUFFER *buffer);
+DllExport int buf_clear(BUFFER *buffer);
+DllExport int buf_append(BUFFER *buffer, byte *mess, int len);
+DllExport int buf_cat(BUFFER *to, BUFFER *from);
+DllExport int buf_set(BUFFER *to, BUFFER *from);
+DllExport int buf_rest(BUFFER *to, BUFFER *from);
+DllExport int buf_appendrnd(BUFFER *to, int n);
+DllExport int buf_appendzero(BUFFER *to, int n);
+DllExport int buf_setc(BUFFER *buf, byte c);
+DllExport int buf_appendc(BUFFER *to, byte b);
+DllExport int buf_setrnd(BUFFER *b, int n);
+DllExport int buf_setf(BUFFER *buffer, char *fmt, ...);
+DllExport int buf_appendf(BUFFER *buffer, char *fmt, ...);
+DllExport int buf_sets(BUFFER *buf, char *s);
+DllExport int buf_appends(BUFFER *buffer, char *s);
+DllExport int buf_nl(BUFFER *buffer);
+DllExport int buf_pad(BUFFER *buffer, int size);
+DllExport int buf_prepare(BUFFER *buffer, int size);
+DllExport int buf_rewind(BUFFER *buffer);
+DllExport int buf_getc(BUFFER *buffer);
+DllExport void buf_ungetc(BUFFER *buffer);
+DllExport int buf_get(BUFFER *buffer, BUFFER *to, int n);
+DllExport int buf_getline(BUFFER *buffer, BUFFER *line);
+DllExport int buf_chop(BUFFER *b);
+DllExport void buf_move(BUFFER *dest, BUFFER *src);
+DllExport byte *buf_data(BUFFER *buffer);
+DllExport int buf_isheader(BUFFER *buffer);
+DllExport int buf_getheader(BUFFER *buffer, BUFFER *field, BUFFER *content);
+DllExport int buf_appendheader(BUFFER *buffer, BUFFER *field, BUFFER *contents);
+DllExport int buf_lookahead(BUFFER *buffer, BUFFER *line);
+DllExport int buf_eq(BUFFER *b1, BUFFER *b2);
+DllExport int buf_ieq(BUFFER *b1, BUFFER *b2);
+DllExport void buf_cut_out(BUFFER *buffer, BUFFER *cut_out, BUFFER *rest,
 		 int from, int len);
 
-int buf_appendl(BUFFER *b, long l);
-int buf_appendl_lo(BUFFER *b, long l);
-long buf_getl(BUFFER *b);
-long buf_getl_lo(BUFFER *b);
-int buf_appendi(BUFFER *b, int i);
-int buf_appendi_lo(BUFFER *b, int i);
-int buf_geti(BUFFER *b);
-int buf_geti_lo(BUFFER *b);
+DllExport int buf_appendl(BUFFER *b, long l);
+DllExport int buf_appendl_lo(BUFFER *b, long l);
+DllExport long buf_getl(BUFFER *b);
+DllExport long buf_getl_lo(BUFFER *b);
+DllExport int buf_appendi(BUFFER *b, int i);
+DllExport int buf_appendi_lo(BUFFER *b, int i);
+DllExport int buf_geti(BUFFER *b);
+DllExport int buf_geti_lo(BUFFER *b);
 
 /* String comparison */
-int strieq(const char *s1, const char *s2);
-int strileft(const char *string, const char *keyword);
-int striright(const char *string, const char *keyword);
-int strifind(const char *string, const char *keyword);
+DllExport int strieq(const char *s1, const char *s2);
+DllExport int strileft(const char *string, const char *keyword);
+DllExport int striright(const char *string, const char *keyword);
+DllExport int strifind(const char *string, const char *keyword);
 
-int streq(const char *s1, const char *s2);
-int strfind(const char *string, const char *keyword);
-int strleft(const char *string, const char *keyword);
+DllExport int streq(const char *s1, const char *s2);
+DllExport int strfind(const char *string, const char *keyword);
+DllExport int strleft(const char *string, const char *keyword);
 
-void strcatn(char *dest, const char *src, int n);
+DllExport void strcatn(char *dest, const char *src, int n);
 
-int bufleft(BUFFER *b, char *k);
-int buffind(BUFFER *b, char *k);
-int bufeq(BUFFER *b, char *k);
+DllExport int bufleft(BUFFER *b, char *k);
+DllExport int buffind(BUFFER *b, char *k);
+DllExport int bufeq(BUFFER *b, char *k);
 
-int bufileft(BUFFER *b, char *k);
-int bufifind(BUFFER *b, char *k);
-int bufiright(BUFFER *b, char *k);
-int bufieq(BUFFER *b, char *k);
+DllExport int bufileft(BUFFER *b, char *k);
+DllExport int bufifind(BUFFER *b, char *k);
+DllExport int bufiright(BUFFER *b, char *k);
+DllExport int bufieq(BUFFER *b, char *k);
 
 /* Utility functions */
 void whoami(char *addr, char *defaultname);
@@ -138,7 +144,7 @@ int doblock(BUFFER *line, BUFFER *filter, int logandreset);
 int doallow(BUFFER *line, BUFFER *filter);
 int allowmessage(BUFFER *in);
 
-void errlog(int type, char *format,...);
+DllExport void errlog(int type, char *format,...);
 void clienterr(BUFFER *msgbuf, char *err);
 void logmail(char *mailbox, BUFFER *message);
 
@@ -162,7 +168,7 @@ void get_parameter(BUFFER *content, char *attribute, BUFFER *value);
 int get_type(BUFFER *content, BUFFER *type, BUFFER *subtype);
 int mail_encode(BUFFER *in, int encoding);
 int hdr_encode(BUFFER *in, int n);
-int attachfile(BUFFER *message, BUFFER *filename);
+DllExport int attachfile(BUFFER *message, BUFFER *filename);
 int pgpmime_sign(BUFFER *message, BUFFER *uid, BUFFER *pass, char *secring);
 int mime_attach(BUFFER *message, BUFFER *attachment, BUFFER *type);
 void mimedecode(BUFFER *msg);
@@ -202,7 +208,7 @@ int digestmem_md5(byte *b, int n, BUFFER *md);
 int digest_sha1(BUFFER *b, BUFFER *md);
 int digest_rmd160(BUFFER *b, BUFFER *md);
 
-int keymgt(int force);
+DllExport int keymgt(int force);
 int key(BUFFER *b);
 int adminkey(BUFFER *b);
 
@@ -230,8 +236,8 @@ int v2createkey(void);
 int seckeytopub(BUFFER *pub, BUFFER *sec, byte keyid[]);
 
 /* configuration, general remailer functions */
-int mix_configline(char *line);
-int mix_config(void);
+DllExport int mix_configline(char *line);
+DllExport int mix_config(void);
 int mix_initialized(void);
 int mix_daily(void);
 
@@ -239,13 +245,13 @@ int mix_daily(void);
 #define INTERMEDIATE 0
 int pool_send(void);
 int pool_read(BUFFER *pool);
-int pool_add(BUFFER *msg, char *type);
+DllExport int pool_add(BUFFER *msg, char *type);
 FILE *pool_new(char *type, char *tmpname, char *path);
 int mix_pool(BUFFER *msg, int type, long latent);
 int pool_packetfile(char *fname, BUFFER *mid, int packetnum);
 void pool_packetexp(void);
 int idexp(void);
-void pop3get(void);
+DllExport void pop3get(void);
 
 typedef struct {  /* added for binary id.log change */
   char id[16];
@@ -272,20 +278,20 @@ int pgp_pubkeycert(BUFFER *userid, char *keyring, BUFFER *pass,
 int pgp_signtxt(BUFFER *msg, BUFFER *uid, BUFFER *pass,
 		char *secring, int remail);
 int pgp_isconventional(BUFFER *buf);
-int pgp_mailenc(int mode, BUFFER *msg, char *sigid,
+DllExport int pgp_mailenc(int mode, BUFFER *msg, char *sigid,
 		BUFFER *pass, char *pubring, char *secring);
 int pgp_signhashalgo(BUFFER *algo, BUFFER *userid, char *secring,
 		     BUFFER *pass);
 
 /* menu */
-int menu_initialized;
-void menu_main(void);
-void menu_folder(char command, char *name);
-int menu_getuserpass(BUFFER *p, int mode);
+DllExport int menu_initialized;
+DllExport void menu_main(void);
+DllExport void menu_folder(char command, char *name);
+DllExport int menu_getuserpass(BUFFER *p, int mode);
 
-int user_pass(BUFFER *b);
-int user_confirmpass(BUFFER *b);
-void user_delpass(void);
+DllExport int user_pass(BUFFER *b);
+DllExport int user_confirmpass(BUFFER *b);
+DllExport void user_delpass(void);
 
 /* remailer */
 typedef struct {
@@ -320,7 +326,7 @@ typedef struct {
 
 #define CHAINMAX 421
 #define MAXREM 100
-int prepare_type2list(BUFFER *out);
+DllExport int prepare_type2list(BUFFER *out);
 int mix2_rlist(REMAILER remailer[]);
 int t1_rlist(REMAILER remailer[]);
 int pgp_rlist(REMAILER remailer[], int n);
@@ -411,8 +417,8 @@ int closesocket(SOCKET s);
 #endif /* else if not defined(WIN32) && defined(USE_SOCK) */
 
 #ifdef WIN32
-int is_nt_service(void);
-void set_nt_exit_event();
+DllExport int is_nt_service(void);
+DllExport void set_nt_exit_event();
 #endif /* WIN32 */
 
 /* check for memory leaks */

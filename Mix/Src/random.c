@@ -6,7 +6,7 @@
    details.
 
    Randomness
-   $Id: random.c,v 1.2.2.2 2002/12/16 22:38:10 rabbi Exp $ */
+   $Id: random.c,v 1.2.2.3 2003/01/12 22:21:26 colintu Exp $ */
 
 
 #include "mix3.h"
@@ -103,7 +103,9 @@ void rnd_time(void)
 void rnd_update(byte *seed, int l)
 {
   int fd = -1;
+  #ifdef DEV_URANDOM
   byte b[512];
+  #endif /* DEV_URANDOM */
 
   rnd_time();
   if (seed)

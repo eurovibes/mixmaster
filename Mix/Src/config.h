@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.9.2.6 2002/12/16 22:38:04 rabbi Exp $ */
+   $Id: config.h,v 1.9.2.7 2003/01/12 22:21:26 colintu Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -130,7 +130,11 @@
 #if defined(WIN32) && !defined(_USRDLL)
 #define DLLIMPORT __declspec(dllimport)
 #else
+#if defined(WIN32) && defined(MIXLIB_EXPORTS)
+#define DLLIMPORT __declspec(dllexport)
+#else
 #define DLLIMPORT
+#endif
 #endif
 
 /** Constants *********************************************************/
@@ -196,7 +200,7 @@
 #define DEFAULT_NYMSECRING "nymsec.pgp"
 #define DEFAULT_NYMDB "secrets.mix"
 
-extern char MIXCONF[];
+DLLIMPORT extern char MIXCONF[];
 extern char DISCLAIMFILE[];
 extern char FROMDSCLFILE[];
 extern char MSGFOOTERFILE[];
