@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.20.2.1 2002/09/11 21:28:59 rabbi Exp $ */
+   $Id: rem.c,v 1.20.2.2 2002/09/11 21:31:12 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -501,7 +501,11 @@ int idexp(void)
   while (fread(&idbuf, 1, sizeof(idlog_t), f) == sizeof(idlog_t)) {
     fpi+=sizeof(idlog_t);
     then = idbuf.time;
-    if (now - then < IDEXP)
+    if (now - then < IDEXP &&
+      now - then > - SECONDSPERDAY * 180 )
+      /* also expire packets that are dated more than half a year in the future.
+       * That way we get rid of invalid packets introduced by the switch to a
+       * binary id.log. */
     {
       fseek(f,fpo,SEEK_SET);
       fwrite(&idbuf,1,sizeof(idlog_t),f);
