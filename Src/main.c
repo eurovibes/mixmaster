@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.34 2003/08/17 19:16:43 weaselp Exp $ */
+   $Id: main.c,v 1.35 2003/08/20 20:33:00 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -683,10 +683,13 @@ static int check_get_pass(int force)
       pass2 = buf_new();
       key = buf_new();
       buf_sets(pass, PASSPHRASE);
-      while (pgpdb_getkey(PK_DECRYPT, PGP_ES_RSA, NULL, NULL, NULL, NULL, NULL,
+      while (
+#ifdef USE_PGP
+	     pgpdb_getkey(PK_DECRYPT, PGP_ES_RSA, NULL, NULL, NULL, NULL, NULL,
 			   NULL, NULL, NULL, pass) < 0 &&
 	     pgpdb_getkey(PK_DECRYPT, PGP_E_ELG,  NULL, NULL, NULL, NULL, NULL,
 			   NULL, NULL, NULL, pass) < 0 &&
+#endif /* USE_PGP */
 	     getv2seckey(NULL, key) < 0)
       {
 	user_delpass();

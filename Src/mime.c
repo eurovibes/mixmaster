@@ -6,7 +6,7 @@
    details.
 
    MIME functions
-   $Id: mime.c,v 1.4 2002/10/09 20:53:29 weaselp Exp $ */
+   $Id: mime.c,v 1.5 2003/08/20 20:33:00 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -518,10 +518,14 @@ int entity_decode(BUFFER *msg, int message, int mptype, BUFFER *data)
   } else if (mptype == pgpsig && bufeq(type, "application") &&
 	     bufieq(subtype, "pgp-signature")) {
     buf_rest(part, msg);
+#ifdef USE_PGP
     if (pgp_decrypt(part, NULL, data, PGPPUBRING, NULL) == PGP_SIGOK)
       buf_appendf(out, "[-- OpenPGP signature from:\n    %b --]\n", data);
     else
       buf_appends(out, "[-- Invalid OpenPGP signature --]\n");
+#else /* USE_PGP */
+    buf_appends(out, "[-- No OpenPGP support --]\n");
+#endif /* !USE_PGP */
   } else if (type->length == 0 || bufieq(type, "text")) {
     while (buf_getline(msg, line) != -1) {
       int softbreak;
@@ -761,6 +765,9 @@ static int entity_encode(BUFFER *message, BUFFER *out, BUFFER *messagehdr,
 
 int pgpmime_sign(BUFFER *message, BUFFER *uid, BUFFER *pass, char *secring)
 {
+#ifndef USE_PGP
+  return (-1)
+#else /* end of not USE_PGP */
   BUFFER *out, *body, *mboundary, *algo;
   int err;
 
@@ -803,4 +810,5 @@ int pgpmime_sign(BUFFER *message, BUFFER *uid, BUFFER *pass, char *secring)
   buf_free(mboundary);
   buf_free(algo);
   return (err);
+#endif /* else if USE_PGP */
 }
