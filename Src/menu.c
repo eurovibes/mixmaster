@@ -475,6 +475,7 @@ void menu_main(void)
   int y, x;
   int pool, n;
   int c;
+  int space;
   BUFFER *chainlist, *line;
   char nym[LINELEN] = ANON;
 
@@ -492,6 +493,9 @@ menu_redraw:
 #if 0
     mvprintw(0, COLS - sizeof(COPYRIGHT), COPYRIGHT);
 #endif
+    for (space = 0; space < (COLS - 10 - sizeof(VERSION)); space++) {
+        printw(" ");
+    };
     standend();
     mix_status(NULL);
 
