@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.31 2003/05/08 18:07:08 weaselp Exp $ */
+   $Id: main.c,v 1.32 2003/08/17 19:04:34 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -345,8 +345,10 @@ int main(int argc, char *argv[])
     --header='header line'        arbitrary message headers\n\
 -a, --attachment=file             attach a file\n"
 #ifdef USE_PGP
-	   "-n, --nym=yournym                 use pseudonym to send the message\n\
-    --encrypt                     encrypt the message using the PGP format\n\
+#ifdef NYMSUPPORT
+	   "-n, --nym=yournym                 use pseudonym to send the message\n"
+#endif /* NYMSUPPORT */
+    "--encrypt                     encrypt the message using the PGP format\n\
     --sign                        sign the message using the PGP format\n"
 #endif /* USE_PGP */
 	   "-l, --chain=mix1,mix2,mix3,...    specify a remailer chain\n\
@@ -483,9 +485,11 @@ WinNT service:\n\
 	  buf_free(pass);
 	}
 	if (nym[0] != 0) {
+#ifdef NYMSUPPORT
 	  if (nym_encrypt(sendmsg, nym, send) == 0)
 	    send = MSG_MAIL;
 	  else
+#endif /* NYMSUPPORT */
 	    fprintf(stderr, "Nym error, sending message anonymously.\n");
 	}
 #endif /* USE_PGP */
@@ -537,6 +541,7 @@ WinNT service:\n\
     }
   }
 #ifdef USE_PGP
+#ifdef NYMSUPPORT
   if (nym[0] != 0) {
     char nymserver[LINELEN] = "*";
     BUFFER *chains;
@@ -566,6 +571,7 @@ WinNT service:\n\
     user_delpass();
     buf_free(chains);
   }
+#endif /* NYMSUPPORT */
 #endif /* USE_PGP */
 
   if (keygen) {

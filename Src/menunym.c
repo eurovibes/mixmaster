@@ -6,8 +6,9 @@
    details.
 
    Menu-based user interface - nym management
-   $Id: menunym.c,v 1.2 2002/09/18 23:26:16 rabbi Exp $ */
+   $Id: menunym.c,v 1.3 2003/08/17 19:04:34 weaselp Exp $ */
 
+#ifdef NYMSUPPORT
 
 #include "menu.h"
 #include "mix3.h"
@@ -468,3 +469,4 @@ select:
 }
 
 #endif /* USE_NCURSES */
+#endif /* NYMSUPPORT */

@@ -15,7 +15,7 @@ Items that need to be completed before the next HEAD release:
 
 Mandatory todo items before 3.0 release:
 
-* disable Nym stuff  weasel,rabbi
+* Remove nym stuff from the manpage  weasel,rabbi
 * autoconf installation script is needed
   - mostly done -- a few bugs still need fixing  dybbuk
 * post-install scripts need to be reworked

@@ -6,8 +6,10 @@
    details.
 
    Create nym server messages
-   $Id: nym.c,v 1.10 2003/05/05 11:03:41 weaselp Exp $ */
+   $Id: nym.c,v 1.11 2003/08/17 19:04:34 weaselp Exp $ */
 
+
+#ifdef NYMSUPPORT
 
 #include "mix3.h"
 #include "pgp.h"
@@ -663,3 +665,5 @@ int nymlist_getstatus(char *nym)
   else
     return (-1);
 }
+
+#endif /* NYMSUPPORT */
