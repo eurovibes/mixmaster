@@ -30,6 +30,7 @@
 #ifdef WIN32
 #include <windows.h>
 #include <shlobj.h>
+#include <shlobj.h>
 #endif /* WIN32 */
 #include <assert.h>
 #include "menu.h"
@@ -660,14 +661,14 @@ int mix_config(void)
 
 #ifdef WIN32
     if (err == -1) {
-      LPMALLOC *lpmalloc;
+      LPMALLOC lpmalloc;
       ITEMIDLIST *itemidlist;
       if (SUCCEEDED(SHGetMalloc(&lpmalloc)))
       {
 	SHGetSpecialFolderLocation(0,CSIDL_APPDATA,&itemidlist);
 	SHGetPathFromIDList(itemidlist,line);
 	lpmalloc->lpVtbl->Free(lpmalloc,&itemidlist);
-	lpmalloc->lpVtbl->Release(lpmalloc)
+	lpmalloc->lpVtbl->Release(lpmalloc);
 
 	strcatn(line, "\\Mixmaster", PATHMAX);
 	err = mixdir(line, 1);
