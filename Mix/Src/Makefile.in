@@ -1,11 +1,11 @@
-# Mixmaster version 3  --  (C) 1999 Anonymizer Inc.
+# Mixmaster version 3.0  --  (C) 1999 - 2004 Anonymizer Inc. and others.
 
 # Mixmaster may be redistributed and modified under certain conditions.
 # This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Makefile-sh.in 647 2003-10-25 23:34:13Z weasel $
+# $Id: Makefile.in 647 2003-10-25 23:34:13Z weasel $
 
 # Edit according to the libraries you want to use:
 INC = %INC
@@ -57,8 +57,8 @@ winmenu.o:	winmenu.rc winmenu.h
 remailer:	$(OBJ) $(NOMENUOBJ) remailer.o $(LIBS)
 	$(CC) $(OBJ) $(NOMENUOBJ) remailer.o $(LIBS) $(LDFLAGS) -o remailer
 
-mpgp:	$(OBJ) $(NOMENUOBJ) pgptest.o $(LIBS)
-	$(CC) $(OBJ) $(NOMENUOBJ) pgptest.o $(LIBS) $(LDFLAGS) -o mpgp
+mpgp:	$(OBJ) $(NOMENUOBJ) mpgp.o $(LIBS)
+	$(CC) $(OBJ) $(NOMENUOBJ) mpgp.o $(LIBS) $(LDFLAGS) -o mpgp
 
 test:	$(OBJ) test.o $(NOMENUOBJ) $(LIBS)
 	$(CC) $(OBJ) test.o $(NOMENUOBJ) $(LIBS) $(LDFLAGS) -o test
@@ -69,8 +69,10 @@ clean:
 allclean: clean
 	-rm -f Makefile
 
+distclean:	allclean
+
 ci: clean
-	cd ~/mix3; ci -l * Mix/* Mix/Src/*; echo
+	cd ~/src/mix3; ci -l * Mix/* Mix/Src/*; echo
 
 parsedate.tab.c: parsedate.y
 	@echo Expect 6 shift/reduce conflicts
