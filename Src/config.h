@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.36 2003/08/24 20:39:26 weaselp Exp $ */
+   $Id: config.h,v 1.37 2003/09/19 00:51:41 weaselp Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -127,7 +127,7 @@
 /* Use AES algorithm? - should be handled by Install script setting compiler option -DUSE_AES */
 /* #define USE_AES */
 /* Support the OpenPGP message format? */
-#define USE_PGP
+/* #define USE_PGP */
 
 #ifndef WIN32
 # define HAVE_SETENV 1
