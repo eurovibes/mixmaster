@@ -175,6 +175,10 @@ char MAILBOUNCE[PATHMAX];
 int CLIENTAUTOFLUSH;
 int MAXRECIPIENTS;
 
+long TIMESKEW_FORWARD;
+long TIMESKEW_BACK;
+int TEMP_FAIL;
+
 char ENTEREDPASSPHRASE[LINELEN] = "";
 
 static int rereadconfig = 0;
@@ -515,6 +519,10 @@ static void mix_setdefaults()
 
 	CLIENTAUTOFLUSH = 1;
 	MAXRECIPIENTS   = 5;
+
+	TIMESKEW_FORWARD = 2*7*24*60*60;
+	TIMESKEW_BACK = 12*60*60;
+	TEMP_FAIL = 75;
 }
 
 int mix_configline(char *line)
@@ -586,7 +594,11 @@ int mix_configline(char *line)
 	  read_conf(NYMDB) || read_conf(PIDFILE) ||
 	  
 	  read_conf_i(CLIENTAUTOFLUSH) ||
-	  read_conf_i(MAXRECIPIENTS) );
+	  read_conf_i(MAXRECIPIENTS) ||
+	  
+	  read_conf_t(TIMESKEW_FORWARD) ||
+	  read_conf_t(TIMESKEW_BACK) ||
+	  read_conf_i(TEMP_FAIL) );
 }
 
 int mix_config(void)
@@ -812,6 +824,33 @@ int mix_config(void)
 /** Library initialization: ******************************************/
 
 static int initialized = 0;
+
+void mix_check_timeskew() {
+  FILE *f;
+  long now, tpool = 0, tpop3 = 0, tdaily = 0, tmailin = 0, latest = 0;
+
+  f = mix_openfile(REGULAR, "r+");
+  if (f != NULL) {
+    lock(f);
+    fscanf(f, "%ld %ld %ld %ld", &tpool, &tpop3, &tdaily, &tmailin);
+    latest = tpool;
+    latest = latest > tpop3 ? latest : tpop3;
+    latest = latest > tdaily ? latest : tdaily;
+    latest = latest > tmailin ? latest : tmailin;
+    now = time(NULL);
+
+
+    if (( (TIMESKEW_BACK    != 0) && (now < latest - TIMESKEW_BACK   )) ||
+        ( (TIMESKEW_FORWARD != 0) && (now > latest + TIMESKEW_FORWARD)) ) {
+      /* Possible timeskew */
+      errlog(ERRORMSG, "Possible timeskew detected.  Check clock and rm %s\n", REGULAR);
+      exit(TEMP_FAIL);
+    }
+    fclose(f);
+  } else {
+    /* shrug */
+  }
+}
 
 int mix_init(char *mixdir)
 {

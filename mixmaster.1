@@ -624,6 +624,18 @@ Default:
 limits the number of allowed recipients in outgoing mail.  Anything that exceeds this
 number is dropped silently.  Default:
 .BR 5 .
+.TP
+.B TEMP_FAIL
+exit with this exit code when a timeskew problem is suspected.  Also see
+.BR TIMESKEW_BACK
+and
+.BR TIMESKEW_FORWARD .
+The default of
+.B 75
+should cause your MTA to requeue the message if you are running
+mixmaster from a
+.BR .forward
+file.
 .PP
 The following are time variables. They can be given as years (
 .BR y
@@ -708,7 +720,29 @@ Mixmaster will generate and advertise a new key
 period of time before the expiration of the key. Clients should always use 
 the most recently created valid key. Clients that deviate from this 
 recommended behavior risk partitioning attacks. Default:
-.BR 1b . 
+.BR 7d .
+.TP
+.B TIMESKEW_BACK
+Allow going back up to
+.BR TIMESKEW_BACK
+in time.  If the time moved further back mixmaster will assume
+there is a problem with your clock and refuse to start as a remailer.
+This is done by comparing the latest timestamp in 
+.BR time.log
+with the current timestamp.  If set to
+.BR 0
+then this test is skipped.  If the system time is indeed correct, simply
+remove
+.BR time.log .
+Default: 
+.BR 12h .
+.TP
+.B TIMESKEW_FORWARD
+Similar to
+.BR TIMESKEW_BACK
+but allow jumping this far into the future.
+Default: 
+.BR 2w .
 .PP
 The following strings must be specified at compile-time in
 .BR config.h .
