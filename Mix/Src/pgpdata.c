@@ -6,7 +6,7 @@
    details.
 
    OpenPGP data
-   $Id: pgpdata.c,v 1.29 2003/08/24 20:39:26 weaselp Exp $ */
+   $Id: pgpdata.c,v 1.30 2003/09/19 00:51:41 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -780,8 +780,6 @@ int pgp_getkey(int mode, int algo, int *psym, int *pmdc, long *pexpires, BUFFER 
   buf_free(sk);
   buf_free(thiskeyid);
   buf_free(mainkeyid);
-  if (thisalgo == PGP_ES_RSA)
-    keytype = -1;
 
   if (uidd_1) {
     primary = 0;
