@@ -6,7 +6,7 @@
 <!-- change this to no to create a document with lots of whitespace -->
 <?rfc compact="yes"?>
 
-<rfc ipr="full2026" docName="draft-sassaman-mixmaster-03.txt">
+<rfc ipr="full2026" docName="draft-sassaman-mixmaster-01.txt">
 
 <front>
 
@@ -37,7 +37,7 @@
   </author>
 
   <author initials="P." surname="Palfrader" fullname="Peter Palfrader">
-    <organization/>
+    <organization>The Mixmaster Project</organization>
     <address>
       <postal>
         <street>Hoettinger Auffahrt 1</street>
