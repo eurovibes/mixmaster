@@ -718,9 +718,9 @@ in section 7.
 
 Several people contributed ideas and source code to the Mixmaster v2
 software. "Antonomasia" <ant@notatla.org.uk>, Adam Back
-<adam@cypherspace.org>, Bodo Moeller <bmoeller@acm.org>, Marco
-<marcoc1@dada.it>, and Myles <myles@tenhand.com> suggested improvements
-to this document.
+<adam@cypherspace.org>, Bodo Moeller <bmoeller@acm.org>, Marco A.
+Calamari <marcoc1@dada.it>, and Myles <myles@tenhand.com> suggested
+improvements to this document.
 
 
 10. References
