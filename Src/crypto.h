@@ -6,7 +6,7 @@
    details.
 
    Interface to cryptographic library
-   $Id: crypto.h,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: crypto.h,v 1.2 2002/07/22 17:54:48 rabbi Exp $ */
 
 
 #ifndef _CRYPTO_H
@@ -31,6 +31,9 @@
 #endif
 #ifdef USE_IDEA
 #include <openssl/idea.h>
+#endif
+#ifdef USE_AES
+#include <openssl/aes.h>
 #endif
 #include <openssl/cast.h>
 #include <openssl/rand.h>

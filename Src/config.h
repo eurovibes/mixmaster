@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.5 2002/07/10 01:58:49 rabbi Exp $ */
+   $Id: config.h,v 1.6 2002/07/22 17:54:48 rabbi Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -45,6 +45,8 @@
 #define USE_RSA
 /* Use IDEA algorithm? (See file idea.txt) */
 #define USE_IDEA
+/* Use AES algorithm? - should be handled by Install script setting compiler option -DUSE_AES */
+/* #define USE_AES */
 /* Support the OpenPGP message format? */
 #define USE_PGP
 

@@ -6,7 +6,7 @@
    details.
 
    Function prototypes
-   $Id: mix3.h,v 1.5 2002/07/09 08:02:02 rabbi Exp $ */
+   $Id: mix3.h,v 1.6 2002/07/22 17:54:48 rabbi Exp $ */
 
 
 #ifndef _MIX3_H
@@ -212,6 +212,9 @@ int buf_ideacrypt(BUFFER *b, BUFFER *key, BUFFER *iv, int enc);
 int buf_bfcrypt(BUFFER *b, BUFFER *key, BUFFER *iv, int enc);
 int buf_3descrypt(BUFFER *b, BUFFER *key, BUFFER *iv, int enc);
 int buf_castcrypt(BUFFER *b, BUFFER *key, BUFFER *iv, int enc);
+#ifdef USE_AES
+int buf_aescrypt(BUFFER *b, BUFFER *key, BUFFER *iv, int enc);
+#endif
 
 int db_getseckey(byte keyid[], BUFFER *key);
 int db_getpubkey(byte keyid[], BUFFER *key);

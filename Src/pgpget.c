@@ -6,7 +6,7 @@
    details.
 
    Read OpenPGP packets
-   $Id: pgpget.c,v 1.3 2001/12/13 22:33:38 rabbi Exp $ */
+   $Id: pgpget.c,v 1.4 2002/07/22 17:54:48 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -476,6 +476,42 @@ end:
   return (err);
 }
 
+#ifdef USE_AES
+static int pgp_aesdecrypt(BUFFER *in, BUFFER *out, BUFFER *key)
+{
+  int err = 0;
+  byte iv[16];
+  byte hdr[18];
+  int i, n;
+
+  AES_KEY ks;
+
+  if ((key->length != 16 && key->length != 24 && key->length != 32) || in->length <= 18)
+    return (-1);
+
+  buf_prepare(out, in->length - 18);
+
+  for (i = 0; i < 16; i++)
+    iv[i] = 0;
+
+  AES_set_encrypt_key(key->data, key->length<<3, &ks);
+
+  n = 0;
+  AES_cfb128_encrypt(in->data, hdr, 18, &ks, iv, &n, AES_DECRYPT);
+  if (n != 2 || hdr[16] != hdr[14] || hdr[17] != hdr[15]) {
+    err = -1;
+    goto end;
+  }
+  iv[14] = iv[0], iv[15] = iv[1];
+  memcpy(iv, in->data + 2, 14);
+  n = 0;
+  AES_cfb128_encrypt(in->data + 18, out->data, in->length - 18, &ks,
+		   iv, &n, AES_DECRYPT);
+end:
+  return (err);
+}
+#endif
+
 int pgp_getsymmetric(BUFFER *in, BUFFER *key, int algo)
 {
   int err = -1;
@@ -484,6 +520,13 @@ int pgp_getsymmetric(BUFFER *in, BUFFER *key, int algo)
   out = buf_new();
 
   switch (algo) {
+#ifdef USE_AES
+   case PGP_K_AES128:
+   case PGP_K_AES192:
+   case PGP_K_AES256:
+    err = pgp_aesdecrypt(in, out, key);
+    break;
+#endif
 #ifdef USE_IDEA
    case PGP_K_IDEA:
     err = pgp_ideadecrypt(in, out, key);
@@ -677,7 +720,7 @@ int pgp_getsymsessionkey(BUFFER *in, BUFFER *pass)
     buf_rest(temp, in);
     if (temp->length) {
       /* encrypted session key present */
-      buf_appendzero(iv, 8);
+      buf_appendzero(iv, pgp_blocklen(algo));
       skcrypt(temp, algo, key, iv, DECRYPT);
       algo = buf_getc(temp);
       buf_rest(in, temp);

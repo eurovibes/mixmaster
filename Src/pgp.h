@@ -6,7 +6,7 @@
    details.
 
    OpenPGP messages
-   $Id: pgp.h,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: pgp.h,v 1.2 2002/07/22 17:54:48 rabbi Exp $ */
 
 
 #ifdef USE_PGP
@@ -41,6 +41,9 @@
 #define PGP_K_3DES 2
 #define PGP_K_CAST5 3
 #define PGP_K_BF 4
+#define PGP_K_AES128 7
+#define PGP_K_AES192 8
+#define PGP_K_AES256 9
 
 /* hash algorithms */
 #define PGP_H_MD5 1
@@ -105,6 +108,7 @@ int pgp_elgencrypt(BUFFER *b, BUFFER *key);
 int pgp_elgdecrypt(BUFFER *b, BUFFER *key);
 int pgp_keyid(BUFFER *key, BUFFER *id);
 int pgp_keylen(int symalgo);
+int pgp_blocklen(int symalgo);
 
 /* pgpget.c */
 int pgp_getmsg(BUFFER *in, BUFFER *key, BUFFER *sig, char *pubring,
