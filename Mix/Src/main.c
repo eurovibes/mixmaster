@@ -417,6 +417,10 @@ WinNT service:\n\
   if (header == 0)
     buf_nl(msg);
 
+  /* timeskew check */
+  if (REMAIL == 1)
+    mix_check_timeskew();
+
   if (readmail || redirect_mail || send == MSG_MAIL || send == MSG_POST) {
     if (filename == NULL || streq(filename, "-"))
       f = stdin;

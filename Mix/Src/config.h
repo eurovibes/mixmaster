@@ -367,6 +367,9 @@ extern char MAILERROR[];
 extern char MAILBOUNCE[];
 extern int CLIENTAUTOFLUSH;
 extern int MAXRECIPIENTS;
+extern long TIMESKEW_FORWARD;
+extern long TIMESKEW_BACK;
+extern int TEMP_FAIL;
 
 DLLIMPORT extern char ENTEREDPASSPHRASE[LINELEN];
 

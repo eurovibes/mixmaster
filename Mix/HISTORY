@@ -392,6 +392,9 @@
                            Drop messages without timestamps and messages with
                              future timestamps.  This abandons backwards
                              compatibility with Mixmaster 2.0.3 and earlier.
+                           Try to detect timeskews and refuse to run as a
+                             remailer if there is a problem suspected.  Only
+                             applies to mixmaster in remailer mode.
 
                            BUG FIXES:
 
