@@ -1,8 +1,12 @@
-/* $Id: main.c,v 1.1 2002/08/28 20:06:50 rabbi Exp $
+/* $Id: main.c,v 1.2 2002/08/29 19:54:47 rabbi Exp $
  * 
  * $Log: main.c,v $
- * Revision 1.1  2002/08/28 20:06:50  rabbi
- * Initial revision
+ * Revision 1.2  2002/08/29 19:54:47  rabbi
+ * Fixed compilation error in main.c. The value of errlog is now assigned in
+ * main().
+ *
+ * Revision 1.1.1.1  2002/08/28 20:06:50  rabbi
+ * Mixmaster 2.0.4 source.
  *
  * Revision 2.13  1998/08/21  13:26:08  um
  * *** empty log message ***
@@ -206,7 +210,7 @@ int MIDDLEMAN = 0;
 int PACKETEXP = 7 * 24;
 int IDEXP = 7 * 24;
 int ERRSTDOUT = 0;
-FILE *errlog = stderr;
+FILE *errlog;
 
 #ifdef USE_BSAFE
 B_ALGORITHM_METHOD *CHOOSER[] =
@@ -608,6 +612,7 @@ main (int argc, char *argv[])
   int i, error, type;
   int rem = 0, snd = 0, lat = 0, chain = 0, gen = 0, keymgt = 0;
   int path = 0, type_list = 0, demon = 0, randseed = 0, queue = 0;
+  errlog = stderr;
 
   init_mix ();
 
