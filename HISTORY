@@ -382,3 +382,7 @@
                            In client mode (REMAIL n) the pool is flushed every time
                              mixmaster is run unless CLIENTAUTOFLUSH is set to n.
                              (closes: #676794: Rate implementation doubled)
+                           Found that weird bug that weird bug that sometimes led to
+                             "Unknown remailer version!" errors: In chain_randfinal()
+                             we selected a random value between 0 and maxrem instead
+                             of 0 and maxrem - 1.
