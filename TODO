@@ -23,6 +23,8 @@ o Remove nym stuff from the manpage  (rabbi)
 - post-install scripts need to be reworked
   - follows item above  (dybbuk)
 - ship with CVS ChangeLog
+- libraries (pcre, zlib) were removed from the Src directory.
+  auto* needs to be updated (dybbuk)
 
 Packaging:
 - rpm -- dybbuk
