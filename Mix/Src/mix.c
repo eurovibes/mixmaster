@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.11.2.7 2002/10/10 13:18:44 weaselp Exp $ */
+   $Id: mix.c,v 1.11.2.8 2002/10/11 01:19:16 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -750,12 +750,12 @@ void sighandler(int signal) {
     pool run before it terminates.
 
     @param restart  Whether or not system calls should be
-	            restarted. Usually we want this, the
-		    only excetion is the sleep() in the
-		    daemon mail loop.
+                    restarted. Usually we want this, the
+                    only excetion is the sleep() in the
+                    daemon mail loop.
     @author         PP
     @return         -1 if calling sigaction failed, 0 on
-	            no error
+                    no error
   */
 int setsignalhandler(int restart)
 {
@@ -824,6 +824,8 @@ int mix_daemon(void)
   if (POP3TIME < t)
     t = POP3TIME;
 #endif /* USE_SOCK */
+  if (t < 5)
+    t = 5; /* Some kind of safety for broken systems */
   slept = t;
 
   setsignalhandler(1); /* set signal handlers and restart any interrupted system calls */
