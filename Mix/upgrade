@@ -6,13 +6,13 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: upgrade,v 1.2 2002/07/11 02:39:33 rabbi Exp $
+# $Id: upgrade,v 1.3 2002/10/09 21:45:07 weaselp Exp $
 
 # readln text default
 readln()
-{   
+{
   echo $echo1 "$1 [$2] $echo2"
-  read ans 
+  read ans
   if [ -z "$ans" ]
   then
     ans="$2"
@@ -26,7 +26,7 @@ readln "Continue with upgrade?" n
  if [ "$ans" = n ]
  then
   exit 1
- fi  
+ fi
 
 NEW=~/tmp.$$
 mkdir $NEW

@@ -1,5 +1,5 @@
 .TH MIX 1 "Mixmaster Version 3.0 beta"
-.\" $Id: mix.1,v 1.21 2002/10/09 21:38:54 weaselp Exp $
+.\" $Id: mix.1,v 1.22 2002/10/09 21:45:07 weaselp Exp $
 .SH NAME
 mix \- anonymous remailer software
 .SH SYNOPSIS
@@ -476,7 +476,7 @@ where complaints about anonymous messages must be
 avoided. (The variable
 .B FORWARDTO
 specifies the remailer
-chain to be used; default: 
+chain to be used; default:
 .BR * .)
 Default:
 .BR n .
@@ -546,9 +546,9 @@ Client default:
 .BR 0 .
 .TP
 .B RATE
-Percentage of messages from the pool to be sent. Remailer default: 
+Percentage of messages from the pool to be sent. Remailer default:
 .BR 95 .
-Client default: 
+Client default:
 .BR 100 .
 Lower values cause the pool to increase in size when
 many messages are received at a time, reducing the effect
@@ -556,29 +556,29 @@ of flooding attacks.
 .TP
 .B INDUMMYP
 Probability that Mixmaster will generate dummy messages upon
-receipt of incoming mail. Larger numbers mean more dummy 
-messages on average. For instance, 
+receipt of incoming mail. Larger numbers mean more dummy
+messages on average. For instance,
 .B 10
-means that on average one in nine incoming messages will trigger 
+means that on average one in nine incoming messages will trigger
 a dummy generation, and
-.B 20 
+.B 20
 means that one in four will.
 .B 0
 means no dummy messages. Remailer default:
 .BR 20 .
-Client default: 
+Client default:
 .BR 3 .
 .TP
 .B OUTDUMMYP
 Probability that Mixmaster will generate dummy messages at
 .B SENDPOOL
-time. If the pool is processed frequently, this should be a lower value 
+time. If the pool is processed frequently, this should be a lower value
 than if there are long intervals between pool processing. Examples:
-.B 50 
-means on average, one dummy message will be generated per pool 
+.B 50
+means on average, one dummy message will be generated per pool
 processing.
-.B 80 
-means four will be generated. 
+.B 80
+means four will be generated.
 .B 0
 means no dummy messages. Remailer default:
 .BR 67 .
@@ -642,7 +642,7 @@ Default:
 .B MAILINTIME
 How often Mixmaster should read mail from
 .BR MAILIN
-and process mails fetched via POP3. Processing here means to 
+and process mails fetched via POP3. Processing here means to
 answer remailer-xxx requests and decrypt messages to the Mixmaster
 and place them in the pool. No other processing of the pool is
 done. This action is always performed sending out messages from the pool (at
@@ -653,7 +653,7 @@ intervals). Default:
 .BR 5m .
 .TP
 .B PACKETEXP
-How long to store parts of incomplete multipart messages and other 
+How long to store parts of incomplete multipart messages and other
 temporary pool files.
 Default:
 .BR 7d .
@@ -710,9 +710,9 @@ the remailer is configured to filter out binaries.
 The character set used for MIME-encoded header lines.
 .TP
 .B DESTBLOCK
-A quoted list of files that contain blocked addresses. 
-Files must be separated by one space. Mixmaster will choose 
-the first file for writing 
+A quoted list of files that contain blocked addresses.
+Files must be separated by one space. Mixmaster will choose
+the first file for writing
 .B AUTOBLOCK
 is enabled.
 .PP
@@ -727,7 +727,7 @@ casual attackers. You can use
 .B `make PASS="\fIyour passphrase\fB"'
 to set a passphrase. This should
 .I not
-be the same as the client passphrase. This option is now deprecated in 
+be the same as the client passphrase. This option is now deprecated in
 favor of the configuration file option
 .BR PASSPHRASE .
 .TP
@@ -798,7 +798,7 @@ Type 2 remailer keys (\fBPUBRING\fP).
 .B rlist.txt
 List of reliable type 1 remailers (\fBTYPE1LIST\fP).
 .TP
-.B mlist.txt 
+.B mlist.txt
 List of reliable type 2 remailers (\fBTYPE2REL\fP).
 .TP
 .B type2.list
