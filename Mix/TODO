@@ -1,3 +1,9 @@
+Items that need to be completed before the next HEAD release:
+
+* keylifetime and key{grace,overlap}period needs to be documented once
+  it's finished.
+
+
 Mandatory todo items before 3.0 release:
 
 * autoconf installation script is needed
@@ -9,8 +15,6 @@ Mandatory todo items before 3.0 release:
 * do full regression tests on as many platforms possible
   + list only these platforms as supported
   + test on Solaris 9 on SPARC.
-* keylifetime and key{grace,overlap}period needs to be documented once
-  it's finished
 * saner usage of /dev/[u]random is required
 * clean up documentation and tarball contents
   + ship with CVS ChangeLog
@@ -46,3 +50,4 @@ Further wishlist:
 * store nym public keys locally
 * nym client needs major work.
 * support for Borland compiler on Windows.
+* COMMENT entire existing codebase!
