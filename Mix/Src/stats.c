@@ -6,7 +6,7 @@
    details.
 
    Remailer statistics
-   $Id: stats.c,v 1.10 2002/08/22 05:18:26 weaselp Exp $ */
+   $Id: stats.c,v 1.11 2002/08/22 05:25:22 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -317,14 +317,18 @@ int conf(BUFFER *out)
     * anon mixmaster@anon.978.org 7384ba1eec585bfd7d2b0e9b307f0b1d 2.9b36 MCNm
     */ 
     
-    /*buf_nl(out);
-    buf_appends(out, "SUPPORTED CPUNK (TYPE I) REMAILERS\n");
-    FIXME
+    buf_nl(out);
+    /* FIXME
+    if (PGP) {
+      buf_appends(out, "SUPPORTED CPUNK (TYPE I) REMAILERS\n");
+      buf_nl(out);
+    }
     */
-    buf_nl(out);
-    buf_appends(out, "SUPPORTED MIXMASTER (TYPE II) REMAILERS\n");
-    prepare_type2list(out);
-    buf_nl(out);
+    if (MIX) {
+      buf_appends(out, "SUPPORTED MIXMASTER (TYPE II) REMAILERS\n");
+      prepare_type2list(out);
+      buf_nl(out);
+    }
   }
 
   
