@@ -117,6 +117,9 @@ char ALLPINGERSURL[BUFSIZE];
 char ALLPINGERSFILE[PATHMAX];
 char WGET[PATHMAX];
 char STATSSRC[PATHMAX];
+int  STATSAUTOUPDATE;
+long STATSINTERVAL;
+
 
 /* remailer configuration */
 int REMAIL;
@@ -461,6 +464,8 @@ static void mix_setdefaults()
 	UNENCRYPTED   = 0;
 	REMIX         = 1;
 	REPGP         = 1;
+	STATSAUTOUPDATE = 0;
+	STATSINTERVAL = 8 * 60 * 60;
 	strnncpy(EXTFLAGS, "");
 
     strnncpy(PRECEDENCE, "");
@@ -607,7 +612,8 @@ int mix_configline(char *line)
 	  read_conf(PGPREMSECRING) || read_conf(NYMSECRING) ||
 	  read_conf(NYMDB) || read_conf(PIDFILE) ||
 	  read_conf(WGET) || read_conf(STATSSRC) ||
-	  
+	  read_conf_i(STATSAUTOUPDATE) || read_conf_t(STATSINTERVAL) ||
+
 	  read_conf_i(CLIENTAUTOFLUSH) ||
 	  read_conf_i(MAXRECIPIENTS) ||
 	  
@@ -926,10 +932,26 @@ void mix_exit(void)
   initialized=0;
 }
 
+void mix_upd_stats(void)
+{
+  FILE *f;
+  BUFFER *statssrc;
+  statssrc = buf_new();
+  buf_clear(statssrc);
+  f = mix_openfile(STATSSRC, "r");
+  if (f != NULL) {
+    buf_read(statssrc, f);
+    fclose(f);
+  }
+  if (statssrc->length > 0)
+    download_stats(statssrc->data);
+  buf_free(statssrc);
+}
+
 int mix_regular(int force)
 {
   FILE *f;
-  long now, tpool = 0, tpop3 = 0, tdaily = 0, tmailin = 0;
+  long now, tpool = 0, tpop3 = 0, tdaily = 0, tmailin = 0, tstats = 0;
   int ret = 0;
 
   mix_init(NULL);
@@ -938,7 +960,7 @@ int mix_regular(int force)
   f = mix_openfile(REGULAR, "r+");
   if (f != NULL) {
     lock(f);
-    fscanf(f, "%ld %ld %ld %ld", &tpool, &tpop3, &tdaily, &tmailin);
+    fscanf(f, "%ld %ld %ld %ld %ld", &tpool, &tpop3, &tdaily, &tmailin, &tstats);
     if (now - tpool >= SENDPOOLTIME)
       force |= FORCE_POOL | FORCE_MAILIN;
 #ifdef USE_SOCK
@@ -949,6 +971,8 @@ int mix_regular(int force)
       force |= FORCE_DAILY;
     if (now - tmailin >= MAILINTIME)
       force |= FORCE_MAILIN;
+    if (now - tstats >= STATSINTERVAL)
+      force |= FORCE_STATS;
     if (force & FORCE_POOL)
       tpool = now;
     if (force & FORCE_POP3)
@@ -957,16 +981,18 @@ int mix_regular(int force)
       tdaily = now;
     if (force & FORCE_MAILIN)
       tmailin = now;
+    if (force & FORCE_STATS)
+      tstats = now;
     rewind(f);
-    fprintf(f, "%ld %ld %ld %ld\n", tpool, tpop3, tdaily, tmailin);
+    fprintf(f, "%ld %ld %ld %ld %ld\n", tpool, tpop3, tdaily, tmailin, tstats);
     unlock(f);
     fclose(f);
   } else {
-    force = FORCE_POOL | FORCE_POP3 | FORCE_DAILY | FORCE_MAILIN;
+    force = FORCE_POOL | FORCE_POP3 | FORCE_DAILY | FORCE_MAILIN | FORCE_STATS;
     f = mix_openfile(REGULAR, "w+");
     if (f != NULL) {
       lock(f);
-      fprintf(f, "%ld %ld %ld %ld\n", now, now, now, now);
+      fprintf(f, "%ld %ld %ld %ld %ld\n", now, now, now, now, now);
       unlock(f);
       fclose(f);
     } else
@@ -983,6 +1009,8 @@ int mix_regular(int force)
     ret = process_mailin();
   if (force & FORCE_POOL)
     ret = pool_send();
+  if ((force & FORCE_STATS) && (STATSAUTOUPDATE != 0))
+    mix_upd_stats();
 
   return (ret);
 }

@@ -400,6 +400,8 @@ extern char ALLPINGERSFILE[];
 
 extern char WGET[];
 extern char STATSSRC[];
+extern int STATSAUTOUPDATE;
+extern long STATSINTERVAL;
 
 DLLIMPORT extern char ENTEREDPASSPHRASE[LINELEN];
 
