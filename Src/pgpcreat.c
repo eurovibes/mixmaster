@@ -6,7 +6,7 @@
    details.
 
    Create OpenPGP packets
-   $Id: pgpcreat.c,v 1.10 2002/09/18 23:26:16 rabbi Exp $ */
+   $Id: pgpcreat.c,v 1.11 2002/09/20 17:59:25 disastry Exp $ */
 
 
 #include "mix3.h"
@@ -52,7 +52,7 @@ int pgp_packet(BUFFER *in, int type)
   }
 #ifndef MIMIC
   else if (in->length < 65536)
-#else /* end of not MIMIC
+#else /* end of not MIMIC */
   else if ((type == PGP_PUBKEY || type == PGP_SECKEY || type == PGP_SIG
 	   || type == PGP_SESKEY || type == PGP_PUBSUBKEY ||
 	   type == PGP_SECSUBKEY) && in->length < 65536)
