@@ -5,18 +5,15 @@
         D Deferred
         X Abandoned
 
-Items that need to be completed before the next HEAD release:
+Items that need to be completed before the next MAIN release:
 
-- keylifetime and key{grace,overlap}period needs to be documented once
-  it's finished  (rabbi)
-- Modify release tarball generation script to build the .tab.c file from
-  parsedate.y, so we don't end up requiring bison on every system that
-  wants to build mixmaster  (rabbi)
 o drop messages without timestamp (weasel)
   - document somewhere  (rabbi)
 o drop messages with future timestamp  (weasel)
   - document somewhere  (rabbi)
-o Remove nym stuff from the manpage  (rabbi)
+- delete secret keys securely after keygraceperiod expires
+- implement time-skew sanity checks so that the timestamp, 
+  key rotation and key deletion features don't cause havok.
 - autoconf installation script is needed
   - mostly done -- a few bugs still need fixing  (dybbuk)
 - post-install scripts need to be reworked
@@ -26,6 +23,9 @@ o Remove nym stuff from the manpage  (rabbi)
 - fix configure bug with global config file: .../${prefix}/... (dybbuk)
 
 Packaging:
+- Modify release tarball generation script to build the .tab.c file from
+  parsedate.y, so we don't end up requiring bison on every system that
+  wants to build mixmaster  (rabbi)
 - rpm -- dybbuk
 - Windows build instructions/files  (rabbi)
 - provide a packaged Windows build to be used with QuickSilver

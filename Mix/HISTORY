@@ -339,7 +339,7 @@
                            Mixmaster keys now have creation and expiration date.
                              It is not secured by any crypto voodoo, it's only
                              informational for clients to decide which keys to
-                             use should they have more.
+                             use should they have more than one per remailer.
                              - on the client side we do not show remailers (and
                                therefore not use them) if their key is expired.
                              - the remailer refuses to decrypt messages to keys
