@@ -1,5 +1,5 @@
 .TH MIX 1 "Mixmaster Version 3.0 beta"
-.\" $Id: mix.1,v 1.20 2002/09/28 12:50:18 ulfm Exp $
+.\" $Id: mix.1,v 1.21 2002/10/09 21:38:54 weaselp Exp $
 .SH NAME
 mix \- anonymous remailer software
 .SH SYNOPSIS
@@ -386,16 +386,6 @@ is
 Default:
 .BR mbox .
 .TP
-.B MAILIN
-If defined an additional mail folder where Mixmaster should read messages from
-when processing its pool. If it ends with a
-.B /
-it is treated as a Maildir, otherwise a standard mbox format file
-is expected. All messages are removed from the folder after reading.
-.B MAILIN
-is not set by default.
-It is an incredible bad idea to set this the same as \fBMAILBOX\fP.
-.TP
 .B MAILABUSE
 Mail folder for messages sent to the
 .I COMPLAINTS
@@ -430,6 +420,16 @@ errors. Default:
 .B MAILBOUNCE
 Mail folder for bounce messages. Default:
 .IR MAILBOX .
+.TP
+.B MAILIN
+If defined an additional mail folder where Mixmaster should read messages from
+when processing its pool. If it ends with a
+.B /
+it is treated as a Maildir, otherwise a standard mbox format file
+is expected. All messages are removed from the folder after reading.
+.B MAILIN
+is not set by default.
+It is an incredible bad idea to set this the same as \fBMAILBOX\fP.
 .TP
 .B VERBOSE
 If
