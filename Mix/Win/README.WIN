@@ -1,0 +1,68 @@
+Mixmaster 2.9 -- anonymous remailer software -- (C) 1999 - 2002 Anonymizer Inc.
+-------------------------------------------------------------------------------
+
+This is the README.WIN file for the Windows distribution of MixMaster.
+
+PREVIEW VERSION  --  WARNING: THIS SOFTWARE IS UNDER DEVELOPMENT!
+Some functionality may not be complete until the 3.0 release.
+
+Please read the standard README file in conjunction with this file.
+
+
+Installation:
+------------
+1.  Install OpenSSL
+     Download the OpenSSL source package and extract it to a suitable directory
+     (e.g. c:\openssl-0.9.7).
+     Follow the instructions in INSTALL.W32 which is included with the package.
+
+2.  Download the latest Mixmaster source package from SourceForge.net and extract
+    it into a suitable directory (e.g. c:\mixmaster-2.9.0).
+
+3.  Copy the following files from the OpenSSL package you built in
+    step 1 into the mixmaster tree.
+   
+        c:\openssl-0.9.7\inc32\openssl\*.* -> c:\mixmaster-2.9.0\Src\include\openssl\
+        c:\openssl-0.9.7\out32dll\libeay32.* -> c:\mixmaster-2.9.0\Src\
+
+4.  Copy the two makefiles mix.mak and mixlib.mak from c:\mixmaster-2.9.0\Win\ to
+    c:\mixmaster-2.9.0\Src\
+
+5.  Start a command line (Dos) session and cd \mixmaster-2.9.0\Src
+
+6.  Build the mixmaster library by typing "nmake -f mixlib.mak"
+      There will be some compiler warnings which can be ignored.
+
+7.  Build the mixmaster executable by typing "nmake -f mix.mak"
+
+8.  Copy the files mix.exe and mixlib.dll from c:\mixmaster-2.9.0\Src\Release to a suitable
+    mixmaster run directory (e.g. c:\mix).
+   
+9.  Copy c:\mixmaster-2.9.0\Src\libeay32.dll to the same mixmaster run directory.
+
+10. Copy the other files required to run mixmaster from c:\mixmaster-2.9.0\conf
+    to the same mixmaster run directory.
+
+
+Copyright:
+---------
+
+Mixmaster may be redistributed and modified under certain conditions.
+This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
+ANY KIND, either express or implied. See the file COPYRIGHT for
+details.
+
+A license is required to use the IDEA(TM) algorithm for commercial
+purposes; see the file idea.txt for details.
+
+Mixmaster uses the compression library zlib by Jean-loup Gailly and Mark
+Adler, the free ncurses library and the regex library by Philip Hazel.
+This product includes cryptographic software written by Eric Young
+(eay@cryptsoft.com). This product includes software developed by the
+OpenSSL Project for use in the OpenSSL Toolkit (http://www.OpenSSL.org/).
+For some platforms: This product includes software developed by the
+University of California, Berkeley and its contributors.
+
+All trademarks are the property of their respective owners.
+
+$Id: README.WIN,v 1.1.2.1 2003/01/14 14:52:37 colintu Exp $
