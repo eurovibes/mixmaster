@@ -377,7 +377,7 @@ User data section              [ up to ~2.5 MB]</artwork></figure>
 |                   |
 |                   |
 |                   |
-+-------------------+</figure></artwork>
++-------------------+</artwork></figure>
       </t>
 
       <section anchor="packet-header" title="Packet Header Format">
@@ -818,7 +818,7 @@ Remailer-Type: Mixmaster [version number]
   <section anchor="acknowledgements" title="Acknowledgements">
 
     <t>Several people contributed ideas and source code to the Mixmaster v2
-      software.<,/t>
+      software.</t>
 
     <t>"Antonomasia" &lt;ant@notatla.org.uk&gt;,
       Adam Back &lt;adam@cypherspace.org&gt;,
