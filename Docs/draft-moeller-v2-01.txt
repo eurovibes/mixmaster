@@ -69,7 +69,7 @@ Table of Contents
    2.3 Message Reassembly
    2.4 Remixing
    3. Pool Behavior
-   3.1 Pool Mix Algorithm
+   3.1 Timed Dynamic Pool Mix Algorithm
    3.2 Dummy Traffic
    4. Message Format
    4.1 Payload Format
@@ -209,7 +209,7 @@ message as though it had been delivered in the other protocol format initially.
 
 3. Pool Behavior
 
-3.1 Cottrell Pool Mix Algorithm
+3.1 Timed Dynamic Pool Mix Algorithm
 
 In order to obfuscate the link between incoming and outgoing messages,
 Mixmaster uses a pooling scheme.  Messages that are to be forwarded
@@ -217,7 +217,7 @@ anonymously are stored in a pool.  In regular intervals the remailer fires
 and sends some random messages from the pool to either the next hop or
 their final recipients.
 
-The pooling scheme used in Mixmaster is the "Cottrell Pool Mix", which has
+The pooling scheme used in Mixmaster is a "Timed Dynamic Pool Mix", which has
 the following three parameters:
   t       mixing interval
   min     minimum number of messages in the pool
