@@ -106,11 +106,11 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
     snprintf(basename, MAX_BASENAME, "%lu.%u_%lu.%s,S=%u",
       time(NULL), getpid(), namecounter++, hostname, messagesize);
     basename[MAX_BASENAME-1] = '\0';
-    strncat(tmpname, "tmp/", MAX_SUBNAME);
+    strncat(tmpname, "tmp" DIRSEPSTR, MAX_SUBNAME);
     tmpname[MAX_SUBNAME-1] = '\0';
     strncat(tmpname, basename, MAX_SUBNAME);
     tmpname[MAX_SUBNAME-1] = '\0';
-    strncat(newname, "new/", MAX_SUBNAME);
+    strncat(newname, "new" DIRSEPSTR, MAX_SUBNAME);
     newname[MAX_SUBNAME-1] = '\0';
     strncat(newname, basename, MAX_SUBNAME);
     newname[MAX_SUBNAME-1] = '\0';
@@ -193,7 +193,7 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
     snprintf(basename, MAX_BASENAME, "%lu.%u_%lu.%s,S=%u",
       time(NULL), getpid(), namecounter++, hostname, messagesize);
     basename[MAX_BASENAME-1] = '\0';
-    strncat(newname, "new/", MAX_SUBNAME);
+    strncat(newname, "new" DIRSEPSTR, MAX_SUBNAME);
     newname[MAX_SUBNAME-1] = '\0';
     strncat(newname, basename, MAX_SUBNAME);
     newname[MAX_SUBNAME-1] = '\0';
