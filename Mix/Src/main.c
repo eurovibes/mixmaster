@@ -320,7 +320,7 @@ int main(int argc, char *argv[])
     goto end;
   }
   if (help || (isatty(fileno(stdin)) && isatty(fileno(stdout))))
-    fprintf(stderr, "Mixmaster %s - %s\n", VERSION, COPYRIGHT);
+    fprintf(stderr, "Mixmaster %s (%s) - %s\n", VERSION, SOURCE_REVISION, COPYRIGHT);
 
   if (help) {
     printf("Usage: %s [options] [user@host] [filename]\n\n", argv[0]);

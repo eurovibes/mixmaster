@@ -6,7 +6,8 @@
    details.
 
    Version definition file.
-   $Id$ */
+   $Id: version.h 651 2003-11-07 06:52:03Z weasel $ */
 
 
 #define VERSION "2.9.0.1"
+#define SOURCE_REVISION "$Rev$"
