@@ -271,14 +271,15 @@
                            Fixed permissions on tarball release.
                            Documentation updates.
 
-2002-??-??      MAIN      Applied Maildir feature patch by drt@un.bewaff.net,
-                             with some changes by PP:
-                             MAILBOX can now be a Maildir (closes: #586223).
-                           New option MAILIN that can be set to either a mbox
+2002-??-??      ???????    New option MAILIN that can be set to either a mbox
                              or Maildir folder. New mail will be read from it
                              and the folder cleared every time Mixmaster
                              processes its pool, or at MAILINTIME intervals
                              (closes: #597043).
+
+2002-??-??      MAIN      Applied Maildir feature patch by drt@un.bewaff.net,
+                             with some changes by PP:
+                             MAILBOX can now be a Maildir (closes: #586223).
                            Mixmaster in daemon mode reloads configuration on
                              SIGHUP. Upon receiving SIGTERM or SIGINT it will
                              finish its current queue run and then exit
