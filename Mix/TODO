@@ -1,68 +1,63 @@
-Todo items before 2.9.1 release:
-
-* permit CRAM-MD5 SMTP AUTH in addition to LOGIN.  n/a (patch welcome)
-
+        - Not done
+        * Top priority
+        . Partially done
+        o Done
+        D Deferred
+        X Abandoned
 
 Items that need to be completed before the next HEAD release:
 
-* keylifetime and key{grace,overlap}period needs to be documented once
-  it's finished.  weasel
-* Modify release tarball generation script to build the .tab.c file from
+- keylifetime and key{grace,overlap}period needs to be documented once
+  it's finished  (weasel)
+- Modify release tarball generation script to build the .tab.c file from
   parsedate.y, so we don't end up requiring bison on every system that
-  wants to build mixmaster.  rabbi
-* document experimental --redirect in mix.1  weasel
+  wants to build mixmaster  (rabbi)
+- document experimental --redirect in mix.1  (weasel)
+- drop messages without timestamp (weasel)
+  - document somewhere  (rabbi)
+- drop messages without timestamp  (weasel)
+  - document somewhere  (rabbi)
+- drop messages with future timestamp  (weasel)
+  - document somewhere  (rabbi)
+- Remove nym stuff from the manpage  (weasel,rabbi)
+- autoconf installation script is needed
+  - mostly done -- a few bugs still need fixing  (dybbuk)
+- post-install scripts need to be reworked
+  - follows item above  (dybbuk)
+- ship with CVS ChangeLog
 
-Mandatory todo items before 3.0 release:
+Packaging:
+- rpm -- dybbuk
+- Windows build instructions/files  (rabbi)
+- provide a packaged Windows build to be used with QuickSilver
+  + Richard has an Installer we can use for this purpose  (rabbi)
+- Macintosh OS/X support  (rabbi)
 
-* Remove nym stuff from the manpage  weasel,rabbi
-* autoconf installation script is needed
-  - mostly done -- a few bugs still need fixing  dybbuk
-* post-install scripts need to be reworked
-  - follows item above.  dybbuk
-
-  * rpm -- dybbuk
-* provide a packaged Windows build to be used with QuickSilver
-  - Richard has an Installer we can use for this purpose.  rabbi
-* do full regression tests on as many platforms possible
-  + list only these platforms as supported
-  + test on Solaris 9 on SPARC.
-* saner usage of /dev/[u]random is required  -- throw warning when not in daemon mode
-* clean up documentation and tarball contents
-  + ship with CVS ChangeLog
+Wishlist:
+- don't drop messages if there are not enough reliable remailers.
+- permit CRAM-MD5 SMTP AUTH in addition to LOGIN.  n/a (patch welcome)
+- do full regression tests on as many platforms possible
+  - list only these platforms as supported
+  - test on Solaris 9 on SPARC.
+- saner usage of /dev/[u]random is required  -- throw warning when not in daemon mode
+- clean up documentation and tarball contents
   + reorganize directory structure
   + add a CONTRIBUTORS or THANKS file.   rabbi
-* resolve any new critical issues
+- AES support -- requires OpenSSL 0.9.7  dybbuk
 
 
-Items for 3.0 or 3.0.1
-
-* allow for separate hard-coded remailer and client defaults.  n/a
-* allow for verification of clearsigned OpenPGP messages  disastry
-* AES support -- requires OpenSSL 0.9.7  dybbuk
-* further mpgp testing of AES/MDC packet support  ulf
-* honor key preferences when encrypting to multiple keys  ulf/disastry (n/a)
-* Macintosh OS/X support  rabbi
-* Windows build instructions/files  rabbi
-* documentation issues resolved  rabbi
-  + mpgp man page  n/a
-* find bug that is causing t* files to linger  n/a
-* further debugging (if needed).
-
-
-Further wishlist:
-
-* Automatic key handling:
-  + requires implementing key signing, key deletion
-    - implement remailer-key signing?
-    - if yes, which key?
-* make mpgp friendlier
-* store nym public keys locally
-* nym client needs major work.
-* support for Borland compiler on Windows.
-  - I'ld even go so far as drop Visual C (or whatever we're supporting at
+Abandoned/Deferred:
+D allow for separate hard-coded remailer and client defaults.  n/a
+D allow for verification of clearsigned OpenPGP messages  disastry
+D honor key preferences when encrypting to multiple keys  ulf/disastry (n/a)
+D further mpgp testing of AES/MDC packet support  ulf
+D make mpgp friendlier
+  D mpgp man page  n/a
+X nym client needs major work.
+  X store nym public keys locally
+D find bug that is causing t* files to linger  n/a
+D COMMENT entire existing codebase!  (HAHA)
+D support for Borland compiler on Windows.
+  D I'ld even go so far as drop Visual C (or whatever we're supporting at
     the moment) and require gcc with Cygwin to build it. But only if this
     results in a Binary that runs without additional DLLs. (Weasel)
-* support a list of remailers not to be selected as *.
-  - a user suggested allowing filtering regexen over chains.
-    useful?  <20021001215010.28351.qmail@nym.alias.net>
-* COMMENT entire existing codebase!
