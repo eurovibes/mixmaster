@@ -449,7 +449,7 @@ build_message (FILE * in_ptr, byte numdest,
 		 Use timestamp to prevent replay of old messages. */
 	      add_to_buffer (headbuff[hop], TSMAGIC, sizeof(TSMAGIC));
 	      /* Fuzzy timestamp: don't leak more information than necessary */
-	      timestamp = time(NULL) / SECONDSPERDAY - random_number(3);
+	      timestamp = time(NULL) / SECONDSPERDAY - random_number(4);
 	      tmpbyte = timestamp & 0xFF;
 	      add_to_buffer (headbuff[hop], &tmpbyte, 1);
 	      tmpbyte = (timestamp / 256) & 0xFF;
