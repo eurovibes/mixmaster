@@ -6,7 +6,7 @@
    details.
 
    Send messages from pool
-   $Id: pool.c,v 1.3 2001/11/06 23:41:58 rabbi Exp $ */
+   $Id: pool.c,v 1.4 2001/11/16 04:51:03 rabbi Exp $ */
 
 #include "mix3.h"
 #include <stdlib.h>
@@ -43,6 +43,7 @@ int mix_send(void)
  * files in user editor: x*
  * incoming mail:        i*  *.inf
  * partial messages:     p*  p*.*
+ * error messages:       e*  *.err
  * outgoing messages:    out*.txt (to be used by external program)
  */
 
