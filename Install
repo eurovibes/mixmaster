@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.12 2002/08/26 22:53:40 rabbi Exp $
+# $Id: Install,v 1.13 2002/08/31 09:28:21 rabbi Exp $
 
 #whereis program default-path
 whereis()
@@ -360,7 +360,7 @@ whenever you re-compile Mixmaster)."
 stored in mix.cfg in clear)."
       read ans
 
-      if [ "$ans" == "" ]
+      if [ "$ans" = "" ]
       then
 	echo "WARNING: setting empty passphrase"
       fi
@@ -442,6 +442,17 @@ then
  INCDIR="/usr/include /usr/include/ssl /usr/lib/ssl/include /usr/local/ssl/include"
  SRCDIR="openssl*"
 
+ opensslwarn()
+ {
+ echo $opensslwarning
+  readln "Continue anyway?" y
+  if [ "$ans" = "n" ]
+  then
+   echo $opensslinfo
+   exit 1
+  fi
+ }
+
  if [ "$system" = win32 ]
  then
   findlib libeay32.a
@@ -496,27 +507,27 @@ then
  elif [ "16#$version" = "16#90581f" ]
  then
   echo "Compiling with OpenSSL 0.9.5a."
-  echo $opensslwarning
+  opensslwarn
  elif [ "16#$version" = "16#90601f" ]
  then
   echo "Compiling with OpenSSL 0.9.6a."
-  echo $opensslwarning
+  opensslwarn
  elif [ "16#$version" = "16#90602f" ]
  then
   echo "Compiling with OpenSSL 0.9.6b."
-  echo $opensslwarning
+  opensslwarn
  elif [ "16#$version" = "16#90603f" ]
  then
   echo "Compiling with OpenSSL 0.9.6c."
-  echo $opensslwarning
+  opensslwarn
  elif [ "16#$version" = "16#90604f" ]
  then
   echo "Compiling with OpenSSL 0.9.6d."
-  echo $opensslwarning
+  opensslwarn
  elif [ "16#$version" = "16#90605f" ]
  then
   echo "Compiling with OpenSSL 0.9.6e."
-  echo $opensslwarning
+  opensslwarn
  elif [ "16#$version" = "16#90606f" ]
  then
   echo "Compiling with OpenSSL 0.9.6f."
