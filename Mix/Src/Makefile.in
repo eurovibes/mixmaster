@@ -5,11 +5,11 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Makefile.in,v 1.9 2003/03/31 17:16:15 weaselp Exp $
+# $Id: Makefile.in,v 1.10 2003/08/08 15:17:52 dybbuk Exp $
 
 # Edit according to the libraries you want to use:
 INC = @CPPFLAGS@
-DEF = -DUSE_SOCK @MIXDIR@
+DEF = -DUSE_SOCK @MIXDIR@ @DEFS@ @XDEFS@
 LIBS = @LIBS@ @XLIBS@
 LDFLAGS = @LDFLAGS@ @LIBOBJS@
 

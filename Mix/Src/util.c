@@ -6,8 +6,7 @@
    details.
 
    Utility functions
-   $Id: util.c,v 1.15 2003/05/03 11:20:42 weaselp Exp $ */
-
+   $Id: util.c,v 1.16 2003/08/08 15:17:52 dybbuk Exp $ */
 
 #include "mix3.h"
 #include <stdlib.h>
@@ -617,30 +616,30 @@ time_t parse_yearmonthday(char* str)
     char *tz;
 
     tz = getenv("TZ");
-#ifdef NO_SETENV
-    putenv("TZ=GMT");
-#else /* end of NO_SETENV */
+#ifdef HAVE_SETENV
     setenv("TZ", "GMT", 1);
-#endif /* else if not NO_SETENV */
+#else /* end of HAVE_SETENV */
+    putenv("TZ=GMT");
+#endif /* else if not HAVE_SETENV */
     tzset();
     memset(&timestruct, 0, sizeof(timestruct));
     timestruct.tm_mday = day;
     timestruct.tm_mon = month - 1;
     timestruct.tm_year = year - 1900;
     date = mktime(&timestruct);
-#ifdef NO_SETENV
+#ifdef HAVE_SETENV
+    if (tz)
+      setenv("TZ", tz, 1);
+    else
+      unsetenv("TZ");
+#else  /* end of HAVE_SETENV */
     if (tz) {
       char envstr[LINELEN];
       snprintf(envstr, LINELEN, "TZ=%s", tz);
       putenv(envstr);
     } else
       putenv("TZ=");
-#else /* end of NO_SETENV */
-    if (tz)
-      setenv("TZ", tz, 1);
-    else
-      unsetenv("TZ");
-#endif /* else if not NO_SETENV */
+#endif /* else if not HAVE_SETENV */
     tzset();
     return date;
   } else

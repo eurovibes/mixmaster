@@ -1,9 +1,11 @@
 dnl Various specific config bits for Mixmaster.
 dnl
-dnl $Id: aclocal.m4,v 1.4 2003/08/07 17:24:23 dybbuk Exp $
+dnl $Id: aclocal.m4,v 1.5 2003/08/08 15:17:52 dybbuk Exp $
 
 dnl Zlib versions before 1.1.4 had a nasty bug.
 AC_DEFUN(AM_ZLIB_CHECK, [
+  AH_TEMPLATE([USE_ZLIB],
+              [Define to use the zlib compression library.])
   zlib_ok=0
   AC_MSG_CHECKING(for zlib 1.1.4)
   AC_RUN_IFELSE([#include <zlib.h>
@@ -24,7 +26,7 @@ else
   [ AC_MSG_RESULT(ok)
     zlib_ok=1
     LIBS="-lz ${LIBS}"
-    CPPFLAGS="-DUSE_ZLIB ${CPPFLAGS}"
+    AC_DEFINE(USE_ZLIB)
   ],
   [
     AC_MSG_RESULT([no ... use the included Zlib.])
@@ -35,16 +37,20 @@ else
     else
        AC_MSG_ERROR([Library not found.])
     fi
-    CPPFLAGS="-DUSE_ZLIB -Izlib-1.1.4 ${CPPFLAGS}"
+    AC_DEFINE(USE_ZLIB)
+    CPPFLAGS="-Izlib-1.1.4 ${CPPFLAGS}"
     TOPDIRS="Src/zlib-1.1.4 ${TOPDIRS}"
     XLIBS="zlib-1.1.4/libz.a ${XLIBS}"
   ], [])
 ])
 
 AC_DEFUN(AM_PASSPHRASE, [
-AC_ARG_WITH(passphrase,
-[  --with-passphrase=PASS  Set Mixmaster key passphrase (NOT RECOMMENDED!)],
-  [ CPPFLAGS="-DPASSPHRASE='\"${with_passphrase}\"' ${CPPFLAGS}"
+ AH_TEMPLATE([COMPILEDPASS],
+ 	     [Define to build a passphrase into the Mixmaster binary.  This method
+	      is not recommended.  We suggest you use mix.cfg instead.])
+ AC_ARG_WITH(passphrase,
+ [  --with-passphrase=PASS  Set Mixmaster key passphrase (NOT RECOMMENDED!)],
+  [ AC_DEFINE_UNQUOTED(COMPILEDPASS, ["$with_passphrase"])
     AC_MSG_WARN([You have set a passphrase in a bad place!  Please read the docs!]) ],
   [])
 ])
@@ -52,6 +58,16 @@ AC_ARG_WITH(passphrase,
 dnl This will detect our OpenSSL version.  Bits are stolen from the
 dnl old crufty Install script.
 AC_DEFUN(AM_OPENSSL_CHECK, [
+dnl Our OpenSSL autoheader templates
+AH_TEMPLATE([USE_OPENSSL],
+            [Define to use the OpenSSL library.])
+AH_TEMPLATE([USE_RSA],
+            [Define to use the RSA public key encryption algorithm.])
+AH_TEMPLATE([USE_IDEA],
+            [Define to use the IDEA encryption algorithm, which may be protected by 
+	     patents.  See README and idea.txt for more information.])
+AH_TEMPLATE([USE_AES],
+            [Define to use the new AES encryption algorithm.])
 # Check our OpenSSL installation.
 AC_ARG_WITH(ssl-dir,
 [  --with-ssl-dir=PATH     Specify path to OpenSSL installation ],
@@ -112,7 +128,7 @@ ac_cv_openssldir="$ssldir"
 # The above test doesn't get everything working for us.  Now we work
 # directly with the cache value.
 if (test ! -z "$ac_cv_openssldir" && test "x$ac_cv_openssldir" != "x(system)") ; then
-    AC_DEFINE(HAVE_OPENSSL)
+    AC_DEFINE(USE_OPENSSL)
     dnl Need to recover ssldir - test above runs in subshell
     ssldir=$ac_cv_openssldir
     if test ! -z "$ssldir" -a "x$ssldir" != "x/usr"; then
@@ -159,7 +175,9 @@ int main(void)
         num = RSA_public_encrypt(sizeof(p_in) - 1, p_in, c, key, RSA_PKCS1_PADDING);
         return(-1 == RSA_private_decrypt(num, c, p, key, RSA_PKCS1_PADDING));
 }
- ], [ AC_MSG_RESULT(yes) ],
+ ], 
+ [ AC_DEFINE(USE_RSA)
+   AC_MSG_RESULT(yes) ],
  [ AC_MSG_ERROR(RSA support not found!) ])
 ])
 
@@ -178,9 +196,10 @@ int main() {
   else  
     exit(1);
 }
- ], [
-    AC_MSG_RESULT(yes)
-    CPPFLAGS="-DUSE_IDEA $CPPFLAGS"
+ ], 
+ [
+  AC_DEFINE(USE_IDEA)
+  AC_MSG_RESULT(yes)
  ],
  [ AC_MSG_ERROR(IDEA support not found!
     Please explicitly disable it with --disable-idea and read the
@@ -206,9 +225,10 @@ int main() {
   else
     exit(1);
 }
- ], [
-    AC_MSG_RESULT(yes)
-    CPPFLAGS="-DUSE_AES $CPPFLAGS"
+ ], 
+ [
+  AC_DEFINE(USE_AES)
+  AC_MSG_RESULT(yes)
  ],
  [ AC_MSG_RESULT(no) ])
 fi
@@ -218,14 +238,13 @@ fi
 dnl Peter Palfrader suggested that no default directory be set here
 dnl unless explicitly commanded!  I like that idea.
 AC_DEFUN(AM_MIXMASTER_DIR, [
-MIXDIR=""
 AC_MSG_CHECKING(for Mixmaster directory)
 AC_ARG_WITH(mixdir,
   [  --with-mixdir=DIR       Set default Mix directory ],
   [ if test ! -z "$with_mixdir"
     then
        AC_MSG_RESULT($with_mixdir)
-       MIXDIR="-DMIXDIR='\"$with_mixdir\"'"
+       XDEFS="-DMIXDIR='\"$with_mixdir\"' ${XDEFS}"
     else
        AC_MSG_RESULT([not found, using default])
     fi
@@ -236,14 +255,13 @@ AC_SUBST(MIXDIR)
 
 dnl Select a non-standard spool.
 AC_DEFUN(AM_MIXMASTER_SPOOL, [
-SPOOL=""
 AC_MSG_CHECKING(for custom spool directory)
 AC_ARG_WITH(spool,
   [  --with-spool=DIR        Set default spool directory ],
   [ if test ! -z "$with_spool"
     then
        AC_MSG_RESULT($with_spool)
-       CPPFLAGS="-DSPOOL='\"$with_spool\"' ${CPPFLAGS}"
+       XDEFS="-DSPOOL='\"$with_spool\"' ${XDEFS}"
     else
        AC_MSG_RESULT([using default])
     fi
@@ -257,19 +275,17 @@ HOMEMIXDIR=""
 AC_MSG_CHECKING(for default relative Mix directory)
 AC_ARG_WITH(homemixdir,
   [  --with-homemixdir=DIR   Default Mix directory relative to $HOME ],
-  [ HOMEMIXDIR="$with_homemixdir"
-    CPPFLAGS="-DHOMEMIXDIR='\"$HOMEMIXDIR\"' ${CPPFLAGS}"
+  [ XDEFS="-DHOMEMIXDIR='\"$with_homemixdir\"' ${XDEFS}"
     AC_MSG_RESULT(["\$HOME/${HOMEMIXDIR}"]) ],
   [ AC_MSG_RESULT(using default) ])
 ])
 
 dnl Is the global mixmaster config working yet?
 AC_DEFUN(AM_MIXMASTER_CONF, [
-MIXCONF=""
 AC_MSG_CHECKING(for global configuration file)
 AC_ARG_WITH(global_conf,
   [  --with-global-conf=FILE Global Mixmaster configuration (no default) ],
-  [ CPPFLAGS="-DGLOBALMIXCONF=\"'$global_conf'\" ${CPPFLAGS}"
+  [ XDEFS="-DGLOBALMIXCONF=\"'$global_conf'\" ${XDEFS}"
     AC_MSG_RESULT([$global_conf]) ],
   [ AC_MSG_RESULT(none) ])
 ])
