@@ -540,13 +540,13 @@ The following variables have numeric values:
 .B POOLSIZE
 The size of the Mixmaster reordering pool. Larger sizes
 imply higher security and longer delays. Remailer default:
-.BR 20 .
+.BR 45 .
 Client default:
 .BR 0 .
 .TP
 .B RATE
 Percentage of messages from the pool to be sent. Remailer default:
-.BR 95 .
+.BR 65 .
 Client default:
 .BR 100 .
 Lower values cause the pool to increase in size when
@@ -564,7 +564,7 @@ a dummy generation, and
 means that one in four will.
 .B 0
 means no dummy messages. Remailer default:
-.BR 20 .
+.BR 10 .
 Client default:
 .BR 3 .
 .TP
@@ -580,7 +580,7 @@ processing.
 means four will be generated.
 .B 0
 means no dummy messages. Remailer default:
-.BR 67 .
+.BR 90 .
 Client default:
 .BR 3 .
 .TP
@@ -654,7 +654,7 @@ The following are time variables. They can be given as years (
 .B SENDPOOLTIME
 How often Mixmaster should check the pool for messages
 to be sent. Remailer default:
-.BR 1h .
+.BR 15m .
 Client default:
 .BR 0h .
 .TP
