@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.14 2002/08/25 13:27:40 weaselp Exp $ */
+   $Id: config.h,v 1.15 2002/08/26 18:08:05 weaselp Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -300,6 +300,7 @@ extern long PACKETEXP;
 extern long IDEXP;
 DLLIMPORT extern int VERBOSE;
 extern long SENDPOOLTIME;
+extern long MAILINTIME;
 extern int NUMCOPIES;
 extern char CHAIN[];
 extern int DISTANCE;

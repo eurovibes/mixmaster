@@ -1,5 +1,5 @@
 .TH MIX 1 "Mixmaster Version 3.0 beta"
-.\" $Id: mix.1,v 1.13 2002/08/25 07:47:23 weaselp Exp $
+.\" $Id: mix.1,v 1.14 2002/08/26 18:08:05 weaselp Exp $
 .SH NAME
 mix \- anonymous remailer software
 .SH SYNOPSIS
@@ -589,6 +589,19 @@ listed in
 for new mail.
 Default:
 .BR 1h .
+.TP
+.B MAILINTIME
+How often Mixmaster should read mail from
+.BR MAILIN
+and process mails fetched via POP3. Processing here means to 
+answer remailer-xxx requests and decrypt messages to the Mixmaster
+and place them in the pool. No other processing of the pool is
+done. This action is always performed sending out messages from the pool (at
+.BR SENDPOOLTIME
+intervals) or receiving mail via POP3 (at
+.BR POP3TIME
+invervals). Default:
+.BR 5m .
 .TP
 .B PACKETEXP
 How long to store parts of incomplete multipart messages.
