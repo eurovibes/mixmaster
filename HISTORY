@@ -393,7 +393,8 @@
                            Mixmaster now uses broken-chain info from stats. I
                              hope this doesn't break any Nym functionality.
                            Warn if remailer stats are older than a day.
-                           Experimental feature:  --redirect -l <chain>.
+
+2003-05-08      3.0a5      Experimental feature:  --redirect -l <chain>.
                              If you have a mixmaster message with a
                              chain starting with hop1 (you cannot know any
                              more because it already is encrypted) then
