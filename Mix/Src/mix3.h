@@ -6,7 +6,7 @@
    details.
 
    Function prototypes
-   $Id: mix3.h,v 1.6 2002/07/22 17:54:48 rabbi Exp $ */
+   $Id: mix3.h,v 1.7 2002/07/24 07:00:16 rabbi Exp $ */
 
 
 #ifndef _MIX3_H
@@ -308,6 +308,7 @@ typedef struct {
 
 #define CHAINMAX 421
 #define MAXREM 100
+int print_type2list();
 int mix2_rlist(REMAILER remailer[]);
 int t1_rlist(REMAILER remailer[]);
 int pgp_rlist(REMAILER remailer[], int n);

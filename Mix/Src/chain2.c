@@ -6,7 +6,7 @@
    details.
 
    Encrypt message for Mixmaster chain
-   $Id: chain2.c,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: chain2.c,v 1.2 2002/07/24 07:00:16 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -19,6 +19,33 @@
 #ifdef USE_RSA
 
 #define N(X) (isdigit(X) ? (X)-'0' : 0)
+
+int print_type2list()
+{
+  FILE *list;
+  char line[LINELEN], name[LINELEN], addr[LINELEN], keyid[LINELEN],
+  version[LINELEN], flags[LINELEN];
+
+  list = mix_openfile(TYPE2LIST, "r");
+  if (list == NULL) {
+    list = mix_openfile(PUBRING, "r");
+    if (list == NULL)
+      return (-1);
+  }
+  while (fgets(line, sizeof(line), list) != NULL) {
+    if (strleft(line, begin_key)) {
+      while (fgets(line, sizeof(line), list) != NULL &&
+	     !strleft(line, end_key)) ;
+    } else if (strlen(line) > 36 && line[0] != '#') {
+      if (sscanf(line, "%127s %127s %127s %127s %127s", name,
+		 addr, keyid, version, flags) < 4)
+	continue;
+      printf("%s", line);
+    }
+  }
+  fclose(list);
+  return (0);
+}
 
 int mix2_rlist(REMAILER remailer[])
 {

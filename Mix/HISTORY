@@ -178,3 +178,5 @@
                              dest.blk. The dest block engine does not under-
                              stand shell globs. Either substring matches or
                              regexen.
+			   Fixed -T switch: if type2.list is not available fall
+			     back to pubring.mix.
