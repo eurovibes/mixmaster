@@ -22,7 +22,8 @@ This program consists of
   computers or use the POP3 and SMTP protocols for mail transfer.
   Mixmaster includes an automated abuse-handling system.
 
-Please report any problems to <mix-devel@melontraffickers.com>.
+Please report any problems via the bug and patch trackers at
+http://sourceforge.net/projects/mixmaster/
 
 [Note: The final release of Mixmaster 3.0 will include the improved
 Mixmaster protocol version 3.]
@@ -191,4 +192,4 @@ University of California, Berkeley and its contributors.
 
 All trademarks are the property of their respective owners.
 
-$Id: README,v 1.1 2001/10/31 08:19:53 rabbi Exp $
+$Id: README,v 1.2 2001/11/03 00:28:53 rabbi Exp $
