@@ -17,9 +17,8 @@ static BOOL download(char *source, char *allpingers) {
 	clear();
 	standout();
 	GetPrivateProfileString(source,"base","",buffer,sizeof(buffer),allpingers);
-	if (buffer[0]=='\0')
-		return FALSE;
-	printw("%s",buffer);
+	if (buffer[0]!='\0')
+		printw("%s",buffer);
 	standend();
 	
 	for (i = 0;i < NUMFILES;i++) {
@@ -29,7 +28,7 @@ static BOOL download(char *source, char *allpingers) {
 		mixfile(path, localfiles[i]);
 		mvprintw(i+3,0,"downloading %s...",localfiles[i]);
 		refresh();
-                if (URLDownloadToFile(NULL,buffer,path,BINDF_GETNEWESTVERSION,NULL) != S_OK) {
+		if (URLDownloadToFile(NULL,buffer,path,BINDF_GETNEWESTVERSION,NULL) != S_OK) {
 			printw("failed to download.\n\rTry using another stats source.");
 			ret = FALSE;
 			break;
@@ -44,23 +43,26 @@ static BOOL download(char *source, char *allpingers) {
 }
 /* Checks whether the stats source has all the required files */
 static BOOL good_source(char *source,char *allpingers) {
-	char buffer[1024];
+	char buffer[1024],*ptr;
 	int i;
 	
-	for (i = 0;i < NUMFILES;i++)
-	{
-		GetPrivateProfileString(source,files[i],"",buffer,sizeof(buffer),allpingers);
-		if (buffer[0]=='\0')
+	GetPrivateProfileString(source,NULL,"",buffer,sizeof(buffer),allpingers);
+	
+	for (i = 0;i < NUMFILES;i++) {
+		ptr = buffer;
+		while (*ptr != '\0') {
+			if (!strcmp(ptr,files[i]))
+				break;
+			ptr+=strlen(ptr)+1;
+		}
+		if (*ptr == '\0')
 			return FALSE;
 	}
 	
 	return TRUE;
 }
 /* Download allpingers.txt */
-static BOOL download_list(void) {
-	char path[PATHMAX];
-	mixfile(path,ALLPINGERS);
-	
+static BOOL download_list(char *allpingers) {
 	clear();
 	standout();
 	printw(URL);
@@ -68,7 +70,7 @@ static BOOL download_list(void) {
 	
 	mvprintw(3,0,"downloading %s...", ALLPINGERS);
 	refresh();
-        if (URLDownloadToFile(NULL,URL,path,BINDF_GETNEWESTVERSION,NULL) != S_OK) {
+	if (URLDownloadToFile(NULL,URL,allpingers,BINDF_GETNEWESTVERSION,NULL) != S_OK) {
 		printw("failed to download.\n\rTry again later.");
 		printw("\n\n\rPress any key to continue");
 		getch();
@@ -80,8 +82,8 @@ static BOOL download_list(void) {
 void update_stats(void) {
 	char buffer[1024],*ptr,*stats[MAXREM];
 	int i=0,x,y,num=0;
-        char path[PATHMAX],c;
-        mixfile(path, ALLPINGERS);
+	char path[PATHMAX],c;
+	mixfile(path, ALLPINGERS);
 	
 	while (1) {
 		x = 0;
@@ -122,7 +124,7 @@ void update_stats(void) {
 			}
 		}
 		else if (c == '*') {
-			download_list();
+			download_list(path);
 		}
 		else break;
 	}
