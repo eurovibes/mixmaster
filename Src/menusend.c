@@ -20,10 +20,6 @@
 #include <io.h>
 #endif /* else if not POSIX */
 
-/* Command line option +nn to position the cursor? */
-#define cursorpos (strfind(editor, "emacs") || streq(editor, "vi") || \
-		   streq(editor, "joe"))
-
 void send_message(int type, char *nym, BUFFER *in)
 {
   char dest[LINELEN] = "", subject[LINELEN] = "";
@@ -214,10 +210,10 @@ redraw:
 
     if (txt->length == 0)
       mvprintw(LINES - 3, 18,
-	       "e)dit message           f)ile                  q)uit");
+	       "e)dit message           f)ile      q)uit w/o sending");
     else
       mvprintw(LINES - 3, 0,
-	       "m)ail message           e)dit message          f)ile                q)uit");
+	       "m)ail message      e)dit message         f)ile          q)uit w/o sending");
     move(LINES - 1, COLS - 1);
     refresh();
     c = getch();
@@ -293,16 +289,9 @@ redraw:
       case 'e':
 #endif /* USE_NCURSES */
 	{
-	  char s[PATHMAX];
-	  char *editor;
-	  int showhdr;              /* show header in the editor? */
 	  int linecount;
 
 	edit:
-	  editor = getenv("EDITOR");
-	  if (editor == NULL)
-	    editor = "vi";
-	  showhdr = 1;
 	  linecount = 1;
 	  sprintf(path, "%s%cx%02x%02x%02x%02x.txt", POOLDIR, DIRSEP,
 		  rnd_byte(), rnd_byte(), rnd_byte(), rnd_byte());
@@ -312,68 +301,25 @@ redraw:
 	    beep();
 #endif /* USE_NCURSES */
 	  } else {
+	    if (type == 'f' || type == 'p')
+	      fprintf(f, "Newsgroups: %s\n", dest);
+	    if (type == 'r' || type == 'g' || type == 'm')
+	      fprintf(f, "To: %s\n", dest);
+	    fprintf(f, "Subject: %s\n", subject);
+	    linecount += 2;
+	    if (hdr)
+	      while (buf_getline(txt, NULL) == 0) linecount++;
+	    else
+	      fprintf(f, "\n");
+	    linecount++;
+	    if (txt->length == 0)
+	      fprintf(f, "\n");
 
-	    if (!cursorpos && txt->length == 0 && (type == 'm' || type == 'p'))
-	      showhdr = 0;
-
-	    if (showhdr)
-	    {
-	      if (type == 'f' || type == 'p')
-		fprintf(f, "Newsgroups: %s\n", dest);
-	      if (type == 'r' || type == 'g' || type == 'm')
-		fprintf(f, "To: %s\n", dest);
-	      fprintf(f, "Subject: %s\n", subject);
-	      linecount += 2;
-	      if (hdr)
-		while (buf_getline(txt, NULL) == 0) linecount++;
-	      else
-		fprintf(f, "\n");
-	      linecount++;
-	      if (txt->length == 0)
-		fprintf(f, "\n");
-	    }
 	    buf_write(txt, f);
 	    fclose(f);
 	  }
-	  if (linecount > 1 && cursorpos)
-	    snprintf(s, PATHMAX, "%s +%d %s", editor, linecount, path);
-	  else
-	    snprintf(s, PATHMAX, "%s %s", editor, path);
 
-#ifdef WIN32
-	  // ShellExecuteEx(NULL,"open",path,NULL,NULL,SW_SHOWDEFAULT);
-
-	  do {
-	    /* FIXME: give this its own function */
-	    SHELLEXECUTEINFO sei;
-	    ZeroMemory(&sei, sizeof(SHELLEXECUTEINFO));
-	    sei.cbSize = sizeof(SHELLEXECUTEINFO);
-	    sei.fMask = SEE_MASK_NOCLOSEPROCESS | SEE_MASK_FLAG_DDEWAIT;
-	    sei.hwnd = NULL;
-	    sei.lpVerb = "open";
-	    sei.lpFile = path;
-	    sei.lpParameters = NULL;
-	    sei.nShow = SW_SHOWNORMAL;
-
-	    if (ShellExecuteEx(&sei) == TRUE) {
-	      WaitForSingleObject(sei.hProcess, INFINITE);
-	      CloseHandle(sei.hProcess);
-	    }
-	  } while (0);
-
-#else /* WIN32 */
-
-#ifdef USE_NCURSES
-	  clear();
-	  refresh();
-	  endwin();
-#endif /* USE_NCURSES */
-	  system(s);
-#ifdef USE_NCURSES
-	  refresh();
-#endif /* USE_NCURSES */
-
-#endif /* WIN32 */
+	  menu_spawn_editor(path, linecount);
 
 	  f = fopen(path, "r");
 	  if (f == NULL) {
@@ -387,28 +333,27 @@ redraw:
 	  }
 	  buf_reset(txt);
 	  hdr = 0;
-	  if (showhdr) {
-	    buf_reset(tmp);
-	    buf_read(tmp, f);
-	    while (buf_getheader(tmp, field, content) == 0) {
-	      if (bufieq(field, "subject"))
-		strncpy(subject, content->data,
-			sizeof(subject));
-	      else if ((type == 'p' || type == 'f') &&
-		       bufieq(field, "newsgroups"))
-		strncpy(dest, content->data, sizeof(dest));
-	      else if (bufieq(field, "to"))
-		strncpy(dest, content->data, sizeof(dest));
-	      else {
-		buf_appendheader(txt, field, content);
-		hdr = 1;
-	      }
+
+	  buf_reset(tmp);
+	  buf_read(tmp, f);
+	  while (buf_getheader(tmp, field, content) == 0) {
+	    if (bufieq(field, "subject"))
+	      strncpy(subject, content->data,
+		      sizeof(subject));
+	    else if ((type == 'p' || type == 'f') &&
+		     bufieq(field, "newsgroups"))
+	      strncpy(dest, content->data, sizeof(dest));
+	    else if (bufieq(field, "to"))
+	      strncpy(dest, content->data, sizeof(dest));
+	    else {
+	      buf_appendheader(txt, field, content);
+	      hdr = 1;
 	    }
-	    if (hdr)
-	      buf_nl(txt);
-	    buf_rest(txt, tmp);
-	  } else
-	    buf_read(txt, f);
+	  }
+	  if (hdr)
+	    buf_nl(txt);
+	  buf_rest(txt, tmp);
+
 	  fclose(f);
 	  unlink(path);
 	  strcatn(path, "~", PATHMAX);

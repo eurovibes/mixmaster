@@ -28,6 +28,8 @@ void read_folder(char command, char *foldername, char *nym);
 void menu_init(void);
 void menu_exit(void);
 
+void menu_spawn_editor(char *path, int lineno);
+
 #ifdef USE_NCURSES
 void read_message(BUFFER *message, char *nym);
 void menu_nym(char *);

@@ -508,6 +508,7 @@ menu_redraw:
     mvprintw(y++, x, "r)ead mail (or news article)");
     mvprintw(y++, x, "d)ummy message");
     mvprintw(y++, x, "s)end messages from pool");
+    mvprintw(y++, x, "e)dit configuration file");
     mvprintw(y++, x, "q)uit");
 
     pool = pool_read(NULL);
@@ -574,6 +575,14 @@ menu_redraw:
 	  } else
 	    read_folder(0, name, nym);
 	}
+	break;
+      case 'e':
+	do {
+	  char path[PATHMAX];
+	  mixfile(path, MIXCONF);
+	  menu_spawn_editor(path, 0);
+	  mix_config();
+	} while (0);
 	break;
       case 'q':
       case 'Q':
