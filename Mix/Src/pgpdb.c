@@ -6,7 +6,7 @@
    details.
 
    OpenPGP key database
-   $Id: pgpdb.c,v 1.13 2002/09/26 22:04:58 weaselp Exp $ */
+   $Id: pgpdb.c,v 1.14 2002/09/26 22:14:00 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -77,7 +77,7 @@ KEYRING *pgpdb_open(char *keyring, BUFFER *encryptkey, int writer)
   keydb->filetype = pgp_readkeyring(keydb->db, keyring);
 #if 0
   if (keydb->filetype == -1) {
-    pgpdb_close(keydb, PGP_ARMOR_KEY);
+    pgpdb_close(keydb);
     return (NULL);
   }
 #endif /* if 0 */
@@ -111,11 +111,7 @@ KEYRING *pgpdb_new(char *keyring, int filetype, BUFFER *encryptkey)
   return (keydb);
 }
 
-int pgpdb_close(KEYRING *keydb, int armortype)
-/*
- * armortype  whether to use PGP_ARMOR_KEY or PGP_ARMOR_SECKEY if the key is
- *             armored
- */
+int pgpdb_close(KEYRING *keydb)
 {
   int err = 0;
 
@@ -126,7 +122,7 @@ int pgpdb_close(KEYRING *keydb, int armortype)
       pgp_encrypt(PGP_NCONVENTIONAL | PGP_NOARMOR, keydb->db,
 		  keydb->encryptkey, NULL, NULL, NULL, NULL);
     if (keydb->filetype == ARMORED)
-      pgp_armor(keydb->db, armortype);
+      pgp_armor(keydb->db, PGP_ARMOR_KEY);
     if (keydb->filetype == -1 || (f = mix_openfile(keydb->filename,
 						   keydb->filetype ==
 						   ARMORED ? "w" : "wb"))
@@ -252,7 +248,7 @@ int pgpdb_getkey(int mode, int algo, int *sym, int *mdc, long *expires, BUFFER *
     case PK_VERIFY:
       r = pgpdb_open(PGPREMPUBRING, NULL, 0);
       if (r != NULL && r->filetype == -1) {
-	pgpdb_close(r, PGP_ARMOR_KEY);
+	pgpdb_close(r);
 	r = pgpdb_open(PGPREMPUBASC, NULL, 0);
       }
       break;
@@ -287,7 +283,7 @@ int pgpdb_getkey(int mode, int algo, int *sym, int *mdc, long *expires, BUFFER *
       }
     }
   }
-  pgpdb_close(r, PGP_ARMOR_KEY);
+  pgpdb_close(r);
 end:
   if (found < 1) {
     if (needpass)
@@ -398,7 +394,7 @@ int pgp_keymgt(int force)
 	buf_nl(out);
       }
     }
-    pgpdb_close(keys, PGP_ARMOR_KEY);
+    pgpdb_close(keys);
   }
 
   seclock = lockfile(PGPREMSECRING);
