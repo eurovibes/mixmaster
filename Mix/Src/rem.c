@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.20 2002/08/03 17:08:02 weaselp Exp $ */
+   $Id: rem.c,v 1.20.2.1 2002/09/11 21:28:59 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -293,16 +293,25 @@ void pool_packetexp(void)
       e = readdir(d);
       if (e == NULL)
 	break;
-      if (e->d_name[0] == 'p') {
+      if (e->d_name[0] == 'p' || e->d_name[0] == 'e' || e->d_name[0] == 't') {
         path=malloc(strlen(POOLDIR)+strlen(e->d_name)+strlen(DIRSEPSTR)+1);
         if (path) {
          strcpy(path, POOLDIR);
           strcat(path, DIRSEPSTR);
           strcat(path, e->d_name);
-          if (stat(path, &sb) == 0 &&
-             time(NULL) - sb.st_mtime > PACKETEXP) {
-                 errlog(NOTICE, "Expiring partial message %s.\n",
-		 e->d_name);
+          if (stat(path, &sb) == 0 && time(NULL) - sb.st_mtime > PACKETEXP) {
+             if (e->d_name[0] == 'p') {
+                errlog(NOTICE, "Expiring incomplete partial message %s.\n",
+                e->d_name);
+             }
+             else if (e->d_name[0] == 'e') {
+                errlog(NOTICE, "Expiring old error message %s.\n",    
+                e->d_name);     
+             }
+             else if (e->d_name[0] == 't') {
+                errlog(NOTICE, "Expiring moldy temporary message %s.\n",
+                e->d_name);
+             }
              unlink(path);
           }
         free(path);
