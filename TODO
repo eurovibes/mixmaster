@@ -5,7 +5,10 @@ Items that need to be completed before the next MAIN release:
 
 - Full WIN32 support.
 
-- stats downloading on Unix (maybe 3.0.x)?
+- stats stuff:
+  - port it to unix
+  - use proper configured filenames
+  - make the allpingers filename and url configureable
 
 - Add equivalent features to -V and --about to mpgp and document in mpgp.1
 
@@ -37,7 +40,7 @@ Packaging:
   parsedate.y, so we don't end up requiring bison on every system that
   wants to build mixmaster  (rabbi)
 - rpm -- dybbuk
-- Windows build instructions/files  (packbart?)
+. Windows build instructions/files  (weasel)
 - provide a packaged Windows build to be used with QuickSilver
   + Richard has an Installer we can use for this purpose  (rabbi)
 - Macintosh OS/X support  (rabbi)
