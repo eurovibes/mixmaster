@@ -397,7 +397,7 @@
                              If you have a mixmaster message with a
                              chain starting with hop1 (you cannot know any
                              more because it already is encrypted) then
-                             mix --redirect -l=foo,bar < file
+                             mix --redirect -l foo,bar < file
                              redirect the message so the chain is actually
                              foo,bar,hop1,... and places it in your pool.
                              If the total number of hops (which cannot be
