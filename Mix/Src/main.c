@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.24 2002/10/09 20:53:29 weaselp Exp $ */
+   $Id: main.c,v 1.25 2002/10/10 10:06:05 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -610,13 +610,13 @@ end:
 	  exit(1);
 	};
       };
-      if (write_pidfile(PIDFILE)) {
- 	fprintf(stderr, "Aborting.\n");
-	exit(1);
-      }
       freopen ("/dev/null", "r", stdin);
       freopen ("/dev/null", "w", stdout);
       freopen ("/dev/null", "w", stderr);
+    }
+    if (write_pidfile(PIDFILE)) {
+      fprintf(stderr, "Aborting.\n");
+      exit(1);
     }
 #endif /* UNIX */
     mix_daemon();
