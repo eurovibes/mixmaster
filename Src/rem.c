@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.20 2002/08/03 17:08:02 weaselp Exp $ */
+   $Id: rem.c,v 1.21 2002/08/21 11:22:37 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -318,7 +318,7 @@ void logmail(char *mailbox, BUFFER *message)
   struct tm *tc;
   char line[LINELEN];
 
-  /* mailbox is "|program", "user@host", "stdout" or "filename" */
+  /* mailbox is "|program", "user@host", "stdout", "Maildir/" or "filename" */
   buf_rewind(message);
   if (mailbox[0] == '\0')	/* default action */
     mailbox = MAILBOX;
@@ -348,6 +348,12 @@ void logmail(char *mailbox, BUFFER *message)
   isloop:
     buf_free(field);
     buf_free(content);
+  } else if (mailbox[strlen(mailbox)-1] == '/') {
+    /* the user is requesting Maildir delivery */
+    if(maildirWrite(mailbox, message, 1) != 0) {
+      errlog(ERRORMSG, "Can't write to maildir %s\n", mailbox);
+      return;
+    }
   } else {
     FILE *mbox;
 

@@ -215,3 +215,7 @@
                            List CAST5 and AES128 in cipher preferences.
                            Now displays Mixmaster version in the PGP version
                              header for non remailer/nym messages.
+
+2002-??-??	2.9b38     Applied Maildir feature patch by drt@un.bewaff.net,
+                             with some changes by PP:
+                             MAILBOX can now be a Maildir (closes: #586223).
