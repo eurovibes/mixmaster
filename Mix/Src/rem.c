@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.10 2001/12/17 01:46:35 rabbi Exp $ */
+   $Id: rem.c,v 1.11 2001/12/18 20:38:37 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -363,7 +363,7 @@ void logmail(char *mailbox, BUFFER *message)
 
 int blockrequest(BUFFER *message)
 {
-  int request = 0, domain;
+  int request = 0;
   BUFFER *from, *line, *field, *content, *addr;
   FILE *f;
   char *destblklst = (char *)malloc( strlen(DESTBLOCK)+1 );
@@ -406,28 +406,8 @@ int blockrequest(BUFFER *message)
 	rfc822_addr (from, addr);
 	buf_chop(addr);
       }
-      if (addr->length == 0) {
-	return (2);
-      };
-      if (! buffind(addr, "@"))
-      {
-	errlog(LOG, "Ignoring blocking request for %b from %b "
-	  "(no @ sign in address).\n", addr, from);
-	return (2);
-      };
       if (bufieq(addr, REMAILERADDR)) {
 	errlog(LOG, "Ignoring blocking request for %b from %b.\n", addr, from);
-	return (2);
-      }
-      if (bufleft(addr, "@")) {
-	errlog(LOG, "Ignoring blocking request: %b from %b: "
-	  "We do not block entire domains.\n",
-	  addr, from);
-	return (2);
-      }
-      if (bufleft(addr, "/")) {
-	errlog(LOG, "Ignoring blocking request: %b from %b is a regex.\n",
-	  addr, from);
 	return (2);
       }
       if (buf_ieq(addr, from))
@@ -435,37 +415,36 @@ int blockrequest(BUFFER *message)
       else
 	errlog(NOTICE, "Blocking request for %b from %b\n", addr, from);
       if (AUTOBLOCK) {
-	domain = 0;
-	if (addr->data[0] == '@') {
-	  domain = 1;
-	  buf_sets(line, "postmaster");
-	  buf_cat(line, addr);
-	  buf_move(addr, line);
-	}
 	buf_clear(line);
 	rfc822_addr(addr, line);
-	if (strchr(line->data, '@') && strchr(strchr(line->data, '@'), '.')) {
-          strcpy( destblklst, DESTBLOCK );
-          destblk = strtok( destblklst, " " );
-          f = mix_openfile( destblk, "a" );
-          free( destblklst );
-	  if (f != NULL) {
-	    lock(f);
-	    sendinfofile(BLOCKFILE, NULL, addr, NULL);
-	    if (line->length) {
-	      if (domain)
-		fprintf(f, "%s", line->data + sizeof("postmaster") - 1);
-	      else
-		fprintf(f, "%s", line->data);
-	    } else
-	      errlog(NOTICE, "%b already blocked.\n", addr);
-	    unlock(f);
-	    fclose(f);
-	  } else
-	    errlog(ERRORMSG, "Can't write to %s.\n", DESTBLOCK);
+	if (line->length == 0) {
+	  errlog(LOG, "Nothing to block after rfc822_addr().\n");
 	} else
-	  errlog(WARNING, "Invalid address not added to %s: %b\n", DESTBLOCK,
-		 addr);
+	  if (bufleft(line, "/")) {
+	    errlog(LOG, "Ignoring blocking request: %b is a regex.\n", addr);
+	  } else {
+	    if (strchr(line->data, '@') && strchr(strchr(line->data, '@'), '.')) {
+              strcpy( destblklst, DESTBLOCK );
+              destblk = strtok( destblklst, " " );
+              f = mix_openfile( destblk, "a" );
+              free( destblklst );
+	      if (f != NULL) {
+		lock(f);
+
+		buf_chop(line);
+		sendinfofile(BLOCKFILE, NULL, line, NULL);
+		if (line->length) {
+		  fprintf(f, "%s\n", line->data);
+		} else
+		  errlog(NOTICE, "%b already blocked.\n", addr);
+		unlock(f);
+		fclose(f);
+	      } else
+	        errlog(ERRORMSG, "Can't write to %s.\n", DESTBLOCK);
+	    } else
+	      errlog(WARNING, "Invalid address not added to %s: %b\n", DESTBLOCK,
+		     addr);
+	  }
       }
     }
   return (request);
