@@ -6,7 +6,7 @@
    details.
 
    Send messages from pool
-   $Id: pool.c,v 1.12 2002/08/22 04:29:43 weaselp Exp $ */
+   $Id: pool.c,v 1.13 2002/08/25 08:47:21 weaselp Exp $ */
 
 #include "mix3.h"
 #include <stdlib.h>
@@ -299,7 +299,7 @@ end:
  */
 int mailin(char *mailbox)
 {
-  if (mailbox != NULL && (strcmp(MAILIN, "") != 0))
+  if (mailbox != NULL && (strcmp(mailbox, "") != 0))
     if (mailbox[strlen(mailbox)-1] == DIRSEP)
       return mailin_maildir(mailbox);
     else
