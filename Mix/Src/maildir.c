@@ -20,6 +20,7 @@
 #include <sys/types.h>
 #include <errno.h>
 #include <stdarg.h>
+#include <assert.h>
 
 static unsigned long namecounter = 0;
 
@@ -68,6 +69,7 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
   char tmpname[MAX_SUBNAME];
   char newname[MAX_SUBNAME];
   int messagesize;
+  char olddirectory[PATHMAX] = "";
 
   /* Declare a handler for SIGALRM so we can time out. */ 
   /* set_handler(SIGALRM, alarm_handler);  */
@@ -87,11 +89,12 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
 
   messagesize = message->length;
 
-  /* Step 1: chdir to maildir (and save actual dir by opening it) */
-  if((currDir = open(".", O_RDONLY)) < 0) {
+  /* Step 1: chdir to maildir (and save current dir) */
+  if (getcwd(olddirectory, PATHMAX) == NULL) {
     returnValue = -1;
     goto realend;
   }
+  olddirectory[PATHMAX-1] = '\0';
   if(chdir(maildir) != 0) {
     returnValue = -1;
     goto functionExit;
@@ -105,9 +108,11 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
       time(NULL), getpid(), namecounter++, hostname, messagesize);
     basename[MAX_BASENAME-1] = '\0';
     strncat(tmpname, "tmp/", MAX_SUBNAME);
+    tmpname[MAX_SUBNAME-1] = '\0';
     strncat(tmpname, basename, MAX_SUBNAME);
     tmpname[MAX_SUBNAME-1] = '\0';
     strncat(newname, "new/", MAX_SUBNAME);
+    newname[MAX_SUBNAME-1] = '\0';
     strncat(newname, basename, MAX_SUBNAME);
     newname[MAX_SUBNAME-1] = '\0';
 	
@@ -190,6 +195,7 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
       time(NULL), getpid(), namecounter++, hostname, messagesize);
     basename[MAX_BASENAME-1] = '\0';
     strncat(newname, "new/", MAX_SUBNAME);
+    newname[MAX_SUBNAME-1] = '\0';
     strncat(newname, basename, MAX_SUBNAME);
     newname[MAX_SUBNAME-1] = '\0';
   }
@@ -207,7 +213,8 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
 
 functionExit:
   /* return to original directory */
-  if ((fchdir(currDir) != 0) || (close(currDir) != 0))
+  assert(olddirectory[0] != '\0');
+  if(chdir(olddirectory) != 0)
     returnValue = -1;
   
 realend:
@@ -222,7 +229,6 @@ realend:
 #endif
 
 #include <dirent.h>
-#include <assert.h>
 
 /* mock-up of errlog for unittest */
 void errlog(int type, char *fmt,...)
