@@ -133,14 +133,13 @@ The sender chooses a sequence of up to 20 remailers for each
 packet. The final remailer must be identical for all packets.
 
 The packet header consists of 20 sections. For a sequence of n
-remailers, header sections n+1, ... , 20 are filled with random
-data. For each section i := n down to 1, the sender generates a
-symmetric encryption key, which is used to encrypt the body and
-all following header sections. This key, together with other control
-information for the remailer, is included in the i-th header section,
-which is then encrypted with the remailer's public key. The resulting
-message is sent to the first remailer in an appropriate transport
-encoding.
+remailers, header n+1 ... 20 are filled with random data. For each
+section i := n down to 1, the sender generates a symmetric encryption
+key, which is used to encrypt the body and all following header
+sections. This key, together with other control information for the
+remailer, is included in the i-th header section, which is then
+encrypted with the remailer's public key. The resulting message is sent
+to the first remailer in an appropriate transport encoding.
 
 To increase reliability, redundant copies of the message may be sent
 through different paths. The final remailer must be identical for all
@@ -150,19 +149,19 @@ only once.
 
 2.2 Remailing
 
-When a remailer receives a message, it decrypts the first header
-section with its private key. By keeping track of a packet ID, the
-remailer verifies that the packet has not been processed before. The
-integrity of the message is verified by checking the packet length and
-verifying message digests included in the packet. Then the first
-header section is removed, the others are shifted up by one, and the
-last section is filled with random padding. All header sections and
-the packet body are decrypted with the symmetric key found in the
-header. This reveals a public key-encrypted header section for the
-next remailer at the top, and removes the old top header
-section. Transport encoding is applied to the resulting message.
+When a remailer receives a message, it decrypts the first header section
+with its private key. By keeping track of a packet ID, the remailer
+verifies that the packet has not been processed before. The integrity of
+the message is verified by checking the packet length and verifying
+message digests included in the packet. Then the first header section is
+removed, the others are shifted up by one, and the last section is
+filled with random padding. All header sections and the packet body are
+decrypted with the symmetric key found in the header. This reveals a
+public key-encrypted header section for the next remailer at the top,
+and removes the old top header section. Transport encoding is applied to
+the resulting message per section 4.4 of this document.
 
-The remailer collects several encrypted messages before sending the
+The remailer must collect several encrypted messages before sending the
 resulting messages in random order. Thus the relation between the
 incoming and outgoing messages is obscured to outside adversaries even
 if the adversary can observe all messages sent. The message is
@@ -200,6 +199,10 @@ hop, it should process the message normally, but instead of sending the message
 to its next hop, treat the processed message as opaque data which will comprise
 the body of a Mixmaster message. The remailer should then create a Mixmaster
 message with this body to be delivered to the next hop remailer.
+
+Ensuring that a remailer's keyring of keys for other remailers in the
+network is up-to-date is the responsibility of the given remailer's
+operator.
 
 If the remailer receives a Mixmaster message that, when decrypted, reveals a
 message of another protocol which the remailer speaks, it should process the
@@ -524,6 +527,9 @@ from which the key is first valid; the second date indicates its
 expiration. If only one date is present, it is treated as the key creation
 date. (The date stamp implies 00:00 UTC).
 
+The version, capabilities, and date fields must each be no longer than
+125 characters.
+
 Digital signatures [RFC 2440] should be used to ensure the
 authenticity of the key files.
 
@@ -657,7 +663,7 @@ number of packet IDs that the remailer must retain, packets which bear a
 timestamp more than a reasonable number of days in the past may be
 discarded. Implementors should consider that packets maybe up to three
 days younger than indicated by the timestamp, and select an expiration
-value which allowsd sufficient time for legitimate messages to pass
+value which allows sufficient time for legitimate messages to pass
 through the network. The number of packet IDs that the remailer must
 retain can be further minimized by discarding packet IDs for packets
 encrypted to a key which has expired more than a week in the past.
@@ -696,6 +702,11 @@ against this attack in large-scale networks. The effect of a more
 powerful attack that combines suppressing messages and re-injecting
 them at a later time is reduced by using timestamps.
 
+Manipulation of the distribution of remailer keys, capabilities, and
+statistics can lead to powerful attacks against a remailer network.
+Sensitive information such as this should be distributed in a secure
+manner.
+
 The lack of accountability that comes with anonymity may have
 implications for the security of a network. For example, many news
 servers accept control messages automatically without any
@@ -706,9 +717,10 @@ in section 7.
 9. Acknowledgments
 
 Several people contributed ideas and source code to the Mixmaster v2
-software. "Antonomasia" <ant@notatla.demon.co.uk>, Adam Back
-<adam@cypherspace.org> and Bodo Moeller <bmoeller@acm.org> suggested
-improvements to this document.
+software. "Antonomasia" <ant@notatla.org.uk>, Adam Back
+<adam@cypherspace.org>, Bodo Moeller <bmoeller@acm.org>, Marco
+<marcoc1@dada.it>, and Myles <myles@tenhand.com> suggested improvements
+to this document.
 
 
 10. References
