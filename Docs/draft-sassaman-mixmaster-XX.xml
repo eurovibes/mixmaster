@@ -28,8 +28,8 @@
     <address>
       <postal>
         <street>5694 Mission Center Road #426</street>
-        <city>San Diego</city> <region>CA</region>
-        <country>US</country>
+        <city>San Diego</city> <region>CA</region> <code>92108-4380</code>
+        <country>USA</country>
       </postal>
       <email>loki@infonex.com</email>
     </address>
@@ -38,6 +38,11 @@
   <author initials="P." surname="Palfrader" fullname="Peter Palfrader">
     <organization>The Mixmaster Project</organization>
     <address>
+      <postal>
+        <street>Hoettinger Auffahrt 1</street>
+        <city>6020 Innsbruck</city>
+        <country>Austria</country>
+      </postal>
       <email>peter@palfrader.org</email>
     </address>
   </author>
@@ -48,6 +53,7 @@
       <postal>
         <street>P.O. Box 99282</street>
         <city>Emeryville</city> <region>CA</region> <code>94662-9282</code>
+        <country>USA</country>
       </postal>
       <email>rabbi@abditum.com</email>
     </address>
