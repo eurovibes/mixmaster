@@ -6,7 +6,7 @@
    details.
 
    OpenPGP data
-   $Id: pgpdata.c,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: pgpdata.c,v 1.2 2001/12/15 00:34:21 ulfm Exp $ */
 
 
 #include "mix3.h"
@@ -390,13 +390,14 @@ int pgp_getkey(int mode, int algo, int *psym, BUFFER *keypacket, BUFFER *key,
   int keytype = -1, type, j;
   int thisalgo, version, skalgo;
   int needsym = 0, symfound = 0;
-  BUFFER *p1, *iv, *sk, *i;
+  BUFFER *p1, *iv, *sk, *i, *thiskeyid;
   int csstart;
 
   p1 = buf_new();
   i = buf_new();
   iv = buf_new();
   sk = buf_new();
+  thiskeyid = buf_new();
   if (psym)
     needsym = *psym;
   if (keypacket == key) {
@@ -484,8 +485,7 @@ int pgp_getkey(int mode, int algo, int *psym, BUFFER *keypacket, BUFFER *key,
       }
       if (keyid && keyid->length && !pgp_iskeyid(p1, keyid))
 	continue;
-      if (keyid);
-	pgp_keyid(p1, keyid);
+      pgp_keyid(p1, thiskeyid);
       if (key) {
 	buf_clear(key);
 	for (j = 0; j < pgp_nummpi(thisalgo); j++) {
@@ -535,6 +535,7 @@ int pgp_getkey(int mode, int algo, int *psym, BUFFER *keypacket, BUFFER *key,
     }
   }
  end:
+  if (keyid) buf_set(keyid, thiskeyid);
   if (tempbuf) {
     buf_move(keypacket, key);
     buf_free(key);
@@ -543,6 +544,7 @@ int pgp_getkey(int mode, int algo, int *psym, BUFFER *keypacket, BUFFER *key,
   buf_free(i);
   buf_free(iv);
   buf_free(sk);
+  buf_free(thiskeyid);
 #ifndef USE_RSA
   if (thisalgo == PGP_ES_RSA)
     keytype = -1;
