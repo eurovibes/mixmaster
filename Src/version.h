@@ -1,1 +1,1 @@
-#define VERSION "3.0b0+cvs"
+#define VERSION "3.0b1"

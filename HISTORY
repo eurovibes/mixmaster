@@ -331,7 +331,7 @@
                            Minor stats fix (gmtime vs localtime).
                            Fix pool stats bug.
 
-2003-12-xx      3.0b1      FEATURE ENHANCEMENTS:
+2004-03-20      3.0b1      FEATURE ENHANCEMENTS:
 
                            The secret pgp keyring is now stored ASCII armored
                              with one key per ascii armor.
@@ -433,7 +433,7 @@
                            Messages to more than one remailer are dropped.
                            Nym support is not compiled in by default anymore.
                            The OpenPGP module mpgp now includes a man
-                             page (contributed by Trek).
+                             page (large contributions by Trek).
                            Ignore 'No reliable remailers' problems when
                              randhopping messages in middleman mode.
                              That is better than dropping them.
