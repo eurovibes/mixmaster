@@ -239,7 +239,7 @@
 #define DEFAULT_NYMDB "secrets.mix"
 #define DEFAULT_STAREX "starex.txt"
 
-extern char MIXCONF[];
+DLLIMPORT extern char MIXCONF[];
 extern char DISCLAIMFILE[];
 extern char FROMDSCLFILE[];
 extern char MSGFOOTERFILE[];
@@ -340,7 +340,7 @@ extern char HELONAME[];
 extern char ENVFROM[];
 extern char SHORTNAME[];
 extern int POOLSIZE;
-extern int RATE;
+DLLIMPORT extern int RATE;
 extern int INDUMMYP;
 extern int OUTDUMMYP;
 extern int MIDDLEMAN;
@@ -355,7 +355,7 @@ extern int LISTSUPPORTED;
 extern long PACKETEXP;
 extern long IDEXP;
 DLLIMPORT extern int VERBOSE;
-extern long SENDPOOLTIME;
+DLLIMPORT extern long SENDPOOLTIME;
 extern long MAILINTIME;
 extern long KEYLIFETIME;
 extern long KEYOVERLAPPERIOD;
@@ -380,7 +380,7 @@ extern char MAILUSAGE[];
 extern char MAILANON[];
 extern char MAILERROR[];
 extern char MAILBOUNCE[];
-extern int CLIENTAUTOFLUSH;
+DLLIMPORT extern int CLIENTAUTOFLUSH;
 extern int MAXRECIPIENTS;
 extern long TIMESKEW_FORWARD;
 extern long TIMESKEW_BACK;
