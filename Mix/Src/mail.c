@@ -6,7 +6,7 @@
    details.
 
    Socket-based mail transport services
-   $Id: mail.c,v 1.7 2002/08/07 17:27:01 weaselp Exp $ */
+   $Id: mail.c,v 1.7.2.1 2002/09/11 21:20:28 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -496,7 +496,8 @@ SOCKET pop3_open(char *user, char *host, char *pass, int auth)
   SOCKET server = INVALID_SOCKET;
   BUFFER *line;
   int authenticated = 0;
-  char c, md[33];
+  char md[33];
+  int c;
 
   line = buf_new();
   server = opensocket(host, 110);
