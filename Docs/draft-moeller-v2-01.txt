@@ -186,21 +186,42 @@ independent.
 
 3. Pool Functionality
 
-3.1 [describe the Cottrell pool mix algorithm here]
+3.1 Cottrell pool mix algorithm
 
-Incoming Mixmaster messages are placed into a "message pool", where they are
-stored until 
+In order to obfuscate the link between incoming and outgoing messages
+Mixmaster uses a pooling scheme.  Messages that are to be forwarded
+anonymously are stored in a pool.  In regular intervals the Mix fires
+and sends some random messages from the pool to either the next hop or their
+final recipient.
 
-3.2. Dummy Traffic [Describe the geometric dummy system here.]
+The pooling scheme used in Mixmaster is Cottrell mixing which has
+the following three parameters:
+  t       mixing interval
+  min     minimum number of messages in the pool
+  rate    percentage of messages to be send in one round
+
+Every t seconds:
+  - Let n be the number of messages currently in the pool
+  - count is the smaller of (n - min) and (n * rate), or 0 if
+    (n - min) is negative.
+  - Select count random messages from the pool and send them.
+
+3.2. Dummy Traffic
 
 Older versions of Mixmaster (2.0.4 - 2.9.0) allowed for the creation of
 "dummy message" cover traffic, but provided no automated means for introducing
 this dummy traffic into the system. Beginning in version 3.0, Mixmaster employs
 an internal dummy policy.
 
-The mix adds to the pool with each incoming message a dummy 
+Every time a message is placed in the pool Mixmaster chooses a random number
+from a geometric distribution and create that many dummy messages which are
+placed in the pool.  Dummy messages are multi hop messages using several random
+nodes as their chain.  Similarly each time just before we run the mixing
+algorithm described above we also choose a random number from a different
+geometric distribution and add that many dummy messages to the pool as well.
 
-
+The distributions' parameters are chosen so that on average we create one
+dummy for every 32 messages coming in and one every 9 mixing rounds.
 
 4. Message Format
 
@@ -237,7 +258,8 @@ If the destination field is "post: [newsgroup]", a "Newsgroups:
 [newsgroup]" field is added to the header of the resulting message. If
 the destination field is of the fourth type, a "To: [address]" field
 is added to the header of the resulting message. [address] and
-[newsgroup] are strings of ASCII characters.
+[newsgroup] are strings of ASCII characters.  If the message
+is a dummy message the node should discard it.
 
 Message headers can be specified in header line fields. Each header
 line field consists of a string of up to 80 ASCII characters, padded
