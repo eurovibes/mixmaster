@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.24 2002/09/06 07:38:08 rabbi Exp $ */
+   $Id: mix.c,v 1.25 2002/09/06 11:34:10 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -514,6 +514,7 @@ int mix_configline(char *line)
 	  read_conf(ORGANIZATION) || read_conf(MID) ||
 	  read_conf(TYPE1) || read_conf_i(POOLSIZE) ||
 	  read_conf_i(RATE) || read_conf_i(MIDDLEMAN) ||
+	  read_conf_i(DUMMYMAILINPROBABILITY) || read_conf_i(DUMMYMAILOUTPROBABILITY) ||
 	  read_conf_i(AUTOBLOCK) || read_conf(FORWARDTO) ||
 	  read_conf_i(SIZELIMIT) || read_conf_i(INFLATEMAX) ||
 	  read_conf_i(MAXRANDHOPS) || read_conf_i(BINFILTER) ||
