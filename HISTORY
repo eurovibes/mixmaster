@@ -455,3 +455,4 @@
                              have IDEA. - Laurent Fousse <laurent@komite.net>
                            Also sort mail into the various mboxes if autoreply
                              is not set.
+                           Properly ignore whitespace in chain selection.
