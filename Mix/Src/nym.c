@@ -6,7 +6,7 @@
    details.
 
    Create nym server messages
-   $Id: nym.c,v 1.9 2003/05/03 05:31:07 weaselp Exp $ */
+   $Id: nym.c,v 1.10 2003/05/05 11:03:41 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -67,7 +67,7 @@ int nym_config(int mode, char *nym, char *nymserver, BUFFER *pseudonym,
     if (chain_select(chain, nymserver, maxrem, remailer, 2, NULL) != 1)
       return (-1);
     if (chain[0] == 0)
-      chain[0] = chain_randfinal(MSG_MAIL, remailer, badchains, maxrem, 2, -1);
+      chain[0] = chain_randfinal(MSG_MAIL, remailer, badchains, maxrem, 2, NULL, -1);
     if (chain[0] == -1)
       return (-1);
     assert(strchr(nym, '@') == NULL && strchr(remailer[chain[0]].addr, '@'));

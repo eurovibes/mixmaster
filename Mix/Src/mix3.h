@@ -6,7 +6,7 @@
    details.
 
    Function prototypes
-   $Id: mix3.h,v 1.22 2003/05/03 05:31:07 weaselp Exp $ */
+   $Id: mix3.h,v 1.23 2003/05/05 11:03:41 weaselp Exp $ */
 
 
 #ifndef _MIX3_H
@@ -344,7 +344,7 @@ int chain_select(int hop[], char *chainstr, int maxrem, REMAILER *remailer,
 		 int type, BUFFER *feedback);
 int chain_rand(REMAILER *remailer, int badchains[MAXREM][MAXREM], int maxrem,
 	       int thischain[], int chainlen, int t);
-int chain_randfinal(int type, REMAILER *remailer, int badchains[MAXREM][MAXREM], int maxrem, int rtype, int secondtolasthop);
+int chain_randfinal(int type, REMAILER *remailer, int badchains[MAXREM][MAXREM], int maxrem, int rtype, int chain[], int chainlen);
 
 float chain_reliability(char *chain, int chaintype,
 			char *reliability_string);

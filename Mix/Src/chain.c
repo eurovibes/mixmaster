@@ -6,7 +6,7 @@
    details.
 
    Prepare messages for remailer chain
-   $Id: chain.c,v 1.11 2003/05/05 10:53:00 weaselp Exp $ */
+   $Id: chain.c,v 1.12 2003/05/05 11:03:40 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -178,12 +178,13 @@ end:
   return len;
 }
 
-int chain_randfinal(int type, REMAILER *remailer, int badchains[MAXREM][MAXREM], int maxrem, int rtype, int secondtolasthop)
+int chain_randfinal(int type, REMAILER *remailer, int badchains[MAXREM][MAXREM], int maxrem, int rtype, int chain[], int chainlen)
 {
-  int num = 0;
+  int randavail = 0;
   int i;
   int t;
   int select[MAXREM];
+  int secondtolasthop = (chainlen <= 1 ? -1 : chain[1]);
 
   t = rtype;
   if (rtype == 2)
@@ -202,9 +203,16 @@ int chain_randfinal(int type, REMAILER *remailer, int badchains[MAXREM][MAXREM],
 	(remailer[i].flags.post || type != MSG_POST) &&      /* remailer supports post when this is a post */
 	((secondtolasthop == -1) || !badchains[secondtolasthop][i]);
 	                             /* we only have hop or the previous one can send to this (may be random) */
-    num += select[i];
+    randavail += select[i];
   }
-  if (num == 0)
+
+  for (i = 1; i <= DISTANCE; i++)
+    if (i < chainlen && select[chain[i]]) {
+      select[chain[i]] = 0;
+      randavail--;
+    }
+
+  if (randavail == 0)
     i = -1;
   else {
     do

@@ -6,7 +6,7 @@
    details.
 
    Encrypt message for Cypherpunk remailer chain
-   $Id: chain1.c,v 1.6 2003/05/03 05:31:07 weaselp Exp $ */
+   $Id: chain1.c,v 1.7 2003/05/05 11:03:40 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -168,7 +168,7 @@ int t1_encrypt(int type, BUFFER *message, char *chainstr, int latency,
     goto end;
   }
   if (chain[0] == 0)
-    chain[0] = chain_randfinal(type, remailer, badchains, maxrem, 1, ( chainlen == 1 ? -1 : chain[1]));
+    chain[0] = chain_randfinal(type, remailer, badchains, maxrem, 1, chain, chainlen);
 
   if (chain[0] == -1) {
     clienterr(feedback, "Invalid remailer chain!");
