@@ -6,7 +6,7 @@
    details.
 
    OpenPGP key database
-   $Id: pgpdb.c,v 1.10 2002/09/12 17:26:00 disastry Exp $ */
+   $Id: pgpdb.c,v 1.11 2002/09/18 05:58:03 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -375,7 +375,7 @@ int pgp_keymgt(int force)
       if (pgp_makeseckey(key, outtxt, pass,
 			 type == 0 ? PGP_ES_RSA : PGP_S_DSA) == 0) {
         err = 0;
-	buf_appends(secout, "Type Bits/KeyID    Date       User ID\n");
+	buf_appends(secout, "Type Bits/KeyID     Date       User ID\n");
 	buf_cat(secout, outtxt);
 	buf_nl(secout);
 	pgp_armor(key, PGP_ARMOR_SECKEY);
@@ -386,7 +386,7 @@ int pgp_keymgt(int force)
       if (pgp_makepubkey(keybak, outtxt, outkey, pass,
 			 type == 0 ? PGP_ES_RSA : PGP_S_DSA) == 0) {
         err = 0;
-	buf_appends(out, "Type Bits/KeyID    Date       User ID\n");
+	buf_appends(out, "Type Bits/KeyID     Date       User ID\n");
 	buf_cat(out, outtxt);
 	buf_nl(out);
 	pgp_armor(outkey, PGP_ARMOR_KEY);
