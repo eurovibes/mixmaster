@@ -669,7 +669,7 @@ The lack of accountability that comes with anonymity may have
 implications for the security of a network. For example, many news
 servers accept control messages automatically without any
 cryptographic authentication. Possible countermeasures are discussed
-in section 5.
+in section 7.
 
 
 9. Acknowledgements
