@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.29 2002/09/20 19:01:33 disastry Exp $ */
+   $Id: mix.c,v 1.30 2002/09/25 23:02:44 ulfm Exp $ */
 
 
 #include "mix3.h"
@@ -95,6 +95,8 @@ char ANONADDR[LINELEN];
 char COMPLAINTS[LINELEN];
 int AUTOREPLY;
 char SMTPRELAY[LINELEN];
+char SMTPUSERNAME[LINELEN];
+char SMTPPASSWORD[LINELEN];
 
 #ifdef USE_SOCK
 char HELONAME[LINELEN];
@@ -505,6 +507,7 @@ int mix_configline(char *line)
 	  read_conf(ANONADDR) || read_conf(REMAILERNAME) ||
 	  read_conf(ANONNAME) || read_conf(COMPLAINTS) ||
 	  read_conf_i(AUTOREPLY) || read_conf(SMTPRELAY) ||
+          read_conf(SMTPUSERNAME) || read_conf(SMTPPASSWORD) ||
 #ifdef USE_SOCK
 	  read_conf(HELONAME) || read_conf(ENVFROM) ||
 #endif /* USE_SOCK */

@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.22 2002/09/06 21:04:15 rabbi Exp $ */
+   $Id: config.h,v 1.23 2002/09/25 23:02:44 ulfm Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -271,6 +271,8 @@ extern char POOLDIR[];
 extern char SENDMAIL[];
 extern char SENDANONMAIL[];
 extern char SMTPRELAY[];
+extern char SMTPUSERNAME[];
+extern char SMTPPASSWORD[];
 extern char NEWS[];
 extern char MAILtoNEWS[];
 extern char ORGANIZATION[];
