@@ -232,3 +232,7 @@
                              appended to outgoing messages leaving the remailer
                              network at this hop (closes: #490117).
                            List known mixmasters in remailer-conf reply.
+                           When expiring packet ids from id.log also expire
+                             packets that are dated more than half a year in the
+                             future.  That way we get rid of invalid packets
+                             introduced by the switch to a binary file.
