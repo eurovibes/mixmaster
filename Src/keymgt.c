@@ -6,7 +6,7 @@
    details.
 
    Key management
-   $Id: keymgt.c,v 1.5 2002/07/24 07:48:50 rabbi Exp $ */
+   $Id: keymgt.c,v 1.6 2002/07/25 14:11:37 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -342,7 +342,7 @@ int keymgt(int force)
      force = 2: generate new key */
   int err = 0;
 
-  if (REMAIL) {
+  if (REMAIL || force == 2) {
 #ifdef USE_RSA
     if (MIX && (err = v2keymgt(force)) == -1)
       err = -1;
