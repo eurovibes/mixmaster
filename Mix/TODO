@@ -1,10 +1,7 @@
 Todo items before 2.9 release:
 
 * Fix Install script bug wrt overwriting mix executable.
-* Look in proper locations for libs on OS X.
 * Fix ncurses support with --config option.
-* Backport the MAILIN/MAILINTIME features.
-* Backport the pid file support for -D.
 
 Optionally:
 

@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.8.2.3 2002/10/09 21:45:16 weaselp Exp $
+# $Id: Install,v 1.8.2.4 2002/10/15 23:28:47 rabbi Exp $
 
 #whereis program default-path
 whereis()
@@ -451,8 +451,8 @@ then
 
  opensslinfo="Please get OpenSSL 0.9.6f or greater from http://www.openssl.org/"
  opensslwarning="WARNING: This version of OpenSSL contains known vulnerabilities. Please upgrade to OpenSSL 0.9.6f or greater!"
- LIBDIR=/usr/local/ssl/lib
- INCDIR="/usr/include /usr/include/ssl /usr/lib/ssl/include /usr/local/ssl/include"
+ LIBDIR="/lib /sw/lib /usr/local/ssl/lib"
+ INCDIR="/usr/include /usr/include/ssl /usr/lib/ssl/include /sw/include /usr/local/ssl/include"
  SRCDIR="openssl*"
 
  opensslwarn()
