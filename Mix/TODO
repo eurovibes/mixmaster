@@ -1,24 +1,34 @@
-Todo items before 3.0 release:
+Mandatory todo items before 3.0 release:
 
 * autoconf installation script is needed
 * post-install scripts need to be reworked
-* Macintosh OS/X support
+* provide a packaged Windows build to be used with QuickSilver
+* clean up documentation and tarball contents
+* do full regression tests on as many platforms possible
+  + list only these platforms as supported
+* resolve any new critical issues
+
+Items for 3.0 or 3.0.1
+
+* allow for verification of clearsigned OpenPGP messages
+* AES support -- requires OpenSSL 0.9.7
 * further mpgp testing of AES/MDC packet support
 * honor key preferences when encrypting to multiple keys
+* Macintosh OS/X support
 * Windows build instructions/files
 * documentation issues resolved
   + mpgp man page
-* allow for verification of clearsigned OpenPGP messages
-* set an expiration date on OpenPGP keys
-* check and enforce expiration date
+* check and enforce OpenPGP key expiration date
 * Implement mbox/Maildir mail input (597043)
+* Have supported cpunks/mixes in -conf reply
+  similar to Reliable (480330)
 * further debugging
 
 Further wishlist:
+
+* set an expiration date on OpenPGP keys
 * Allow sending with middlemen remailers last
   in chain in interactive mixmaster (481244)
-* Have supported cpunks/mixes in -conf reply
-  (480330)
 * investigate whether and how it is feasible to
   add expiration/creation dates to mixmaster keys
   if feasible, implement setting and checking
