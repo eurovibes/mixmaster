@@ -15,6 +15,7 @@ Items that need to be completed before the next HEAD release:
 * Modify release tarball generation script to build the .tab.c file from
   parsedate.y, so we don't end up requiring bison on every system that
   wants to build mixmaster.
+* perhaps document --redirect in mix.1
 
 Mandatory todo items before 3.0 release:
 
