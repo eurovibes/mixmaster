@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.9 2002/07/24 09:00:11 weaselp Exp $ */
+   $Id: mix.c,v 1.10 2002/07/29 12:42:56 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -203,7 +203,7 @@ void whoami(char *addr, char *defaultname)
 {
   char *p = NULL;
 
-#if defined(HAVE_GETDOMAINNAME) || defined(HAVE_GETHOSTNAME)
+#if defined(HAVE_GETDOMAINNAME) || (defined(HAVE_GETHOSTNAME) && ! defined(HAVE_UNAME))
   char line[LINELEN];
 
 #endif
