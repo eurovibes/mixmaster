@@ -5,6 +5,7 @@ Items that need to be completed before the next MAIN release:
 - Full WIN32 support.
   - rename pop3.cfg to pop3.cfg.txt
   - different editor handling?  if so, provide suggestions.
+  - Sane randomness handling
 - stats stuff:
   - port it to unix
   - use proper configured filenames
