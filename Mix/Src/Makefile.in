@@ -5,7 +5,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Makefile.in,v 1.2 2002/07/08 17:29:10 rabbi Exp $
+# $Id: Makefile.in,v 1.3 2002/07/21 16:34:42 weaselp Exp $
 
 # Edit according to the libraries you want to use:
 INC = %INC
@@ -70,3 +70,4 @@ allclean: clean
 ci: clean
 	cd ~/mix3; ci -l * Mix/* Mix/Src/*; echo
 
+include Makefile.deps
