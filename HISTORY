@@ -362,3 +362,6 @@
                              could have been used after it was free()d which
                              resulted in segfaults.
                            Install script tweaks
+                           Check that feedback buffer is not null before
+                             operating on it in chain_select().
+                             Closes #631353, thanks Sami Farin.

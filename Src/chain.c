@@ -6,7 +6,7 @@
    details.
 
    Prepare messages for remailer chain
-   $Id: chain.c,v 1.5 2002/12/05 04:23:32 weaselp Exp $ */
+   $Id: chain.c,v 1.6 2003/04/02 13:14:13 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -74,8 +74,10 @@ int chain_select(int hop[], char *chainstr, int maxrem, REMAILER *remailer,
 	    break;
       }
       if (k < 0 || k >= maxrem) {
-	buf_appendf(feedback, "No such remailer: %b", selected);
-	buf_nl(feedback);
+	if (feedback != NULL) {
+		buf_appendf(feedback, "No such remailer: %b", selected);
+		buf_nl(feedback);
+	}
 #if 0
 	k = 0;
 #else /* end of 0 */
@@ -85,7 +87,9 @@ int chain_select(int hop[], char *chainstr, int maxrem, REMAILER *remailer,
       }
       hop[len++] = k;
       if (len >= 20) {          /* array passed in is has length 20 */
-	buf_appends(feedback, "Chain too long.\n");
+	if (feedback != NULL) {
+		buf_appends(feedback, "Chain too long.\n");
+	}
 	break;
       }
       if (i > 0)
