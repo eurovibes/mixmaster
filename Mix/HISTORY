@@ -457,3 +457,6 @@
                              is not set.
                            Properly ignore whitespace in chain selection.
                            Removed unused functions in keymgt.c.
+                           Added new options -V, --version, and --about.
+                           Made manpage corrections.
+                           Minor ncurses display tweaks.
