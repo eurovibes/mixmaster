@@ -6,7 +6,7 @@
    details.
 
    OpenPGP data
-   $Id: pgpdata.c,v 1.3 2002/01/16 19:12:25 ulfm Exp $ */
+   $Id: pgpdata.c,v 1.4 2002/07/09 08:05:45 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -503,10 +503,14 @@ int pgp_getkey(int mode, int algo, int *psym, BUFFER *keypacket, BUFFER *key,
 	   case 2:
 	   case 3:
 	    for (j = 0; j < pgp_numsecmpi(thisalgo); j++) {
+	      unsigned char lastb[8];
 	      if (mpi_get(p1, i) == -1) {
 		keytype = -1;
 		goto end;
 	      }
+	      if (j)
+		{buf_clear(iv); buf_append(iv, lastb, 8);} // memcpy(iv->data, lastb, 8);
+	      memcpy(lastb, i->data+i->length-8, 8);
 	      skcrypt(i, skalgo, sk, iv, DECRYPT);
 	      mpi_put(key, i);
 	    }
