@@ -6,7 +6,7 @@
    details.
 
    OpenPGP messages
-   $Id: pgp.c,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: pgp.c,v 1.2 2002/08/01 14:24:24 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -450,6 +450,7 @@ int pgp_signtxt(BUFFER *msg, BUFFER *uid, BUFFER *pass,
   buf_cat(out, msg);
   buf_move(msg, out);
 end:
+  buf_free(line);
   buf_free(sig);
   buf_free(out);
   return (err);

@@ -195,5 +195,7 @@
                            Fix public remailer keys getting re-signed
                              every time keys are requested (Closes: #478383).
                            Make smtp sending similar to local /usr/lib/sendmail
-                             sending (wrt header/body seperation; Closes: #482052).
+                             sending (wrt header/body seperation;
+                             Closes: #482052).
                            Add X-Loop header on mailbox forwarded messages.
+                           Several small fixes.
