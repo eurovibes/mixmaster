@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.17 2002/08/26 18:08:05 weaselp Exp $ */
+   $Id: mix.c,v 1.18 2002/08/26 19:38:51 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -155,6 +155,8 @@ char MAILUSAGE[PATHMAX];
 char MAILANON[PATHMAX];
 char MAILERROR[PATHMAX];
 char MAILBOUNCE[PATHMAX];
+
+char ENTEREDPASSPHRASE[LINELEN] = "";
 
 static int rereadconfig = 0;
 static int terminatedaemon = 0;
@@ -733,6 +735,11 @@ static int mix_config(void)
 #endif
     REMAIL = 0;
   }
+
+  if (strncmp(ENTEREDPASSPHRASE, "", LINELEN) != 0) {
+    strncpy(PASSPHRASE, ENTEREDPASSPHRASE, LINELEN);
+    PASSPHRASE[LINELEN-1] = 0;
+  };
 
   return (0);
 }
