@@ -6,7 +6,7 @@
    details.
 
    OpenPGP messages
-   $Id: pgp.c,v 1.7 2002/08/25 13:27:40 weaselp Exp $ */
+   $Id: pgp.c,v 1.8 2002/09/12 17:25:59 disastry Exp $ */
 
 
 #include "mix3.h"
@@ -176,7 +176,7 @@ int pgp_encrypt(int mode, BUFFER *in, BUFFER *to, BUFFER *sigid,
 		BUFFER *pass, char *pubring, char *secring)
 {
   BUFFER *dek, *out, *sig, *dest, *tmp;
-  int err = 0, sym = 0, mdc = 0;
+  int err = 0, sym = PGP_K_ANY, mdc = 0;
   int text;
 
   out = buf_new();
@@ -207,7 +207,7 @@ int pgp_encrypt(int mode, BUFFER *in, BUFFER *to, BUFFER *sigid,
     if (err == -1)
       goto end;
     if (to->ptr == to->length) {
-      if ((err = pgpdb_getkey(PK_ENCRYPT, PGP_ANY, &sym, &mdc, NULL, dest, NULL,
+      if ((err = pgpdb_getkey(PK_ENCRYPT, PGP_ANY, &sym, &mdc, NULL, NULL, dest, NULL,
 			      NULL, pubring, NULL)) < 0)
 	goto end;
       pgp_setkey(dek, sym);
@@ -443,7 +443,7 @@ int pgp_signtxt(BUFFER *msg, BUFFER *uid, BUFFER *pass,
 
   buf_appends(out, begin_pgpsigned);
   buf_nl(out);
-  if (pgpdb_getkey(PK_SIGN, PGP_ANY, NULL, NULL, NULL, uid, NULL, NULL, secring, pass) == PGP_S_DSA)
+  if (pgpdb_getkey(PK_SIGN, PGP_ANY, NULL, NULL, NULL, NULL, uid, NULL, NULL, secring, pass) == PGP_S_DSA)
     buf_appends(out, "Hash: SHA1\n");
   buf_nl(out);
   while (buf_getline(msg, line) != -1) {

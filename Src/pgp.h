@@ -6,7 +6,7 @@
    details.
 
    OpenPGP messages
-   $Id: pgp.h,v 1.8 2002/08/29 08:50:00 weaselp Exp $ */
+   $Id: pgp.h,v 1.9 2002/09/12 17:25:59 disastry Exp $ */
 
 
 #ifdef USE_PGP
@@ -43,6 +43,7 @@
 #define PGP_MDC 19
 
 /* symmetric algorithms */
+#define PGP_K_ANY 0
 #define PGP_K_IDEA 1
 #define PGP_K_3DES 2
 #define PGP_K_CAST5 3
@@ -60,13 +61,22 @@
 #define PGP_SIG_BINARY 0
 #define PGP_SIG_CANONIC 1
 #define PGP_SIG_CERT 0x10
+#define PGP_SIG_CERT1 0x11
+#define PGP_SIG_CERT2 0x12
+#define PGP_SIG_CERT3 0x13
+#define isPGP_SIG_CERT(x) (x >= PGP_SIG_CERT && x <= PGP_SIG_CERT3)
 #define PGP_SIG_BINDSUBKEY 0x18
+#define PGP_SIG_KEYREVOKE 0x20
+#define PGP_SIG_SUBKEYREVOKE 0x28
+#define PGP_SIG_CERTREVOKE 0x30
 
 /* signature subpacket types */
 #define PGP_SUB_CREATIME 2
+#define PGP_SUB_CERTEXPIRETIME 3
 #define PGP_SUB_KEYEXPIRETIME 9
 #define PGP_SUB_PSYMMETRIC 11
 #define PGP_SUB_ISSUER 16
+#define PGP_SUB_PRIMARY 25
 #define PGP_SUB_FEATURES 30
 
 #define ARMORED 1
@@ -107,7 +117,7 @@ int pgp_makepubkey(BUFFER *seckey, BUFFER *outtxt, BUFFER *pubkey,
 		   BUFFER *pass, int keyalgo);
 int pgp_makeseckey(BUFFER *keypacket, BUFFER *outtxt,
                    BUFFER *pass, int keyalgo);
-int pgp_getkey(int mode, int algo, int *sym, int *mdc, BUFFER *keypacket, BUFFER *key,
+int pgp_getkey(int mode, int algo, int *sym, int *mdc, long *expires, BUFFER *keypacket, BUFFER *key,
 	       BUFFER *keyid, BUFFER *userid, BUFFER *pass);
 int pgp_rsakeygen(int bits, BUFFER *userid, BUFFER *pass, char *pubring,
 		  char *secring, int remail);
@@ -153,7 +163,7 @@ int pgp_digest(int hashalgo, BUFFER *in, BUFFER *d);
 
 /* pgpdb.c */
 
-int pgpdb_getkey(int mode, int algo, int *sym, int *mdc, BUFFER *key, BUFFER *user,
+int pgpdb_getkey(int mode, int algo, int *sym, int *mdc, long *expires, BUFFER *key, BUFFER *user,
 		 BUFFER *founduid, BUFFER *keyid, char *keyring, BUFFER *pass);
 
 typedef struct {

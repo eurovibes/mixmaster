@@ -6,7 +6,7 @@
    details.
 
    OpenPGP data
-   $Id: pgpdata.c,v 1.15 2002/09/06 22:45:06 rabbi Exp $ */
+   $Id: pgpdata.c,v 1.16 2002/09/12 17:26:00 disastry Exp $ */
 
 
 #include "mix3.h"
@@ -420,22 +420,83 @@ static int pgp_iskeyid(BUFFER *key, BUFFER *keyid)
   return(ret);
 }
 
-int pgp_getkey(int mode, int algo, int *psym, int *pmdc, BUFFER *keypacket, BUFFER *key,
+int pgp_get_sig_subpacket(BUFFER * p1, BUFFER *out)
+{
+  int suptype, len = buf_getc(p1);
+  if (len > 192 && len < 255)
+    len = (len - 192) * 256 + buf_getc(p1) + 192;
+  else if (len == 255)
+    len = buf_getl(p1);
+  suptype = buf_getc(p1);
+  if (len)
+    buf_get(p1, out, len-1); /* len-1 - exclude type */
+  else
+    buf_clear(out);
+  return suptype;
+}
+
+typedef struct _UIDD {
+  struct _UIDD * next;
+  long created, expires;
+  int revoked, sym, mdc, uid, primary;
+  BUFFER *uidstr;
+} UIDD;
+
+static UIDD * new_uidd_c(UIDD *uidd_c, int uidno)
+{
+  UIDD * tmp;
+
+  if (!uidd_c || uidd_c->uid < uidno) {
+    tmp = (UIDD *)malloc(sizeof(UIDD));
+    if (!tmp)
+	return uidd_c;
+    if (uidd_c) {
+      uidd_c->next = tmp;
+      uidd_c = uidd_c->next;
+    } else
+      uidd_c = tmp;
+    if (uidd_c) {
+      memset(uidd_c, 0, sizeof(UIDD));
+      uidd_c->uid = uidno;
+    }
+  }
+  return uidd_c;
+}
+
+int pgp_getkey(int mode, int algo, int *psym, int *pmdc, long *pexpires, BUFFER *keypacket, BUFFER *key,
 	       BUFFER *keyid, BUFFER *userid, BUFFER *pass)
+/* IN:  mode   - PK_SIGN, PK_VERIFY, PK_DECRYPT, PK_ENCRYPT
+ *	algo   - PGP_ANY, PGP_ES_RSA, PGP_E_ELG, PGP_S_DSA
+ *	psym   - reyested sym PGP_K_ANY, PGP_K_IDEA, PGP_K_3DES, ... or NULL
+ *	pass   - passprase or NULL
+ *	keypacket - key, with key uid sig subkey packets, possibly encrypted
+ *	keyid  - reyested (sub)keyid or empty buffer or NULL
+ * OUT: psym   - found sym algo
+ *	pmdc   - found mdc flag
+ *	key    - found key, only key packet, decrypted
+ *	keyid  - found (sub)keyid
+ *	userid - found userid
+ *	pexpires - expiry time, or 0 if don't expire
+ */
 {
   int tempbuf = 0;
   int keytype = -1, type, j;
   int thisalgo = 0, version, skalgo;
   int needsym = 0, symfound = 0, mdcfound = 0;
-  BUFFER *p1, *iv, *sk, *i, *thiskeyid;
+  BUFFER *p1, *iv, *sk, *i, *thiskeyid, *mainkeyid;
   int ivlen;
   int csstart;
+  long now = time(NULL);
+  long created = 0, expires = 0, subexpires = 0;
+  int uidno = 0, primary = 0, subkeyno = 0, subkeyok = 0;
+  UIDD * uidd_1 = NULL, * uidd_c = NULL;
 
   p1 = buf_new();
   i = buf_new();
   iv = buf_new();
   sk = buf_new();
   thiskeyid = buf_new();
+  mainkeyid = buf_new();
   if (psym)
     needsym = *psym;
   if (keypacket == key) {
@@ -448,26 +509,24 @@ int pgp_getkey(int mode, int algo, int *psym, int *pmdc, BUFFER *keypacket, BUFF
   while ((type = pgp_getpacket(keypacket, p1)) > 0) {
     switch (type) {
     case PGP_SIG:
+    {
       /* it is assumed that only valid keys have been imported */
-      if (buf_getc(p1) == 4) {
-	if (buf_getc(p1) == PGP_SIG_CERT) {
-	  buf_getc(p1);
-	  buf_getc(p1);
-	  j = buf_geti(p1);
+      long a;
+      int self = 0, certexpires = 0, suptype;
+      int sigtype, sigver = buf_getc(p1);
+      created = 0, expires = 0, primary = 0;
+      if (sigver == 4) {
+         sigtype = buf_getc(p1);
+	if (isPGP_SIG_CERT(sigtype) || sigtype == PGP_SIG_BINDSUBKEY || sigtype == PGP_SIG_CERTREVOKE) {
+	  int revoked = (sigtype == PGP_SIG_CERTREVOKE), sym = PGP_K_3DES, mdc = 0;
+	  buf_getc(p1); /* pk algo */
+	  buf_getc(p1); /* hash algo */
+	  j = buf_geti(p1); /* length of hashed signature subpackets */
 	  j += p1->ptr;
 	  while (p1->ptr < j) {
-	    int len, type, a;
-	    len = buf_getc(p1);
-	    if (len > 192 && len < 255)
-	      len = (len - 192) * 256 + buf_getc(p1) + 192;
-	    else if (len == 255)
-	      len = buf_getl(p1);
-	    type = buf_getc(p1);
-	    if (len)
-	      buf_get(p1, i, len-1); /* len-1 - exclude type */
-	    else
-	      buf_clear(i);
-	    if (type == PGP_SUB_PSYMMETRIC) {
+	    suptype = pgp_get_sig_subpacket(p1, i);
+	    switch (suptype & 0x7F) {
+	    case PGP_SUB_PSYMMETRIC:
 	      while ((a = buf_getc(i)) != -1)
 		if ((a == PGP_K_3DES || a == PGP_K_CAST5 || a == PGP_K_BF
 #ifdef USE_IDEA
@@ -476,47 +535,159 @@ int pgp_getkey(int mode, int algo, int *psym, int *pmdc, BUFFER *keypacket, BUFF
 #ifdef USE_AES
 		     || a ==  PGP_K_AES128 || a ==  PGP_K_AES192 || a ==  PGP_K_AES256
 #endif
-		     ) && (a == needsym || needsym == 0)) {
-		  symfound = a;
+		     ) && (a == needsym || needsym == PGP_K_ANY)) {
+		  sym = a;
 		  break; /* while ((a = buf_getc(i)) != -1) */
 		} /* if ((a == PGP_K_3DES)... */
-	    } /* if (type == PGP_SUB_PSYMMETRIC) */
-	    else if (type == PGP_SUB_FEATURES) {
+	      break;
+	    case PGP_SUB_FEATURES:
 	      if ((a = buf_getc(i)) != -1)
 		if (a & 0x01)
-		  mdcfound = 1;
-	    } /* if (type == PGP_SUB_FEATURES) */
+		  mdc = 1;
+	      break;
+	    case PGP_SUB_CREATIME:
+	      if ((a = buf_getl(i)) != -1)
+		created = a;
+	      break;
+	    case PGP_SUB_KEYEXPIRETIME:
+	      if ((a = buf_getl(i)) != -1)
+		expires = a;
+	      break;
+	    case PGP_SUB_CERTEXPIRETIME:
+	      if ((a = buf_getl(i)) != -1)
+		certexpires = a;
+	      break;
+	    case PGP_SUB_ISSUER: /* ISSUER normaly is in unhashed data, but check anyway */
+	      if (i->length == 8)
+		self = buf_eq(i, mainkeyid);
+	      break;
+	    case PGP_SUB_PRIMARY:
+	      if ((a = buf_getl(i)) != -1)
+		primary = a;
+	      break;
+	    default:
+	      if (suptype & 0x80) {
+		; /* "critical" bit set! now what? */
+	      }
+	    } /* switch (suptype) */
 	  } /* while (p1->ptr < j) */
-	} /* if (buf_getc(p1) == PGP_SIG_CERT) */
-      } /* if (buf_getc(p1) == 4) */
+	  if (p1->ptr == j) {
+	      j = buf_geti(p1); /* length of unhashed signature subpackets */
+	      j += p1->ptr;
+	      while (p1->ptr < j) {
+		suptype = pgp_get_sig_subpacket(p1, i);
+		if (suptype == PGP_SUB_ISSUER) {
+		  if (i->length == 8)
+		    self = buf_eq(i, mainkeyid);
+		} /* if (suptype == PGP_SUB_ISSUER) */
+	      } /* while (p1->ptr < j) #2 */
+	  } /* if (p1->ptr == j) */
+	  if (p1->ptr != j) /* sig damaged ? */
+	    break; /* switch (type) */
+	  if (self) {
+	    if (certexpires)
+		certexpires = ((created + certexpires < now) || (created + certexpires < 0));
+	    if ((isPGP_SIG_CERT(sigtype) && !certexpires) || sigtype == PGP_SIG_CERTREVOKE) {
+	      uidd_c = new_uidd_c(uidd_c, uidno);
+	      if (!uidd_1)
+		uidd_1 = uidd_c;
+	      if (uidd_c && uidd_c->uid == uidno) {
+		if (uidd_c->created <= created) {
+		  /* if there is several selfsigs on that uid, find the newest one */
+		  uidd_c->created = created;
+		  uidd_c->expires = expires;
+		  uidd_c->revoked = revoked;
+		  uidd_c->primary = primary;
+		  uidd_c->sym = sym;
+		  uidd_c->mdc = mdc;
+		}
+	      }
+	    } /* if ((isPGP_SIG_CERT(sigtype) && !certexpires) || sigtype == PGP_SIG_CERTREVOKE) */
+	    else if (sigtype == PGP_SIG_BINDSUBKEY) {
+	      if (!subkeyok) {
+		subexpires = expires ? created + expires : 0;
+		if (expires && ((created + expires < now) || (created + expires < 0))) {
+		  if (mode == PK_ENCRYPT) { /* allow decrypt with expired subkeys, but not encrypt */
+		    keytype = -1;
+		  }
+		}
+		if (keytype != -1)
+		  subkeyok = subkeyno;
+	      }
+	    } /* if (sigtype == PGP_SIG_BINDSUBKEY) */
+	  } /* if (self) */
+	} /* if (isPGP_SIG_CERT(sigtype) || sigtype == PGP_SIG_BINDSUBKEY || sigtype == PGP_SIG_CERTREVOKE) */
+      } /* if (sigver == 4) */
+      else if (sigver == 2 || sigver == 3) {
+        buf_getc(p1); /* One-octet length of following hashed material.  MUST be 5 */
+        sigtype = buf_getc(p1);
+      } /* if (sigver == 2 || sigver == 3) */
+      if (sigtype == PGP_SIG_KEYREVOKE) {
+        /* revocation can be either v3 or v4. if v4 we could check issuer, but we don't do it... */
+	if (mode == PK_SIGN || mode == PK_ENCRYPT) { /* allow verify and decrypt with revokeded keys, but not sign and encrypt */
+	  keytype = -1;
+	}
+      } /* if (sigtype == PGP_SIG_KEYREVOKE) */
+      else if (sigtype == PGP_SIG_SUBKEYREVOKE) {
+      if (!subkeyok || subkeyok == subkeyno)
+	  if (mode == PK_ENCRYPT) { /* allow decrypt with revokeded subkeys, but not encrypt */
+	    keytype = -1;
+	  }
+      } /* if (sigtype == PGP_SIG_SUBKEYREVOKE) */
       break; /* switch (type) */
+    } /* case PGP_SIG: */
     case PGP_USERID:
+      uidno++;
+      uidd_c = new_uidd_c(uidd_c, uidno);
+      if (!uidd_1)
+	uidd_1 = uidd_c;
+      if (uidd_c && uidd_c->uid == uidno) {
+	uidd_c->uidstr = buf_new();
+	buf_set(uidd_c->uidstr, p1);
+      }
       if (userid)
 	buf_move(userid, p1);
       break;
     case PGP_PUBSUBKEY:
     case PGP_SECSUBKEY:
+      subkeyno++;
+      if (keytype != -1 && subkeyno > 1) {
+        /* usable subkey already found, don't bother to check other */
+	continue;
+      }
       if (keytype != -1 && (mode == PK_SIGN || mode == PK_VERIFY))
 	continue;
     case PGP_PUBKEY:
-    case PGP_SECKEY:
       if ((type == PGP_PUBKEY || type == PGP_PUBSUBKEY) &&
 	  (mode == PK_DECRYPT || mode == PK_SIGN))
 	continue;
+    case PGP_SECKEY:
+      if (type == PGP_PUBKEY || type == PGP_SECKEY)
+	pgp_keyid(p1, mainkeyid);
       keytype = type;
       version = buf_getc(p1);
       switch (version) {
       case 2:
       case 3:
-	buf_getl(p1);		/* created */
-	buf_geti(p1);		/* valid */
+	created = buf_getl(p1);			/* created */
+	expires = buf_geti(p1) * (24*60*60);	/* valid */
+	if (uidno == 0) {
+	  uidd_c = new_uidd_c(uidd_c, uidno);
+	  if (!uidd_1)
+	    uidd_1 = uidd_c;
+	  if (uidd_c && uidd_c->uid == uidno) {
+	    uidd_c->created = created;
+	    uidd_c->expires = expires;
+	    uidd_c->sym = PGP_K_IDEA;
+	  }
+	}
 	thisalgo = buf_getc(p1);
 	if (thisalgo != PGP_ES_RSA) {
 	  keytype = -1;
 	  goto end;
 	}
 	symfound = PGP_K_IDEA;
-    mdcfound = 0;
+	mdcfound = 0;
 	break;
       case 4:
 	buf_appendc(key, version);
@@ -529,7 +700,7 @@ int pgp_getkey(int mode, int algo, int *psym, int *pmdc, BUFFER *keypacket, BUFF
       default:
 	keytype = -1;
 	goto end;
-      }
+      } /* switch (version) */
       if (algo != PGP_ANY && thisalgo != algo) {
 	keytype = -1;
 	continue;
@@ -563,8 +734,8 @@ int pgp_getkey(int mode, int algo, int *psym, int *pmdc, BUFFER *keypacket, BUFF
 	      buf_clear(iv);
 	      buf_append(iv, lastb, ivlen);
 	      mpi_put(key, i);
-	    }
-	    break;
+	    } /* for */
+	    break; /* switch (version) */
 	   case 4:
 	    buf_clear(i);
 	    buf_rest(i, p1);
@@ -578,14 +749,14 @@ int pgp_getkey(int mode, int algo, int *psym, int *pmdc, BUFFER *keypacket, BUFF
 	      mpi_put(key, i);
 	    }
 	    break;
-	  }
+	  } /* switch (version) */
 	  if (pgp_csum(key, csstart) != buf_geti(p1)) {
 	    keytype = PGP_PASS;
 	    goto end;
 	  }
 	}
-      }
-      break;
+      } /* if (key) */
+      break; /* switch (type) */
      default:
       /* ignore trust packets etc */
       break;
@@ -602,13 +773,50 @@ int pgp_getkey(int mode, int algo, int *psym, int *pmdc, BUFFER *keypacket, BUFF
   buf_free(iv);
   buf_free(sk);
   buf_free(thiskeyid);
+  buf_free(mainkeyid);
 #ifndef USE_RSA
   if (thisalgo == PGP_ES_RSA)
     keytype = -1;
 #endif
-  if (needsym > 0 && symfound != needsym)
+
+  if (uidd_1) {
+    primary = 0;
+    created = expires = 0;
+    while (uidd_1) {
+      /* find newest uid which is not revoked or expired */
+      if (primary <= uidd_1->primary && created <= uidd_1->created && !uidd_1->revoked) {
+	created = uidd_1->created;
+	expires = uidd_1->expires;
+	primary = uidd_1->primary;
+	symfound = uidd_1->sym;
+	mdcfound = uidd_1->mdc;
+	if (userid && uidd_1->uidstr)
+	  buf_set(userid, uidd_1->uidstr);
+      }
+      uidd_c = uidd_1;
+      uidd_1 = uidd_1->next;
+      if (uidd_c->uidstr)
+	buf_free(uidd_c->uidstr);
+      free(uidd_c);
+    }
+    if (expires && ((created + expires < now) || (created + expires < 0))) {
+      if (mode == PK_SIGN || mode == PK_ENCRYPT) { /* allow verify and decrypt with expired keys, but not sign and encrypt */
+        keytype = -1;
+      }
+    }
+  } /* if (uidd_1) */
+  expires = expires ? created + expires : 0;
+  if (subexpires > 0 && expires > 0 && subexpires < expires)
+    expires = subexpires;
+  if (pexpires)
+    *pexpires = expires;
+
+  if (!subkeyok && keytype == PGP_E_ELG && (mode == PK_DECRYPT || mode == PK_ENCRYPT))
+    keytype = -1; /* no usable subkey found, one with valid binding */
+
+  if (needsym != PGP_K_ANY && needsym != symfound)
     keytype = -1;
-  else if (psym && *psym == 0)
+  else if (psym && *psym == PGP_K_ANY)
     *psym = symfound;
   if (pmdc)
     *pmdc = mdcfound;
@@ -748,7 +956,7 @@ int pgp_makepubkey(BUFFER *keypacket, BUFFER *outtxt, BUFFER *out,
       }
       pgp_packet(p, PGP_USERID);
       err = pgp_sign(pubkey, p, sig, NULL, pass, PGP_SIG_CERT, 1, created, 0,
-		     seckey, NULL);
+		     seckey, NULL);     /* maybe PGP_SIG_CERT3 ? */
       buf_cat(out, p);
       if (err == 0)
 	buf_cat(out, sig);
