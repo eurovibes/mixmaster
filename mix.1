@@ -1,5 +1,5 @@
 .TH MIX 1 "Mixmaster Version 3.0 beta"
-.\" $Id: mix.1,v 1.1 2001/10/31 08:19:53 rabbi Exp $
+.\" $Id: mix.1,v 1.2 2001/12/12 18:50:59 rabbi Exp $
 .SH NAME
 mix \- anonymous remailer software
 .SH SYNOPSIS
@@ -165,6 +165,15 @@ Generate remailer keys if necessary.
 .TP
 .B \-S, \-\-send
 Force sending the message(s) from the pool.
+.TP
+.B \-\-install\-svc
+Install the Mixmaster Service on Win32.
+.TP
+.B \-\-remove\-svc
+Remove the Mixmaster Service on Win32.
+.TP
+.B \-\-run\-svc
+Run the Mixmaster Service on Win32.
 .SH CONFIGURATION
 Mixmaster reads its configuration from the file
 .B mix.cfg
