@@ -6,6 +6,13 @@ Items that need to be completed before the next MAIN release:
 - Full functionality / regression testing around chain operations
   following the recent whitespace bug fix. (everyone)
 
+- Hunt and kill bug in Mixmaster causing echolot pings to be turned
+  into permanent t* files.
+
+- Document -V, --version, and --about in mixmaster.1
+
+- Add equivalent features to the above to mpgp and document in mpgp.1
+
 Items for 3.0.x:
 
 - delete secret keys securely after keygraceperiod expires
