@@ -429,3 +429,4 @@
                           Config option PRECEDENCE allows setting the
                             Precedence: header on all outgoing mail.
                             (Hauke Lampe)
+                          Nym support is not compiled in by default anymore.
