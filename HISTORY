@@ -151,22 +151,16 @@
                            Fixed inconsistencies between software name and
                              package name.
 
-2002-03-09                 Fix command line parsing.
-
-2002-07-01                 Encrypt-to directive is now supported.
+2002-07-01      2.9b34     Encrypt-to directive is now supported.
                            Partial packets now properly expire if not
                              reassembled (by cmeclax).
                            Fixed an address blocking error introduced in
                              the last version (Peter Palfrader).
                            Various command line bug fixes.
 
-2002-07-06                 Updated zlib due to security reasons.
+2002-07-10                 Updated zlib due to security reasons.
                            Does not generate keys in client mode.
                            Uses binary format for id.log.
-                           mpgp fixes (by Disastry).
-
-2002-07-10                 Call RSA_free at the end of pgp_rsakeygen() in pgpdata.c (by Disastry).
-                           Fix use of global vars in mpi_bitcount() (by Disastry).
-                           Include destination allow in remailer-conf reply;
-                             Closes: #482203 dest.alw info in remailer-conf data;
-                             Patch: #483536 by Katherine, slightly modified by Peter Palfrader.
+                           Assorted mpgp fixes (by Disastry).
+                           Added support for storing the key passphrase
+                             in the mix.cfg file. (by Disastry).

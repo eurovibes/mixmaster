@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.5 2002/01/10 23:59:16 rabbi Exp $ */
+   $Id: mix.c,v 1.6 2002/07/10 01:58:49 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -108,6 +108,11 @@ int RELFINAL = 99;
 long MAXLAT = 36 * 60 * 60;
 char PGPPUBRING[PATHMAX];
 char PGPSECRING[PATHMAX];
+#ifdef PASSPHRASE
+char PASS_PHRASE[LINELEN] = PASSPHRASE;
+#else
+char PASS_PHRASE[LINELEN] = "";
+#endif
 char MAILBOX[PATHMAX] = "mbox";
 char MAILABUSE[PATHMAX];
 char MAILBLOCK[PATHMAX];
@@ -318,6 +323,7 @@ int mix_configline(char *line)
 	  read_conf_i(DISTANCE) || read_conf_i(MINREL) ||
 	  read_conf_i(RELFINAL) || read_conf_t(MAXLAT) ||
 	  read_conf(PGPPUBRING) || read_conf(PGPSECRING) ||
+	  read_conf(PASS_PHRASE) ||
 #ifdef USE_SOCK
 	  read_conf_i(POP3DEL) || read_conf_i(POP3SIZELIMIT) ||
 	  read_conf_t(POP3TIME) ||
