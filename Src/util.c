@@ -6,7 +6,7 @@
    details.
 
    Utility functions
-   $Id: util.c,v 1.8 2002/09/18 23:26:17 rabbi Exp $ */
+   $Id: util.c,v 1.9 2002/09/24 08:08:47 disastry Exp $ */
 
 
 #include "mix3.h"
@@ -332,7 +332,7 @@ int decode(BUFFER *in, BUFFER *out)
       } else if (a[0] == '\r' && a[1] == '\n') {	/* ignore crlf */
 	a += 2;
 	continue;
-      } else if (a[0] == '=' && a[1] == '4' && a[2] == '6') {
+      } else if (a[0] == '=' && a[1] == '4' && a[2] == '6' && !(asctobin[a[5]] & 0x80) ) {
 	a += 2;			/* '=46' at the left of a line really is 'F' */
 	*a = 'F';		/* fix in memory ... */
 	continue;
