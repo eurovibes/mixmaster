@@ -17,7 +17,7 @@ o drop messages without timestamp (weasel)
   - document somewhere  (rabbi)
 o drop messages with future timestamp  (weasel)
   - document somewhere  (rabbi)
-- Remove nym stuff from the manpage  (rabbi)
+o Remove nym stuff from the manpage  (rabbi)
 - autoconf installation script is needed
   - mostly done -- a few bugs still need fixing  (dybbuk)
 - post-install scripts need to be reworked
