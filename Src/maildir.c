@@ -12,7 +12,16 @@
 
 #include "mix3.h"
 
+#ifdef WIN32
+#include <io.h>
+#include <direct.h>
+#include <process.h>
+#define sleep(s) Sleep(s*1000)
+#define S_IWUSR _S_IWRITE
+#define S_IRUSR _S_IREAD
+#else
 #include <unistd.h>
+#endif
 #include <fcntl.h>
 #include <time.h>
 #include <string.h>
@@ -21,6 +30,10 @@
 #include <errno.h>
 #include <stdarg.h>
 #include <assert.h>
+
+#if defined(S_IFDIR) && !defined(S_ISDIR)
+#define S_ISDIR(m) (((m) & S_IFMT) == S_IFDIR)
+#endif
 
 static unsigned long namecounter = 0;
 
