@@ -277,14 +277,15 @@
                              processes its pool, or at MAILINTIME intervals
                              (closes: #597043).
                            The Mixmaster daemon now writes a pid file.
+                           Mixmaster in daemon mode now catches SIGTERM and
+                             SIGINT and finishes its current queue run and then
+                             exits successfully.
 
 2002-??-??      MAIN       Applied Maildir feature patch by drt@un.bewaff.net,
                              with some changes by PP:
                              MAILBOX can now be a Maildir (closes: #586223).
                            Mixmaster in daemon mode reloads configuration on
-                             SIGHUP. Upon receiving SIGTERM or SIGINT it will
-                             finish its current queue run and then exit
-                             successfully.
+                             SIGHUP.
                            The secret pgp keyring is now stored ASCII armored
                              with one key per ascii armor.
                            NB: Due to the bug with reading armored keyrings and
