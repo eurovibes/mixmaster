@@ -6,7 +6,7 @@
    details.
 
    OpenPGP messages
-   $Id: pgp.h,v 1.3 2002/07/25 14:49:06 weaselp Exp $ */
+   $Id: pgp.h,v 1.4 2002/07/26 23:29:45 rabbi Exp $ */
 
 
 #ifdef USE_PGP
@@ -35,6 +35,8 @@
 #define PGP_TRUST 12
 #define PGP_USERID 13
 #define PGP_PUBSUBKEY 14
+#define PGP_ENCRYPTEDMDC 18
+#define PGP_MDC 19
 
 /* symmetric algorithms */
 #define PGP_K_IDEA 1
@@ -120,7 +122,7 @@ int pgp_packetpartial(BUFFER *buf, long *len, int *partial);
 int pgp_getpacket(BUFFER *buf, BUFFER *p);
 int pgp_getsig(BUFFER *p, pgpsig *sig, char *pubring);
 void pgp_verify(BUFFER *msg, BUFFER *detached, pgpsig *sig);
-int pgp_getsymmetric(BUFFER *buf, BUFFER *key, int algo);
+int pgp_getsymmetric(BUFFER *buf, BUFFER *key, int algo, int type);
 int pgp_getliteral(BUFFER *buf);
 int pgp_uncompress(BUFFER *buf);
 int pgp_getsessionkey(BUFFER *buf, BUFFER *pass, char *secring);
