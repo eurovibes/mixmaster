@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.20 2002/08/28 15:18:35 weaselp Exp $ */
+   $Id: mix.c,v 1.21 2002/08/28 16:29:28 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -858,12 +858,14 @@ int mix_daily(void)
     @author	PP
     @return	nothing
  */
+#ifdef POSIX
 void sighandler(int signal) {
   if (signal == SIGHUP)
     rereadconfig = 1;
   else if (signal == SIGINT || signal == SIGTERM)
     terminatedaemon = 1;
 };
+#endif
 
 /** Set the signal handler for SIGHUP, SIGINT and SIGTERM
     This function registers signal handlers so that

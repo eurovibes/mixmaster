@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.17 2002/08/28 09:35:25 weaselp Exp $ */
+   $Id: config.h,v 1.18 2002/08/28 16:29:28 weaselp Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -311,7 +311,7 @@ extern int RELFINAL;
 extern long MAXLAT;
 DLLIMPORT extern char PGPPUBRING[];
 DLLIMPORT extern char PGPSECRING[];
-extern char PASSPHRASE[];
+DLLIMPORT extern char PASSPHRASE[];
 extern long POP3TIME;
 extern int POP3DEL;
 extern int POP3SIZELIMIT;
@@ -324,6 +324,6 @@ extern char MAILANON[];
 extern char MAILERROR[];
 extern char MAILBOUNCE[];
 
-extern char ENTEREDPASSPHRASE[LINELEN];
+DLLIMPORT extern char ENTEREDPASSPHRASE[LINELEN];
 
 #endif
