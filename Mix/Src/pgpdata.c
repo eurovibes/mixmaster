@@ -6,7 +6,7 @@
    details.
 
    OpenPGP data
-   $Id: pgpdata.c,v 1.27 2003/02/15 08:06:44 weaselp Exp $ */
+   $Id: pgpdata.c,v 1.28 2003/05/03 10:55:49 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -1064,7 +1064,9 @@ int pgp_rsakeygen(int bits, BUFFER *userid, BUFFER *pass, char *pubring,
 
   buf_appendc(skey, 3);
   buf_appendl(skey, now);
-  buf_appendi(skey, KEYLIFETIME/(24*60*60));
+  /* until we can handle the case, where our key expires, don't create keys with expiration dates */
+  buf_appendi(skey, 0);
+  /* buf_appendi(skey, KEYLIFETIME/(24*60*60)); */
   buf_appendc(skey, PGP_ES_RSA);
   mpi_bnput(skey, k->n);
   mpi_bnput(skey, k->e);

@@ -6,7 +6,7 @@
    details.
 
    Create OpenPGP packets
-   $Id: pgpcreat.c,v 1.13 2002/10/09 20:53:30 weaselp Exp $ */
+   $Id: pgpcreat.c,v 1.14 2003/05/03 10:55:49 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -767,7 +767,8 @@ int pgp_sign(BUFFER *msg, BUFFER *msg2, BUFFER *sig, BUFFER *userid,
     buf_cat(sub, d);
 
     if (self || type == PGP_SIG_BINDSUBKEY) {
-      if (KEYLIFETIME) { /* add key expirtaion time */
+      /* until we can handle the case where our pgp keys expire, don't create keys that expire */
+      if (0 && KEYLIFETIME) { /* add key expirtaion time */
 	buf_clear(d);
 	buf_appendl(d, KEYLIFETIME);
 	pgp_subpacket(d, PGP_SUB_KEYEXPIRETIME);
