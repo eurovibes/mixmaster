@@ -222,7 +222,10 @@ Reasons for doing this include: keeping unhappy end-users from escalating compla
 <h3>3.1.3 Qmail</h3>
 <h3>3.1.4 Sendmail</h3>
 <h3>3.1.5 Add-Ons</h3>
+<a name=3.1.5.1></a>
 <h3>3.1.5.1 TLS-SSL</h3>
+TLS-SSL stands for Transport Layer Security-Secure Socket Layer, and it is intended to add an extra layer of security to your mail server's communications. It does so by encrypting all header information when sending mail between MTAs that support it. As any extra level of security is generally a good thing when running a remailer, you are strongly encouraged to install TLS-SSL on your MTA.<br><br>
+For those running Qmail, the procedure is rather straightforwrad. Download the <a href=http://inoa.net/qmail/qmail-1.03-tls.patch>patch</a>, apply it to your source tree with "patch < tls.patch", make your server certificates as mentioned in the patch instructions, and re-run "make setup check" to install the updated binaries. Make certain you have run "make clean" first, and that Qmail is shut down during the recompilation (and of course turned back on once successful ;-).
 <h3>3.1.5.2 RBLs</h3>
 <a name=3.2></a>
 <h3>3.2 Downloading Software</h3>
