@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.9.2.4 2002/10/10 13:18:43 weaselp Exp $ */
+   $Id: config.h,v 1.9.2.5 2002/10/18 22:16:58 rabbi Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -236,6 +236,7 @@ extern char NYMDB[];
 
 /* string constants */
 #define remailer_type "Remailer-Type: Mixmaster "
+#define mixmaster_protocol "2"
 #define begin_remailer "-----BEGIN REMAILER MESSAGE-----"
 #define end_remailer "-----END REMAILER MESSAGE-----"
 #define begin_key "-----Begin Mix Key-----"

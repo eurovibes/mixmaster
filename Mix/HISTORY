@@ -282,3 +282,9 @@
                              exits successfully.
                            Minor code formating cleanup and Install script
                              fixes.
+
+2002-xx-xx      STABLE     The Mixmaster protocol version is now prepended 
+                             to the software version in the Mixmaster cap-
+                             string.
+                           Minor configuration default changes and Install 
+                             script fixes.
