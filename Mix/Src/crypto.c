@@ -6,7 +6,7 @@
    details.
 
    Interface to cryptographic library
-   $Id: crypto.c,v 1.5.2.3 2002/12/16 23:40:55 rabbi Exp $ */
+   $Id$ */
 
 
 #include "mix3.h"

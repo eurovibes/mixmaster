@@ -6,7 +6,7 @@
    details.
 
    OpenPGP data
-   $Id: pgpdata.c,v 1.11.2.6 2003/06/01 23:39:10 rabbi Exp $ */
+   $Id$ */
 
 #include "mix.h"
 #include "mix3.h"

@@ -6,7 +6,7 @@
    details.
 
    Send messages from pool
-   $Id: pool.c,v 1.10.2.6 2003/06/01 23:39:10 rabbi Exp $ */
+   $Id$ */
 
 #include "mix3.h"
 #include <stdlib.h>

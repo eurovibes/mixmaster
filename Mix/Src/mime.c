@@ -6,7 +6,7 @@
    details.
 
    MIME functions
-   $Id: mime.c,v 1.3.2.3 2003/06/01 23:39:09 rabbi Exp $ */
+   $Id$ */
 
 #include "mix.h"
 #include "mix3.h"

@@ -6,7 +6,7 @@
    details.
 
    Socket-based mail transport services
-   $Id: mail.c,v 1.7.2.10 2003/01/13 22:56:08 colintu Exp $ */
+   $Id$ */
 
 
 #include "mix3.h"

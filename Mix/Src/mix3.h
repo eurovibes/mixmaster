@@ -6,7 +6,7 @@
    details.
 
    Function prototypes
-   $Id: mix3.h,v 1.8.2.9 2003/06/01 23:40:05 rabbi Exp $ */
+   $Id$ */
 
 
 #ifndef _MIX3_H

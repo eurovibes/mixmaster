@@ -5,7 +5,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Makefile.deps,v 1.1.2.2 2002/12/16 22:46:57 rabbi Exp $
+# $Id$
 
 buffers.o: mix3.h config.h version.h mix.h
 chain.o: mix3.h config.h version.h mix.h

@@ -6,7 +6,7 @@
    details.
 
    Key management
-   $Id: keymgt.c,v 1.9.2.5 2002/12/16 22:38:05 rabbi Exp $ */
+   $Id$ */
 
 
 #include "mix3.h"

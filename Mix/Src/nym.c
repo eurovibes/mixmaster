@@ -6,7 +6,7 @@
    details.
 
    Create nym server messages
-   $Id: nym.c,v 1.2.2.4 2003/06/01 23:39:09 rabbi Exp $ */
+   $Id$ */
 
 #include "mix.h"
 #include "mix3.h"

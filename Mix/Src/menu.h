@@ -6,7 +6,7 @@
    details.
 
    Menu-based user interface
-   $Id: menu.h,v 1.2.2.2 2002/12/16 22:38:06 rabbi Exp $ */
+   $Id$ */
 
 
 #ifndef _MENU_H

@@ -6,7 +6,7 @@
    details.
 
    Menu-based user interface - nym management
-   $Id: menunym.c,v 1.1.1.1.2.3 2003/06/01 23:39:09 rabbi Exp $ */
+   $Id$ */
 
 
 #include "menu.h"

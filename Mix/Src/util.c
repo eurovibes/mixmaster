@@ -6,7 +6,7 @@
    details.
 
    Utility functions
-   $Id: util.c,v 1.2.2.8 2003/06/01 23:39:10 rabbi Exp $ */
+   $Id$ */
 
 
 #include "mix3.h"

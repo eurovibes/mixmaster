@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: upgrade,v 1.2.2.2 2002/12/16 22:38:02 rabbi Exp $
+# $Id$
 
 # readln text default
 readln()

@@ -5,7 +5,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Makefile.in,v 1.4.2.2 2002/12/16 22:38:03 rabbi Exp $
+# $Id$
 
 # Edit according to the libraries you want to use:
 INC = %INC

@@ -6,7 +6,7 @@
    details.
 
    Encrypt message for Mixmaster chain
-   $Id: chain2.c,v 1.2.2.3 2002/12/16 22:38:04 rabbi Exp $ */
+   $Id$ */
 
 
 #include "mix3.h"

@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.9.2.7 2003/01/12 22:21:26 colintu Exp $ */
+   $Id$ */
 
 
 #ifndef _CONFIG_H

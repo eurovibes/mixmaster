@@ -6,7 +6,7 @@
    details.
 
    OpenPGP messages
-   $Id: pgp.h,v 1.6.2.3 2002/12/16 22:38:08 rabbi Exp $ */
+   $Id$ */
 
 
 #ifdef USE_PGP

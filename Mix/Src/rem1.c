@@ -6,7 +6,7 @@
    details.
 
    Process Cypherpunk remailer messages
-   $Id: rem1.c,v 1.6.2.3 2003/06/01 23:39:10 rabbi Exp $ */
+   $Id$ */
 
 
 #include "mix.h"

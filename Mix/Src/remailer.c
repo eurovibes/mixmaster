@@ -6,7 +6,7 @@
    details.
 
    Simple remailer frontend: Read mix packets from standard input.
-   $Id: remailer.c,v 1.1.1.1.2.1 2002/12/16 22:38:12 rabbi Exp $ */
+   $Id$ */
 
 
 #include "mix.h"

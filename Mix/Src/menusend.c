@@ -6,7 +6,7 @@
    details.
 
    Menu-based user interface -- send message
-   $Id: menusend.c,v 1.2.2.5 2003/06/01 23:39:09 rabbi Exp $ */
+   $Id$ */
 
 #include "mix.h"
 #include "menu.h"

@@ -6,7 +6,7 @@
    details.
 
    Read OpenPGP packets
-   $Id: pgpget.c,v 1.7.2.5 2003/06/01 23:39:10 rabbi Exp $ */
+   $Id$ */
 
 #include "mix.h"
 #include "mix3.h"
