@@ -6,7 +6,7 @@
    details.
 
    Function prototypes
-   $Id: mix3.h,v 1.15 2002/09/05 01:21:54 weaselp Exp $ */
+   $Id: mix3.h,v 1.16 2002/09/18 23:26:16 rabbi Exp $ */
 
 
 #ifndef _MIX3_H
@@ -19,17 +19,17 @@
 #ifdef WIN32
 #ifndef USE_SOCK
 #define _WINSOCKAPI_		/* don't include winsock */
-#endif
+#endif /* not USE_SOCK */
 #include <windows.h>
 #ifdef _MSC
 #define snprintf _snprintf
-#endif
+#endif /* _MSC */
 #define DIRSEP '\\'
 #define DIRSEPSTR "\\"
-#else
+#else /* end of WIN32 */
 #define DIRSEP '/'
 #define DIRSEPSTR "/"
-#endif
+#endif /* else if not WIN32 */
 
 #define NOT_IMPLEMENTED {printf("Function not implemented.\n");return -1;}
 #define SECONDSPERDAY 86400
@@ -217,13 +217,13 @@ int buf_crypt(BUFFER *b, BUFFER *key, BUFFER *iv, int enc);
 
 #ifdef USE_IDEA
 int buf_ideacrypt(BUFFER *b, BUFFER *key, BUFFER *iv, int enc);
-#endif
+#endif /* USE_IDEA */
 int buf_bfcrypt(BUFFER *b, BUFFER *key, BUFFER *iv, int enc);
 int buf_3descrypt(BUFFER *b, BUFFER *key, BUFFER *iv, int enc);
 int buf_castcrypt(BUFFER *b, BUFFER *key, BUFFER *iv, int enc);
 #ifdef USE_AES
 int buf_aescrypt(BUFFER *b, BUFFER *key, BUFFER *iv, int enc);
-#endif
+#endif /* USE_AES */
 
 int db_getseckey(byte keyid[], BUFFER *key);
 int db_getpubkey(byte keyid[], BUFFER *key);
@@ -398,7 +398,7 @@ struct dirent {
 DIR *opendir(const char *name);
 struct dirent *readdir(DIR *dir);
 int closedir(DIR *dir);
-#endif
+#endif /* _MSC */
 
 /* sockets */
 #if defined(WIN32) && defined(USE_SOCK)
@@ -406,19 +406,19 @@ int closedir(DIR *dir);
 int sock_init(void);
 void sock_exit(void);
 
-#else
+#else /* end of defined(WIN32) && defined(USE_SOCK) */
 typedef int SOCKET;
 
 #define INVALID_SOCKET -1
 SOCKET opensocket(char *hostname, int port);
 int closesocket(SOCKET s);
 
-#endif
+#endif /* else if not defined(WIN32) && defined(USE_SOCK) */
 
 #ifdef WIN32
 int is_nt_service(void);
 void set_nt_exit_event();
-#endif
+#endif /* WIN32 */
 
 /* check for memory leaks */
 #ifdef DEBUG
@@ -427,9 +427,9 @@ void set_nt_exit_event();
 BUFFER *mix3_bufnew(char *, int, char*);
 #if __GNUC__ >= 2
 # define buf_new() mix3_bufnew(__FILE__, __LINE__, __PRETTY_FUNCTION__)
-#else
+#else /* end of __GNUC__ >= 2 */
 # define buf_new() mix3_bufnew(__FILE__, __LINE__, "file")
-#endif
+#endif /* else if not __GNUC__ >= 2 */
 #endif /* DEBUG */
 
-#endif
+#endif /* not _MIX3_H */

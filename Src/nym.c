@@ -6,7 +6,7 @@
    details.
 
    Create nym server messages
-   $Id: nym.c,v 1.3 2002/08/25 13:27:40 weaselp Exp $ */
+   $Id: nym.c,v 1.4 2002/09/18 23:26:16 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -21,7 +21,7 @@ int nym_config(int mode, char *nym, char *nymserver, BUFFER *pseudonym,
 {
 #ifndef USE_PGP
   return (-1);
-#else
+#else /* end of not USE_PGP */
   REMAILER remailer[MAXREM];
   KEYRING *r;
   int maxrem;
@@ -191,7 +191,7 @@ int nym_config(int mode, char *nym, char *nymserver, BUFFER *pseudonym,
 
 #ifdef DEBUG
   buf_write(req, stderr);
-#endif
+#endif /* DEBUG */
   buf_clear(line);
   buf_appendc(line, '<');
   buf_cat(line, config);
@@ -203,7 +203,7 @@ int nym_config(int mode, char *nym, char *nymserver, BUFFER *pseudonym,
     goto end;
 #ifdef DEBUG
   buf_write(req, stderr);
-#endif
+#endif /* DEBUG */
   buf_sets(out, "To: ");
   buf_cat(out, config);
   buf_nl(out);
@@ -231,14 +231,14 @@ end:
   buf_free(oldchains);
   buf_free(config);
   return (err);
-#endif
+#endif /* else if USE_PGP */
 }
 
 int nym_encrypt(BUFFER *msg, char *nym, int type)
 {
 #ifndef USE_PGP
   return (-1);
-#else
+#else /* end of not USE_PGP */
   BUFFER *out, *userpass, *sig, *config;
   int err = -1;
 
@@ -263,7 +263,7 @@ int nym_encrypt(BUFFER *msg, char *nym, int type)
     buf_appendc(sig, '>');
 #ifdef DEBUG
     buf_write(out, stderr);
-#endif
+#endif /* DEBUG */
     user_pass(userpass);
     err = pgp_encrypt(PGP_ENCRYPT | PGP_SIGN | PGP_TEXT | PGP_REMAIL,
 		      out, config, sig, userpass, NULL, NYMSECRING);
@@ -281,14 +281,14 @@ int nym_encrypt(BUFFER *msg, char *nym, int type)
   buf_free(userpass);
   buf_free(sig);
   return (err);
-#endif
+#endif /* else if USE_PGP */
 }
 
 int nym_decrypt(BUFFER *msg, char *thisnym, BUFFER *log)
 {
 #ifndef USE_PGP
   return (-1);
-#else
+#else /* end of not USE_PGP */
   BUFFER *pgpmsg, *out, *line;
   BUFFER *nymlist, *userpass;
   BUFFER *decr, *sig, *mid;
@@ -397,7 +397,7 @@ int nym_decrypt(BUFFER *msg, char *thisnym, BUFFER *log)
 #if 0
 	if (err == PGP_PASS || err == PGP_ERR)
 	  user_delpass();
-#endif
+#endif /* 0 */
 	if (err != PGP_ERR && err != PGP_PASS && err != PGP_NOMSG &&
 	    err != PGP_NODATA) {
 	  buf_appends(out, info_beginpgp);
@@ -444,7 +444,7 @@ end:
   buf_free(userpass);
   buf_free(ek);
   return (decrypted);
-#endif
+#endif /* else if USE_PGP */
 }
 
 int nymlist_read(BUFFER *list)
@@ -452,7 +452,7 @@ int nymlist_read(BUFFER *list)
 #ifdef USE_PGP
   BUFFER *key;
 
-#endif
+#endif /* USE_PGP */
   FILE *f;
   int err = 0;
 
@@ -469,8 +469,8 @@ int nymlist_read(BUFFER *list)
 	buf_clear(list);
 	err = -1;
       }
-    buf_free(key);
-#endif
+    buf_free(key); 
+#endif /* USE_PGP */
   }
   return (err);
 }
@@ -480,7 +480,7 @@ int nymlist_write(BUFFER *list)
 #ifdef USE_PGP
   BUFFER *key;
 
-#endif
+#endif /* USE_PGP */
   FILE *f;
 
   if (list->length == 0)
@@ -493,7 +493,7 @@ int nymlist_write(BUFFER *list)
     pgp_encrypt(PGP_NCONVENTIONAL | PGP_NOARMOR, list, key, NULL, NULL, NULL,
 		NULL);
   buf_free(key);
-#endif
+#endif /* USE_PGP */
   f = mix_openfile(NYMDB, "wb");
   if (f == NULL)
     return (-1);

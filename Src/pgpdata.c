@@ -6,7 +6,7 @@
    details.
 
    OpenPGP data
-   $Id: pgpdata.c,v 1.19 2002/09/18 06:44:40 weaselp Exp $ */
+   $Id: pgpdata.c,v 1.20 2002/09/18 23:26:16 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -26,7 +26,7 @@ int pgp_keylen(int symalgo)
   case PGP_K_AES192:
     return (24);
   case PGP_K_AES128:
-#endif
+#endif /* USE_AES */
   case PGP_K_IDEA:
   case PGP_K_CAST5:
   case PGP_K_BF:
@@ -46,7 +46,7 @@ int pgp_blocklen(int symalgo)
   case PGP_K_AES192:
   case PGP_K_AES128:
     return (16);
-#endif
+#endif /* USE_AES */
   case PGP_K_IDEA:
   case PGP_K_CAST5:
   case PGP_K_BF:
@@ -100,13 +100,13 @@ int skcrypt(BUFFER *data, int skalgo, BUFFER *key, BUFFER *iv, int enc)
 #ifdef USE_IDEA
   case PGP_K_IDEA:
     return (buf_ideacrypt(data, key, iv, enc));
-#endif
+#endif /* USE_IDEA */
 #ifdef USE_AES
   case PGP_K_AES128:
   case PGP_K_AES192:
   case PGP_K_AES256:
     return (buf_aescrypt(data, key, iv, enc));
-#endif
+#endif /* USE_AES */
   case PGP_K_3DES:
     return (buf_3descrypt(data, key, iv, enc));
   case PGP_K_BF:
@@ -180,7 +180,7 @@ int pgp_rsa(BUFFER *in, BUFFER *k, int mode)
 
       BN_free(i);
     }
-#endif
+#endif /* 1 */
   }
   buf_prepare(out, RSA_size(key));
 
@@ -214,7 +214,7 @@ end:
   buf_free(mpi);
   return (err);
 }
-#endif
+#endif /* USE_RSA */
 
 /* Contrary to RFC 2440, old PGP versions use this for clearsign only.
  * If the text is included in the OpenPGP message, the application will
@@ -235,7 +235,7 @@ void pgp_sigcanonic(BUFFER *msg)
     while (line->length > 0 && (line->data[line->length - 1] == ' '
 #if 0
 				|| line->data[line->length - 1] == '\t'
-#endif
+#endif /* 0 */
 	))
       line->length--;
     line->data[line->length] = '\0';
@@ -532,10 +532,10 @@ int pgp_getkey(int mode, int algo, int *psym, int *pmdc, long *pexpires, BUFFER 
 		if ((a == PGP_K_3DES || a == PGP_K_CAST5 || a == PGP_K_BF
 #ifdef USE_IDEA
 		     || a == PGP_K_IDEA
-#endif
+#endif /* USE_IDEA */
 #ifdef USE_AES
 		     || a ==  PGP_K_AES128 || a ==  PGP_K_AES192 || a ==  PGP_K_AES256
-#endif
+#endif /* USE_AES */
 		     ) && (a == needsym || needsym == PGP_K_ANY)) {
 		  sym = a;
 		  break; /* while ((a = buf_getc(i)) != -1) */
@@ -778,7 +778,7 @@ int pgp_getkey(int mode, int algo, int *psym, int *pmdc, long *pexpires, BUFFER 
 #ifndef USE_RSA
   if (thisalgo == PGP_ES_RSA)
     keytype = -1;
-#endif
+#endif /* not USE_RSA */
 
   if (uidd_1) {
     primary = 0;
@@ -1070,7 +1070,7 @@ int pgp_rsakeygen(int bits, BUFFER *userid, BUFFER *pass, char *pubring,
     buf_cat(skey, iv);
   }
   else
-#endif
+#endif /* USE_IDEA */
     buf_appendc(skey, 0);
 
   mpi_bnputenc(skey, k->d, skalgo, dk, iv);
@@ -1123,7 +1123,7 @@ end:
   buf_free(sig);
   return (err);
 }
-#endif
+#endif /* USE_RSA */
 
 #define begin_param "-----BEGIN PUBLIC PARAMETER BLOCK-----"
 #define end_param "-----END PUBLIC PARAMETER BLOCK-----"
@@ -1400,7 +1400,7 @@ int pgp_dosign(int algo, BUFFER *data, BUFFER *key)
     if (err == 0)
       mpi_put(out, data);
     break;
-#endif
+#endif /* USE_RSA */
    case PGP_S_DSA:
     err = pgp_dsasign(data, key, out);
     break;

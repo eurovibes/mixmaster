@@ -19,9 +19,9 @@
 #define sleep(s) Sleep(s*1000)
 #define S_IWUSR _S_IWRITE
 #define S_IRUSR _S_IREAD
-#else
+#else /* end of WIN32 */
 #include <unistd.h>
-#endif
+#endif /* else not WIN32 */
 #include <fcntl.h>
 #include <time.h>
 #include <string.h>
@@ -33,7 +33,7 @@
 
 #if defined(S_IFDIR) && !defined(S_ISDIR)
 #define S_ISDIR(m) (((m) & S_IFMT) == S_IFDIR)
-#endif
+#endif /* defined(S_IFDIR) && !defined(S_ISDIR) */
 
 #ifndef SHORTNAMES
 
@@ -54,9 +54,9 @@ int checkDirectory(char *dir, char *append, int create) {
     if (create) {
 #ifndef POSIX
       err = mkdir(tmp);
-#else
+#else /* end of not POSIX */
       err = mkdir(tmp, S_IRWXU);
-#endif
+#endif /* else if POSIX */
       if (err == 0)
 	errlog(NOTICE, "Creating directory %s.\n", tmp);
     } else
@@ -154,9 +154,9 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
   /* on NFS this could fail */
 #ifndef WIN32
   if((fsync(fd) != 0) || (close(fd) != 0)) {
-#else
+#else /* end of not WIN32 */
   if((_commit(fd) != 0) || (close(fd) != 0)) {
-#endif
+#endif /* else if WIN32 */
     returnValue = -1;
     goto functionExit;
   } 
@@ -206,7 +206,7 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
     strcatn(newname, "new" DIRSEPSTR, MAX_SUBNAME);
     strcatn(newname, basename, MAX_SUBNAME);
   }
-#else /* POSIX */
+#else /* end of POSIX */
   /* On non POSIX systems we simply use rename(). Let's hope DJB
    * never finds out
    */
@@ -214,7 +214,7 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
     returnValue = -1;
     goto functionExit;
   };
-#endif /* POSIX */
+#endif /* else if not POSIX */
 
   returnValue = 0;
 
@@ -229,20 +229,20 @@ realend:
   return returnValue;
 }
 
-#else /* no SHORTNAMES */
+#else /* end of SHORTNAMES */
 int maildirWrite(char *maildir, BUFFER *message, int create) {
 {
   errlog(ERRORMSG, "Maildir delivery does not work with SHORTNAMES.\n");
   return -1;
 }
-#endif /* no SHORTNAMES */
+#endif /* else if not SHORTNAMES */
 
 
 #ifdef UNITTEST
 
 #ifdef NDEBUG
 #undef NDEBUG
-#endif
+#endif /* NDEBUG */
 
 #include <dirent.h>
 

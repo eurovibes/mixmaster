@@ -6,7 +6,7 @@
    details.
 
    Menu-based user interface - utility functions
-   $Id: menuutil.c,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: menuutil.c,v 1.2 2002/09/18 23:26:16 rabbi Exp $ */
 
 
 #include "menu.h"
@@ -23,7 +23,7 @@ void cl(int y, int x)
   move(y, x);
   hline(' ', COLS - x);
 }
-#endif
+#endif /* USE_NCURSES */
 
 void menu_init(void)
 {
@@ -35,7 +35,7 @@ void menu_init(void)
   intrflush(stdscr, FALSE);
   keypad(stdscr, TRUE);
   menu_initialized = 1;
-#endif
+#endif /* USE_NCURSES */
 }
 
 void menu_exit(void)
@@ -43,7 +43,7 @@ void menu_exit(void)
   user_delpass();
 #ifdef USE_NCURSES
   endwin();
-#endif
+#endif /* USE_NCURSES */
 }
 
 #ifdef USE_NCURSES
@@ -81,7 +81,7 @@ void savemsg(BUFFER *message)
   }
 }
 
-#endif
+#endif /* USE_NCURSES */
 
 int menu_getuserpass(BUFFER *b, int mode)
 {
@@ -103,6 +103,6 @@ int menu_getuserpass(BUFFER *b, int mode)
       return (bufeq(b, p));
     return (0);
   }
-#endif
+#endif /* USE_NCURSES */
   return (-1);
 }

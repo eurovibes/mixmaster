@@ -317,4 +317,4 @@ static char *GetLastErrorText()
     return error_buf;
 } /* GetLastErrorText */
 
-#endif
+#endif /* WIN32SERVICE */

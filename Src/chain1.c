@@ -6,7 +6,7 @@
    details.
 
    Encrypt message for Cypherpunk remailer chain
-   $Id: chain1.c,v 1.2 2001/12/12 19:21:50 rabbi Exp $ */
+   $Id: chain1.c,v 1.3 2002/09/18 23:26:16 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -101,7 +101,7 @@ int t1_rlist(REMAILER remailer[])
 
 #ifdef USE_PGP
   pgp_rlist(remailer, n);
-#endif
+#endif /* USE_PGP */
   return (n);
 }
 
@@ -115,8 +115,8 @@ int t1_ek(BUFFER *key, BUFFER *seed, int num)
 #ifdef DEBUG
   fprintf(stderr, "passphrase=%s (%2X%2X%2X%2X %d)\n", key->data,
 	  seed->data[0], seed->data[1], seed->data[2], seed->data[3], num);
-#endif
-  return (0);
+#endif /* DEBUG */
+  return (0); 
 }
 
 int t1_encrypt(int type, BUFFER *message, char *chainstr, int latency,
@@ -228,7 +228,7 @@ int t1_encrypt(int type, BUFFER *message, char *chainstr, int latency,
       buf_appends(message, "::\nEncrypted: PGP\n\n");
       buf_cat(message, b);
     } else
-#endif
+#endif /* USE_PGP */
     {
       if (remailer[chain[hop]].flags.pgponly) {
 	buf_setf(line, "PGP encryption needed for remailer %s!\n",
@@ -283,4 +283,4 @@ int t1_getreply(BUFFER *msg, BUFFER *ek, int len)
   return (err);
 }
 
-#endif
+#endif /* USE_PGP */

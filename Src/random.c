@@ -6,7 +6,7 @@
    details.
 
    Randomness
-   $Id: random.c,v 1.2 2002/08/03 17:08:02 weaselp Exp $ */
+   $Id: random.c,v 1.3 2002/09/18 23:26:16 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -15,13 +15,13 @@
 #ifdef POSIX
 #include <sys/time.h>
 #include <unistd.h>
-#else
+#else /* end of POSIX */
 #include <io.h>
 #include <process.h>
-#endif
+#endif /* else if not POSIX */
 #ifdef WIN32
 #include <windows.h>
-#endif
+#endif /* WIN32 */
 #include <assert.h>
 #include <string.h>
 
@@ -75,7 +75,7 @@ int rnd_add(byte *b, int l)
   RAND_seed(b, l);
   return (0);
 }
-#endif
+#endif /* USE_OPENSSL */
 
 void rnd_time(void)
 {
@@ -83,19 +83,19 @@ void rnd_time(void)
 
 #ifdef WIN32
   SYSTEMTIME t;
-#endif
+#endif /* WIN32 */
 
 #ifdef HAVE_GETTIMEOFDAY
   struct timeval tv;
 
   gettimeofday(&tv, 0);
   rnd_add((byte *) &tv, sizeof(tv));
-#elif defined(WIN32)
+#elif defined(WIN32) /* end of HAVE_GETTIMEOFDAY */
   GetSystemTime(&t);
   rnd_add((byte *) &t, sizeof(t));
-#else
+#else /* end of defined(WIN32) */
   rnd_add((byte *) time(NULL), sizeof(time_t));
-#endif
+#endif /* else if not defined(WIN32), HAVE_GETTIMEOFDAY */
   pid = getpid();
   rnd_add((byte *) &pid, sizeof(pid));
 }
@@ -119,7 +119,7 @@ void rnd_update(byte *seed, int l)
     }
     close(fd);
   }
-#endif
+#endif /* DEV_URANDOM */
 }
 
 int rnd_bytes(byte *b, int n)
@@ -207,4 +207,4 @@ int rnd_mouse(UINT i, WPARAM w, LPARAM l)
   }
   return (rnd_state == RND_SEEDED ? 100 : entropy * 100 / NEEDED);
 }
-#endif
+#endif /* WIN32 */

@@ -6,7 +6,7 @@
    details.
 
    Utility functions
-   $Id: util.c,v 1.7 2002/09/12 04:48:58 weaselp Exp $ */
+   $Id: util.c,v 1.8 2002/09/18 23:26:17 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -22,12 +22,12 @@
 #include <unistd.h>
 #include <sys/file.h>
 #include <termios.h>
-#else
+#else /* end of POSIX */
 #include <io.h>
-#endif
+#endif /* else if not POSIX */
 #ifdef HAVE_GETKEY
 #include <pc.h>
-#endif
+#endif /* HAVE_GETKEY */
 #include <assert.h>
 
 
@@ -122,7 +122,7 @@ int mixfile(char *path, const char *name)
     path[PATHMAX-1] = '\0';
     strcatn(path, name + 1, PATHMAX);
   } else
-#endif
+#endif /* POSIX */
   if (name[0] == DIRSEP || (isalpha(name[0]) && name[1] == ':') || MIXDIR == NULL) {
     strncpy(path, name, PATHMAX);
     path[PATHMAX-1] = '\0';
@@ -148,10 +148,10 @@ FILE *openpipe(const char *prog)
 
 #ifdef POSIX
   p = popen(prog, "w");
-#endif
+#endif /* POSIX */
 #ifdef _MSC
   p = _popen(prog, "w");
-#endif
+#endif /* _MSC */
 
   if (p == NULL)
     errlog(ERRORMSG, "Unable to open pipe to %s\n", prog);
@@ -179,11 +179,11 @@ int closepipe(FILE *p)
 {
 #ifdef POSIX
   return (pclose(p));
-#elif defined(_MSC)
+#elif defined(_MSC) /* end of POSIX */
   return (_pclose(p));
-#else
+#else /* end of defined(_MSC) */
   return -1;
-#endif
+#endif /* else if not defined(_MSC), POSIX */
 }
 
 /** Base 64 encoding ****************************************************/
@@ -357,7 +357,7 @@ int decode(BUFFER *in, BUFFER *out)
 	    a += 4;
 	    continue;		/* support Mixmaster 2.0.3 encoding */
 	  }
-#endif
+#endif /* 1 */
 	  break;
 	}
       }
@@ -426,9 +426,9 @@ int lock(FILE *f)
   lockstruct.l_start = 0;
   lockstruct.l_len = 0;
   return (fcntl(fileno(f), F_SETLKW, &lockstruct));
-#else
+#else /* end of WIN32 */
   return (0);
-#endif
+#endif /* else if not WIN32 */
 }
 
 int unlock(FILE *f)
@@ -442,9 +442,9 @@ int unlock(FILE *f)
   lockstruct.l_start = 0;
   lockstruct.l_len = 0;
   return (fcntl(fileno(f), F_SETLKW, &lockstruct));
-#else
+#else /* end of not WIN32 */
   return (0);
-#endif
+#endif /* else if WIN32 */
 }
 
 /* get passphrase ******************************************************/
@@ -458,7 +458,7 @@ static int getuserpass(BUFFER *b, int mode)
 #ifdef HAVE_TERMIOS
   struct termios attr;
 
-#endif
+#endif /* HAVE_TERMIOS */
 
   if (mode == 0)
     fprintf(stderr, "enter passphrase: ");
@@ -471,10 +471,10 @@ static int getuserpass(BUFFER *b, int mode)
     p[n] = getkey();
   }
   p[n] = 0;
-#else
+#else /* end of HAVE_GETKEY */
   scanf("%127s", p);
-#endif
-#else
+#endif /* else if not HAVE_GETKEY */
+#else /* end of not UNIX */
   fd = open("/dev/tty", O_RDONLY);
   if (tcgetattr(fd, &attr) != 0)
     return (-1);
@@ -492,7 +492,7 @@ static int getuserpass(BUFFER *b, int mode)
   close(fd);
   fprintf(stderr, "\n");
   p[n - 1] = 0;
-#endif
+#endif /* else if UNIX */
   if (mode == 0)
     buf_appends(b, p);
   else
@@ -592,7 +592,7 @@ int write_pidfile(char *pidfile)
   }
   if(f)
     fclose(f);
-#endif
+#endif /* POSIX */
   return (err);
 }
 
@@ -600,9 +600,9 @@ int clear_pidfile(char *pidfile)
 {
 #ifdef POSIX
   return (unlink(pidfile));
-#else
+#else /* end of POSIX */
   return (0);
-#endif
+#endif /* else if not POSIX */
 }
 
 time_t parse_yearmonthday(char* str)
@@ -616,9 +616,9 @@ time_t parse_yearmonthday(char* str)
     tz = getenv("TZ");
 #ifdef WIN32
     putenv("TZ=");
-#else
+#else /* end of WIN32 */
     setenv("TZ", "", 1);
-#endif
+#endif /* else if not WIN32 */
     tzset();
     memset(&timestruct, 0, sizeof(timestruct));
     timestruct.tm_mday = day;
@@ -632,12 +632,12 @@ time_t parse_yearmonthday(char* str)
       putenv(envstr);
     } else
       putenv("TZ=");
-#else
+#else /* end of WIN32 */
     if (tz)
       setenv("TZ", tz, 1);
     else
       unsetenv("TZ");
-#endif
+#endif /* else if not WIN32 */
     tzset();
     return date;
   } else
@@ -652,7 +652,7 @@ int fileno(FILE *f)
   return (f->_handle);
 }
 
-#endif
+#endif /* __RSXNT__ */
 
 #ifdef _MSC	/* Visual C lacks dirent */
 
@@ -699,4 +699,4 @@ int closedir(DIR *dir)
   return (-1);
 }
 
-#endif
+#endif /* _MSC */

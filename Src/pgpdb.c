@@ -6,7 +6,7 @@
    details.
 
    OpenPGP key database
-   $Id: pgpdb.c,v 1.11 2002/09/18 05:58:03 weaselp Exp $ */
+   $Id: pgpdb.c,v 1.12 2002/09/18 23:26:16 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -80,7 +80,7 @@ KEYRING *pgpdb_open(char *keyring, BUFFER *encryptkey, int writer)
     pgpdb_close(keydb);
     return (NULL);
   }
-#endif
+#endif /* if 0 */
   if (encryptkey && encryptkey->length && pgp_isconventional(keydb->db) &&
       pgp_decrypt(keydb->db, encryptkey, NULL, NULL, NULL) < 0) {
     user_delpass();
@@ -196,7 +196,7 @@ int pgpdb_getnext(KEYRING *keydb, BUFFER *key, BUFFER *keyid, BUFFER *userid)
       case PGP_USERID:
 #ifdef DEBUG
 	printf("%s\n", p->data);
-#endif
+#endif /* DEBUG */
 	if (userid && userid->length > 0 && bufifind(p, userid->data))
 	  found = 1;
 	break;
@@ -349,8 +349,8 @@ int pgp_keymgt(int force)
   if (force == 0 && (pgpdb_getkey(PK_ENCRYPT, PGP_ES_RSA, NULL, NULL, NULL, NULL, NULL,
 				  NULL, NULL, PGPKEY, NULL) < 0))
     goto end;
-#endif
-#endif
+#endif /* USE_IDEA */
+#endif /* USE_RSA */
   res = pgpdb_getkey(PK_DECRYPT, PGP_E_ELG, NULL, NULL, &expires, NULL, NULL,
 				  NULL, NULL, NULL, pass);
   if (force == 2 || res < 0 || (expires > 0 && expires - KEYOVERLAPPERIOD < time(NULL)))

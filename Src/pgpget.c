@@ -6,7 +6,7 @@
    details.
 
    Read OpenPGP packets
-   $Id: pgpget.c,v 1.9 2002/09/12 17:26:00 disastry Exp $ */
+   $Id: pgpget.c,v 1.10 2002/09/18 23:26:16 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -111,9 +111,9 @@ int pgp_getmsg(BUFFER *in, BUFFER *key, BUFFER *sig, char *pubring,
     tc = localtime(&t);
 #if 0
     strftime(line, LINELEN, "[%Y-%m-%d %H:%M:%S]", tc);
-#else
+#else /* end of 0 */
     strftime(line, LINELEN, "[%a %b %d %H:%M:%S %Y]", tc);
-#endif
+#endif /* else if not 0 */
     if (sig) {
       buf_cat(sig, signature.userid);
       buf_appendc(sig, ' ');
@@ -283,7 +283,7 @@ int pgp_getsig(BUFFER *p, pgpsig *sig, char *pubring)
       goto end;
     sig->ok = PGP_SIGVRFY;
     break;
-#endif
+#endif /* USE_RSA */
   default:
     break;
   }
@@ -320,9 +320,9 @@ void pgp_verify(BUFFER *msg, BUFFER *detached, pgpsig *sig)
     while (buf_getline(msg, t) != -1) {
 #if 0
       pgp_sigcanonic(t); /* according to OpenPGP */
-#else
+#else /* end of 0 */
       buf_appends(t, "\r\n");
-#endif
+#endif /* else if not 0 */
       MD5_Update(&c, t->data, t->length);
     }
     break;
@@ -397,7 +397,7 @@ static int pgp_ideadecrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
 end:
   return (err);
 }
-#endif
+#endif /* USE_IDEA */
 
 static int pgp_3desdecrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
 {
@@ -642,7 +642,7 @@ static int pgp_aesdecrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
 end:
   return (err);
 }
-#endif
+#endif /* USE_AES */
 
 int pgp_getsymmetric(BUFFER *in, BUFFER *key, int algo, int mdc)
 {
@@ -658,12 +658,12 @@ int pgp_getsymmetric(BUFFER *in, BUFFER *key, int algo, int mdc)
    case PGP_K_AES256:
     err = pgp_aesdecrypt(in, out, key, mdc);
     break;
-#endif
+#endif /* USE_AES */
 #ifdef USE_IDEA
    case PGP_K_IDEA:
     err = pgp_ideadecrypt(in, out, key, mdc);
     break;
-#endif
+#endif /* USE_IDEA */
    case PGP_K_3DES:
     err = pgp_3desdecrypt(in, out, key, mdc);
     break;
@@ -768,7 +768,7 @@ int pgp_getsessionkey(BUFFER *in, BUFFER *pass, char *secring)
     mpi_get(in, out);
     err = pgp_rsa(out, key, PK_DECRYPT);
     break;
-#endif
+#endif /* USE_RSA */
    case PGP_E_ELG:
     buf_rest(out, in);
     err = pgp_elgdecrypt(out, key);
