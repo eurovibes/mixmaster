@@ -1,3 +1,4 @@
+
 <?xml version="1.0"?>
 <!-- vim: set et sw=2 wm=5 fdm=syntax nofen: -->
 <!-- $Id$ -->
@@ -482,7 +483,7 @@ Packet type 2 (final hop, partial message):
           twenty, and the packet body, each are decrypted
           separately using the respective initialization
           vectors. In the case of packet types one and two, header
-          sections two through 20 are ignored, and the packet body
+          sections two through twenty are ignored, and the packet body
           is decrypted using the given initialization vector.</t>
 
       </section>
