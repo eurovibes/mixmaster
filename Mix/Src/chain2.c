@@ -6,7 +6,7 @@
    details.
 
    Encrypt message for Mixmaster chain
-   $Id: chain2.c,v 1.11 2003/05/05 15:26:20 weaselp Exp $ */
+   $Id: chain2.c,v 1.12 2003/05/08 18:07:08 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -204,7 +204,32 @@ int mix2_rlist(REMAILER remailer[], int badchains[MAXREM][MAXREM])
 static int send_packet(int numcopies, BUFFER *packet, int chain[],
 		       int chainlen, int packetnum, int numpackets,
 		       BUFFER *mid, REMAILER remailer[], int badchains[MAXREM][MAXREM],
-		       int maxrem, BUFFER *feedback)
+		       int maxrem, char *redirect_to, BUFFER *feedback)
+/*
+ * Puts a mix packet in the pool.
+ *
+ * numcopies   ... how often to put this packet into the pool
+ *                 i.e. send it.  required that random remailers are in the chain.
+ * packet      ... the payload, 10240 bytes in size.
+ * chain       ... the chain to send this message along
+ * chainlen    ... length of the chain
+ * packetnum   ... in multi-packet messages (fragmented) the serial of this packet
+ * numpackets  ...  the total number of packets
+ * mid         ... the message ID (required for fragmented packets
+ * remailer    ... information about remailers, their reliabilities, capabilities, etc.
+ * badchains   ... broken chain information
+ * maxrem      ... the number of remailers in remailer[] and badchains[]
+ * redirect_to ... if this is not-null it needs to be an email address.
+ *                 in this case packet needs to be not only the body, but a
+ *                 complete mixmaster packet of 20480 bytes in size (20 headers + body).
+ *                 the chain given is prepended to the one already encrypted in
+ *                 the existing message.  If this exceeds the allowed 20 hops in total
+ *                 the message is corrupted, the last node will realize this.
+ *                 This is useful if you want to reroute an existing mixmaster message
+ *                 that has foo as the next hop via a chain so that the packet will
+ *                 actually flow hop1,hop2,hop3,foo,....
+ * feedback    ... a buffer to write feedback to
+ */
 {
   BUFFER *pid, *out, *header, *other, *encrypted, *key, *body;
   BUFFER *iv, *ivarray, *temp;
@@ -227,6 +252,15 @@ static int send_packet(int numcopies, BUFFER *packet, int chain[],
   iv = buf_new();
   ivarray = buf_new();
   temp = buf_new();
+
+  if (redirect_to != NULL) {
+    assert(packet->length == 20480);
+    buf_append(header, packet->data, 10240);
+    buf_append(temp, packet->data + 10240, 10240);
+    buf_clear(packet);
+    buf_cat(packet, temp);
+  } else 
+    assert(packet->length == 10240);
 
   buf_setrnd(pid, 16);
 
@@ -252,7 +286,7 @@ static int send_packet(int numcopies, BUFFER *packet, int chain[],
       case 2:
       case 3:			/* not implemented yet; fall back to version 2 */
 	/* create header chart to be encrypted with the session key */
-	if (numcopies > 1 && hop == 0)
+	if (numcopies > 1 && hop == 0 && redirect_to == NULL)
 	  buf_set(encrypted, pid);	/* same ID only at final hop */
 	else
 	  buf_setrnd(encrypted, 16);
@@ -260,7 +294,7 @@ static int send_packet(int numcopies, BUFFER *packet, int chain[],
 	buf_cat(encrypted, key);
 	buf_setrnd(iv, 8);	/* IV for encrypting the body */
 
-	if (hop > 0) {
+	if (hop > 0 || redirect_to != NULL) {
 	  /* IVs for header chart encryption */
 	  buf_setrnd(ivarray, 18 * 8);
 	  buf_cat(ivarray, iv);	/* 19th IV equals the body IV */
@@ -268,7 +302,13 @@ static int send_packet(int numcopies, BUFFER *packet, int chain[],
 	  buf_appendc(encrypted, 0);
 	  buf_cat(encrypted, ivarray);
 	  memset(addr, 0, 80);
-	  strcpy(addr, remailer[thischain[hop - 1]].addr);
+	  if (hop == 0) {
+	    assert(redirect_to != NULL);
+	    strncpy(addr, redirect_to, 80);
+	  } else {
+	    assert(hop > 0);
+	    strcpy(addr, remailer[thischain[hop - 1]].addr);
+	  };
 	  buf_append(encrypted, addr, 80);
 	} else {
 	  if (numpackets == 1)
@@ -296,7 +336,7 @@ static int send_packet(int numcopies, BUFFER *packet, int chain[],
 	/* encrypt message body */
 	buf_crypt(body, key, iv, ENCRYPT);
 
-	if (hop > 0) {
+	if (hop > 0 || redirect_to != NULL) {
 	  /* encrypt the other header charts */
 	  buf_clear(other);
 	  for (i = 0; i < 19; i++) {
@@ -373,6 +413,124 @@ end:
   return (err);
 }
 
+int redirect_message(BUFFER *sendmsg, char *chainstr, int numcopies, BUFFER *feedback)
+{
+  BUFFER *field;
+  BUFFER *content;
+  BUFFER *line;
+  char recipient[80] = "";
+  int num = 0;
+  int err = 0;
+  int c;
+  int hop;
+
+  REMAILER remailer[MAXREM];
+  int chain[20];
+  int thischain[20];
+  int chainlen;
+  int badchains[MAXREM][MAXREM];
+  int maxrem;
+  int tempchain[20];
+  int tempchainlen;
+  int israndom;
+
+  field = buf_new();
+  content = buf_new();
+  line = buf_new();
+
+  if (numcopies == 0)
+    numcopies = NUMCOPIES;
+  if (numcopies > 10)
+    numcopies = 10;
+
+  /* Find the recipient */
+  while (buf_getheader(sendmsg, field, content) == 0)
+    if (bufieq(field, "to")) {
+      strncpy(recipient, content->data, sizeof(recipient));
+      num++;
+    };
+  if (num != 1) {
+    clienterr(feedback, "Did not find exactly one To: address!");
+    err = -1;
+    goto end;
+  };
+
+  /* Dearmor the message */
+  err = mix_dearmor(sendmsg, sendmsg);
+  if (err == -1)
+    goto end;
+  assert (sendmsg->length == 20480);
+
+  /* Check the chain */
+  maxrem = mix2_rlist(remailer, badchains);
+  if (maxrem < 1) {
+    clienterr(feedback, "No remailer list!");
+    err = -1;
+    goto end;
+  }
+  chainlen = chain_select(chain, chainstr, maxrem, remailer, 0, line);
+  if (chainlen < 1) {
+    if (line->length)
+      clienterr(feedback, line->data);
+    else
+      clienterr(feedback, "Invalid remailer chain!");
+    err = -1;
+    goto end;
+  } else if (chainlen >= 20) {
+    clienterr(feedback, "A chainlength of 20 will certainly destroy the message!");
+    err = -1;
+    goto end;
+  };
+
+
+  for (c = 0; c < numcopies; c++) {
+    /* if our recipient is a remailer we want to make sure we're not using a known broken chain.
+     * therefore we need to pick the final remailer with care */
+    for (hop = 0; hop < chainlen; hop++)
+      thischain[hop] = chain[hop];
+    if (thischain[0] == 0) {
+      /* Find out, if recipient is a remailer */
+      tempchainlen = chain_select(tempchain, recipient, maxrem, remailer, 0, line);
+      if (tempchainlen < 1 && line->length == 0) {
+	/* recipient is apparently not a remailer we know about */
+	;
+      } else {
+	/* Build a new chain, based on the one we already selected but
+	 * with the recipient as the final hop.
+	 * This is so that chain_rand properly selects nodes based on
+	 * broken chains and DISTANCE */
+	assert(chainlen < 20);
+	for (hop = 0; hop < chainlen; hop++)
+	  thischain[hop+1] = thischain[hop];
+	thischain[0] = tempchain[0];
+
+	israndom = chain_rand(remailer, badchains, maxrem, thischain, chainlen + 1, 0);
+	if (israndom == -1) {
+	  err = -1;
+	  clienterr(feedback, "No reliable remailers!");
+	  goto end;
+	}
+
+	/* Remove the added recipient hop */
+	for (hop = 0; hop < chainlen; hop++)
+	  thischain[hop] = thischain[hop + 1];
+      };
+    };
+
+    /* queue the packet */
+    if (send_packet(1, sendmsg, thischain, chainlen,
+	    -1, -1, NULL,
+	    remailer, badchains, maxrem, recipient, feedback) == -1)
+      err = -1;
+  };
+
+end:
+  buf_free(field);
+  buf_free(content);
+  buf_free(line);
+  return (err);
+}
+
 int mix2_encrypt(int type, BUFFER *message, char *chainstr, int numcopies,
 		 BUFFER *feedback)
 {
@@ -426,10 +584,8 @@ int mix2_encrypt(int type, BUFFER *message, char *chainstr, int numcopies,
     err = -1;
     goto end;
   }
-  if (chain[0] == 0) {
+  if (chain[0] == 0)
     chain[0] = chain_randfinal(type, remailer, badchains, maxrem, 0, chain, chainlen);
-    fprintf(stderr,"bla %d\n", chain[0]);
-  };
 
   if (chain[0] == -1) {
     clienterr(feedback, "No reliable remailers!");
@@ -494,7 +650,7 @@ int mix2_encrypt(int type, BUFFER *message, char *chainstr, int numcopies,
       buf_pad(packet, 10240);
       if (send_packet(numcopies, packet, chain, chainlen,
 		      i + 1, body->length / 10236 + 1,
-		      mid, remailer, badchains, maxrem, feedback) == -1)
+		      mid, remailer, badchains, maxrem, NULL, feedback) == -1)
 	err = -1;
     }
     break;
