@@ -790,7 +790,7 @@ int buf_zip(BUFFER *buf, BUFFER *f, int b);
 int buf_unzip(BUFFER *buf, int type);
 
   uncompresses a GZIP [RFC 1952] compressed buffer. If type == 1, uncompress
-  a ZLIB [RFC 1950] compressed buffer.
+  a ZLIBá[RFC 1950] compressed buffer.
 
   Return values:
    0 on success,
