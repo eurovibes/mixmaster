@@ -8,14 +8,18 @@ code for 2.9 from scratch. I'd like to give special thanks to Peter
 Palfrader, for all of his hard work and assistance in helping me continue
 this project, and to Janis Jagars for his valuable code contributions.
 
-I have compiled below a partial list of people who have contributed to
-Mixmaster's success, through suggestions, bug reports, patches, or other
-contributions. Please report any omissions to me.
-
 Mixmaster uses Jean-loup Gailly and Mark Adler's compression library zlib,
 Philip Hazel's Perl Compatible Regular Expressions library, the ncurses
 library (originally written by Zeyd Ben-Halim and Eric Raymond), and
 OpenSSL (based on work by Eric Young and Tim Hudson.)
+
+I have compiled below a partial list of people who have contributed to
+Mixmaster's success, through suggestions, bug reports, patches, or other
+contributions. Please report any omissions to me.
+
+Over the past few years, there have been numerous anonymous contributions
+to the Mixmaster project as well. While we obviously can't thank the
+contributor(s) by name, they are still very much appreciated.
 
 Thanks also to all the remailer operators, who give their time and service
 (and perform what is too often a thankless job) to ensure that our right
@@ -39,6 +43,7 @@ Jim Castleberry
 cmeclax
 Bram Cohen
 Lance Cottrell
+Richard Christman
 Todd Cutter
 Dingo Admin
 Andy Dustman
@@ -59,6 +64,7 @@ Patrick J. LoPresti
 L. McCarthy
 Medusa
 Christian Mock
+Bodo Möller
 Ulf Möller
 noise
 Bill O'Hanlon
