@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.15 2002/08/23 03:25:48 weaselp Exp $ */
+   $Id: mix.c,v 1.16 2002/08/25 07:47:23 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -19,6 +19,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #ifdef POSIX
+#include <signal.h>
 #include <unistd.h>
 #include <pwd.h>
 #include <sys/utsname.h>
@@ -35,44 +36,42 @@
 int buf_vappendf(BUFFER *b, char *fmt, va_list args);
 
 /** filenames ************************************************************/
-char MIXCONF[PATHMAX] = DEFAULT_MIXCONF;       /* mixmaster configuration file */
-char DISCLAIMFILE[PATHMAX] = DEFAULT_DISCLAIMFILE;
-char FROMDSCLFILE[PATHMAX] = DEFAULT_FROMDSCLFILE;
-char MSGFOOTERFILE[PATHMAX] = DEFAULT_MSGFOOTERFILE;
-char POP3CONF[PATHMAX] = DEFAULT_POP3CONF;
-char HELPFILE[PATHMAX] = DEFAULT_HELPFILE;
-char ABUSEFILE[PATHMAX] = DEFAULT_ABUSEFILE;
-char REPLYFILE[PATHMAX] = DEFAULT_REPLYFILE;
-char USAGEFILE[PATHMAX] = DEFAULT_USAGEFILE;
-char USAGELOG[PATHMAX] = DEFAULT_USAGELOG;
-char BLOCKFILE[PATHMAX] = DEFAULT_BLOCKFILE;
-char ADMKEYFILE[PATHMAX] = DEFAULT_ADMKEYFILE;
-char KEYFILE[PATHMAX] = DEFAULT_KEYFILE;
-char PGPKEY[PATHMAX] = DEFAULT_PGPKEY;
-char DSAPARAMS[PATHMAX] = DEFAULT_DSAPARAMS;
-char DHPARAMS[PATHMAX] = DEFAULT_DHPARAMS;
-char MIXRAND[PATHMAX] = DEFAULT_MIXRAND;
-char SECRING[PATHMAX] = DEFAULT_SECRING;
-char PUBRING[PATHMAX] = DEFAULT_PUBRING;
-char IDLOG[PATHMAX] = DEFAULT_IDLOG;
-char STATS[PATHMAX] = DEFAULT_STATS;
-/* To enable multiple dest.blk files, edit the following line. */
-/* Filenames must be seperated by one space.                   */
-char DESTBLOCK[PATHMAX] = DEFAULT_DESTBLOCK;
-char DESTALLOW[PATHMAX] = DEFAULT_DESTALLOW;
-char SOURCEBLOCK[PATHMAX] = DEFAULT_SOURCEBLOCK;
-char HDRFILTER[PATHMAX] = DEFAULT_HDRFILTER;
-char REGULAR[PATHMAX] = DEFAULT_REGULAR;
-char POOL[PATHMAX] = DEFAULT_POOL;             /* remailer pool subdirectory */
-char TYPE1LIST[PATHMAX] = DEFAULT_TYPE1LIST;
-char TYPE2REL[PATHMAX] = DEFAULT_TYPE2REL;
-char TYPE2LIST[PATHMAX] = DEFAULT_TYPE2LIST;
+char MIXCONF[PATHMAX];
+char DISCLAIMFILE[PATHMAX];
+char FROMDSCLFILE[PATHMAX];
+char MSGFOOTERFILE[PATHMAX];
+char POP3CONF[PATHMAX];
+char HELPFILE[PATHMAX];
+char ABUSEFILE[PATHMAX];
+char REPLYFILE[PATHMAX];
+char USAGEFILE[PATHMAX];
+char USAGELOG[PATHMAX];
+char BLOCKFILE[PATHMAX];
+char ADMKEYFILE[PATHMAX];
+char KEYFILE[PATHMAX];
+char PGPKEY[PATHMAX];
+char DSAPARAMS[PATHMAX];
+char DHPARAMS[PATHMAX];
+char MIXRAND[PATHMAX];
+char SECRING[PATHMAX];
+char PUBRING[PATHMAX];
+char IDLOG[PATHMAX];
+char STATS[PATHMAX];
+char DESTBLOCK[PATHMAX];
+char DESTALLOW[PATHMAX];
+char SOURCEBLOCK[PATHMAX];
+char HDRFILTER[PATHMAX];
+char REGULAR[PATHMAX];
+char POOL[PATHMAX];
+char TYPE1LIST[PATHMAX];
+char TYPE2REL[PATHMAX];
+char TYPE2LIST[PATHMAX];
 
-char PGPREMPUBRING[PATHMAX] = DEFAULT_PGPREMPUBRING;
-char PGPREMPUBASC[PATHMAX] = DEFAULT_PGPREMPUBASC;
-char PGPREMSECRING[PATHMAX] = DEFAULT_PGPREMSECRING;
-char NYMSECRING[PATHMAX] = DEFAULT_NYMSECRING;
-char NYMDB[PATHMAX] = DEFAULT_NYMDB;
+char PGPREMPUBRING[PATHMAX];
+char PGPREMPUBASC[PATHMAX];
+char PGPREMSECRING[PATHMAX];
+char NYMSECRING[PATHMAX];
+char NYMDB[PATHMAX];
 
 
 /** config ***************************************************************/
@@ -81,19 +80,15 @@ char MIXDIR[PATHMAX];
 char POOLDIR[PATHMAX];
 
 /* programs */
-#ifdef WIN32
-char SENDMAIL[LINELEN] = "outfile";
-#else
-char SENDMAIL[LINELEN] = "/usr/lib/sendmail -t";
-#endif
+char SENDMAIL[LINELEN];
 char SENDANONMAIL[LINELEN];
 char NEWS[LINELEN];
 char TYPE1[LINELEN];
 
 /* addresses */
-char MAILtoNEWS[LINELEN] = "mail2news@anon.lcs.mit.edu";
-char REMAILERNAME[LINELEN] = "Anonymous Remailer";
-char ANONNAME[LINELEN] = "Anonymous";
+char MAILtoNEWS[LINELEN];
+char REMAILERNAME[LINELEN];
+char ANONNAME[LINELEN];
 char REMAILERADDR[LINELEN];
 char ANONADDR[LINELEN];
 char COMPLAINTS[LINELEN];
@@ -103,72 +98,65 @@ char SMTPRELAY[LINELEN];
 #ifdef USE_SOCK
 char HELONAME[LINELEN];
 char ENVFROM[LINELEN];
-int POP3DEL = 0;
-int POP3SIZELIMIT = 0;
-long POP3TIME = 60 * 60;
+int POP3DEL;
+int POP3SIZELIMIT;
+long POP3TIME;
 
 #endif
 
 char SHORTNAME[LINELEN];
 
 /* remailer configuration */
-int REMAIL = 0;
-int MIX = 1;
-int PGP = 1;
-int UNENCRYPTED = 0;
-int REMIX = 1;
-int REPGP = 1;
+int REMAIL;
+int MIX;
+int PGP;
+int UNENCRYPTED;
+int REMIX;
+int REPGP;
 
-int POOLSIZE = 0;
-int RATE = 100;
-int MIDDLEMAN = 0;
-int AUTOBLOCK = 1;
-char FORWARDTO[LINELEN] = "*";
-int SIZELIMIT = 0;		/* maximal size of remailed messages */
-int INFLATEMAX = 50;		/* maximal size of Inflate: padding */
-int MAXRANDHOPS = 20;
-int BINFILTER = 0;		/* filter binary attachments? */
-int LISTSUPPORTED = 1;		/* list supported remailers in remailer-conf reply? */
-long PACKETEXP = 7 * SECONDSPERDAY;	/* Expiration time for old packets */
-long IDEXP = 7 * SECONDSPERDAY;	/* 0 = no ID log !! */
-long SENDPOOLTIME = 60 * 60;	/* frequency for sending pool messages */
+int POOLSIZE;
+int RATE;
+int MIDDLEMAN;
+int AUTOBLOCK;
+char FORWARDTO[LINELEN];
+int SIZELIMIT;		/* maximal size of remailed messages */
+int INFLATEMAX;		/* maximal size of Inflate: padding */
+int MAXRANDHOPS;
+int BINFILTER;		/* filter binary attachments? */
+int LISTSUPPORTED;		/* list supported remailers in remailer-conf reply? */
+long PACKETEXP;	/* Expiration time for old packets */
+long IDEXP;	/* 0 = no ID log !! */
+long SENDPOOLTIME;	/* frequency for sending pool messages */
 
 char ERRLOG[LINELEN];
 char ADDRESS[LINELEN];
 char NAME[LINELEN];
 
-char ORGANIZATION[LINELEN] = "Anonymous Posting Service";
-char MID[LINELEN] = "y";
+char ORGANIZATION[LINELEN];
+char MID[LINELEN];
 
 /* client config */
-int NUMCOPIES = 1;
-char CHAIN[LINELEN] = "*,*,*,*";
-int VERBOSE = 2;
-int DISTANCE = 2;
-int MINREL = 98;
-int RELFINAL = 99;
-long MAXLAT = 36 * 60 * 60;
+int NUMCOPIES;
+char CHAIN[LINELEN];
+int VERBOSE;
+int DISTANCE;
+int MINREL;
+int RELFINAL;
+long MAXLAT;
 char PGPPUBRING[PATHMAX];
 char PGPSECRING[PATHMAX];
-#ifdef COMPILEDPASS
-char PASSPHRASE[LINELEN] = COMPILEDPASS;
-#else
-char PASSPHRASE[LINELEN] = "";
-#endif
-char MAILIN[PATHMAX] = "";
-char MAILBOX[PATHMAX] = "mbox";
+char PASSPHRASE[LINELEN];
+char MAILIN[PATHMAX];
+char MAILBOX[PATHMAX];
 char MAILABUSE[PATHMAX];
 char MAILBLOCK[PATHMAX];
-#ifdef WIN32
-char MAILUSAGE[PATHMAX] = "nul:";
-char MAILANON[PATHMAX] = "nul:";
-char MAILERROR[PATHMAX] = "nul:";
-#else
-char MAILUSAGE[PATHMAX] = "/dev/null";
-char MAILANON[PATHMAX] = "/dev/null";
-char MAILERROR[PATHMAX] = "/dev/null";
-#endif
+char MAILUSAGE[PATHMAX];
+char MAILANON[PATHMAX];
+char MAILERROR[PATHMAX];
 char MAILBOUNCE[PATHMAX];
+
+static int rereadconfig = 0;
+static int terminatedaemon = 0;
 
 #if defined(S_IFDIR) && !defined(S_ISDIR)
 #define S_ISDIR(m) (((m) & S_IFMT) == S_IFDIR)
@@ -338,6 +326,142 @@ static int readtconfline(char *line, char *name, int namelen, long *var)
     return (0);
 }
 
+void mix_setdefaults()
+{
+#define strnncpy(a,b) strncpy(a, b, sizeof(a)); a[sizeof(a)-1] = '\0'
+
+	strnncpy(MIXCONF      , DEFAULT_MIXCONF);
+	strnncpy(DISCLAIMFILE , DEFAULT_DISCLAIMFILE);
+	strnncpy(FROMDSCLFILE , DEFAULT_FROMDSCLFILE);
+	strnncpy(MSGFOOTERFILE, DEFAULT_MSGFOOTERFILE);
+	strnncpy(POP3CONF     , DEFAULT_POP3CONF);
+	strnncpy(HELPFILE     , DEFAULT_HELPFILE);
+	strnncpy(ABUSEFILE    , DEFAULT_ABUSEFILE);
+	strnncpy(REPLYFILE    , DEFAULT_REPLYFILE);
+	strnncpy(USAGEFILE    , DEFAULT_USAGEFILE);
+	strnncpy(USAGELOG     , DEFAULT_USAGELOG);
+	strnncpy(BLOCKFILE    , DEFAULT_BLOCKFILE);
+	strnncpy(ADMKEYFILE   , DEFAULT_ADMKEYFILE);
+	strnncpy(KEYFILE      , DEFAULT_KEYFILE);
+	strnncpy(PGPKEY       , DEFAULT_PGPKEY);
+	strnncpy(DSAPARAMS    , DEFAULT_DSAPARAMS);
+	strnncpy(DHPARAMS     , DEFAULT_DHPARAMS);
+	strnncpy(MIXRAND      , DEFAULT_MIXRAND);
+	strnncpy(SECRING      , DEFAULT_SECRING);
+	strnncpy(PUBRING      , DEFAULT_PUBRING);
+	strnncpy(IDLOG        , DEFAULT_IDLOG);
+	strnncpy(STATS        , DEFAULT_STATS);
+	strnncpy(DESTBLOCK    , DEFAULT_DESTBLOCK);
+	strnncpy(DESTALLOW    , DEFAULT_DESTALLOW);
+	strnncpy(SOURCEBLOCK  , DEFAULT_SOURCEBLOCK);
+	strnncpy(HDRFILTER    , DEFAULT_HDRFILTER);
+	strnncpy(REGULAR      , DEFAULT_REGULAR);
+	strnncpy(POOL         , DEFAULT_POOL);
+	strnncpy(TYPE1LIST    , DEFAULT_TYPE1LIST);
+	strnncpy(TYPE2REL     , DEFAULT_TYPE2REL);
+	strnncpy(TYPE2LIST    , DEFAULT_TYPE2LIST);
+
+	strnncpy(PGPREMPUBRING, DEFAULT_PGPREMPUBRING);
+	strnncpy(PGPREMPUBASC , DEFAULT_PGPREMPUBASC);
+	strnncpy(PGPREMSECRING, DEFAULT_PGPREMSECRING);
+	strnncpy(NYMSECRING   , DEFAULT_NYMSECRING);
+	strnncpy(NYMDB        , DEFAULT_NYMDB);
+
+
+	strnncpy(MIXDIR       , "");
+	strnncpy(POOLDIR      , "");
+
+/* programs */
+#ifdef WIN32
+	strnncpy(SENDMAIL     , "outfile");
+#else
+	strnncpy(SENDMAIL     , "/usr/lib/sendmail -t");
+#endif
+	strnncpy(SENDANONMAIL , "");
+	strnncpy(NEWS         , "");
+	strnncpy(TYPE1        , "");
+
+/* addresses */
+	strnncpy(MAILtoNEWS   , "mail2news@anon.lcs.mit.edu");
+	strnncpy(REMAILERNAME , "Anonymous Remailer");
+	strnncpy(ANONNAME     , "Anonymous");
+	strnncpy(REMAILERADDR , "");
+	strnncpy(ANONADDR     , "");
+	strnncpy(COMPLAINTS   , "");
+	strnncpy(SMTPRELAY    , "");
+	AUTOREPLY             = 0;
+
+#ifdef USE_SOCK
+  	strnncpy(HELONAME     , "");
+	strnncpy(ENVFROM      , "");
+	POP3DEL               = 0;
+	POP3SIZELIMIT         = 0;
+	POP3TIME              = 60 * 60;
+
+#endif
+
+	strnncpy(SHORTNAME    , "");
+
+/* 	configuration */
+	REMAIL        = 0;
+	MIX           = 1;
+	PGP           = 1;
+	UNENCRYPTED   = 0;
+	REMIX         = 1;
+	REPGP         = 1;
+
+	POOLSIZE      = 0;
+	RATE          = 100;
+	MIDDLEMAN     = 0;
+	AUTOBLOCK     = 1;
+	strnncpy(FORWARDTO, "*");
+	SIZELIMIT     = 0;		/* maximal size of remailed messages */
+	INFLATEMAX    = 50;		/* maximal size of Inflate: padding */
+	MAXRANDHOPS   = 20;
+	BINFILTER     = 0;		/* filter binary attachments? */
+	LISTSUPPORTED = 1;		/* list supported remailers in remailer-conf reply? */
+	PACKETEXP     = 7 * SECONDSPERDAY;	/* Expiration time for old packets */
+	IDEXP         = 7 * SECONDSPERDAY;	/* 0 = no ID log !! */
+	SENDPOOLTIME  = 60 * 60;	/* frequency for sending pool messages */
+
+	strnncpy(ERRLOG      , "");
+	strnncpy(ADDRESS     , "");
+	strnncpy(NAME        , "");
+
+	strnncpy(ORGANIZATION, "Anonymous Posting Service");
+	strnncpy(MID         , "y");
+
+/* client config */
+	NUMCOPIES = 1;
+	strnncpy(CHAIN, "*,*,*,*");
+	VERBOSE = 2;
+	DISTANCE = 2;
+	MINREL = 98;
+	RELFINAL = 99;
+	MAXLAT = 36 * 60 * 60;
+	strnncpy(PGPPUBRING, "");
+	strnncpy(PGPSECRING, "");
+#ifdef COMPILEDPASS
+	strnncpy(PASSPHRASE, COMPILEDPASS);
+#else
+	strnncpy(PASSPHRASE, "");
+#endif
+	strnncpy(MAILIN    , "");
+	strnncpy(MAILBOX   , "mbox");
+	strnncpy(MAILABUSE , "");
+	strnncpy(MAILBLOCK , "");
+#ifdef WIN32
+	strnncpy(MAILUSAGE , "nul:");
+	strnncpy(MAILANON  , "nul:");
+	strnncpy(MAILERROR , "nul:");
+#else
+	strnncpy(MAILUSAGE , "/dev/null");
+	strnncpy(MAILANON  , "/dev/null");
+	strnncpy(MAILERROR , "/dev/null");
+#endif
+	strnncpy(MAILBOUNCE, "");
+}
+
 int mix_configline(char *line)
 {
   return (read_conf(ADDRESS) || read_conf(NAME) ||
@@ -395,7 +519,6 @@ int mix_configline(char *line)
 	  read_conf(PGPREMPUBRING) || read_conf(PGPREMPUBASC) ||
 	  read_conf(PGPREMSECRING) || read_conf(NYMSECRING) ||
 	  read_conf(NYMDB) );
-
 }
 
 static int mix_config(void)
@@ -417,12 +540,11 @@ static int mix_config(void)
   int rkey = 0;
 #endif
 
+  mix_setdefaults();
+
 #ifdef POSIX
   pw = getpwuid(getuid());
 #endif
-
-  if (MIXDIR[0])		/* if set by main() */
-    err = mixdir(MIXDIR, 1);
 
 #ifdef WIN32
   RegOpenKeyEx(HKEY_CURRENT_USER, "Software", 0, KEY_ALL_ACCESS, &regsw);
@@ -709,6 +831,59 @@ int mix_daily(void)
   return (0);
 }
 
+/** Handle signals SIGHUP, SIGINT, and SIGTERM
+    This signal handler gets called if the daemon
+    process receives one of SIGHUP, SIGINT, or SIGTERM.
+    It then sets either rereadconfig of terminatedaemon
+    to true depending on the signal received.
+
+    @author	PP
+    @return	nothing
+ */
+void sighandler(int signal) {
+  if (signal == SIGHUP)
+    rereadconfig = 1;
+  else if (signal == SIGINT || signal == SIGTERM)
+    terminatedaemon = 1;
+};
+
+/** Set the signal handler for SIGHUP, SIGINT and SIGTERM
+    This function registers signal handlers so that
+    we can react on signals send by the user in daemon
+    mode. SIGHUP will instruct mixmaster to reload its
+    configuration while SIGINT and SIGTERM will instruct
+    it to shut down. Mixmaster will finish the current
+    pool run before it terminates.
+
+    @param restart  Whether or not system calls should be
+                    restarted. Usually we want this, the
+		    only excetion is the sleep() in the
+		    daemon mail loop.
+    @author         PP
+    @return         -1 if calling sigaction failed, 0 on
+                    no error
+  */
+int setsignalhandler(int restart)
+{
+#ifdef POSIX
+  struct sigaction hdl;
+  int err = 0;
+
+  memset(&hdl, 0, sizeof(hdl));
+  hdl.sa_handler = sighandler;
+  hdl.sa_flags = restart ? SA_RESTART : 0;
+  
+  if (sigaction(SIGHUP, &hdl, NULL))
+    err = -1;
+  if (sigaction(SIGINT, &hdl, NULL))
+    err = -1;
+  if (sigaction(SIGTERM, &hdl, NULL))
+    err = -1;
+  return (err);
+#else /* POSIX */
+  return(0);
+#endif /* POSIX */
+}
 
 #ifdef WIN32
 /* Try to detect if we are the service or not... 
@@ -754,28 +929,49 @@ void set_nt_exit_event(HANDLE h_svc_exit_event)
 
 int mix_daemon(void)
 {
-  long t;
+  long t, slept;
   t = SENDPOOLTIME;
 #ifdef USE_SOCK
   if (POP3TIME < t)
     t = POP3TIME;
 #endif
+  slept = t;
 
+  setsignalhandler(1); /* set signal handlers and restart any interrupted system calls */
   for(;;) {
-    mix_regular(0);
+    if (terminatedaemon)
+      exit(0);
+    if (rereadconfig) {
+      rereadconfig = 0;
+      mix_config();
+      t = SENDPOOLTIME;
+#ifdef USE_SOCK
+      if (POP3TIME < t)
+	t = POP3TIME;
+#endif
+    }
+    if (slept >= t) {
+      mix_regular(0);
+      slept = 0;
+    }
+
+    if (!terminatedaemon && !rereadconfig) {
+      setsignalhandler(0); /* set signal handlers;  don't restart system calls */
 #ifdef WIN32
 #ifdef WIN32SERVICE
-    if (hMustTerminate) {
-      if (WaitForSingleObject(hMustTerminate, t * 1000) == WAIT_OBJECT_0) {
-        CloseHandle(hMustTerminate);
-        return 0;
-      }
-    } else
+      if (hMustTerminate) {
+	if (WaitForSingleObject(hMustTerminate, t * 1000) == WAIT_OBJECT_0) {
+	  CloseHandle(hMustTerminate);
+	  return 0;
+	}
+      } else
 #endif
       Sleep(t * 1000);
 #else
-    sleep(t);
+      slept += (t - slept) - sleep(t - slept);
 #endif
+      setsignalhandler(1); /* set signal handlers and restart any interrupted system calls */
+    }
   }
 }
 
