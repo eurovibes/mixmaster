@@ -121,7 +121,7 @@
 
     <t>Viewed from a high level, Mixmaster is like a packet network,
       where each node in the network is known as a "remailer."
-      The original content is split into pieces, and an independant
+      The original content is split into pieces, and an independent
       path is determined for each piece, with the only requirement
       that all paths must end at the same remailer.  Each piece
       is multiply encrypted so that any intermediate remailer can
@@ -137,15 +137,15 @@
 
       <t>The user agent splits the original content into chunks
         of 10236 bytes; if the last chunk is shorter, random padding
-        is added.. Each chunk has a four-byte length prepended,
-        and the result is called the packet body. If the sender
-        desires anonymity, care should be taken to not include
-        any identifying information (such as from the original
-        content) in the packets. The content may be compressed
-        before splitting.</t>
+        is added. Each chunk has a four-byte length prepended,
+        and the result is called the packet body. 
+        If sender anonymity is desired, care should be taken to not
+        include any identifying information (such as headers or unique
+        content from the original plaintext message) in the packets.
+        The content may be compressed before splitting.</t>
 
       <t>The sender next chooses a chain of up to 20 remailers
-        for each packet. Each path is independant, and can be of
+        for each packet. Each path is independent, and can be of
         a different length, but all paths must end at the same
         remailer.  This final remailer is responsible detecting and
         discarding duplicate packets, reconstructing the message,
@@ -187,7 +187,7 @@
           target="transport-encoding"/>.</t>
 
       <t>In order to prevent an adversary from determining the relationship
-        between incoming and outoing messages (i.e., traffic analysis), the
+        between incoming and outgoing messages (i.e., traffic analysis), the
         remailer must collect several encrypted messages before sending the
         message it has just created; see <xref target="timed-pool"/>.</t>
 
@@ -522,7 +522,7 @@ Remailer-Type: Mixmaster [version number]
         base64.</t>
 
       <t>The packet itself is encoded in Base-64 encoding <xref
-          target="RFC1421"/>, with linebreaks every 40 characters.</t>
+          target="RFC1421"/>, with line-breaks every 40 characters.</t>
 
     </section>
 
@@ -598,7 +598,7 @@ Remailer-Type: Mixmaster [version number]
       (1024 bits) in little-endian byte order, and of the RSA modulus and the
       public exponent in big-endian form using 128 bytes each, with preceding
       null bytes for the exponent if necessary. The packet is encoded in
-      Base-64 <xref target="RFC1421"/>, with linebreaks every 40 characters.
+      Base-64 <xref target="RFC1421"/>, with line-breaks every 40 characters.
       Its length (258 bytes) is given as a decimal number.</t>
 
     <t>Digital signatures <xref target="RFC2440"/> should be used to ensure
@@ -627,26 +627,28 @@ Remailer-Type: Mixmaster [version number]
         a Mixmaster message. The remailer should then create a Mixmaster
         message with this body to be delivered to the next hop remailer.</t>
 
-      <t>Ensuring that a remailer's keyring containing the public keys for
-        other remailers in the network remains up-to-date is the
-        responsibility of the given remailer's operator.</t>
+     <t>Ensuring that a remailer's keyring contains up to date copies of 
+        the public keys for other remailers is the responsibility of the 
+        given remailer's operator. Utilities such as Echolot can be used
+        to assist in automating this task.</t>
+
 
       <t>If the remailer receives a Mixmaster message that, when decrypted,
-        reveals a message of another protocol which the remailer speaks, it
-        should process the message as though it had been delivered in the
-        other protocol format initially.</t>
+        contains a message in an alternate protocol supported by the
+        remailer, it should process the message as though it had initially 
+        been delivered in the alternate protocol format.</t>
 
     </section>
 
     <section anchor="admin-commands" title="Administrative Commands">
 
-      <t>The remailer software understands a number of specific administrative
-        commands. These commands are sent via the Subject: line of an e-mail to
-        the email address of the remailer:
+      <t>The existing remailer software understands a number of specific 
+        administrative commands. These commands are sent via the Subject: 
+        line of an e-mail to the email address of the remailer:
         <list style="hanging">
           <t hangText="remailer-help:">Returns information about using the
             remailer. The remailer may support a suffix consisting of a
-            dash and a two-leter ISO 639 country code. For example,
+            dash and a two-letter ISO 639 country code. For example,
             remailer-help-ar will return a help file in Arabic, if
             available.  Supported languages should be listed at the
             beginning of the "remailer-help" response.</t>
@@ -704,8 +706,8 @@ Remailer-Type: Mixmaster [version number]
 
       <t>When anonymous messages are forwarded to third parties, remailer
         operators should be aware that senders might try to supply header
-        fields that indicate a false identity or to send Usenet control
-        messages unauthorized. This is a problem because many news servers
+        fields that indicate a false identity or to send unauthorized Usenet 
+        control messages. This is a problem because many news servers
         accept control messages automatically without any authentication.</t>
 
       <t>For these reasons, remailer software should allow the operator to
@@ -829,7 +831,7 @@ Remailer-Type: Mixmaster [version number]
 
   </section>
 
-  <section anchor="acknowledgements" title="Acknowledgements">
+  <section anchor="acknowledgments" title="Acknowledgments">
 
     <t>Several people contributed ideas and source code to the Mixmaster v2
       software.</t>
@@ -839,7 +841,7 @@ Remailer-Type: Mixmaster [version number]
       Marco A. Calamari &lt;marcoc@dada.it&gt;,
       Bodo Moeller &lt;bmoeller@acm.org&gt;,
       Jon Orbeton &lt;jono@networkcommand.com&gt;, and
-      Myles &lt;myles@tenhand.com&gt; suggested improvements to this
+      Myles Conley &lt;miles@tenhand.com&gt; suggested improvements to this
       document.  Rich Salz &lt;rsalz@datapower.com&gt; contributed
       significantly to this document by XMLifying it and rewording
       many ambiguous sections.</t>
