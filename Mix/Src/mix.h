@@ -847,6 +847,7 @@ int mix_send(void);
 #define FORCE_POP3 2
 #define FORCE_DAILY 4
 #define FORCE_MAILIN 8
+#define FORCE_STATS 16
 void mix_check_timeskew(void);
 int mix_regular(int force);
 int mix_daemon(void);
