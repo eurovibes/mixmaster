@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.1 2001/10/31 08:19:52 rabbi Exp $
+# $Id: Install,v 1.2 2001/11/02 21:48:21 rabbi Exp $
 
 #whereis program default-path
 whereis()
@@ -342,6 +342,27 @@ then
   LDFLAGS="-lsocket -lnsl"
  fi
 
+ if [ "$system" = OpenBSD ]
+ then
+  LIBDIR=
+  INCDIR=
+  SRCDIR=idea*
+  findlib libidea.a
+  if [ "$found" = "" ]
+  then
+   echo "Please build libidea.a or install OpenSSL with IDEA now."
+   exit 1
+  else
+   IDEALIB="$MAKELIB"
+   LIBS="$LIBS $LIB"
+   LDFLAGS="$LDFLAGS $LDFLAG"
+   if [ "$INCDIR" != "" ]
+   then
+    INC="$INC -I$INCDIR"
+   fi
+  fi
+ fi
+
  LIBDIR=
  INCDIR=
  SRCDIR=zlib*
@@ -381,7 +402,7 @@ then
   fi
  fi
 
- opensslinfo="Please get OpenSSL 0.9.4 from http://www.openssl.org/"
+ opensslinfo="Please get OpenSSL 0.9.6b from http://www.openssl.org/"
  LIBDIR=/usr/local/ssl/lib
  INCDIR="/usr/include /usr/include/ssl /usr/lib/ssl/include /usr/local/ssl/include"
  SRCDIR="openssl*"
@@ -421,9 +442,9 @@ then
  fi 
 
  # Find the OpenSSL version header
- if [ -f $INCDIR/openssl/opensslv.h ]
+ if [ -f $INCDIR/opensslv.h ]
  then
-  version=`grep 'SSL.*_VERSION_NUMBER.*0x' $INCDIR/openssl/opensslv.h | sed 's/.*0x0*//;s/[ 	].*//;s/L$//'`
+  version=`grep 'SSL.*_VERSION_NUMBER.*0x' $INCDIR/opensslv.h | sed 's/.*0x0*//;s/[ 	].*//;s/L$//'`
  fi
  if [ "$version" = "" ]
  then
@@ -434,19 +455,19 @@ then
    echo $opensslinfo
    exit 1
   fi
- elif [ "$version" -lt "920" ]
+ elif [ "16#$version" -lt "16#0920" ]
  then
-  echo "This version of SSLeay is not supported."
+  echo "This version: ${version} of SSLeay is not supported."
   echo $opensslinfo
   exit 1
- elif [ "$version" -lt "903100" ]
+ elif [ "16#$version" -lt "16#00903100" ]
  then
-  echo "This version of OpenSSL is not supported."
+  echo "This version: ${version} of OpenSSL is not supported."
   echo $opensslinfo
   exit 1
- elif [ "$version" -gt "906000" ]
+ elif [ "16#$version" -gt "16#00906000" ]
  then
-  echo "Warning: This version of OpenSSL is untested."
+  echo "Warning: This version: ${version} of OpenSSL is untested."
   readln "Continue anyway?" y
   if [ "$ans" = "n" ]
   then
@@ -526,6 +547,7 @@ http://www.clark.net/pub/dickey/ncurses/ncurses.tar.gz"
      -e "s#%DEF#$DEF#" < Makefile.in >> Makefile
  echo "$ZLIB" >>Makefile
  echo "$PCRE" >>Makefile
+ echo "$IDEALIB" >>Makefile
  echo "$NCURSES" >>Makefile
  echo "$OPENSSL" >>Makefile
 fi
