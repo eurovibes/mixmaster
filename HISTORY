@@ -412,8 +412,8 @@
                             next pool run.
                           Hopefully fix a bug with pool stats.
 
-2003-06-27      3.0a7     Two minor fixes for bugs introduced in 3.0a6 and
+2003-06-29      3.0a7     Two minor fixes for bugs introduced in 3.0a6 and
                             3.0a4.
 
-2003            CVS       Minor stats fix.  The date in remailer-stats was
+2003-06-30      3.0a8     Minor stats fix.  The date in remailer-stats was
                             sometimes wrong.
