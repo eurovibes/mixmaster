@@ -191,3 +191,4 @@
                            Random Documentation updates.
                            Default to not installing a .forward file in Install
                              script.
+                           Fix unused variable warning on OpenBSD.
