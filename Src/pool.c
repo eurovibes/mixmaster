@@ -6,7 +6,7 @@
    details.
 
    Send messages from pool
-   $Id: pool.c,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: pool.c,v 1.2 2001/11/02 20:39:48 rabbi Exp $ */
 
 #include "mix3.h"
 #include <stdlib.h>
@@ -438,6 +438,7 @@ int filtermsg(BUFFER *in)
   mid = buf_new();
   mboundary = buf_new();
   out = buf_new();
+  block = NULL;
 
   if (SIZELIMIT > 0 && in->length > SIZELIMIT * 1024) {
     errlog(NOTICE, "Message rejected: %ld bytes\n", in->length);
@@ -573,7 +574,7 @@ end:
   buf_free(out);
   buf_free(line);
   buf_free(line2);
-  buf_free(block);
+  if (block) buf_free(block);
   buf_free(filter);
   buf_free(mid);
   buf_free(mboundary);
