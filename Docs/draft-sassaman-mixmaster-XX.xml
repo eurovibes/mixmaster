@@ -143,7 +143,7 @@
         content) in the packets. The content may be compressed
         before splitting.</t>
 
-      <t>The sender next chooses a sequence of up to 20 remailers
+      <t>The sender next chooses a chain of up to 20 remailers
         for each packet. Each path is independant, and can be of
         a different length, but all paths must end at the same
         remailer.  This final remailer is responsible detecting and
@@ -151,19 +151,19 @@
         and doing the final delivery.</t>
 
       <t>Each packet is next prepared as follows (the full details
-        are in <xref target="packet-header"/>).  For a sequence
+        are in <xref target="header-section"/>).  For a chain
         of "n" remailers, headers "n + 1" through 20 are filled
         with random data.  For headers "n" down to one, the sender
         generates a symmetric encryption key. This key is used to
         encrypt the packet body and all the following headers. The
         key, and other control information, is then encrypted with
-        the public key of the "n"'th remailer in the sequence.</t>
+        the public key of the "n"'th remailer in the chain.</t>
 
-      <t>The process is repeated, working backward through the sequence
+      <t>The process is repeated, working backward through the chain
         until the first packet has header information encrypted for the
         first remailer, and the packet body has been encrypted "n" times.
         The packet is then sent to the first remailer on its
-        sequence.</t>
+        chain.</t>
 
     </section>
 
@@ -171,7 +171,7 @@
 
       <t>When a remailer receives a message, it uses its private key to
         decrypt the first header section. The Packet ID (see
-        <xref target="packet-header"/> can be used to detect
+        <xref target="header-section"/> can be used to detect
         duplicates. The integrity of the message is verified by
         checking the packet length and verifying the message digest
         in the packet header.</t>
@@ -195,7 +195,7 @@
     <section anchor="message-reassembly" title="Message Reassembly">
 
       <t>When a packet is sent to the final remailer, it contains an
-        indication that the sequence ends at that remailer, and whether the
+        indication that the chain ends at that remailer, and whether the
         packet contains the complete message or if it is part of a multi-part
         message. If the packet contains the entire message, the packet body
         is decrypted and after reordering messages, the plain text is
@@ -250,7 +250,7 @@
     <section anchor="dummy-traffic" title="Dummy Traffic">
 
       <t>Dummy messages are multi-hop messages with four randomly
-        selected remailers as the sequence. The sequences must selected
+        selected remailers as the chain. The chain must selected
         such that no remailer will appear twice unless two other remailers
         separate them.</t>
 
@@ -325,7 +325,7 @@ User data section              [ up to ~2.5 MB]</artwork></figure>
             be given. Compression may be used if the capabilities attribute of
             the final remailer contains the flag "C".</t>
           <t>An RFC 2822 user data section begins with the three bytes
-            "##[RETURN]" (35, 35, 13). It contains an e-mail message or a
+            "##[CR]" (35, 35, 13). It contains an e-mail message or a
             Usenet message.</t>
           <t>A user data section not beginning with one of the above
             identification strings contains only the body of the message. When
@@ -348,7 +348,7 @@ User data section              [ up to ~2.5 MB]</artwork></figure>
       <t>The asymmetric encryption mechanism is RSA with 1024 bit RSA keys
         and the PKCS #1 v1.5 (RSAES-PKCS1-v1_5) padding format <xref
           target="RFC2437"/>. The symmetric encryption mechanism is EDE
-        3DES with cipher block chaining (24-byte key, eight-byte initialization
+        3DES with cipher block chaining (24-byte key, 8-byte initialization
         vector) <xref target="Schneier96"/>. MD5 <xref target="RFC1321"/>
         is used as the message digest algorithm.</t>
     </section>
@@ -361,7 +361,7 @@ User data section              [ up to ~2.5 MB]</artwork></figure>
         size.</t>
 
       <t>The packet header consists of 20 header sections (specified in
-        <xref target="packet-header"/>) of 512 bytes each, resulting in a
+        <xref target="header-section"/>) of 512 bytes each, resulting in a
         total header size of 10240 bytes. The header sections (except for
         the first one) and the packet body are encrypted with symmetric
         session keys specified in the first header section.<figure><artwork>
@@ -384,7 +384,7 @@ User data section              [ up to ~2.5 MB]</artwork></figure>
 +-------------------+</artwork></figure>
       </t>
 
-      <section anchor="packet-header" title="Packet Header Format">
+      <section anchor="header-section" title="Header Section Format">
 
         <t>Packet layout<figure><artwork>
 [ Public key ID                 16 bytes ]
@@ -393,6 +393,7 @@ User data section              [ up to ~2.5 MB]</artwork></figure>
 [ Initialization vector          8 bytes ]
 [ Encrypted header part        328 bytes ]
 [ Random padding                31 bytes ]</artwork></figure>
+         Total size: 512 bytes
         </t>
 
         <t>To generate the RSA-encrypted session key, a 24-byte
@@ -410,15 +411,16 @@ User data section              [ up to ~2.5 MB]</artwork></figure>
 [ Packet information     depends on packet type ]
 [ Timestamp                             7 bytes ]
 [ Message digest                       16 bytes ]
-[ padding                             as needed ]</artwork></figure>
+[ Random padding                      as needed ]</artwork></figure>
+         Total size: 328 bytes
         </t>
 
         <t>The fields are defined as follows:
           <list style="hanging">
-            <t hangText="Packet ID">randomly generated packet identifier.</t>
-            <t hangText="Triple-DES key">used to encrypt the following
+            <t hangText="Packet ID:">randomly generated packet identifier.</t>
+            <t hangText="Triple-DES key:">used to encrypt the following
               header sections and the packet body.</t>
-            <t hangText="Packet type identifier">The type identifiers
+            <t hangText="Packet type identifier:">The type identifiers
               are:
               <texttable>
                 <ttcol align='left' width='20%'>Value</ttcol>
@@ -428,13 +430,13 @@ User data section              [ up to ~2.5 MB]</artwork></figure>
                 <c>2</c><c>Final hop, partial message</c>
               </texttable>
             </t>
-            <t hangText="Timestamp">A timestamp is introduced with the byte
+            <t hangText="Timestamp:">A timestamp is introduced with the byte
               sequence (48, 48, 48, 48, 0). The following two bytes specify
               the number of days since January 1, 1970, in little-endian
               byte order. A random number between one and three, inclusive,
               may be subtracted from the number of days in order to obscure
               the origin of the message.</t>
-            <t hangText="Message digest">MD5 digest computed over the
+            <t hangText="Message digest:">MD5 digest computed over the
               preceding elements of the encrypted header part.</t>
           </list>
         </t>
@@ -456,17 +458,16 @@ Packet type 2 (final hop, partial message):
   [ Initialization vector        8 bytes ]</artwork></figure>
 
           <list style="hanging">
-            <t hangText="Initialization vectors"> For packet type one and two,
-              the IV is used to symmetrically encrypt the packet body. For
+            <t hangText="Initialization vectors:"> For packet type one and two
               packet type 0, there is one IV for each of the 19 following
               header sections. The IV for the last header section is also
               used for the packet body.</t>
-            <t hangText="Remailer address">E-mail address of next hop.</t>
-            <t hangText="Message ID">Identifier unique to
+            <t hangText="Remailer address:">E-mail address of next hop.</t>
+            <t hangText="Message ID:">Identifier unique to
               (all chunks of) this message.</t>
-            <t hangText="Chunk number">Sequence number used in multi-part
+            <t hangText="Chunk number:">Sequence number used in multi-part
               messages, starting with one.</t>
-            <t hangText="Number of chunks">Total number of chunks.</t>
+            <t hangText="Number of chunks:">Total number of chunks.</t>
           </list>
         </t>
 
@@ -534,17 +535,18 @@ Remailer-Type: Mixmaster [version number]
     </t>
 
     <t>The attributes are listed in one line separated by spaces. Individual
-      attributes must not contain whitespace, and are defined as follows:
+      attributes must not contain whitespace, and are defined as follows:</t>
+    <t>
       <list style="hanging">
-        <t hangText="identifier">A human readable string identifying the
+        <t hangText="identifier:">A human readable string identifying the
           remailer</t>
-        <t hangText="address">The remailer's Internet mail address</t>
-        <t hangText="key ID">Public key ID</t>
-        <t hangText="version">Software version number</t>
-        <t hangText="capabilities">Flags indicating additional remailer
+        <t hangText="address:">The remailer's Internet mail address</t>
+        <t hangText="key ID:">Public key ID</t>
+        <t hangText="version:">Software version number</t>
+        <t hangText="capabilities:">Flags indicating additional remailer
           capabilities</t>
-        <t hangText="validity date">Date from which the key is valid</t>
-        <t hangText="expiration date">Date of the key's expiration</t>
+        <t hangText="validity date:">Date from which the key is valid</t>
+        <t hangText="expiration date:">Date of the key's expiration</t>
       </list>
     </t>
 
@@ -635,23 +637,23 @@ Remailer-Type: Mixmaster [version number]
         commands. These commands are sent via the Subject: line of an e-mail to
         the email address of the remailer:
         <list style="hanging">
-          <t hangText="remailer-help">Returns information about using the
+          <t hangText="remailer-help:">Returns information about using the
             remailer. The remailer may support a suffix consisting of a
             dash and a two-leter ISO 639 country code. For example,
             remailer-help-ar will return a help file in Arabic, if
             available.  Supported languages should be listed at the
             beginning of the "remailer-help" response.</t>
-          <t hangText="remailer-key">Returns the remailer's public key as
+          <t hangText="remailer-key:">Returns the remailer's public key as
             described in <xref target="key-format"/>. It may also return the keys and attributes
             of other remailers it knows about.</t>
-          <t hangText="remailer-stats">Returns information about the number
+          <t hangText="remailer-stats:">Returns information about the number
             of messages the remailer has processed per day.</t>
-          <t hangText="remailer-conf">Returns local configuration
+          <t hangText="remailer-conf:">Returns local configuration
             information such as software version, supported protocols,
             filtered headers, blocked newsgroups and domains, and the
             attribute strings for other remailers the remailer knows
             about.</t>
-          <t hangText="remailer-adminkey">Returns the OpenPGP <xref target="RFC2440"/>
+          <t hangText="remailer-adminkey:">Returns the OpenPGP <xref target="RFC2440"/>
             key of the remailer's operator.</t>
         </list>
       </t>
@@ -750,9 +752,9 @@ Remailer-Type: Mixmaster [version number]
       intervals should not be smaller than the randomness in the delay caused
       by trusted remailers.</t>
 
-    <t>There is no anonymity if all remailers in a given sequence collude with
+    <t>There is no anonymity if all remailers in a given chain collude with
       the adversary, or if they are compromised during the lifetime of their
-      keys. Using a longer sequence increases the assurance that the user's
+      keys. Using a longer chain increases the assurance that the user's
       privacy will be preserved, but at the same time causes lower
       reliability and higher latency. Sending redundant copies of a message
       increases reliability but may also facilitate attacks. An optimum must
@@ -836,7 +838,7 @@ Remailer-Type: Mixmaster [version number]
 
   </section>
 
-  <section anchor="examples" title="Examples">
+  <section anchor="examples" title="Examples">      <!-- XXX -->
 
     <t>This section contains a sample message and a sample key file</t>
 
