@@ -6,7 +6,7 @@
    details.
 
    OpenPGP messages
-   $Id: pgp.c,v 1.10 2002/09/25 16:14:31 disastry Exp $ */
+   $Id: pgp.c,v 1.11 2002/09/26 07:44:40 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -371,11 +371,12 @@ end:
 
 int pgp_armor(BUFFER *in, int mode)
 
-/* mode = 1: remailer message 
- *        0: normal message, 
- *        2: key 
- *        3: nym key
- *        4: nym signature 
+/* mode = 1: remailer message    (PGP_ARMOR_REM)
+ *        0: normal message,     (PGP_ARMOR_NORMAL)
+ *        2: key                 (PGP_ARMOR_KEY)
+ *        3: nym key             (PGP_ARMOR_NYMKEY)
+ *        4: nym signature       (PGP_ARMOR_NYMSIG)
+ *        5: secret key          (PGP_ARMOR_SECKEY)
  */
 
 {
