@@ -83,6 +83,52 @@ void savemsg(BUFFER *message)
 
 #endif /* USE_NCURSES */
 
+void menu_spawn_editor(char *path, int lineno) {
+#ifdef WIN32
+  SHELLEXECUTEINFO sei;
+  ZeroMemory(&sei, sizeof(SHELLEXECUTEINFO));
+  sei.cbSize = sizeof(SHELLEXECUTEINFO);
+  sei.fMask = SEE_MASK_NOCLOSEPROCESS | SEE_MASK_FLAG_DDEWAIT;
+  sei.hwnd = NULL;
+  sei.lpVerb = "open";
+  sei.lpFile = path;
+  sei.lpParameters = NULL;
+  sei.nShow = SW_SHOWNORMAL;
+
+  if (ShellExecuteEx(&sei) == TRUE) {
+    WaitForSingleObject(sei.hProcess, INFINITE);
+    CloseHandle(sei.hProcess);
+  }
+#else /* WIN32 */
+  char *editor;
+  char s[PATHMAX];
+
+/* Command line option +nn to position the cursor? */
+#define cursorpos (strfind(editor, "emacs") || streq(editor, "vi") || \
+		   streq(editor, "joe"))
+
+  editor = getenv("EDITOR");
+  if (editor == NULL)
+    editor = "vi";
+
+  if (lineno > 1 && cursorpos)
+    snprintf(s, PATHMAX, "%s +%d %s", editor, lineno, path);
+  else
+    snprintf(s, PATHMAX, "%s %s", editor, path);
+
+#ifdef USE_NCURSES
+  clear();
+  refresh();
+  endwin();
+#endif /* USE_NCURSES */
+  system(s);
+#ifdef USE_NCURSES
+  refresh();
+#endif /* USE_NCURSES */
+
+#endif /* WIN32 */
+}
+
 int menu_getuserpass(BUFFER *b, int mode)
 {
 #ifdef USE_NCURSES
