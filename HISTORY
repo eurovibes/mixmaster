@@ -361,3 +361,4 @@
                            Fix a problem in destinationblock() where a buffer
                              could have been used after it was free()d which
                              resulted in segfaults.
+                           Install script tweaks
