@@ -264,4 +264,5 @@
                              Currently, only AUTH LOGIN is supported.
                            Mixmaster now handles <CR><LF> in pubring.mix.
                            Removed incorrect NT service checks in mix.c.
+                           Mixmaster now keeps no stats in client mode.
                            Documentation updates.

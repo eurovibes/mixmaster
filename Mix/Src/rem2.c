@@ -6,7 +6,7 @@
    details.
 
    Process Mixmaster remailer messages
-   $Id: rem2.c,v 1.2 2002/07/09 08:02:02 rabbi Exp $ */
+   $Id: rem2.c,v 1.2.2.1 2002/10/05 23:54:06 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -87,6 +87,9 @@ static int isnewid(BUFFER *id, long timestamp)
   long now, old = 0;
   LOCK *i = NULL;
   idlog_t idbuf;
+
+  if (REMAIL == 0)
+    return (1); /* don't keep statistics for the client */
 
   now = time(NULL);
 
