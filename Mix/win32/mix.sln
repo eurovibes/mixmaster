@@ -28,10 +28,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pdcurses", "pdcurses.vcproj
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "mixinstall", "installer\mixinstall.vdproj", "{1F3CB659-1182-4FA4-8A2D-69A89365EFDC}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -75,12 +71,6 @@ Global
 		{F587947F-949D-4AD6-A527-3A34918741B5}.Release.Build.0 = Release|Win32
 		{F587947F-949D-4AD6-A527-3A34918741B5}.Release Static.ActiveCfg = Release|Win32
 		{F587947F-949D-4AD6-A527-3A34918741B5}.Release Static.Build.0 = Release|Win32
-		{1F3CB659-1182-4FA4-8A2D-69A89365EFDC}.Debug.ActiveCfg = Debug
-		{1F3CB659-1182-4FA4-8A2D-69A89365EFDC}.Debug.Build.0 = Debug
-		{1F3CB659-1182-4FA4-8A2D-69A89365EFDC}.Release.ActiveCfg = Release
-		{1F3CB659-1182-4FA4-8A2D-69A89365EFDC}.Release.Build.0 = Release
-		{1F3CB659-1182-4FA4-8A2D-69A89365EFDC}.Release Static.ActiveCfg = Release
-		{1F3CB659-1182-4FA4-8A2D-69A89365EFDC}.Release Static.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
