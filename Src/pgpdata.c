@@ -6,7 +6,7 @@
    details.
 
    OpenPGP data
-   $Id: pgpdata.c,v 1.2 2001/12/15 00:34:21 ulfm Exp $ */
+   $Id: pgpdata.c,v 1.3 2002/01/16 19:12:25 ulfm Exp $ */
 
 
 #include "mix3.h"
@@ -425,7 +425,10 @@ int pgp_getkey(int mode, int algo, int *psym, BUFFER *keypacket, BUFFER *key,
 	    else if (len == 255)
 	      len = buf_getl(p1);
 	    type = buf_getc(p1);
-	    buf_get(p1, i, len);
+	    if (len)
+	      buf_get(p1, i, len);
+	    else
+	      buf_clear(i);
 	    if (type == PGP_SUB_PSYMMETRIC)
 	      while ((a = buf_getc(i)) != -1)
 		if ((a == PGP_K_3DES || a == PGP_K_CAST5
