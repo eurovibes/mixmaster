@@ -6,7 +6,7 @@
    details.
 
    Menu-based user interface
-   $Id: menu.c,v 1.15 2003/05/03 05:31:07 weaselp Exp $ */
+   $Id: menu.c,v 1.16 2003/08/17 19:04:34 weaselp Exp $ */
 
 
 #include "menu.h"
@@ -108,6 +108,7 @@ void read_folder(char command, char *foldername, char *nym)
 	mix_status("Reading message %d", num);
 #ifdef USE_PGP
       if (ispgp)
+#ifdef NYMSUPPORT
 	switch (nym_decrypt(mail, NULL, log)) {
 	case 2:
 	  from = -1, subject = -1;
@@ -126,6 +127,11 @@ void read_folder(char command, char *foldername, char *nym)
 	default:
 	  ;
 	}
+#else
+	buf_clear(mail);
+	from = -1, subject = -1;
+	continue;
+#endif /* NYMSUPPORT */
 #endif /* USE_PGP */
       buf_cat(folder, mail);
       buf_clear(mail);
@@ -485,7 +491,9 @@ menu_redraw:
     standend();
     mix_status(NULL);
 
+#ifdef NYMSUPPORT
     mvprintw(8, 4, "n)ym: %s", nym);
+#endif /* NYMSUPPORT */
     y = 12, x = 25;
     mvprintw(y++, x, "m)ail");
     mvprintw(y++, x, "p)ost to Usenet");
@@ -509,9 +517,11 @@ menu_redraw:
       case '\014':
 	mix_status("");
 	goto menu_redraw;
+#ifdef NYMSUPPORT
       case 'n':
 	menu_nym(nym);
 	goto menu_redraw;
+#endif /* NYMSUPPORT */
       case 'm':
       case 'p':
 	send_message(c, nym, NULL);

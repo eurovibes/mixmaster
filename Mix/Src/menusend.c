@@ -6,7 +6,7 @@
    details.
 
    Menu-based user interface -- send message
-   $Id: menusend.c,v 1.6 2002/10/09 20:53:29 weaselp Exp $ */
+   $Id: menusend.c,v 1.7 2003/08/17 19:04:34 weaselp Exp $ */
 
 
 #include "menu.h"
@@ -176,7 +176,9 @@ redraw:
     standend();
     mix_status(NULL);
     cl(2, 0);
+#ifdef NYMSUPPORT
     printw("n)ym: %s", thisnym);
+#endif /* NYMSUPPORT */
     if (!strleft(thisnym, NONANON)) {
       cl(4, 0);
       chain_reliability(chain, 0, reliability);   /* chaintype 0=mix */
@@ -228,9 +230,11 @@ redraw:
 	  c = 'm';
       }
       switch (c) {
+#ifdef NYMSUPPORT
       case 'n':
 	menu_nym(thisnym);
 	goto redraw;
+#endif /* NYMSUPPORT */
       case '\014':
 	goto redraw;
       case 'd':
@@ -488,11 +492,13 @@ redraw:
 	    goto quit;
 	  } else {
 #ifdef USE_PGP
+#ifdef NYMSUPPORT
 	    if (!streq(thisnym, ANON)) {
 	      if (nym_encrypt(msg, thisnym, (type == 'p' || type == 'f') ?
 			      MSG_POST : MSG_MAIL) == 0)
 		type = 'm';
 	    }
+#endif /* NYMSUPPORT */
 #endif /* USE_PGP */
 	    err = mix_encrypt((type == 'p' || type == 'f') ?
 			      MSG_POST : MSG_MAIL,
