@@ -359,7 +359,7 @@ int pool_read(BUFFER *pool)
   int size = 0;
 
   d = opendir(POOLDIR);
-  if (d != NULL)
+  if (d != NULL) {
     for (;;) {
       e = readdir(d);
       if (e == NULL)
@@ -372,7 +372,9 @@ int pool_read(BUFFER *pool)
 	size++;
       }
     }
-  closedir(d);
+    closedir(d);
+  } else
+    errlog(WARNING, "Error reading pool dir %s\n", POOLDIR);
   return (size);
 }
 
@@ -397,7 +399,8 @@ void pool_dosend(void)
       }
     }
     closedir(d);
-  }
+  } else
+    errlog(WARNING, "Error reading pool dir %s\n", POOLDIR);
   sendmail_end();
 }
 

@@ -327,3 +327,6 @@
                              Closes #631353, thanks Sami Farin.
                            Make sure DH/DSA param file is actually opened before
                              writing to it.  Fixes a segfault in case it is not.
+                           Handle a pool we cannot read correctly: don't close
+                             the NULL dir handle (segfaults on *bsd). We also
+                             print a warning in that case now.
