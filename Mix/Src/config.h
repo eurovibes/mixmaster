@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.33 2003/07/07 11:28:05 weaselp Exp $ */
+   $Id: config.h,v 1.34 2003/07/07 11:32:45 weaselp Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -282,6 +282,7 @@ extern char POOLDIR[];
 extern char EXTFLAGS[];
 extern char SENDMAIL[];
 extern char SENDANONMAIL[];
+extern char PRECEDENCE[];
 extern char SMTPRELAY[];
 extern char SMTPUSERNAME[];
 extern char SMTPPASSWORD[];
