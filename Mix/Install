@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.26 2002/12/14 20:56:04 weaselp Exp $
+# $Id: Install,v 1.27 2002/12/16 06:02:28 weaselp Exp $
 
 #whereis program default-path
 whereis()
@@ -482,6 +482,7 @@ then
   exit 1
  fi
 
+ OPENSSLLIB="$LIB"
  LIBS="$LIBS $LIB"
  LDFLAGS="$LDFLAGS $LDFLAG"
  if [ "$MAKELIB" != "" ]
@@ -681,7 +682,7 @@ int main() {
   exit(0);
 }
 END
-   if gcc $LDFLAGS $INC tmptst.c -o /dev/null
+   if gcc $LDFLAGS $INC tmptst.c -o /dev/null $OPENSSLLIB
    then
      DEF="$DEF -DUSE_IDEA"
    else
