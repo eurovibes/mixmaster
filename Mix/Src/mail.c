@@ -6,7 +6,7 @@
    details.
 
    Socket-based mail transport services
-   $Id: mail.c,v 1.9 2002/08/29 08:06:31 weaselp Exp $ */
+   $Id: mail.c,v 1.10 2002/08/29 08:49:59 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -131,7 +131,9 @@ int sendmail(BUFFER *message, char *from, BUFFER *address)
 #ifdef SHORTNAMES
     int i;
     for (i = 0; i < 10000; i++) {
-      sprintf(path, "%s%cout%i.txt", POOLDIR, DIRSEP, i);
+      path[0] = '\0';
+      snprintf(path, PATHMAX, "%s%cout%i.txt", POOLDIR, DIRSEP, i);
+      path[PATHMAX-1] = '\0';
       f = fopen(path, "r");
       if (f)
 	fclose(f);
@@ -151,6 +153,7 @@ int sendmail(BUFFER *message, char *from, BUFFER *address)
 
     /* Step 2:  Stat the file.  Wait for ENOENT as a response. */
     for (count = 0;; count++) {
+      path[0] = '\0';
       snprintf(path, PATHMAX, "%s%cout.%lu.%u_%lu.%s,S=%lu.txt",
 	POOLDIR, DIRSEP, time(NULL), getpid(), namecounter++, hostname, head->length + message->length);
       path[PATHMAX-1] = '\0';
