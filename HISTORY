@@ -236,7 +236,37 @@
                            Linux PPC fixes (and all other archs where char is
                              unsigned).
 
-2002-??-??      2.9b39     Applied Maildir feature patch by drt@un.bewaff.net,
+2002-xx-xx      2.9b39     Added a new feature, --store-mail (-I), which will
+                             deliver an encrypted mix packet to the message pool
+                             without attempting being decrypted.
+                           Made minor updates for WIN32 DLL.
+                           When sending type II messages interactivly you may 
+                             now choose a middleman remailer as the last hop
+                             in your chain (closes: #481244).
+                           If a footer.txt file exists its content will be 
+                             appended to outgoing messages leaving the remailer
+                             network at this hop (closes: #490117).
+                           List known remailers in remailer-conf reply (closes:
+                             #480330).
+                           The files created with "SENDMAIL outfile" have
+                             different names now to scale beyond 10k files
+                             (closes: #587593).  
+                           Fixed the "is a mailfolder" checking for -f.
+                           Various fixes for Mixmaster when not using ncurses.
+                           Added new option --config to allow loading of
+                             configuration information from an alternate file.
+                           POOL is now used correctly if set in mix.cfg.
+                           ASCII armor checksum is now verified on PGP keys.
+                           Corrected a bug where 1/4096 of pgp messages was
+                             destroyed due an improper armor checksum
+                             interpretation.
+                           Added password-based authenticated SMTP for mix.
+                             Currently, only AUTH LOGIN is supported.
+                           Mixmaster now handles <CR><LF> in pubring.mix.
+                           Removed incorrect NT service checks in mix.c.  
+                           Documentation updates.
+
+2002-??-??      MAIN      Applied Maildir feature patch by drt@un.bewaff.net,
                              with some changes by PP:
                              MAILBOX can now be a Maildir (closes: #586223).
                            New option MAILIN that can be set to either a mbox
@@ -244,14 +274,6 @@
                              and the folder cleared every time Mixmaster
                              processes its pool, or at MAILINTIME intervals
                              (closes: #597043).
-                           When sending type II messages interactively you may
-                             now choose a middleman remailer as the last hop
-                             in your chain (closes: #481244).
-                           If a footer.txt file exists its content will be
-                             appended to outgoing messages leaving the remailer
-                             network at this hop (closes: #490117).
-                           List known Mixmasters/cpunks in remailer-conf reply
-                             (closes: #480330).
                            Mixmaster in daemon mode reloads configuration on 
                              SIGHUP. Upon receiving SIGTERM or SIGINT it will 
                              finish its current queue run and then exit
@@ -266,9 +288,6 @@
                            Mixmaster now prompts for secret key passphrase when
                              started in daemon mode.
                            The Mixmaster daemon now writes a pid file.
-                           The files created with "SENDMAIL outfile" have
-                             different names now to scale beyond 10k files
-                             (closes: #587593).
                            Mixmaster checks expiration and revocation status of
                              pgp keys, userids, and subkeys.
                            Mixmaster will not encrypt or sign with a revoked
@@ -293,16 +312,3 @@
                                seemed sensible.
                            Mixmaster now generates dummy messages automatically
                              as mail enters and exits the pool.
-                           Fixed the "is a mailfolder" checking for -f.
-                           Various fixes for Mixmaster when not using ncurses.
-                           Added new option --config to allow loading of 
-                             configuration information from an alternate file.
-                           POOL is now used correctly if set in mix.cfg.
-                           ASCII armor checksum is now verified on PGP keys.
-                           Corrected a bug where 1/4096 of pgp messages was 
-                             destroyed due an improper armor checksum 
-                             interpretation.
-                           Added password-based authenticated SMTP for mix.
-                             Currently, only AUTH LOGIN is supported.
-                           Mixmaster now handles <CR><LF> in pubring.mix.
-                           Removed incorrect NT service checks in mix.c.
