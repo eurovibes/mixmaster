@@ -155,6 +155,13 @@ Remove the Mixmaster Service on Win32.
 .TP
 .B \-\-run\-svc
 Run the Mixmaster Service on Win32.
+.TP
+.B \-\-redirect
+Read a mixmaster packet from stdin and route it through a chain given with
+\fB\-\-chain\fP.
+Note that this may corrupt the packet if there is not enough space in the
+headers (that is, if there are more than 20 hops total).  This function is
+not normaly needed but may come in handy in certain cases.
 .SH CONFIGURATION
 Mixmaster reads its configuration from the file
 .B mix.cfg
