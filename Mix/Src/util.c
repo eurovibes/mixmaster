@@ -6,7 +6,7 @@
    details.
 
    Utility functions
-   $Id: util.c,v 1.13 2002/10/10 22:07:48 weaselp Exp $ */
+   $Id: util.c,v 1.14 2003/02/04 04:20:00 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -615,6 +615,10 @@ time_t parse_yearmonthday(char* str)
   if (sscanf( str, "%d-%d-%d", &year, &month, &day) == 3 ) {
     struct tm timestruct;
     char *tz;
+/* FIXME: this is broken */
+/*  TZ="" works on Linux, but not on solaris */
+/*  TZ=UTC  works not everywhere either */
+
     tz = getenv("TZ");
 #ifdef NO_SETENV
     putenv("TZ=");

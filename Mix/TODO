@@ -7,6 +7,7 @@ Todo items before 2.9.1 release:
 
 Items that need to be completed before the next HEAD release:
 
+* Fix timezone handling in util.c.
 * keylifetime and key{grace,overlap}period needs to be documented once
   it's finished.
 * Recreate pgpkey.txt regularily with only the latest non-expired keys.
