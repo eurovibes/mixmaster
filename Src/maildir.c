@@ -1,8 +1,20 @@
+/* Mixmaster version 3.0  --  (C) 1999 - 2004 Anonymizer Inc. and others.
+
+   Mixmaster may be redistributed and modified under certain conditions.
+   This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
+   ANY KIND, either express or implied. See the file COPYRIGHT for
+   details.
+
+   Maildir support routines
+   $Id: $ */
+
+
 /* Maildir support for Mixmaster 3 - see
    http://www.qmail.org/man/man5/maildir.html and
    http://cr.yp.to/proto/maildir.html
 
-   Added by drt@un.bewaff.net - http://c0re.jp/
+   Added by and (C) 2001 Doobee R. Tzeck 
+   drt@un.bewaff.net - http://c0re.jp/
 
    To test it try:
    $ gcc maildir.c -DUNITTEST -o test_maildir

@@ -75,13 +75,13 @@ SIZELIMIT           0
 
 ## Remailing strategy:
 MAILINTIME          5m
-SENDPOOLTIME        1h
-POOLSIZE            20
-RATE                95
+SENDPOOLTIME        10m
+POOLSIZE            25
+RATE                30
 
 ## Dummy generation probabilities
-INDUMMYP            10 
-OUTDUMMYP           30 
+INDUMMYP            3
+OUTDUMMYP           10 
 
 ## How long to store packet IDs and incomplete message parts
 IDEXP               7d

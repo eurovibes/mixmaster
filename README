@@ -1,5 +1,5 @@
-Mixmaster version 3 -- anonymous remailer software -- (C) 1999 Anonymizer Inc.
-------------------------------------------------------------------------------
+Mixmaster 3.0 -- anonymous remailer software -- (C) 1999 - 2004 Anonymizer Inc.
+-------------------------------------------------------------------------------
 
 PREVIEW VERSION  ---  WARNING: THIS SOFTWARE IS UNDER DEVELOPMENT!
 
@@ -51,7 +51,7 @@ To install or upgrade Mixmaster, type `./Install'.
 
 Mixmaster uses lists of currently operating remailers and information
 about their reliability. You can get the current remailer lists from
-http://stats.melontraffickers.com/ and http://anon.efga.org/ and via
+http://stats.melontraffickers.com/ and http://www.noreply.org/ and via
 finger from nym.alias.net:
 
   pubring.asc    Type 1 remailer keys
