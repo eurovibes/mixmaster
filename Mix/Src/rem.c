@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.6 2001/12/14 22:24:18 rabbi Exp $ */
+   $Id: rem.c,v 1.7 2001/12/15 05:10:52 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -387,34 +387,30 @@ int blockrequest(BUFFER *message)
     if (bufifind(line, "destination-block")) {
       buf_clear(addr);
       request = 1;
-      if (buffind(line, "@")) {
+      {
 	int c = 0;
 
 	while (!strileft(line->data + line->ptr, "block"))
 	  line->ptr++;
-	while (c != ' ')
+	while (c != ' ' && c != -1)
 	  c = tolower(buf_getc(line));
 	while (c == ' ')
 	  c = buf_getc(line);
-	do {
-	  buf_appendc(addr, c);
-	  c = buf_getc(line);
-	} while (c > ' ');
-      } else
-	buf_set(addr, from);
-      {
-	BUFFER *real_addr;
-	real_addr = buf_new();
-	rfc822_addr (addr, real_addr);
-	buf_set (addr, real_addr);
-	buf_free (real_addr);
+	if (c != -1)
+	  do {
+	    buf_appendc(addr, c);
+	    c = buf_getc(line);
+	  } while (c > ' ');
       }
+      if (addr->length == 0)
+	rfc822_addr (addr, from);
       if (addr->length == 0) {
 	return (2);
       };
       if (! buffind(addr, "@"))
       {
-	errlog(LOG, "Ignoring blocking request for %b from %b (no @ sign in address).\n", addr, from);
+	errlog(LOG, "Ignoring blocking request for %b from %b "
+	  "(no @ sign in address).\n", addr, from);
 	return (2);
       };
       if (bufieq(addr, REMAILERADDR)) {
@@ -422,7 +418,8 @@ int blockrequest(BUFFER *message)
 	return (2);
       }
       if (bufleft(addr, "/")) {
-	errlog(LOG, "Ignoring blocking request: %b from %b is a regex.\n", addr, from);
+	errlog(LOG, "Ignoring blocking request: %b from %b is a regex.\n",
+	  addr, from);
 	return (2);
       }
       if (buf_ieq(addr, from))
