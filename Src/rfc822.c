@@ -6,7 +6,7 @@
    details.
 
    Parse RFC 822 headers
-   $Id: rfc822.c,v 1.2 2001/12/11 18:01:32 rabbi Exp $ */
+   $Id: rfc822.c,v 1.3 2002/09/08 21:59:43 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -41,7 +41,7 @@ static void backtrack(BUFFER *b, int len)
 /* white space and comments */
 static void wsc(BUFFER *in, BUFFER *string)
 {
-  char c;
+  int c;
 
   for (;;) {
     c = buf_getc(in);

@@ -281,4 +281,6 @@
                              older than PACKETEXP time along with expired 
                              partial packets.
                            Mixmaster now generates dummy messages automatically
-                             as mail enters and exits the pool (by PP).
+                             as mail enters and exits the pool.
+                           Linux PPC fixes (and all other archs where char is
+                             unsigned).
