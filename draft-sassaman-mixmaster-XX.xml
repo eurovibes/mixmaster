@@ -173,7 +173,7 @@
 
       <t>When a remailer receives a message, it uses its private key to
         decrypt the first header section. The Packet ID (see
-        <xref target="header-section"/> can be used to detect
+        <xref target="header-section"/>) can be used to detect
         duplicates. The integrity of the message is verified by
         checking the packet length and verifying the message digest
         in the packet header.</t>
