@@ -1,12 +1,12 @@
 Internet-Draft                                              Ulf Moeller
-Expires: December 31, 2003
+Expires: August 31, 2004
                                                          Lance Cottrell
                                                         Anonymizer Inc.
                                                         Peter Palfrader
                                                   The Mixmaster Project
                                                            Len Sassaman
                                                  Nomen Abditum Services
-                                                              July 2003
+                                                          February 2004
 
 
 
@@ -35,11 +35,11 @@ Status of This Memo
      The list of Internet-Draft Shadow Directories can be accessed at
      http://www.ietf.org/shadow.html
 
-     This Internet-Draft will expire on December 31, 2003.
+     This Internet-Draft will expire on July 31, 2004.
 
 Copyright Notice
 
-   Copyright (C) The Internet Society (2003).  All Rights Reserved.
+   Copyright (C) The Internet Society (2004).  All Rights Reserved.
 
 
 
@@ -231,20 +231,23 @@ Every t seconds:
 3.2. Dummy Traffic
 
 "Dummy messages" are multi-hop messages of type NULL with four randomly
-selected nodes as their chain.
+selected nodes as their chain. Chains are selected such that no node
+will appear twice in the chain unless separated by two other nodes in
+the chain.
 
 Older versions of Mixmaster (2.0.4 - 2.9.0) allowed for the creation of
-dummy message cover traffic, but provided no automated means for introducing
-this dummy traffic into the system. Beginning in version 3.0, Mixmaster employs
-an internal dummy policy.
+dummy message cover traffic, but provided no automated means for
+introducing this dummy traffic into the system. Beginning in version
+3.0, Mixmaster employs an internal dummy policy.
 
-Every time a message is placed in the pool, the remailer chooses a random
-number from a geometric distribution and creates that many dummy messages
-which are also placed in the pool.
+Every time a message is placed in the pool, the remailer chooses a
+random number from a geometric distribution and creates that many dummy
+messages which are also placed in the pool.
 
 Similarly, prior to each execution of the mixing algorithm described in
-section 3.1, the remailer selects a random number from a different geometric
-distribution and adds that many dummy messages to the pool as well.
+section 3.1, the remailer selects a random number from a different
+geometric distribution and adds that many dummy messages to the pool as
+well.
 
 The distributions' parameters are chosen so that on average the remailer
 creates one dummy for every 32 messages coming in and one every 9 mixing
