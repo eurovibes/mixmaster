@@ -8,12 +8,12 @@ CFG=pcre - Win32 Release
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "Pcre.mak".
+!MESSAGE NMAKE /f "pcre.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "Pcre.mak" CFG="pcre - Win32 Release"
+!MESSAGE NMAKE /f "pcre.mak" CFG="pcre - Win32 Release"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
