@@ -6,7 +6,7 @@
    details.
 
    Randomness
-   $Id: random.c,v 1.3 2002/09/18 23:26:16 rabbi Exp $ */
+   $Id$ */
 
 
 #include "mix3.h"

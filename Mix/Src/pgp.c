@@ -6,7 +6,7 @@
    details.
 
    OpenPGP messages
-   $Id: pgp.c,v 1.17 2003/08/24 20:39:26 weaselp Exp $ */
+   $Id$ */
 
 
 #include "mix3.h"

@@ -6,7 +6,7 @@
    details.
 
    Menu-based user interface - nym management
-   $Id: menunym.c,v 1.3 2003/08/17 19:04:34 weaselp Exp $ */
+   $Id$ */
 
 #ifdef NYMSUPPORT
 

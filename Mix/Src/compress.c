@@ -6,7 +6,7 @@
    details.
 
    Buffer compression (interface to zlib)
-   $Id: compress.c,v 1.4 2003/10/14 05:39:35 weaselp Exp $ */
+   $Id$ */
 
 
 #include "mix3.h"

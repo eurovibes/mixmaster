@@ -6,7 +6,7 @@
    details.
 
    Create nym server messages
-   $Id: nym.c,v 1.11 2003/08/17 19:04:34 weaselp Exp $ */
+   $Id$ */
 
 
 #ifdef NYMSUPPORT

@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-# $Id: configure.ac,v 1.3 2003/10/14 15:10:45 dybbuk Exp $
+# $Id$
 AC_INIT(Src/version.h)
 AC_CONFIG_AUX_DIR(etc)
 AM_INIT_AUTOMAKE(mixmaster, [3.08+cvs], mixmaster-devel@lists.sourceforge.net)

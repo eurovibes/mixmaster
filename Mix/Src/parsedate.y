@@ -1,5 +1,5 @@
 %{
-/*  $Id: parsedate.y,v 1.1 2003/02/15 00:29:36 weaselp Exp $
+/*  $Id$
 **
 **  Originally written by Steven M. Bellovin <smb@research.att.com> while
 **  at the University of North Carolina at Chapel Hill.  Later tweaked by

@@ -6,7 +6,7 @@
    details.
 
    Mixmaster DLL startup
-   $Id: dllmain.c,v 1.5 2002/10/09 20:53:28 weaselp Exp $ */
+   $Id$ */
 
 
 #include "mix3.h"

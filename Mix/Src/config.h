@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.39 2003/09/29 20:41:39 weaselp Exp $ */
+   $Id$ */
 
 
 #ifndef _CONFIG_H

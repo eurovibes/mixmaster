@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.47 2003/09/23 19:03:48 weaselp Exp $ */
+   $Id$ */
 
 
 #include "mix3.h"
