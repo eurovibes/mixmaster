@@ -118,7 +118,7 @@ int chain_select(int hop[], char *chainstr, int maxrem, REMAILER *remailer,
   /* put the chain backwards: final hop is in hop[0] */
 
   for (i = chain->length; i >= 0; i--)
-    if (i == 0 || chain->data[i - 1] <= ' ' || chain->data[i - 1] == ','
+    if (i == 0 || chain->data[i - 1] == ','
 	|| chain->data[i - 1] == ';' || chain->data[i - 1] == ':') {
       for (j = i; isspace(chain->data[j]);)	/* ignore whitespace */
 	j++;
