@@ -1,6 +1,6 @@
 dnl Various specific config bits for Mixmaster.
 dnl
-dnl $Id: aclocal.m4,v 1.5 2003/08/08 15:17:52 dybbuk Exp $
+dnl $Id: aclocal.m4,v 1.6 2003/08/09 02:27:35 dybbuk Exp $
 
 dnl Zlib versions before 1.1.4 had a nasty bug.
 AC_DEFUN(AM_ZLIB_CHECK, [
@@ -271,12 +271,11 @@ AC_ARG_WITH(spool,
       
 dnl HOMEMIXDIR is something else.
 AC_DEFUN(AM_MIXMASTER_HOME, [
-HOMEMIXDIR=""
 AC_MSG_CHECKING(for default relative Mix directory)
 AC_ARG_WITH(homemixdir,
   [  --with-homemixdir=DIR   Default Mix directory relative to $HOME ],
   [ XDEFS="-DHOMEMIXDIR='\"$with_homemixdir\"' ${XDEFS}"
-    AC_MSG_RESULT(["\$HOME/${HOMEMIXDIR}"]) ],
+    AC_MSG_RESULT([\$HOME/${with_homemixdir}]) ],
   [ AC_MSG_RESULT(using default) ])
 ])
 
