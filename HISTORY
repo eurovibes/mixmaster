@@ -125,3 +125,5 @@
                              option, and updated help (by Len Sassaman).
                            Removed redundant "encoded" variable in mime.c.
                            Fixed Installer bugs.
+
+2001-xx-xx	2.9beta32  POP sockets now properly close (by Disastry).
