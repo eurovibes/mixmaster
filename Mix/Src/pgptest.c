@@ -17,7 +17,7 @@
 #ifdef POSIX
 #include <unistd.h>
 #include <termios.h>
-#endif
+#endif /* POSIX */
 
 int pass(BUFFER *b)
 {
@@ -27,7 +27,7 @@ int pass(BUFFER *b)
 
 #ifdef HAVE_TERMIOS
   struct termios attr;
-#endif
+#endif /* HAVE_TERMIOS */
 
   fprintf(stderr, "enter passphrase: ");
   fflush(stderr);
@@ -47,11 +47,11 @@ int pass(BUFFER *b)
   close(fd);
   p[n - 1] = 0;
 
-#else
+#else /* end of HAVE_TERMIOS */
   fgets(p, LINELEN, stdin);
   if (p[strlen(p)-1]=='\n')
     p[strlen(p)-1] = 0;
-#endif
+#endif /* else if not HAVE_TERMIOS */
 
   fprintf(stderr, "\n");
   buf_appends(b, p);

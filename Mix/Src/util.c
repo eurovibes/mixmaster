@@ -6,7 +6,7 @@
    details.
 
    Utility functions
-   $Id: util.c,v 1.2.2.1 2002/10/04 23:49:16 rabbi Exp $ */
+   $Id: util.c,v 1.2.2.2 2002/10/09 20:29:44 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -20,12 +20,12 @@
 #include <unistd.h>
 #include <sys/file.h>
 #include <termios.h>
-#else
+#else /* end of POSIX */
 #include <io.h>
-#endif
+#endif /* else if not POSIX */
 #ifdef HAVE_GETKEY
 #include <pc.h>
-#endif
+#endif /* HAVE_GETKEY */
 #include <assert.h>
 
 /** string comparison functions. return 1 on match, 0 otherwise ********/
@@ -135,10 +135,10 @@ FILE *openpipe(const char *prog)
 
 #ifdef POSIX
   p = popen(prog, "w");
-#endif
+#endif /* POSIX */
 #ifdef _MSC
   p = _popen(prog, "w");
-#endif
+#endif /* _MSC */
 
   if (p == NULL)
     errlog(ERRORMSG, "Unable to open pipe to %s\n", prog);
@@ -166,11 +166,11 @@ int closepipe(FILE *p)
 {
 #ifdef POSIX
   return (pclose(p));
-#elif defined(_MSC)
+#elif defined(_MSC) /* end of POSIX */
   return (_pclose(p));
-#else
+#else /* end of defined(_MSC) */
   return -1;
-#endif
+#endif /* else if not defined(_MSC), POSIX */
 }
 
 /** Base 64 encoding ****************************************************/
@@ -344,7 +344,7 @@ int decode(BUFFER *in, BUFFER *out)
 	    a += 4;
 	    continue;		/* support Mixmaster 2.0.3 encoding */
 	  }
-#endif
+#endif /* 1 */
 	  break;
 	}
       }
@@ -413,9 +413,9 @@ int lock(FILE *f)
   lockstruct.l_start = 0;
   lockstruct.l_len = 0;
   return (fcntl(fileno(f), F_SETLKW, &lockstruct));
-#else
+#else /* end of WIN32 */
   return (0);
-#endif
+#endif /* else if not WIN32 */
 }
 
 int unlock(FILE *f)
@@ -429,9 +429,9 @@ int unlock(FILE *f)
   lockstruct.l_start = 0;
   lockstruct.l_len = 0;
   return (fcntl(fileno(f), F_SETLKW, &lockstruct));
-#else
+#else /* end of not WIN32 */
   return (0);
-#endif
+#endif /* else if WIN32 */
 }
 
 /* get passphrase ******************************************************/
@@ -445,7 +445,7 @@ static int getuserpass(BUFFER *b, int mode)
 #ifdef HAVE_TERMIOS
   struct termios attr;
 
-#endif
+#endif /* HAVE_TERMIOS */
 
   if (mode == 0)
     fprintf(stderr, "enter passphrase: ");
@@ -458,10 +458,10 @@ static int getuserpass(BUFFER *b, int mode)
     p[n] = getkey();
   }
   p[n] = 0;
-#else
+#else /* end of HAVE_GETKEY */
   scanf("%127s", p);
-#endif
-#else
+#endif /* else if not HAVE_GETKEY */
+#else /* end of not UNIX */
   fd = open("/dev/tty", O_RDONLY);
   if (tcgetattr(fd, &attr) != 0)
     return (-1);
@@ -479,7 +479,7 @@ static int getuserpass(BUFFER *b, int mode)
   close(fd);
   fprintf(stderr, "\n");
   p[n - 1] = 0;
-#endif
+#endif /* else if UNIX */
   if (mode == 0)
     buf_appends(b, p);
   else
@@ -529,7 +529,7 @@ int fileno(FILE *f)
   return (f->_handle);
 }
 
-#endif
+#endif /* __RSXNT__ */
 
 #ifdef _MSC	/* Visual C lacks dirent */
 
@@ -576,4 +576,4 @@ int closedir(DIR *dir)
   return (-1);
 }
 
-#endif
+#endif /* _MSC */

@@ -6,7 +6,7 @@
    details.
 
    Prepare messages for remailer chain
-   $Id: chain.c,v 1.2 2001/12/11 09:02:16 rabbi Exp $ */
+   $Id: chain.c,v 1.2.2.1 2002/10/09 20:29:43 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -54,7 +54,7 @@ int chain_select(int hop[], char *chainstr, int maxrem, REMAILER *remailer,
 #if 0
       else if (isdigit(chain->data[j]))
 	k = atoi(chain->data + j);
-#endif
+#endif /* 0 */
       else {
 	buf_sets(selected, chain->data + j);
 	rfc822_addr(selected, addr);
@@ -78,10 +78,10 @@ int chain_select(int hop[], char *chainstr, int maxrem, REMAILER *remailer,
 	buf_nl(feedback);
 #if 0
 	k = 0;
-#else
+#else /* end of 0 */
 	len = -1;
 	goto end;
-#endif
+#endif /* else not 0 */
       }
       hop[len++] = k;
       if (len >= 20) {          /* array passed in is has length 20 */

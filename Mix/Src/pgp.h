@@ -6,7 +6,7 @@
    details.
 
    OpenPGP messages
-   $Id: pgp.h,v 1.6 2002/08/20 06:50:38 rabbi Exp $ */
+   $Id: pgp.h,v 1.6.2.1 2002/10/09 20:29:44 weaselp Exp $ */
 
 
 #ifdef USE_PGP
@@ -14,7 +14,7 @@
 #include "mix3.h"
 #ifdef USE_OPENSSL
 #include <openssl/opensslv.h>
-#endif
+#endif /* USE_OPENSSL */
 
 /* in the PGP Version header, list the same information as all other 
    versions of Mixmaster to prevent anonymity set division. */
@@ -168,5 +168,5 @@ int pgpdb_append(KEYRING *keydb, BUFFER *p);
 int pgpdb_getnext(KEYRING *keydb, BUFFER *p, BUFFER *keyid, BUFFER *userid);
 int pgpdb_close(KEYRING *keydb);
 
-#endif /* _PGP_H */
+#endif /* not _PGP_H */
 #endif /* USE_PGP */

@@ -6,7 +6,7 @@
    details.
 
    Menu-based user interface
-   $Id: menu.h,v 1.2 2002/07/21 03:53:11 weaselp Exp $ */
+   $Id: menu.h,v 1.2.2.1 2002/10/09 20:29:44 weaselp Exp $ */
 
 
 #ifndef _MENU_H
@@ -15,10 +15,10 @@
 #ifdef USE_NCURSES
 #ifdef HAVE_NCURSES_H
 #include <ncurses.h>
-#else
+#else /* end of HAVE_NCURSES_H */
 #include <curses.h>
-#endif
-#endif
+#endif /* else if not HAVE_NCURSES_H */
+#endif /* USE_NCURSES */
 
 #define NONANON "non-anonymous"
 #define ANON "Anonymous"
@@ -38,8 +38,8 @@ void savemsg(BUFFER *message);
 int menu_replychain(int *d, int *l, char *mdest, char *pdest, char *psub,
 		    char *r);
 
-#endif
+#endif /* USE_NCURSES */
 
 #define maxnym 30
 
-#endif
+#endif /* not _MENU_H */

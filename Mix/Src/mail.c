@@ -6,7 +6,7 @@
    details.
 
    Socket-based mail transport services
-   $Id: mail.c,v 1.7.2.2 2002/10/04 23:49:16 rabbi Exp $ */
+   $Id: mail.c,v 1.7.2.3 2002/10/09 20:29:44 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -21,7 +21,8 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
-#endif
+#endif /* defined(UNIX) && defined(USE_SOCK) */
+
 #include <fcntl.h>
 #include <time.h>
 #include <sys/stat.h>
@@ -139,7 +140,7 @@ int sendmail(BUFFER *message, char *from, BUFFER *address)
 	break;
     }
     f = fopen(path, "w");
-#else /* SHORTNAMES */
+#else /* end of SHORTNAMES */
     static unsigned long namecounter = 0;
     struct stat statbuf;
     int count;
@@ -166,11 +167,11 @@ int sendmail(BUFFER *message, char *from, BUFFER *address)
        break; /* Too many retries - give up */
 #ifdef WIN32
       Sleep(2000); /* sleep and retry */
-#else
+#else /* end of WIN32 */
       sleep(2); /* sleep and retry */
-#endif
+#endif /* else not WIN32 */
     }
-#endif /* SHORTNAMES */
+#endif /* else not SHORTNAMES */
     if (f != NULL) {
       err = buf_write(head, f);
       err = buf_write(message, f);
@@ -215,7 +216,7 @@ void sock_exit(void)
 {
   WSACleanup();
 }
-#endif
+#endif /* WIN32 */
 
 SOCKET opensocket(char *hostname, int port)
 {
@@ -245,7 +246,7 @@ int closesocket(SOCKET s)
 {
   return (close(s));
 }
-#endif
+#endif /* ifndef WIN32 */
 
 int sock_getline(SOCKET s, BUFFER *line)
 {
@@ -278,7 +279,7 @@ int sock_cat(SOCKET s, BUFFER *b)
   } while (p < b->length);
   return (0);
 }
-#else
+#else /* end of USE_SOCK */
 SOCKET opensocket(char *hostname, int port)
 {
   return (INVALID_SOCKET);
@@ -298,7 +299,7 @@ int sock_cat(SOCKET s, BUFFER *b)
 {
   return (-1);
 }
-#endif
+#endif /* else not USE_SOCK */
 
 /* send messages by SMTP ************************************************/
 
@@ -396,7 +397,7 @@ SOCKET smtp_open(void)
 err:
     buf_free(line);
   }
-#endif
+#endif /* USE_SOCK */
   return (s);
 }
 
@@ -416,7 +417,7 @@ int smtp_close(SOCKET s)
     errlog(WARNING, "SMTP quit failed: %b\n", line);
   closesocket(s);
   buf_free(line);
-#endif
+#endif /* USE_SOCK */
   return (ret);
 }
 
@@ -522,7 +523,7 @@ end:
   buf_free(field);
   buf_free(content);
   buf_free(rcpt);
-#endif
+#endif /* USE_SOCK */
   return (ret);
 }
 
@@ -795,4 +796,4 @@ void pop3get(void)
   buf_free(line);
   buf_free(msg);
 }
-#endif
+#endif /* USE_SOCK */

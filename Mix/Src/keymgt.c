@@ -6,7 +6,7 @@
    details.
 
    Key management
-   $Id: keymgt.c,v 1.9.2.1 2002/10/04 23:49:16 rabbi Exp $ */
+   $Id: keymgt.c,v 1.9.2.2 2002/10/09 20:29:44 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -171,7 +171,7 @@ end:
   return (err);
 }
 
-#else
+#else /* end of USE_RSA */
 static int getv2seckey(byte keyid[], BUFFER *key)
 {
   return -1;
@@ -181,7 +181,7 @@ static int getv2pubkey(byte keyid[], BUFFER *key)
 {
   return -1;
 }
-#endif
+#endif /* else not USE_RSA */
 
 int key(BUFFER *out)
 {
@@ -340,7 +340,7 @@ end:
 
   return (err);
 }
-#endif
+#endif /* USE_RSA */
 
 int keymgt(int force)
 {
@@ -353,11 +353,11 @@ int keymgt(int force)
 #ifdef USE_RSA
     if (MIX && (err = v2keymgt(force)) == -1)
       err = -1;
-#endif
+#endif /* USE_RSA */
 #ifdef USE_PGP
     if (PGP && (err = pgp_keymgt(force)) == -1)
       err = -1;
-#endif
+#endif /* USE_PGP */
   }
   return (err);
 }

@@ -6,7 +6,7 @@
    details.
 
    Remailer statistics
-   $Id: stats.c,v 1.8.2.3 2002/10/05 23:54:06 rabbi Exp $ */
+   $Id: stats.c,v 1.8.2.4 2002/10/09 20:29:44 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -189,7 +189,7 @@ int stats(BUFFER *b)
 #if 0
       else
 	buf_appends(b, "  [ no remailing ]");
-#endif
+#endif /* 0 */
       buf_nl(b);
     }
     if ((today - havestats) / SECONDSPERDAY >= 1)
@@ -215,7 +215,7 @@ int stats(BUFFER *b)
 #if 0
       else
 	buf_appends(b, "  [ no remailing ]");
-#endif
+#endif /* 0 */
       buf_nl(b);
     }
   }
@@ -391,19 +391,19 @@ void conf_premail(BUFFER *out)
   if (PGP) {
 #ifdef USE_IDEA
     buf_appends(out, " ek");
-#endif
+#endif /* USE_IDEA */
     buf_appends(out, " ekx");
   }
 #ifdef USE_IDEA
   buf_appends(out, " esub");
-#endif
+#endif /* USE_IDEA */
 #if 0				/* obsolete */
 #ifdef USE_NSUB
   buf_appends(out, " nsub");
-#else
+#else /* end of USE_NSUB */
   buf_appends(out, " ksub");
-#endif
-#endif
+#endif /* else if not USE_NSUB */
+#endif /* 0 */
   if (INFLATEMAX)
     buf_appendf(out, " inflt%d", INFLATEMAX);
   if (MAXRANDHOPS)

@@ -805,7 +805,7 @@ int buf_unzip(BUFFER *buf, int type);
 #include <stdio.h>
 #ifdef WIN32
 #include <windows.h>
-#endif
+#endif /* WIN32 */
 
 typedef unsigned char byte;
 
@@ -823,7 +823,7 @@ void rnd_update(byte *b, int n);
 void rnd_initialized(void);
 #ifdef WIN32
 int rnd_mouse(UINT i, WPARAM w, LPARAM l);
-#endif
+#endif /* WIN32 */
 
 BUFFER *buf_new(void);
 int buf_free(BUFFER *buf);
@@ -894,5 +894,5 @@ int pgp_decrypt(BUFFER *message, BUFFER *pass, BUFFER *sig, char *pubring,
 		char *secring);
 int pgp_keygen(int algo, int bits, BUFFER *userid, BUFFER *pass,
 		  char *pubring, char *secring, int remail);
-#endif
-#endif
+#endif /* USE_PGP */
+#endif /* not _MIXLIB_H */

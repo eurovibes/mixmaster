@@ -6,7 +6,7 @@
    details.
 
    OpenPGP messages
-   $Id: pgp.c,v 1.6.2.2 2002/10/05 00:15:14 rabbi Exp $ */
+   $Id: pgp.c,v 1.6.2.3 2002/10/09 20:29:44 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -109,10 +109,10 @@ int pgp_mailenc(int mode, BUFFER *msg, char *sigid,
       buf_move(body, encrhdr);
       encapsulate = 1;
     }
-#else
+#else /* end of 1 */
     /* send headers as plain text */
     buf_cat(plainhdr, encrhdr);
-#endif
+#endif /* not 1 */
     buf_move(hdr, plainhdr);
 
     buf_clear(line);
@@ -136,10 +136,10 @@ int pgp_mailenc(int mode, BUFFER *msg, char *sigid,
     if (mode & PGP_ENCRYPT) {
 #if 1
       buf_sets(field, "+--");
-#else
+#else /* end of 1 */
     buf_setrnd(mboundary, 18);
     encode(mboundary, 0);
-#endif
+#endif /* else if not 1 */
 
       buf_appendf(hdr,
 		  "Content-Type: multipart/encrypted; boundary=\"%b\"; "
@@ -217,7 +217,7 @@ int pgp_encrypt(int mode, BUFFER *in, BUFFER *to, BUFFER *sigid,
 	pgp_setkey(dek, PGP_K_3DES);
 	err = pgp_sessionkey(out, dest, NULL, dek, pubring);
       }
-#endif
+#endif /* USE_IDEA */
     } else {
       /* multiple recipients */
       pgp_setkey(dek, PGP_K_3DES);
@@ -232,7 +232,7 @@ int pgp_encrypt(int mode, BUFFER *in, BUFFER *to, BUFFER *sigid,
 	    pgp_setkey(dek, PGP_K_IDEA);
 	    continue;
 	  }
-#endif
+#endif /* USE_IDEA */
 	  if (err < 0)
 	    goto end;
 	  buf_cat(out, tmp);
@@ -292,7 +292,7 @@ unsigned long crc24(BUFFER * in)
        crc ^= POLY;
     }
   }
-#else
+#else /* end of 0 */
   /* pre-computed CRC table -- much faster */
   unsigned long table[256];
   unsigned long t;
@@ -311,7 +311,7 @@ unsigned long crc24(BUFFER * in)
   }
   for (p = 0; p < in->length; p++)
     crc = crc << 8 ^ table[(in->data[p] ^ crc >> 16) & 255];
-#endif
+#endif /* end of not 0 */
   return crc & ((1<<24)-1);
 }
 
@@ -402,11 +402,11 @@ int pgp_armor(BUFFER *in, int mode)
   if (mode == PGP_ARMOR_REM || mode == PGP_ARMOR_NYMKEY || mode == PGP_ARMOR_NYMSIG)
     buf_appends(out, "Version: N/A\n");
   else
-#elif MIMIC
+#elif MIMIC /* end of CLOAK */
   if (mode == PGP_ARMOR_REM || mode == PGP_ARMOR_NYMKEY || mode == PGP_ARMOR_NYMSIG)
     buf_appends(out, "Version: 2.6.3i\n");
   else
-#endif
+#endif /* MIMIC */
   {
     buf_appends(out, "Version: Mixmaster ");
     buf_appends(out, VERSION);
@@ -447,7 +447,7 @@ int pgp_keygen(int algo, int bits, BUFFER *userid, BUFFER *pass, char *pubring,
     errlog(WARNING, "IDEA disabled: OpenPGP RSA key cannot be used for decryption!\n");
 #endif
     return (pgp_rsakeygen(bits, userid, pass, pubring, secring, remail));
-#endif
+#endif /* USE_RSA */
   case PGP_E_ELG:
     return (pgp_dhkeygen(bits, userid, pass, pubring, secring, remail));
   default:

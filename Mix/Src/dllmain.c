@@ -6,7 +6,7 @@
    details.
 
    Mixmaster DLL startup
-   $Id: dllmain.c,v 1.3 2001/12/11 20:59:26 rabbi Exp $ */
+   $Id: dllmain.c,v 1.3.2.1 2002/10/09 20:29:44 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -32,5 +32,4 @@ int WINAPI DllMain(HINSTANCE hInstance, DWORD fdwReason, PVOID pvReserved)
   }
   return(1);
 }
-#endif
-
+#endif /* WIN32 */

@@ -6,7 +6,7 @@
    details.
 
    Menu-based user interface
-   $Id: menu.c,v 1.1.1.1.2.1 2002/10/04 23:49:16 rabbi Exp $ */
+   $Id: menu.c,v 1.1.1.1.2.2 2002/10/09 20:29:44 weaselp Exp $ */
 
 
 #include "menu.h"
@@ -17,9 +17,9 @@
 #include <fcntl.h>
 #ifdef POSIX
 #include <unistd.h>
-#else
+#else /* end of POSIX */
 #include <io.h>
-#endif
+#endif /* else if not POSIX */
 #include <assert.h>
 
 void menu_folder(char command, char *foldername)
@@ -35,9 +35,9 @@ void read_folder(char command, char *foldername, char *nym)
 {
 #ifdef USE_NCURSES
   char path[PATHMAX] = "stdin", path_with_tilde[PATHMAX], l[LINELEN];
-#else
+#else /* end of USE_NCURSES */
   char path[PATHMAX] = "stdin", l[LINELEN];
-#endif
+#endif /* else if not USE_NCURSES */
   char *h;
   FILE *f;
   BUFFER *folder;
@@ -57,7 +57,7 @@ void read_folder(char command, char *foldername, char *nym)
   long p;
   int display, range, selected, i, redraw, c, q;
 
-#endif
+#endif /* USE_NCURSES */
   int ispgp = 0, eof = 0;
   folder_has_changed = 0;
 
@@ -84,7 +84,7 @@ void read_folder(char command, char *foldername, char *nym)
 #ifdef USE_NCURSES
     if (foldername)
       beep();
-#endif
+#endif /* USE_NCURSES */
     mix_status("Can't read %s.\n", path);
     goto end;
   }
@@ -126,7 +126,7 @@ void read_folder(char command, char *foldername, char *nym)
 	default:
 	  ;
 	}
-#endif
+#endif /* USE_PGP */
       buf_cat(folder, mail);
       buf_clear(mail);
       ispgp = 0;
@@ -164,7 +164,7 @@ void read_folder(char command, char *foldername, char *nym)
 #ifdef USE_NCURSES
     clear();
     beep();
-#endif
+#endif /* USE_NCURSES */
     mix_status("%s is empty.\n", path);
     goto end;
   }
@@ -172,7 +172,7 @@ void read_folder(char command, char *foldername, char *nym)
 #ifdef USE_NCURSES
     clear();
     beep();
-#endif
+#endif /* USE_NCURSES */
     mix_status("%s is not a mail folder.\n", path);
     goto end;
   }
@@ -185,7 +185,7 @@ void read_folder(char command, char *foldername, char *nym)
     mix_status("Folder contains several messages.");
     goto end;
   }
-#endif
+#endif /* not USE_NCURSES */
 
   if (num < 2) {
     folder->ptr = 0;
@@ -198,7 +198,7 @@ void read_folder(char command, char *foldername, char *nym)
       read_message(folder, nym);
 
     clear();
-#endif
+#endif /* USE_NCURSES */
     goto end;
   }
 #ifdef USE_NCURSES
@@ -412,7 +412,7 @@ void read_folder(char command, char *foldername, char *nym)
       beep();
     }
   }
-#endif
+#endif /* USE_NCURSES */
 
 end:
 #ifdef USE_NCURSES
@@ -438,7 +438,7 @@ end:
       mix_status("%s was not saved.", path);
     }
   }
-#endif
+#endif /* USE_NCURSES */
   buf_free(folder);
   buf_free(line);
   buf_free(field);
@@ -968,4 +968,4 @@ void menu_chain(char *chainstr, int chaintype, int post)
     strncpy(chainstr, newchain, CHAINMAX);
 }
 
-#endif
+#endif /* USE_NCURSES */

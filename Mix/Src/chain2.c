@@ -6,7 +6,7 @@
    details.
 
    Encrypt message for Mixmaster chain
-   $Id: chain2.c,v 1.2.2.1 2002/10/04 23:49:16 rabbi Exp $ */
+   $Id: chain2.c,v 1.2.2.2 2002/10/09 20:29:44 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -434,7 +434,7 @@ end:
   return (err);
 }
 
-#else
+#else /* end of USE_RSA */
 
 int mix2_rlist(REMAILER remailer[])
 {
@@ -446,4 +446,4 @@ int mix2_encrypt(int type, BUFFER *message, char *chainstr, int numcopies,
 {
   return (-1);
 }
-#endif
+#endif /* else not USE_RSA */

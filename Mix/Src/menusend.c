@@ -6,7 +6,7 @@
    details.
 
    Menu-based user interface -- send message
-   $Id: menusend.c,v 1.2.2.1 2002/10/04 23:49:16 rabbi Exp $ */
+   $Id: menusend.c,v 1.2.2.2 2002/10/09 20:29:44 weaselp Exp $ */
 
 
 #include "menu.h"
@@ -16,9 +16,9 @@
 #include <stdlib.h>
 #ifdef POSIX
 #include <unistd.h>
-#else
+#else /* end of POSIX */
 #include <io.h>
-#endif
+#endif /* else if not POSIX */
 
 /* Command line option +nn to position the cursor? */
 #define cursorpos (strfind(editor, "emacs") || streq(editor, "vi") || \
@@ -37,13 +37,13 @@ void send_message(int type, char *nym, BUFFER *in)
 #ifdef USE_PGP
   int sign = 0, encrypt = 0, key = 0;
 
-#endif
+#endif /* USE_PGP */
 #ifdef USE_NCURSES
   char reliability[9];
   int c;
   char line[LINELEN];
 
-#endif
+#endif /* USE_NCURSES */
   msg = buf_new();
   tmp = buf_new();
   txt = buf_new();
@@ -69,7 +69,7 @@ void send_message(int type, char *nym, BUFFER *in)
     mix_status("Invalid option to -f");
     mix_exit();
     exit(1);
-#else
+#else /* end of not USE_NCURSES */
     clear();
     echo();
     if (in != NULL)
@@ -105,7 +105,7 @@ void send_message(int type, char *nym, BUFFER *in)
       buf_move(txt, tmp);
     }
     noecho();
-#endif
+#endif /* else if USE_NCURSES */
   } else {
     strcpy(subject, "Re: your mail");
     while (buf_getheader(txt, field, content) == 0) {
@@ -159,7 +159,7 @@ void send_message(int type, char *nym, BUFFER *in)
 #ifdef USE_NCURSES
       beep();
       mix_status("No recipient address found.");
-#endif
+#endif /* USE_NCURSES */
       goto quit;
     }
     goto edit;
@@ -208,7 +208,7 @@ redraw:
       if (key == 0)
         printw("attach pgp k)ey: no");
     }
-#endif
+#endif /* USE_PGP */
 
     if (txt->length == 0)
       mvprintw(LINES - 3, 18,
@@ -287,7 +287,7 @@ redraw:
 	}
 	break;
       case 'e':
-#endif
+#endif /* USE_NCURSES */
 	{
 	  char s[PATHMAX];
 	  char *editor;
@@ -306,7 +306,7 @@ redraw:
 	  if (f == NULL) {
 #ifdef USE_NCURSES
 	    beep();
-#endif
+#endif /* USE_NCURSES */
 	  } else {
 	    
 	    if (!cursorpos && txt->length == 0 && (type == 'm' || type == 'p'))
@@ -340,11 +340,11 @@ redraw:
 	  clear();
 	  refresh();
 	  endwin();
-#endif
+#endif /* USE_NCURSES */
 	  system(s);
 #ifdef USE_NCURSES
 	  refresh();
-#endif
+#endif /* USE_NCURSES */
 
 	  f = fopen(path, "r");
 	  if (f == NULL) {
@@ -352,9 +352,9 @@ redraw:
 	    clear();
 	    beep();
 	    continue;
-#else
+#else /* end of USE_NCURSES */
 	    goto quit;
-#endif
+#endif /* else if not USE_NCURSES */
 	  }
 	  buf_reset(txt);
 	  hdr = 0;
@@ -393,7 +393,7 @@ redraw:
 	    if (!strleft(line, "y"))
 	      goto quit;
 	  }
-#else
+#else /* end of not USE_NCURSES */
 	  goto redraw;
 	}
 	break;
@@ -405,7 +405,7 @@ redraw:
 	  goto redraw;
 	} else {
 	  mix_status("Creating message...");
-#endif
+#endif /* else if USE_NCURSES */
 	  buf_reset(msg);
 
 	  if (type == 'p' || type == 'f')
@@ -445,12 +445,12 @@ redraw:
 #ifdef USE_NCURSES
 		beep();
 		goto redraw;
-#endif
+#endif /* USE_NCURSES */
 	      }
 	    }
 	    buf_free(p);
 	  }
-#endif
+#endif /* USE_PGP */
 
 	  if (strleft(thisnym, NONANON)) {
 	    FILE *f = NULL;
@@ -472,18 +472,18 @@ redraw:
 	      if (sendmail(msg, tmp->data, NULL) != 0) {
 #ifdef USE_NCURSES
 		clear();
-#endif
+#endif /* USE_NCURSES */
 		mix_status("Error sending message.");
 #ifdef USE_NCURSES
 		goto redraw;
-#else
+#else /* end of USE_NCURSES */
 		goto quit;
-#endif
+#endif /* else if not USE_NCURSES */
 	      }
 	    }
 #ifdef USE_NCURSES
 	    clear();
-#endif
+#endif /* USE_NCURSES */
 	    mix_status("Message sent non-anonymously.");
 	    goto quit;
 	  } else {
@@ -493,14 +493,14 @@ redraw:
 			      MSG_POST : MSG_MAIL) == 0)
 		type = 'm';
 	    }
-#endif
+#endif /* USE_PGP */
 	    err = mix_encrypt((type == 'p' || type == 'f') ?
 			      MSG_POST : MSG_MAIL,
 			      msg, chain, numcopies, chainlist);
 	    if (err == 0) {
 #ifdef USE_NCURSES
 	      clear();
-#endif
+#endif /* USE_NCURSES */
 	      for (n = 0; buf_getline(chainlist, tmp) == 0; n++) ;
 	      if (n > 1)
 		mix_status("Done. (%d packets)", n);
@@ -510,7 +510,7 @@ redraw:
 	    } else {
 #ifdef USE_NCURSES
 	      beep();
-#endif
+#endif /* USE_NCURSES */
 	      if (chainlist->length)
 		mix_status("%s", chainlist->data);
 	      else
@@ -561,13 +561,13 @@ redraw:
 	  buf_free(uid);
 	}
 	break;
-#endif
+#endif /* USE_PGP */
       default:
 	beep();
       }
     }
   }
-#endif
+#endif /* USE_NCURSES */
 quit:
   buf_free(cc);
   buf_free(cite);

@@ -6,7 +6,7 @@
    details.
 
    OpenPGP key database
-   $Id: pgpdb.c,v 1.6.2.2 2002/10/04 23:49:16 rabbi Exp $ */
+   $Id: pgpdb.c,v 1.6.2.3 2002/10/09 20:29:44 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -79,7 +79,7 @@ KEYRING *pgpdb_open(char *keyring, BUFFER *encryptkey, int writer)
     pgpdb_close(keydb);
     return (NULL);
   }
-#endif
+#endif /* if 0 */
   if (encryptkey && encryptkey->length && pgp_isconventional(keydb->db) &&
       pgp_decrypt(keydb->db, encryptkey, NULL, NULL, NULL) < 0) {
     user_delpass();
@@ -195,7 +195,7 @@ int pgpdb_getnext(KEYRING *keydb, BUFFER *key, BUFFER *keyid, BUFFER *userid)
       case PGP_USERID:
 #ifdef DEBUG
 	printf("%s\n", p->data);
-#endif
+#endif /* DEBUG */
 	if (userid && userid->length > 0 && bufifind(p, userid->data))
 	  found = 1;
 	break;
@@ -343,8 +343,8 @@ int pgp_keymgt(int force)
   if (force == 0 && (pgpdb_getkey(PK_ENCRYPT, PGP_ES_RSA, NULL, NULL, NULL, NULL,
 				  NULL, NULL, PGPKEY, NULL) < 0))
     goto end;
-#endif
-#endif
+#endif /* USE_IDEA */
+#endif /* USE_RSA */
   if (force == 2 || (pgpdb_getkey(PK_DECRYPT, PGP_E_ELG, NULL, NULL, NULL, NULL,
 				  NULL, NULL, NULL, pass) < 0))
     pgp_keygen(PGP_E_ELG, 0, userid, pass, PGPKEY, PGPREMSECRING, 0);

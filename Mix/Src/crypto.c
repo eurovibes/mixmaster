@@ -6,7 +6,7 @@
    details.
 
    Interface to cryptographic library
-   $Id: crypto.c,v 1.5 2002/08/03 17:08:01 weaselp Exp $ */
+   $Id: crypto.c,v 1.5.2.1 2002/10/09 20:29:44 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -480,4 +480,4 @@ int buf_ideacrypt(BUFFER *buf, BUFFER *key, BUFFER *iv, int enc)
   return (0);
 }
 #endif /* USE_IDEA */
-#endif
+#endif /* USE_OPENSSL */

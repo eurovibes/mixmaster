@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.20.2.3 2002/10/04 23:49:16 rabbi Exp $ */
+   $Id: rem.c,v 1.20.2.4 2002/10/09 20:29:44 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -18,12 +18,12 @@
 #include <sys/stat.h>
 #ifdef POSIX
 #include <unistd.h>
-#else
+#else /* end of POSIX */
 #include <io.h>
-#endif
+#endif /* else if not POSIX */
 #ifndef _MSC
 #include <dirent.h>
-#endif
+#endif /* not _MSC */
 #include <assert.h>
 
 int blockrequest(BUFFER *message);
@@ -271,11 +271,11 @@ int pool_packetfile(char *fname, BUFFER *mid, int packetnum)
   sprintf(fname, "%s%cp%02x%02x%02x%01x.%02x", POOLDIR, DIRSEP,
 	  mid->data[0], mid->data[1], mid->data[2], mid->data[3] & 15,
 	  packetnum);
-#else
+#else /* end of SHORTNAMES */
   sprintf(fname, "%s%cp%02x%02x%02x%02x%02x%02x%01x", POOLDIR, DIRSEP,
 	  packetnum, mid->data[0], mid->data[1], mid->data[2], mid->data[3],
 	  mid->data[4], mid->data[5] & 15);
-#endif
+#endif /* else if not SHORTNAMES */
   return (0);
 }
 
@@ -515,9 +515,9 @@ int idexp(void)
   }
 #ifdef _MSC
     chsize(fileno(f),fpo);
-#else
+#else /* end of _MSC */
     ftruncate(fileno(f),fpo);
-#endif
+#endif /* else if not _MSC */
   fclose(f);
   unlockfile(i);
   buf_free(b);

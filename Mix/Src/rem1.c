@@ -6,7 +6,7 @@
    details.
 
    Process Cypherpunk remailer messages
-   $Id: rem1.c,v 1.6 2002/07/24 07:48:50 rabbi Exp $ */
+   $Id: rem1.c,v 1.6.2.1 2002/10/09 20:29:44 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -72,7 +72,7 @@ void t1_esub(BUFFER *esub, BUFFER *subject)
   buf_free(iv);
   buf_free(out);
 }
-#endif
+#endif /* USE_IDEA */
 
 #define N(X) (isdigit(X) ? (X)-'0' : 0)
 
@@ -222,7 +222,7 @@ header:
 #if USE_NSUB
     else if (bufieq(field, "subject"))
       buf_set(subject, content);
-#endif
+#endif /* USE_NSUB */
   }
 
   if (cutmarks->length > 0) {
@@ -271,7 +271,7 @@ header:
       hdr = 0;
       goto header;
     }
-#endif
+#endif /* USE_PGP */
     if (testto->length == 0)
       errlog(ERRORMSG, "Can't decrypt PGP message.\n");
     buf_appends(test, "Can't decrypt PGP message.\n");
@@ -281,7 +281,7 @@ header:
 #if 0
   if (err == -1)
     goto end;
-#endif
+#endif /* 0 */
 
   if (isline(line, HDRMARK) && (hdr == 0 || hdr == 1)) {
     buf_getline(in, NULL);
@@ -320,7 +320,7 @@ header:
 #ifdef USE_IDEA
     if (esub->length > 0)
       t1_esub(esub, subject);
-#endif
+#endif /* USE_IDEA */
     buf_appendf(out, "Subject: %b\n", subject);
   }
   buf_cat(out, header);
@@ -328,7 +328,7 @@ header:
 
 #if 0
   inflate -= in->length;
-#endif
+#endif /* 0 */
   if (inflate > 0) {
     buf_setrnd(temp, inflate * 3 / 4);
     encode(temp, 64);
@@ -373,9 +373,9 @@ header:
     buf_appends(out, EKMARK);
     buf_nl(out);
     buf_cat(out, temp);
-#else
+#else /* end of USE_PGP */
     err = -1;
-#endif
+#endif /* Else if not USE_PGP */
   }
 
   if (type == -1) {

@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.11.2.2 2002/10/05 00:39:25 rabbi Exp $ */
+   $Id: mix.c,v 1.11.2.3 2002/10/09 20:29:44 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -22,13 +22,13 @@
 #include <unistd.h>
 #include <pwd.h>
 #include <sys/utsname.h>
-#else
+#else /* end of POSIX */
 #include <io.h>
 #include <direct.h>
-#endif
+#endif /* else if not POSIX */
 #ifdef WIN32
 #include <windows.h>
-#endif
+#endif /* WIN32 */
 #include <assert.h>
 #include "menu.h"
 
@@ -83,9 +83,9 @@ char POOLDIR[PATHMAX];
 /* programs */
 #ifdef WIN32
 char SENDMAIL[LINELEN] = "outfile";
-#else
+#else /* end of WIN32 */
 char SENDMAIL[LINELEN] = "/usr/lib/sendmail -t";
-#endif
+#endif /* else if not WIN32 */
 char SENDANONMAIL[LINELEN];
 char NEWS[LINELEN];
 char TYPE1[LINELEN];
@@ -109,7 +109,7 @@ int POP3DEL = 0;
 int POP3SIZELIMIT = 0;
 long POP3TIME = 60 * 60;
 
-#endif
+#endif /* USE_SOCK */
 
 char SHORTNAME[LINELEN];
 
@@ -154,9 +154,9 @@ char PGPPUBRING[PATHMAX];
 char PGPSECRING[PATHMAX];
 #ifdef COMPILEDPASS
 char PASSPHRASE[LINELEN] = COMPILEDPASS;
-#else
+#else /* end of COMPILEDPASS */
 char PASSPHRASE[LINELEN] = "";
-#endif
+#endif /* else if not COMPILEDPASS */
 char MAILBOX[PATHMAX] = "mbox";
 char MAILABUSE[PATHMAX];
 char MAILBLOCK[PATHMAX];
@@ -164,16 +164,16 @@ char MAILBLOCK[PATHMAX];
 char MAILUSAGE[PATHMAX] = "nul:";
 char MAILANON[PATHMAX] = "nul:";
 char MAILERROR[PATHMAX] = "nul:";
-#else
+#else /* end of WIN32 */
 char MAILUSAGE[PATHMAX] = "/dev/null";
 char MAILANON[PATHMAX] = "/dev/null";
 char MAILERROR[PATHMAX] = "/dev/null";
-#endif
+#endif /* else if not WIN32 */
 char MAILBOUNCE[PATHMAX];
 
 #if defined(S_IFDIR) && !defined(S_ISDIR)
 #define S_ISDIR(m) (((m) & S_IFMT) == S_IFDIR)
-#endif
+#endif /* defined(S_IFDIR) && !defined(S_ISDIR) */
 
 static int mixdir(char *d, int create)
 {
@@ -189,9 +189,9 @@ static int mixdir(char *d, int create)
     if (create) {
 #ifndef POSIX
       err = mkdir(MIXDIR);
-#else
+#else /* end of not POSIX */
       err = mkdir(MIXDIR, S_IRWXU);
-#endif
+#endif /* else if POSIX */
       if (err == 0)
 	errlog(NOTICE, "Creating directory %s.\n", MIXDIR);
     } else
@@ -210,14 +210,14 @@ void whoami(char *addr, char *defaultname)
 #if defined(HAVE_GETDOMAINNAME) || (defined(HAVE_GETHOSTNAME) && ! defined(HAVE_UNAME))
   char line[LINELEN];
 
-#endif
+#endif /* defined(HAVE_GETDOMAINNAME) || [...] */
 #ifdef HAVE_UNAME
   struct utsname uts;
 
-#endif
+#endif /* HAVE_UNAME */
 #ifdef POSIX
   p = getlogin();
-#endif
+#endif /* POSIX */
   if (p == NULL)
     strcpy(addr, defaultname);
   else
@@ -227,10 +227,10 @@ void whoami(char *addr, char *defaultname)
 #ifdef HAVE_UNAME
   if (uname(&uts) != -1)
     strcatn(addr, uts.nodename, LINELEN);
-#elif defined(HAVE_GETHOSTNAME)
+#elif defined(HAVE_GETHOSTNAME) /* end of HAVE_UNAME */
   if (gethostname(line, LINELEN) == 0)
     strcatn(addr, line, LINELEN);
-#endif
+#endif /* defined(HAVE_GETHOSTNAME) */
   if (addr[strlen(addr) - 1] == '@')
     strcatn(addr, SHORTNAME, LINELEN);
 
@@ -240,7 +240,7 @@ void whoami(char *addr, char *defaultname)
       strcatn(addr, ".", LINELEN);
       strcatn(addr, line, LINELEN);
     }
-#endif
+#endif /* HAVE_GETDOMAINNAME */
   }
 }
 
@@ -349,7 +349,7 @@ int mix_configline(char *line)
           read_conf(SMTPUSERNAME) || read_conf(SMTPPASSWORD) ||
 #ifdef USE_SOCK
 	  read_conf(HELONAME) || read_conf(ENVFROM) ||
-#endif
+#endif /* USE_SOCK */
 	  read_conf(SENDMAIL) || read_conf(SENDANONMAIL) ||
 	  read_conf_i(REMAIL) || read_conf_i(MIX) ||
 	  read_conf_i(PGP) || read_conf_i(UNENCRYPTED) ||
@@ -373,7 +373,7 @@ int mix_configline(char *line)
 #ifdef USE_SOCK
 	  read_conf_i(POP3DEL) || read_conf_i(POP3SIZELIMIT) ||
 	  read_conf_t(POP3TIME) ||
-#endif
+#endif /* USE_SOCK */
 	  read_conf(MAILBOX) || read_conf(MAILABUSE) ||
 	  read_conf(MAILBLOCK) || read_conf(MAILUSAGE) ||
 	  read_conf(MAILANON) || read_conf(MAILERROR) ||
@@ -408,20 +408,20 @@ int mix_config(void)
   int err = -1;
 #ifdef POSIX
   struct passwd *pw;
-#endif
+#endif /* POSIX */
   struct stat buf;
 #ifdef HAVE_UNAME
   struct utsname uts;
-#endif
+#endif /* HAVE_UNAME */
 #ifdef WIN32
   HKEY regsw, reg, regpgp;
   DWORD type, len;
   int rkey = 0;
-#endif
+#endif /* WIN32 */
 
 #ifdef POSIX
   pw = getpwuid(getuid());
-#endif
+#endif /* POSIX */
 
   if (MIXDIR[0])		/* if set by main() */
     err = mixdir(MIXDIR, 1);
@@ -435,7 +435,7 @@ int mix_config(void)
       err = mixdir(line, 1);
     RegCloseKey(reg);
   }
-#endif
+#endif /* WIN32 */
 
   if (err == -1 && (d = getenv("MIXPATH")) != NULL)
     err = mixdir(d, 1);
@@ -443,7 +443,7 @@ int mix_config(void)
 #ifdef SPOOL
   if (err == -1 && strlen(SPOOL) > 0)
     err = mixdir(SPOOL, 0);
-#endif
+#endif /* SPOOL */
 
 #ifdef POSIX
   if (err == -1 && pw != NULL) {
@@ -454,7 +454,7 @@ int mix_config(void)
     strcatn(line, HOMEMIXDIR, PATHMAX);
     err = mixdir(line, 1);
   }
-#endif
+#endif /* POSIX */
 
   if (err == -1) {
     getcwd(MIXDIR, PATHMAX);
@@ -469,7 +469,7 @@ int mix_config(void)
 	mix_configline(line);
     fclose(f);
   }
-#endif
+#endif /* GLOBALMIXCONF */
   f = mix_openfile(MIXCONF, "r");
   if (f != NULL) {
     while (fgets(line, LINELEN, f) != NULL)
@@ -502,10 +502,10 @@ int mix_config(void)
 #ifdef HAVE_UNAME
   if (SHORTNAME[0] == '\0' && uname(&uts) != -1)
     strncpy(SHORTNAME, uts.nodename, LINELEN);
-#elif defined(HAVE_GETHOSTNAME)
+#elif defined(HAVE_GETHOSTNAME) /* end of HAVE_UNAME */
   if (SHORTNAME[0] == '\0')
     gethostname(SHORTNAME, LINELEN);
-#endif
+#endif /* defined(HAVE_GETHOSTNAME) */
   if (SHORTNAME[0] == '\0')
     strcpy(SHORTNAME, "unknown");
 
@@ -515,7 +515,7 @@ int mix_config(void)
 #ifdef HAVE_GECOS
   if (NAME[0] == '\0' && pw != NULL)
     strcatn(NAME, pw->pw_gecos, sizeof(NAME));
-#endif
+#endif /* HAVE_GECOS */
 
   if (REMAILERADDR[0] == '\0')
     strncpy(REMAILERADDR, ADDRESS, LINELEN);
@@ -541,10 +541,10 @@ int mix_config(void)
 #ifndef USE_PGP
   if (TYPE1[0] == '\0')
     PGP = 0;
-#endif
+#endif /* not USE_PGP */
 #ifndef USE_RSA
   MIX = 0;
-#endif
+#endif /* not USE_RSA */
 
 #ifdef WIN32
   if (RegOpenKeyEx(regsw, "PGP", 0, KEY_ALL_ACCESS, &regpgp) == 0) 
@@ -564,7 +564,7 @@ int mix_config(void)
   if (rkey)
     RegCloseKey(regpgp);
   RegCloseKey(regsw);
-#endif
+#endif /* WIN32 */
 
   if (PGPPUBRING[0] == '\0') {
     char *d;
@@ -608,7 +608,7 @@ int mix_config(void)
       fprintf(f, "COMPLAINTS	%s\n", COMPLAINTS);
       fclose(f);
     }
-#endif
+#endif /* not GLOBALMIXCONF */
     REMAIL = 0;
   }
 
@@ -627,7 +627,7 @@ int mix_init(char *mixdir)
     mix_config();
 #if defined(USE_SOCK) && defined(WIN32)
     sock_init();
-#endif
+#endif /* defined(USE_SOCK) && defined(WIN32) */
     /* atexit (mix_exit); */
     initialized = 1;
   }
@@ -644,7 +644,7 @@ void mix_exit(void)
   rnd_final();
 #if defined(USE_SOCK) && defined(WIN32)
   sock_exit();
-#endif
+#endif /* defined(USE_SOCK) && defined(WIN32) */
   initialized=0;
 }
 
@@ -666,7 +666,7 @@ int mix_regular(int force)
 #ifdef USE_SOCK
     if (now - tpop3 >= POP3TIME)
       force |= FORCE_POP3;
-#endif
+#endif /* USE_SOCK */
     if (now - tdaily >= SECONDSPERDAY)
       force |= FORCE_DAILY;
     if (force & FORCE_POOL)
@@ -696,7 +696,7 @@ int mix_regular(int force)
 #ifdef USE_SOCK
   if (force & FORCE_POP3)
     pop3get();
-#endif
+#endif /* USE_SOCK */
   if (force & FORCE_POOL)
     ret = pool_send();
 
@@ -755,7 +755,7 @@ int mix_daemon(void)
 #ifdef USE_SOCK
   if (POP3TIME < t)
     t = POP3TIME;
-#endif
+#endif /* USE_SOCK */
 
   for(;;) {
     mix_regular(0);
@@ -767,11 +767,11 @@ int mix_daemon(void)
         return 0;
       }
     } else
-#endif
+#endif /* WIN32SERVICE */
       Sleep(t * 1000);
-#else
+#else /* end of WIN32 */
     sleep(t);
-#endif
+#endif /* else if not WIN32 */
   }
 }
 
@@ -834,9 +834,9 @@ void mix_status(char *fmt,...)
     va_start(args, fmt);
 #ifdef _MSC
     _vsnprintf(statusline, sizeof(statusline) - 1, fmt, args);
-#else
+#else /* end of _MSC */
     vsnprintf(statusline, sizeof(statusline) - 1, fmt, args);
-#endif
+#endif /* else if not _MSC */
     va_end(args);
   }
 #ifdef USE_NCURSES
@@ -845,7 +845,7 @@ void mix_status(char *fmt,...)
     printw("%s", statusline);
     refresh();
   } else
-#endif
+#endif /* USE_NCURSES */
   {
     fprintf(stderr, "%s", statusline);
   }

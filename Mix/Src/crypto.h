@@ -6,7 +6,7 @@
    details.
 
    Interface to cryptographic library
-   $Id: crypto.h,v 1.2 2002/07/22 17:54:48 rabbi Exp $ */
+   $Id: crypto.h,v 1.2.2.1 2002/10/09 20:29:44 weaselp Exp $ */
 
 
 #ifndef _CRYPTO_H
@@ -17,7 +17,7 @@
 #include <openssl/opensslv.h>
 #if (OPENSSL_VERSION_NUMBER < 0x0903100)
 #error "This version of OpenSSL is not supported. Please get a more current verion from http://www.openssl.org"
-#endif
+#endif /* version check */
 #include <openssl/des.h>
 #include <openssl/blowfish.h>
 #include <openssl/md5.h>
@@ -28,25 +28,25 @@
 #include <openssl/dsa.h>
 #ifdef USE_RSA
 #include <openssl/rsa.h>
-#endif
+#endif /* USE_RSA */
 #ifdef USE_IDEA
 #include <openssl/idea.h>
-#endif
+#endif /* USE_IDEA */
 #ifdef USE_AES
 #include <openssl/aes.h>
-#endif
+#endif /* USE_AES */
 #include <openssl/cast.h>
 #include <openssl/rand.h>
 
 #ifdef USE_RSA
 typedef RSA PUBKEY;
 typedef RSA SECKEY;
-#endif
+#endif /* USE_RSA */
 
-#else
+#else /* end of USE_OPENSSL */
 /* #error "No crypto library." */
 typedef void PUBKEY;
 typedef void SECKEY;
-#endif
+#endif /* else not USE_OPENSSL */
 
-#endif
+#endif /* ifndef _CRYPTO_H */

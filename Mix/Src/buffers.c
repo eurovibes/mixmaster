@@ -6,7 +6,7 @@
    details.
 
    Dynamically allocated buffers
-   $Id: buffers.c,v 1.3.2.1 2002/10/04 23:49:16 rabbi Exp $ */
+   $Id: buffers.c,v 1.3.2.2 2002/10/09 20:29:43 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -17,11 +17,11 @@
 #include <stdarg.h>
 #ifdef WIN32
 #include <io.h>
-#endif
+#endif /* WIN32 */
 #include <assert.h>
 #ifdef POSIX
 #include <unistd.h>
-#endif
+#endif /* POSIX */
 
 static void fail(void)
 {
@@ -65,9 +65,9 @@ static void sanity_check(BUFFER *b)
   assert(b->length >= 0 && b->length < b->size);
   assert(b->ptr >= 0 && b->ptr <= b->length);
 }
-#else
+#else /* not DEBUG */
 #define sanity_check(arg)
-#endif
+#endif /* else not DEBUG */
 
 int buf_reset(BUFFER *buffer)
 {
@@ -326,13 +326,13 @@ int buf_read(BUFFER *outmsg, FILE *infile)
       errlog(ERRORMSG, "Message file too large. Giving up.\n");
       return (1);
     }
-#endif
+#endif /* BUFFER_MAX */
   }
 
 #ifdef WIN32
   if (isatty(fileno(infile)) && isatty(fileno(stdout)))
     printf("\n");
-#endif
+#endif /* WIN32 */
 
   return (err);
 }
@@ -362,7 +362,7 @@ int buf_write_sync(BUFFER *buffer, FILE *out)
     /* dir entry not synced */
     if (fsync(fileno(out)) != 0)
       ret = -1;
-#endif
+#endif /* POSIX */
 
     if (fclose(out) != 0)
       ret = -1;
@@ -544,10 +544,10 @@ int buf_getheader(BUFFER *buffer, BUFFER *field, BUFFER *content)
 #if 1
     buf_nl(content);
     buf_cat(content, line);
-#else
+#else /* end of 1 */
     buf_appendc(content, ' ');
     buf_appends(content, line->data + 1);
-#endif
+#endif /* else if not 1 */
   }
   buffer->ptr = p;
 end:

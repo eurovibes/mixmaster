@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.10.2.3 2002/10/07 21:12:52 rabbi Exp $ */
+   $Id: main.c,v 1.10.2.4 2002/10/09 20:29:44 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -16,9 +16,9 @@
 #include <stdlib.h>
 #ifdef POSIX
 #include <unistd.h>
-#else
+#else /* end of POSIX */
 #include <io.h>
-#endif
+#endif /* else if not POSIX */
 
 static char *largopt(char *p, char *opt, char *name, int *error);
 static void noarg(char *name, char p);
@@ -34,7 +34,7 @@ static void noarg(char *name, char p);
 int mix_main(int argc, char *argv[])
 #else
 int main(int argc, char *argv[])
-#endif
+#endif /* WIN32SERVICE */
 {
   int error = 0, deflt = 1, help = 0, readmail = 0, send = -1, sendpool = 0,
   header = 1, maint = 0, keygen = 0, verbose = 2, sign = 0, encrypt = 0;
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 #ifdef USE_SOCK
   int pop3 = 0;
 
-#endif
+#endif /* USE_SOCK */
   char *filename = NULL;
   int i;
   int ret = 0;
@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
       menu_folder(0, NULL);
     goto end;
   }
-#endif
+#endif /* USE_NCURSES */
   if (argc > 1 && strleft(argv[1], "-f")) {
     menu_folder(strlen(argv[1]) > 2 ? argv[1][2] : 0,
 		argc < 3 ? NULL : argv[2]);
@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
 #ifdef USE_SOCK
 	else if (streq(p, "pop-mail"))
 	  pop3 = 1, deflt = 0;
-#endif
+#endif /* USE_SOCK */
 	else if (streq(p, "daemon"))
 	  daemon = 1, deflt = 0;
 	else if (streq(p, "post"))
@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
 	} else if ((q = largopt(p, "nym", argv[0], &error)) != NULL) {
 	  buf_appendf(msg, "Nym: %s\n", q);
 	}
-#endif
+#endif /* USE_PGP */
 	else if ((q = largopt(p, "copies", argv[0], &error)) != NULL) {
 	  sscanf(q, "%d", &numcopies);
         } else if ((q = largopt(p, "config", argv[0], &error)) != NULL) {
@@ -181,7 +181,7 @@ int main(int argc, char *argv[])
 	  case 'P':
 	    pop3 = 1, deflt = 0;
 	    break;
-#endif
+#endif /* USE_SOCK */
 	  case 'D':
 	    daemon = 1, deflt = 0;
 	    break;
@@ -247,7 +247,7 @@ int main(int argc, char *argv[])
 	      error = 1;
 	    }
 	    break;
-#endif
+#endif /* USE_PGP */
 	  case 'c':
 	    if (i < argc - 1)
 	      sscanf(argv[++i], "%d", &numcopies);
@@ -339,7 +339,7 @@ int main(int argc, char *argv[])
 	   "-n, --nym=yournym                 use pseudonym to send the message\n\
     --encrypt                     encrypt the message using the PGP format\n\
     --sign                        sign the message using the PGP format\n"
-#endif
+#endif /* USE_PGP */
 	   "-l, --chain=mix1,mix2,mix3,...    specify a remailer chain\n\
 -c, --copies=num                  send num copies to increase reliability\n\
 -d, --dummy                       generate a dummy message\n\
@@ -348,12 +348,12 @@ int main(int argc, char *argv[])
 	   "    --nym-config=yournym          generate a new pseudonym\n\
     --latency=hours               reply chain latency\n\
     --reply-chain=rem1,rem2,...   reply chain for the pseudonym\n"
-#endif
+#endif /* USE_PGP */
 	   "-v, --verbose                     output informational messages\n\
 -f [file]                         read a mail folder\n"
 #ifndef USE_NCURSES
 	   "\n-fr, -ff, -fg [file]              send reply/followup/group reply to a message\n"
-#endif
+#endif /* USE_NCURSES */
 	   "\nThe input file is expected to contain mail headers if no address is\n\
 specified in the command line.\n\
 \n\
@@ -365,7 +365,7 @@ Remailer:\n\
 -D, --daemon                      remailer as background process\n"
 #ifdef USE_SOCK
 	   "-S, --send                        force sending messages from the pool\n"
-#endif
+#endif /* USE_SOCK */
 	   "-P, --pop-mail                    force getting messages from POP3 servers\n\
 -G, --generate-key                generate a new remailer key\n\
 -K, --update-keys                 generate remailer keys if necessary\n\
@@ -377,7 +377,7 @@ WinNT service:\n\
     --install-svc                 install the service\n\
     --remove-svc                  remove the service\n\
     --run-svc                     run as a service\n"
-#endif
+#endif /* WIN32SERVICE */
     );
 
     ret = 0;
@@ -396,7 +396,7 @@ WinNT service:\n\
     printf("When done, press ^D.\n\n");
 #else
     printf("When done, press ^Z.\n\n");
-#endif
+#endif /* else not UNIX */
   }
   if (header == 0)
     buf_nl(msg);
@@ -477,7 +477,7 @@ WinNT service:\n\
 	  else
 	    fprintf(stderr, "Nym error, sending message anonymously.\n");
 	}
-#endif
+#endif /* USE_PGP */
 	if (numdest == 0) {
 	  fprintf(stderr, "No destination address given!\n");
 	  ret = 2;
@@ -553,7 +553,7 @@ WinNT service:\n\
     user_delpass();
     buf_free(chains);
   }
-#endif
+#endif /* USE_PGP */
 
   if (keygen)
     keymgt(keygen);
@@ -562,7 +562,7 @@ WinNT service:\n\
 #ifdef USE_SOCK
   if (pop3)
     pop3get();
-#endif
+#endif /* USE_SOCK */
   if (maint)
     mix_regular(0);
 
@@ -601,7 +601,7 @@ end:
     freopen ("/dev/null", "r", stdin);
     freopen ("/dev/null", "w", stdout);
     freopen ("/dev/null", "w", stderr);
-#endif
+#endif /* UNIX */
     mix_daemon();
   }
   mix_exit();

@@ -6,7 +6,7 @@
    details.
 
    Create OpenPGP packets
-   $Id: pgpcreat.c,v 1.5.2.1 2002/10/04 23:49:16 rabbi Exp $ */
+   $Id: pgpcreat.c,v 1.5.2.2 2002/10/09 20:29:44 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -33,9 +33,9 @@ int pgp_packet(BUFFER *in, int type)
 #if 0
       buf_appendc(out, ((in->length-192) >> 8) + 192);
       buf_appendc(out,  (in->length-192) & 0xFF);
-#else
+#else /* end of 0 */
       buf_appendi(out, in->length - 0xC0 + 0xC000);
-#endif
+#endif /* else if not 0 */
     } else {
       buf_appendc(out, in->length);
     }
@@ -45,18 +45,18 @@ int pgp_packet(BUFFER *in, int type)
       type != PGP_SIG && type != PGP_PUBSUBKEY && type != PGP_SECSUBKEY
 #ifdef MIMIC
       && type != PGP_ENCRYPTED
-#endif
+#endif /* MIMIC */
     ) {
     buf_setc(out, ctb);
     buf_appendc(out, in->length);
   }
 #ifndef MIMIC
   else if (in->length < 65536)
-#else
+#else /* end of not MIMIC
   else if ((type == PGP_PUBKEY || type == PGP_SECKEY || type == PGP_SIG
 	   || type == PGP_SESKEY || type == PGP_PUBSUBKEY ||
 	   type == PGP_SECSUBKEY) && in->length < 65536)
-#endif
+#endif /* else if MIMIC */
   {
     buf_appendc(out, ctb | 1);
     buf_appendi(out, in->length);
@@ -104,9 +104,9 @@ int pgp_packet3(BUFFER *in, int type)
   buf_move(in, out);
   buf_free(out);
   return (0);
-#else
+#else /* end of MIMIC */
   return pgp_packet(in, type);
-#endif
+#endif /* else if not MIMIC */
 }
 
 #ifdef USE_IDEA
@@ -154,7 +154,7 @@ static int pgp_ideaencrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
   }
   return (0);
 }
-#endif
+#endif /* USE_IDEA */
 
 static int pgp_3desencrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
 {
@@ -341,7 +341,7 @@ static int pgp_aesencrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
   }
   return (0);
 }
-#endif
+#endif /* USE_AES */
 
 int pgp_symmetric(BUFFER *in, BUFFER *key, int mdc)
 {
@@ -357,14 +357,14 @@ int pgp_symmetric(BUFFER *in, BUFFER *key, int mdc)
    case PGP_K_IDEA:
     pgp_ideaencrypt(in, out, key, mdc);
     break;
-#endif
+#endif /* USE_IDEA */
 #ifdef USE_AES
    case PGP_K_AES128:
    case PGP_K_AES192:
    case PGP_K_AES256:
     pgp_aesencrypt(in, out, key, mdc);
     break;
-#endif
+#endif /* USE_AES */
    case PGP_K_3DES:
     pgp_3desencrypt(in, out, key, mdc);
     break;
@@ -474,7 +474,7 @@ int pgp_sessionkey(BUFFER *out, BUFFER *user, BUFFER *keyid, BUFFER *seskey,
     err = pgp_rsa(encrypt, key, PK_ENCRYPT);
     mpi_put(out, encrypt);
     break;
-#endif
+#endif /* USE_RSA */
    case PGP_E_ELG:
     err = pgp_elgencrypt(encrypt, key);
     buf_cat(out, encrypt);
@@ -515,9 +515,9 @@ int pgp_symsessionkey(BUFFER *out, BUFFER *seskey, BUFFER *pass)
   buf_setc(out, 4); /* version */
 #ifdef MIMICPGP5
   pgp_makesk(out, key, sym, 1, PGP_H_MD5, pass);
-#else
+#else /* end of MIMICPGP5 */
   pgp_makesk(out, key, sym, 3, PGP_H_SHA1, pass);
-#endif
+#endif /* else if not MIMICPGP5 */
   if (seskey->length > 1)
     buf_cat(out, seskey);
   else {
@@ -767,7 +767,7 @@ int pgp_sign(BUFFER *msg, BUFFER *msg2, BUFFER *sig, BUFFER *userid,
       buf_setc(d, PGP_K_CAST5);
 #ifdef USE_AES 
       buf_appendc(d, PGP_K_AES128);
-#endif
+#endif /* USE_AES */
       buf_appendc(d, PGP_K_3DES);
       pgp_subpacket(d, PGP_SUB_PSYMMETRIC);
       buf_cat(sub, d);
