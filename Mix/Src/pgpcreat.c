@@ -6,7 +6,7 @@
    details.
 
    Create OpenPGP packets
-   $Id: pgpcreat.c,v 1.14 2003/05/03 10:55:49 weaselp Exp $ */
+   $Id: pgpcreat.c,v 1.15 2003/08/24 20:39:26 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -469,12 +469,10 @@ int pgp_sessionkey(BUFFER *out, BUFFER *user, BUFFER *keyid, BUFFER *seskey,
   buf_appendi(encrypt, csum);
 
   switch (algo) {
-#ifdef USE_RSA
   case PGP_ES_RSA:
     err = pgp_rsa(encrypt, key, PK_ENCRYPT);
     mpi_put(out, encrypt);
     break;
-#endif /* USE_RSA */
    case PGP_E_ELG:
     err = pgp_elgencrypt(encrypt, key);
     buf_cat(out, encrypt);

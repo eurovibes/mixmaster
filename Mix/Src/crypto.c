@@ -6,7 +6,7 @@
    details.
 
    Interface to cryptographic library
-   $Id: crypto.c,v 1.7 2002/09/18 23:26:16 rabbi Exp $ */
+   $Id: crypto.c,v 1.8 2003/08/24 20:39:26 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -73,7 +73,6 @@ int digest_rmd160(BUFFER *b, BUFFER *md)
   return (digestmem_rmd160(b->data, b->length, md));
 }
 
-#ifdef USE_RSA
 #define MAX_RSA_MODULUS_LEN 128
 
 static int read_seckey(BUFFER *buf, SECKEY *key, const byte id[])
@@ -382,8 +381,6 @@ int pk_encrypt(BUFFER *in, BUFFER *keybuf)
   RSA_free(key);
   return (err);
 }
-#endif /* USE_RSA */
-
 int buf_crypt(BUFFER *buf, BUFFER *key, BUFFER *iv, int enc)
 {
   des_key_schedule ks1;

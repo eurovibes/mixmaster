@@ -6,7 +6,7 @@
    details.
 
    OpenPGP data
-   $Id: pgpdata.c,v 1.28 2003/05/03 10:55:49 weaselp Exp $ */
+   $Id: pgpdata.c,v 1.29 2003/08/24 20:39:26 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -126,7 +126,6 @@ int pgp_csum(BUFFER *key, int start)
   return (csum);
 }
 
-#ifdef USE_RSA
 int pgp_rsa(BUFFER *in, BUFFER *k, int mode)
 {
   BUFFER *mpi, *out;
@@ -214,7 +213,6 @@ end:
   buf_free(mpi);
   return (err);
 }
-#endif /* USE_RSA */
 
 /* Contrary to RFC 2440, old PGP versions use this for clearsign only.
  * If the text is included in the OpenPGP message, the application will
@@ -782,10 +780,8 @@ int pgp_getkey(int mode, int algo, int *psym, int *pmdc, long *pexpires, BUFFER 
   buf_free(sk);
   buf_free(thiskeyid);
   buf_free(mainkeyid);
-#ifndef USE_RSA
   if (thisalgo == PGP_ES_RSA)
     keytype = -1;
-#endif /* not USE_RSA */
 
   if (uidd_1) {
     primary = 0;
@@ -1032,7 +1028,6 @@ end:
   return (err);
 }
 
-#ifdef USE_RSA
 int pgp_rsakeygen(int bits, BUFFER *userid, BUFFER *pass, char *pubring,
 	       char *secring, int remail)
      /* remail==2: encrypt the secring */
@@ -1133,7 +1128,6 @@ end:
   buf_free(sig);
   return (err);
 }
-#endif /* USE_RSA */
 
 #define begin_param "-----BEGIN PUBLIC PARAMETER BLOCK-----"
 #define end_param "-----END PUBLIC PARAMETER BLOCK-----"
@@ -1410,13 +1404,11 @@ int pgp_dosign(int algo, BUFFER *data, BUFFER *key)
   r = buf_new();
   s = buf_new();
   switch (algo) {
-#ifdef USE_RSA
    case PGP_ES_RSA:
     err = pgp_rsa(data, key, PK_SIGN);
     if (err == 0)
       mpi_put(out, data);
     break;
-#endif /* USE_RSA */
    case PGP_S_DSA:
     err = pgp_dsasign(data, key, out);
     break;

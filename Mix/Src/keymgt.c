@@ -6,7 +6,7 @@
    details.
 
    Key management
-   $Id: keymgt.c,v 1.23 2003/08/20 20:33:00 weaselp Exp $ */
+   $Id: keymgt.c,v 1.24 2003/08/24 20:39:26 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -45,7 +45,6 @@ static int getv3pubkey(byte keyid[], BUFFER *key)
   return -1;			/*  XXX */
 }
 
-#ifdef USE_RSA
 /* now accepts NULL keyid too, with NULL keyid any key
  * will be matched, with valid passphrase of course */
 int getv2seckey(byte keyid[], BUFFER *key)
@@ -195,18 +194,6 @@ end:
   return (err);
 }
 
-#else /* end of USE_RSA */
-int getv2seckey(byte keyid[], BUFFER *key)
-{
-  return -1;
-}
-
-static int getv2pubkey(byte keyid[], BUFFER *key)
-{
-  return -1;
-}
-#endif /* else not USE_RSA */
-
 int key(BUFFER *out)
 {
   int err = -1;
@@ -284,7 +271,6 @@ int adminkey(BUFFER *out)
 	return err;
 }
 
-#ifdef USE_RSA
 int v2keymgt(int force)
 /*
  * Mixmaster v2 Key Management
@@ -440,7 +426,6 @@ int v2keymgt(int force)
 
   return (err);
 }
-#endif /* USE_RSA */
 
 int keymgt(int force)
 {
@@ -450,10 +435,8 @@ int keymgt(int force)
   int err = 0;
 
   if (REMAIL || force == 2) {
-#ifdef USE_RSA
     if (MIX && (err = v2keymgt(force)) == -1)
       err = -1;
-#endif /* USE_RSA */
 #ifdef USE_PGP
     if (PGP && (err = pgp_keymgt(force)) == -1)
       err = -1;
