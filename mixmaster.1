@@ -33,6 +33,12 @@ with mail headers.
 .B "\-h, \-\-help"
 Print a summary of command line options.
 .TP
+.B "\-V, \-\-version"
+Print version information.
+.TP
+.B "\-\-about"
+Print authorship and copyright information.
+.TP
 .B "\-\-config=\fIfilename"
 Read configuration from an alternate file.
 .TP
@@ -1054,9 +1060,23 @@ The passphrase used to protect your nyms and PGP keys.
 .I MIXPASS
 is not set, the client will ask for a passphrase.
 .SH SEE ALSO
+.BR mpgp (1),
 .BR pgp (1),
 .BR procmail (1),
 .BR sendmail (8).
+.SH HISTORY
+Mixmaster is an implementation of a Chuamian mix-net system.
+Versions 1.0 through 2.0.3 of the 
+.BR mixmaster
+remailer were originally written by Lance Cottrell. Mixmaster was first 
+released in 1995. Ulf Moeller collaborated on version 2.0.4, and began an 
+entire rewrite of
+.BR mixmaster
+in 1999. This rewrite was released in 2002 as version 2.9.0, with major 
+contributions from Janis Jagars, Peter Palfrader, and Len Sassaman.
+Mixmaster 3.0 is based on the 2.9 codebase. Peter Palfrader and Len 
+Sassaman are the principal maintainers. For more information on 
+contributing authors, please see the file THANKS for details.
 .SH COPYRIGHT
 (C) 1999 - 2004 Anonymizer Inc. and others.
 Mixmaster may be redistributed and modified under certain conditions.
