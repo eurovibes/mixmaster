@@ -19,8 +19,8 @@ If you cannot use the Mixmaster software, want to use an anonymous
 remailer, and are willing to accept reduced security, you can do the
 following:
 
-Send email with Subject: remailer-key to <%RMA> to obtain a copy of the
-remailer's PGP key.
+Send email with Subject: remailer-key to <%RMA> to obtain
+a copy of the remailer's PGP key.
 
 Then do the following:
 
@@ -42,8 +42,8 @@ This is some anonymized email.
 
 5)	Now encrypt the file with the PGP key of this remailer.
 
-Finally, email the encrypted file to <%RMA> as shown in the example
-below.
+Finally, email the encrypted file to <%RMA> as
+shown in the example below.
 
 The line "Encrypted: PGP" instructs the remailer to decrypt the message
 and process its contents.
@@ -98,7 +98,9 @@ This is some anonymized email.
 You can chain remailers by using another remailer to send the message to
 <%RMA> anonymously. For example, take the message
 
-================================================================== ::
+================================================================== 
+
+::
 Anon-To: %RMA
 
 ::
@@ -113,11 +115,13 @@ ybry/1Rsqn4la3a0JiIhLvnYGCu9HFtiC8oIxnlkeuIYe+EH =HgDq
 -----END PGP MESSAGE-----
 ==================================================================
 
-Next, encrypt the message with the PGP key of the <%RMN> and send the
-twice-encrypted message to <%RMA>. Similar to a Russian doll, containing
-increasingly smaller dolls inside the each outer doll, you can layer
-multiple encryption layers and remailer hops around your message. If
-this sounds confusing, just use the Mixmaster client software instead.
+Next, encrypt the message with the PGP key of the <%RMN>
+and send the twice-encrypted message to <%RMA>.
+
+Similar to a Russian doll, containing increasingly smaller dolls inside
+the each outer doll, you can layer multiple encryption layers and
+remailer hops around your message. If this sounds confusing, just use
+the Mixmaster client software instead.
 
 If you send your messages through a chain of several independent
 remailers, it will be become increasingly difficult, though not
@@ -136,4 +140,5 @@ http://lexx.shinn.net/nym/
 http://riot.eu.org/anon/nym.html
 
 				*****
+
 
