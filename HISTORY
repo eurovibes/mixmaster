@@ -126,7 +126,7 @@
                            Removed redundant "encoded" variable in mime.c.
                            Fixed Installer bugs.
 
-2001-11-06	2.9beta32  Client functionality updates.
+2001-11-06      2.9beta32  Client functionality updates.
                            POP sockets now properly close.
                            Memory may be freed without allocating.
                            Correct time is written to mbox.
