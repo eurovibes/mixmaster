@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.20 2002/10/09 21:45:06 weaselp Exp $
+# $Id: Install,v 1.21 2002/10/18 22:04:13 rabbi Exp $
 
 #whereis program default-path
 whereis()
@@ -688,7 +688,7 @@ Mixmaster will not create an RSA OpenPGP key (to cut down mail loss)"
      -e "s#%LIBS#$LIBS#" \
      -e "s#%LDFLAGS#$LDFLAGS#" \
      -e "s#%INC#$INC#" \
-     -e "s#%DEF#$DEF#" < Makefile.in >> Makefile
+     -e "s#%DEF#$DEF#" < Makefile-sh.in >> Makefile
  echo "$ZLIB" >>Makefile
  echo "$PCRE" >>Makefile
  echo "$IDEALIB" >>Makefile
