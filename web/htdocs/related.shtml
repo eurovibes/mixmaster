@@ -22,6 +22,11 @@ Java.  It does not rely on Mixmaster itself to build the messages but rather
 implements the required procedures itself.
 
 <p>
+Deacon is developing a <a href="http://sourceforge.net/projects/nymproxy">Nym-Proxy</a>
+which lets you use your usual Mail and News clients while still using a Nym.
+This is for Unixes.
+
+<p>
 <a href="http://quicksilver.skuz.net/">QuickSilver</a> is an actively
 maintained and developed client for Win32.  It doesn't call the Mixmaster
 binary but instead links against the mix.dll build from Mixmaster's sources.
@@ -61,11 +66,6 @@ dowloaded via finger from
 There also is a project that makes the nym.alias.net source work with newer PGP
 and GnuPG versions. The project web site is at
 <a href="http://sourceforge.net/projects/nymserv">http://sourceforge.net/projects/nymserv</a>.
-
-<p>
-Deacon also is developing a <a href="http://sourceforge.net/projects/nymproxy">Nym-Proxy</a>
-which lets you use your usual Mail and News clients while still using a Nym.
-This is for Unixes.
 
 <h2>Pingers</h2>
 
