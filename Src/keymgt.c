@@ -6,7 +6,7 @@
    details.
 
    Key management
-   $Id: keymgt.c,v 1.16 2002/09/27 09:15:54 weaselp Exp $ */
+   $Id: keymgt.c,v 1.17 2002/10/02 07:54:12 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -211,6 +211,9 @@ int key(BUFFER *out)
 {
   int err = -1;
   FILE *f;
+  BUFFER *tmpkey;
+
+  tmpkey = buf_new();
 
   buf_sets(out, "Subject: Remailer key for ");
   buf_appends(out, SHORTNAME);
@@ -222,14 +225,16 @@ int key(BUFFER *out)
   buf_nl(out);
 
   if (PGP) {
-    if ((f = mix_openfile(PGPKEY, "r")) != NULL) {
-      /* FIXME: Return only the key with the latest expiration date for each
-       * type (DSA/RSA)
-       */
-      buf_appends(out, "Here is the PGP key:\n\n");
-      buf_read(out, f);
+    if (pgp_latestkeys(tmpkey, PGP_ES_RSA) == 0) {
+      buf_appends(out, "Here is the RSA PGP key:\n\n");
+      buf_cat(out, tmpkey);
       buf_nl(out);
-      fclose(f);
+      err = 0;
+    }
+    if (pgp_latestkeys(tmpkey, PGP_S_DSA) == 0) {
+      buf_appends(out, "Here is the DSA PGP key:\n\n");
+      buf_cat(out, tmpkey);
+      buf_nl(out);
       err = 0;
     }
   }
@@ -249,6 +254,8 @@ int key(BUFFER *out)
   }
   if (err == -1)
     errlog(ERRORMSG, "Cannot create remailer keys!");
+
+  buf_free(tmpkey);
 
   return (err);
 }

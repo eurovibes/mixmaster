@@ -6,7 +6,7 @@
    details.
 
    OpenPGP key database
-   $Id: pgpdb.c,v 1.18 2002/10/01 08:23:20 weaselp Exp $ */
+   $Id: pgpdb.c,v 1.19 2002/10/02 07:54:12 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -238,6 +238,8 @@ int pgpdb_append(KEYRING *keydb, BUFFER *p)
 
 int pgpdb_getkey(int mode, int algo, int *sym, int *mdc, long *expires, BUFFER *key, BUFFER *userid,
 		 BUFFER *founduid, BUFFER *keyid, char *keyring, BUFFER *pass)
+/* FIXME: This could be changed to return the key with the latest expiration date if
+ *        a key is not unique */
 {
   KEYRING *r;
   BUFFER *id, *thisid, *thiskey;
@@ -409,8 +411,7 @@ int pgp_keymgt(int force)
   else {
     while (pgpdb_getnext(keys, key, NULL, userid) != -1) {
       buf_clear(outtxt);
-      buf_clear(outkey);
-      if (pgp_makekeyheader(PGP_PUBKEY, key, outtxt, pass, PGP_ANY) == 0) {
+      if (pgp_makekeyheader(PGP_PUBKEY, key, outtxt, NULL, PGP_ANY) == 0) {
 	err = 0;
 	buf_appends(out, "Type Bits/KeyID     Date       User ID\n");
 	buf_cat(out, outtxt);
@@ -477,6 +478,56 @@ end:
   buf_free(outtxt);
   buf_free(outkey);
   buf_free(secout);
+  return (err);
+}
+
+int pgp_latestkeys(BUFFER* outtxt, int algo)
+/* returns our latest key from pgpkey.txt in the buffer outtxt
+ * with pgp key header, ascii armored
+ *
+ * Can probably be extended to do this for all keys if we pass
+ * the keyring file and the userid 
+ *
+ * IN:  algo: PGP_ANY, PGP_ES_RSA, PGP_E_ELG, PGP_S_DSA
+ * OUT: outtxt
+ */
+{
+  int err = -1;
+  long expires_found = 0, expires;
+  BUFFER *key, *userid, *tmptxt;
+  KEYRING *keys;
+
+  key = buf_new();
+  userid = buf_new();
+  buf_sets(userid, REMAILERNAME);
+  tmptxt = buf_new();
+
+  keys = pgpdb_open(PGPKEY, NULL, 0, PGP_TYPE_PUBLIC);
+  if (keys != NULL) {
+    while (pgpdb_getnext(keys, key, NULL, userid) != -1) {
+      buf_clear(tmptxt);
+      if (pgp_makekeyheader(PGP_PUBKEY, key, tmptxt, NULL, algo) == 0) {
+	pgp_getkey(PK_VERIFY, algo, NULL, NULL, &expires, key, NULL, NULL, NULL, NULL);
+	if (expires == 0 || (expires_found <= expires)) {
+	  err = 0;
+          buf_clear(outtxt);
+	  buf_appends(outtxt, "Type Bits/KeyID     Date       User ID\n");
+	  buf_cat(outtxt, tmptxt);
+	  buf_nl(outtxt);
+	  pgp_armor(key, PGP_ARMOR_KEY);
+	  buf_cat(outtxt, key);
+	  buf_nl(outtxt);
+	  expires_found = expires;
+	}
+      }
+    }
+    pgpdb_close(keys);
+  }
+
+  buf_free(key);
+  buf_free(userid);
+  buf_free(tmptxt);
+
   return (err);
 }
 
