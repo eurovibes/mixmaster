@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.26 2002/09/06 21:04:15 rabbi Exp $ */
+   $Id: mix.c,v 1.27 2002/09/06 22:45:05 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -972,18 +972,18 @@ int is_nt_service(void)
 
     if (_fileno(stdin) == -1 && _fileno(stdout) == -1 && _fileno(stderr) == -1)
         return issvc = 1; /* have no stdin,stderr,stdout - probably service */
-#endif // WIN32SERVICE
+#endif /* WIN32SERVICE */
 
-    return issvc = 0; // assume not the service
-} // is_nt_service
+    return issvc = 0; /* assume not the service */
+} /* is_nt_service */
 
 HANDLE hMustTerminate = NULL;
 void set_nt_exit_event(HANDLE h_svc_exit_event)
 {
     hMustTerminate = h_svc_exit_event;
-} // set_nt_exit_event
+} /* set_nt_exit_event */
 
-#endif // WIN32
+#endif /* WIN32 */
 
 int mix_daemon(void)
 {
