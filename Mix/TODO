@@ -1,11 +1,9 @@
-Short-term issues:
-* better dest.blk handling (suggested by noise)
-* source.alw file/bastion host (suggested by Alex de Joode)
-* "strict middleman" configuration (suggested by Antonomasia)
-* remove pcre and zlib packages from the mixmaster distribution
-  and make necessary changes to the Install script
+Todo items before 3.0 release:
 
-Long-term issues:
-* non-SMTP inter-remailer communication (suggested by Kat)
-* graphical Windows user interface
-* Mixmaster protocol version 3
+* autoconf installation script is needed
+* post-install scripts need to be reworked
+* Macintosh OS/X support
+* further mpgp testing of AES/MDC packet support
+* Windows build instructions/files
+* documentation issues resolved
+* futher debugging
