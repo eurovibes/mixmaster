@@ -1,54 +1,53 @@
 Todo items before 2.9.1 release:
 
-* permit CRAM-MD5 SMTP AUTH in addition to LOGIN.
-* Check and enforce expiration/revocation of OpenPGP keys (?)
-* Update the nymservers in default dest.alw
+* permit CRAM-MD5 SMTP AUTH in addition to LOGIN.  n/a (patch welcome)
+* Update the nymservers in default dest.alw  rabbi
 
 
 Items that need to be completed before the next HEAD release:
 
-* Fix timezone handling in util.c (or use parsedate?).
+* Fix timezone handling in util.c (or use parsedate?).  weasel
 * keylifetime and key{grace,overlap}period needs to be documented once
-  it's finished.
-* Recreate pgpkey.txt regularily with only the latest non-expired keys.
-  - prehaps seperate public pgp keyring and pgp key reply file
+  it's finished.  weasel
 * Modify release tarball generation script to build the .tab.c file from
   parsedate.y, so we don't end up requiring bison on every system that
-  wants to build mixmaster.
-* document experimental --redirect in mix.1
+  wants to build mixmaster.  rabbi
+* document experimental --redirect in mix.1  weasel
 
 Mandatory todo items before 3.0 release:
 
-* disable Nym stuff
+* disable Nym stuff  weasel,rabbi
 * autoconf installation script is needed
-  - mostly done -- a few bugs still need fixing
+  - mostly done -- a few bugs still need fixing  dybbuk
 * post-install scripts need to be reworked
-  - follows item above.
+  - follows item above.  dybbuk
+
+  * rpm -- dybbuk
 * provide a packaged Windows build to be used with QuickSilver
-  - Richard has an Installer we can use for this purpose.
+  - Richard has an Installer we can use for this purpose.  rabbi
 * do full regression tests on as many platforms possible
   + list only these platforms as supported
   + test on Solaris 9 on SPARC.
-* saner usage of /dev/[u]random is required
+* saner usage of /dev/[u]random is required  -- throw warning when not in daemon mode
 * clean up documentation and tarball contents
   + ship with CVS ChangeLog
   + reorganize directory structure
-  + add a CONTRIBUTORS or THANKS file.
+  + add a CONTRIBUTORS or THANKS file.   rabbi
 * resolve any new critical issues
 
 
 Items for 3.0 or 3.0.1
 
-* allow for separate hard-coded remailer and client defaults.
-* allow for verification of clearsigned OpenPGP messages
-* AES support -- requires OpenSSL 0.9.7
-* further mpgp testing of AES/MDC packet support
-* honor key preferences when encrypting to multiple keys
-* Macintosh OS/X support
-* Windows build instructions/files
-* documentation issues resolved
-  + mpgp man page
-* find bug that is causing t* files to linger
+* allow for separate hard-coded remailer and client defaults.  n/a
+* allow for verification of clearsigned OpenPGP messages  disastry
+* AES support -- requires OpenSSL 0.9.7  dybbuk
+* further mpgp testing of AES/MDC packet support  ulf
+* honor key preferences when encrypting to multiple keys  ulf/disastry (n/a)
+* Macintosh OS/X support  rabbi
+* Windows build instructions/files  rabbi
+* documentation issues resolved  rabbi
+  + mpgp man page  n/a
+* find bug that is causing t* files to linger  n/a
 * further debugging (if needed).
 
 
