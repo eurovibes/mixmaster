@@ -170,3 +170,5 @@
                              Install script.
 
 2002-07-21      ??????     Removed duplicate define of NYMDB from menu.h.
+                           Fix a strncat() to undefined string variable in
+                            mix.c (Closes: #584381).
