@@ -357,13 +357,13 @@ check_packetID (byte * ID, unsigned char *timestamp)
   if (then == 0)
     {
       if (VERBOSE)
-      fprintf(errlog, "Ignoring message without timestamp.\n");
+	fprintf(errlog, "Ignoring message without timestamp.\n");
       return(0);
     }
   if (then > now)
     {
       if (VERBOSE)
-        fprintf(errlog, "Ignoring message with future timestamp.\n");
+	fprintf(errlog, "Ignoring message with future timestamp.\n");
       return (0);
     }
   if (then > 0 && now - then > IDEXP * 3600)
