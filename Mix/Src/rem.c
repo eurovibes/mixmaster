@@ -266,6 +266,7 @@ hdrend:
     break;
   case BLOCKREQUEST:
     blockrequest(message);
+    /* Already wrote a log entry in blockrequest() */
     logmail(MAILBLOCK, message);
     break;
   case DISABLED:
@@ -279,21 +280,23 @@ hdrend:
 	(replyto->data, "mailer-daemon")) {
       errlog(LOG, "Bounce mail from %b\n", replyto);
       logmail(MAILBOUNCE, message);
-    } else if (bufifind(to, REMAILERADDR) && blockrequest(message))
+    } else if (bufifind(to, REMAILERADDR) && blockrequest(message)) {
+      /* Already wrote a log entry in blockrequest() */
       logmail(MAILBLOCK, message);
-    else if (!AUTOREPLY)
-      logmail(MAILBOX, message);
-    else if (bufifind(to, REMAILERADDR)) {
+    } else if (bufifind(to, REMAILERADDR)) {
       errlog(LOG, "Non-remailer message from %b\n", replyto);
-      sendinfofile(USAGEFILE, USAGELOG, replyto, NULL);
+      if (AUTOREPLY)
+	sendinfofile(USAGEFILE, USAGELOG, replyto, NULL);
       logmail(MAILUSAGE, message);
     } else if (bufifind(to, COMPLAINTS)) {
       errlog(WARNING, "Abuse complaint from %b\n", replyto);
-      sendinfofile(ABUSEFILE, NULL, replyto, subject);
+      if (AUTOREPLY)
+	sendinfofile(ABUSEFILE, NULL, replyto, subject);
       logmail(MAILABUSE, message);
     } else if (ANONADDR[0] && bufifind(to, ANONADDR)) {
       errlog(LOG, "Reply to anonymous message from %b\n", replyto);
-      sendinfofile(REPLYFILE, NULL, replyto, subject);
+      if (AUTOREPLY)
+	sendinfofile(REPLYFILE, NULL, replyto, subject);
       logmail(MAILANON, message);
     } else {
       errlog(DEBUGINFO, "Mail from %b\n", replyto);
