@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.10.2.2 2002/10/05 00:15:14 rabbi Exp $ */
+   $Id: main.c,v 1.10.2.3 2002/10/07 21:12:52 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -300,6 +300,8 @@ int main(int argc, char *argv[])
       }
     }
   }
+  if (REMAIL == 0)
+    mix_regular(0); /* check client pool */
 
   if (error) {
     ret = 1;
