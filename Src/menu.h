@@ -39,9 +39,7 @@ void askfilename(char *fn);
 void savemsg(BUFFER *message);
 int menu_replychain(int *d, int *l, char *mdest, char *pdest, char *psub,
 		    char *r);
-#ifdef WIN32
 void update_stats(void);
-#endif /* WIN32 */
 
 #endif /* USE_NCURSES */
 

@@ -25,7 +25,7 @@ RANLIB = ranlib
 
 OBJ = mix.o rem.o rem1.o rem2.o chain.o chain1.o chain2.o nym.o pgp.o pgpdb.o pgpdata.o pgpget.o pgpcreat.o pool.o mail.o rfc822.o mime.o keymgt.o compress.o stats.o crypto.o random.o util.o buffers.o maildir.o parsedate.tab.o
 
-MIXOBJ = rndseed.o menu.o menusend.o menunym.o menuutil.o
+MIXOBJ = rndseed.o menu.o menusend.o menunym.o menuutil.o menustats.o
 NOMENUOBJ = rndseed.o dummy.o
 WINOBJ = winmain.o winutil.o
 

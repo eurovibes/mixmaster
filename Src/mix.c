@@ -113,6 +113,10 @@ long POP3TIME;
 #endif /* USE_SOCK */
 
 char SHORTNAME[LINELEN];
+char ALLPINGERSURL[BUFSIZE];
+char ALLPINGERSFILE[PATHMAX];
+char WGET[PATHMAX];
+char STATSSRC[PATHMAX];
 
 /* remailer configuration */
 int REMAIL;
@@ -411,6 +415,10 @@ static void mix_setdefaults()
 	strnncpy(NYMSECRING   , DEFAULT_NYMSECRING);
 	strnncpy(NYMDB        , DEFAULT_NYMDB);
 	strnncpy(STAREX       , DEFAULT_STAREX);
+	strnncpy(ALLPINGERSURL, DEFAULT_ALLPINGERSURL);
+	strnncpy(ALLPINGERSFILE, DEFAULT_ALLPINGERSFILE);
+	strnncpy(WGET         , DEFAULT_WGET);
+	strnncpy(STATSSRC     , DEFAULT_STATSSRC);
 
 	strnncpy(MIXDIR       , "");
 	strnncpy(POOLDIR      , "");
@@ -590,13 +598,15 @@ int mix_configline(char *line)
 	  read_conf(PGPMAXCOUNT) ||
 	  read_conf(DESTALLOW) || read_conf(DESTALLOW2) ||
 	  read_conf(SOURCEBLOCK) ||
-	  read_conf(STAREX) ||
+	  read_conf(STAREX) || read_conf(ALLPINGERSURL) ||
+	  read_conf(ALLPINGERSFILE) ||
 	  read_conf(HDRFILTER) || read_conf(REGULAR) ||
 	  read_conf(POOL) || read_conf(TYPE1LIST) ||
 	  read_conf(TYPE2REL) || read_conf(TYPE2LIST) ||
 	  read_conf(PGPREMPUBRING) || read_conf(PGPREMPUBASC) ||
 	  read_conf(PGPREMSECRING) || read_conf(NYMSECRING) ||
 	  read_conf(NYMDB) || read_conf(PIDFILE) ||
+	  read_conf(WGET) || read_conf(STATSSRC) ||
 	  
 	  read_conf_i(CLIENTAUTOFLUSH) ||
 	  read_conf_i(MAXRECIPIENTS) ||

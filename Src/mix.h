@@ -908,7 +908,8 @@ time_t parsedate(char *p);
 
 #ifdef WIN32
 
-#define sleep(x) Sleep(x*1000)
+#define sleep(x) Sleep((x)*1000)
+#define strcasecmp stricmp
 
 #endif /* WIN32 */
 

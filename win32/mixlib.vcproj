@@ -227,6 +227,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\Src\menustats.c">
+			</File>
+			<File
 				RelativePath="..\Src\menuutil.c">
 				<FileConfiguration
 					Name="Release|Win32">

@@ -243,6 +243,10 @@
 #define DEFAULT_NYMSECRING "nymsec.pgp"
 #define DEFAULT_NYMDB "secrets.mix"
 #define DEFAULT_STAREX "starex.txt"
+#define DEFAULT_ALLPINGERSURL "http://www.noreply.org/allpingers/allpingers.txt"
+#define DEFAULT_ALLPINGERSFILE "allpingers.txt"
+#define DEFAULT_WGET "wget"
+#define DEFAULT_STATSSRC "stats-src.txt"
 
 DLLIMPORT extern char MIXCONF[];
 extern char DISCLAIMFILE[];
@@ -391,6 +395,11 @@ extern int MAXRECIPIENTS;
 extern long TIMESKEW_FORWARD;
 extern long TIMESKEW_BACK;
 extern int TEMP_FAIL;
+extern char ALLPINGERSURL[];
+extern char ALLPINGERSFILE[];
+
+extern char WGET[];
+extern char STATSSRC[];
 
 DLLIMPORT extern char ENTEREDPASSPHRASE[LINELEN];
 

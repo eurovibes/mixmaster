@@ -126,6 +126,10 @@ int write_pidfile(char *pidfile);
 int clear_pidfile(char *pidfile);
 time_t parse_yearmonthday(char* str);
 
+int url_download(char* url, char* dest);
+void read_allpingers(BUFFER *allpingers);
+int good_stats_source (BUFFER *allpingers, char *sourcename);
+int stats_download(BUFFER *allpingers, char *sourcename, int curses);
 
 typedef struct {
   char *name;

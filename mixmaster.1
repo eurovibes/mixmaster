@@ -114,6 +114,12 @@ Post a follow-up to a message.
 .TP
 .B "\-fg\fR [\fIfile\fR]"
 Send a group reply to a message.
+.TP
+.B "\-\-update-pinger-list"
+Download an updated all pingers list file.
+.TP
+.B "\-\-update-stats\fI[=source\fR]"
+Download updated stats.
 .SS Remailer options:
 .TP
 .B "\-\-config=\fIfilename"
@@ -294,6 +300,16 @@ used to send non-anonymous messages,
 is used instead.)
 Default:
 .IR ANONADDR .
+.TP
+.B ALLPINGERSURL
+URL from which to download the 
+.IR ALLPINGERSFILE .
+Default:
+.BR http://www.noreply.org/allpingers/allpingers.txt .
+.TP
+.B WGET
+Define the http protocol download tool. Default:
+.BR wget .
 .SS Remailer configuration:
 .TP
 .B NEWS
@@ -997,6 +1013,9 @@ are supported. For example
 would allow user-defined names in the
 .B From:
 line, while replacing any given address with the remailer address.
+.TP
+.B allpingers.txt
+Information on all known pingers (\fBALLPINGERSFILE\fP).
 .SS
 Mixmaster uses the following files internally:
 .TP
@@ -1020,6 +1039,9 @@ Log file of messages already processed (\fBIDLOG\fP).
 .TP
 .B stats.log
 Log file for remailer statistics (\fBSTATS\fP).
+.TP
+.B stats-src.txt
+File for name of most recent statistics source (\fBSTATSSRC\fP).
 .TP
 .B pgpmaxcount.log
 Log file for PGP Max-Count statistics (\fBPGPMAXCOUNT\fP).
