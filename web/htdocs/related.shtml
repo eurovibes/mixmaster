@@ -12,6 +12,12 @@
 <h2>Remailer Clients</h2>
 
 <p>
+<a href="http://www.mutt.org">The Mutt E-Mail Client</a> has an interface to
+call the Mixmaster binary.  For <a href="http://www.gnu.org/software/emacs/emacs.html">Emacs</a>
+Erik wrote an <a href="http://erik.arneson.org/elisp.html">interface</a>:
+<a href="http://erik.arneson.org/mixmaster.el">mixmaster.el</a>.
+
+<p>
 The <a href="http://sourceforge.net/projects/jbn">JBN</a> project on
 sourceforge was just started in order to maintain JBN again and bring it up to
 date. (<a href="http://www.theinternet.cc/potatoware/jbn2">old versions</a>)
