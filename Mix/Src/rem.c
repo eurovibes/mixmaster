@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.20.2.5 2002/10/09 20:51:08 weaselp Exp $ */
+   $Id: rem.c,v 1.20.2.6 2002/12/14 20:08:02 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -381,8 +381,9 @@ void logmail(char *mailbox, BUFFER *message)
 
 int blockrequest(BUFFER *message)
 {
-  int request = 0;
-  BUFFER *from, *line, *field, *content, *addr;
+  int request = 0, num, i;
+  BUFFER *from, *line, *field, *content, *addr, *remailer_addr, *copy_addr;
+  REMAILER remailer[MAXREM];
   FILE *f;
   char *destblklst = (char *)malloc( strlen(DESTBLOCK)+1 );
   char *destblk;
@@ -392,6 +393,8 @@ int blockrequest(BUFFER *message)
   field = buf_new();
   content = buf_new();
   addr = buf_new();
+  remailer_addr = buf_new();
+  copy_addr = buf_new();
 
   buf_rewind(message);
   while (buf_getheader(message, field, content) == 0)
@@ -424,10 +427,35 @@ int blockrequest(BUFFER *message)
 	rfc822_addr (from, addr);
 	buf_chop(addr);
       }
-      if (bufieq(addr, REMAILERADDR)) {
+      /* Check whether somebody wants us to block ourselves */
+      buf_set(copy_addr, addr);
+      buf_sets(remailer_addr, REMAILERADDR);
+      if (doblock(remailer_addr, copy_addr, 1)) {
 	errlog(LOG, "Ignoring blocking request for %b from %b.\n", addr, from);
-	return (2);
+	request = 2;
+	goto end;
       }
+      /* Check if some evil person tries to block a known type II remailer */
+      num = mix2_rlist(remailer);
+      for (i = 0; i < num; i++) {
+	buf_sets(remailer_addr, remailer[i].addr);
+	if (doblock(remailer_addr, copy_addr, 1)) {
+	  errlog(LOG, "Ignoring blocking request for %b from %b.\n", addr, from);
+	  request = 2;
+	  goto end;
+	}
+      }
+      /* Check if some evil person tries to block a known type I remailer */
+      num = t1_rlist(remailer);
+      for (i = 0; i < num; i++) {
+	buf_sets(remailer_addr, remailer[i].addr);
+	if (doblock(remailer_addr, copy_addr, 1)) {
+	  errlog(LOG, "Ignoring blocking request for %b from %b.\n", addr, from);
+	  request = 2;
+	  goto end;
+	}
+      }
+
       if (buf_ieq(addr, from))
 	errlog(NOTICE, "Blocking request for %b\n", addr);
       else
@@ -465,6 +493,16 @@ int blockrequest(BUFFER *message)
 	  }
       }
     }
+
+end:
+  buf_free(from);
+  buf_free(line);
+  buf_free(field);
+  buf_free(content);
+  buf_free(addr);
+  buf_free(remailer_addr);
+  buf_free(copy_addr);
+
   return (request);
 }
 
