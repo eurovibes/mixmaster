@@ -6,7 +6,7 @@
    details.
 
    Prepare messages for remailer chain
-   $Id: chain.c,v 1.4 2002/10/09 20:53:27 weaselp Exp $ */
+   $Id: chain.c,v 1.5 2002/12/05 04:23:32 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -116,6 +116,7 @@ int chain_randfinal(int type, REMAILER *remailer, int maxrem, int rtype)
 	remailer[i].info[t].reliability >= 100 * RELFINAL &&
 	remailer[i].info[t].latency <= MAXLAT &&
 	(type == MSG_NULL || !remailer[i].flags.middle) &&
+	!remailer[i].flags.star_ex &&
 	(remailer[i].flags.post || type != MSG_POST))
       num++;
   }
@@ -130,6 +131,7 @@ int chain_randfinal(int type, REMAILER *remailer, int maxrem, int rtype)
 	     remailer[i].info[t].reliability >= 100 * RELFINAL &&
 	     remailer[i].info[t].latency <= MAXLAT &&
 	     (type == MSG_NULL || !remailer[i].flags.middle) &&
+	     !remailer[i].flags.star_ex &&
 	     (remailer[i].flags.post || type != MSG_POST)));
   }
   return (i);
@@ -155,6 +157,7 @@ int chain_rand(REMAILER *remailer, int maxrem,
 	select[i] = ((remailer[i].flags.mix && t == 0) ||
 		     (remailer[i].flags.pgp && remailer[i].flags.ek && t == 1))
 	  && remailer[i].info[t].reliability >= 100 * MINREL &&
+	  !remailer[i].flags.star_ex &&
 	  remailer[i].info[t].latency <= MAXLAT,
 	  randavail += select[i];
 

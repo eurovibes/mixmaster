@@ -6,7 +6,7 @@
    details.
 
    Send messages from pool
-   $Id: pool.c,v 1.19 2002/10/09 20:53:31 weaselp Exp $ */
+   $Id: pool.c,v 1.20 2002/12/05 04:23:33 weaselp Exp $ */
 
 #include "mix3.h"
 #include <stdlib.h>
@@ -23,6 +23,8 @@
 #include <dirent.h>
 #endif /* not _MSC */
 #include <assert.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #ifdef USE_PCRE
 #include "pcre.h"
@@ -332,6 +334,8 @@ int pool_add(BUFFER *msg, char *type)
 FILE *pool_new(char *type, char *tmpname, char *path)
 {
   FILE *f;
+  struct stat buf;
+  int err;
 
   assert(strlen(type) == 3);
 #ifdef SHORTNAMES
@@ -346,6 +350,9 @@ FILE *pool_new(char *type, char *tmpname, char *path)
   strcpy(path, tmpname);
   strrchr(path, DIRSEP)[1] = type[0];
 #endif /* else if not SHORTNAMES */
+  err = stat(tmpname, &buf);
+  if (err == 0)
+    errlog(WARNING, "Overwriting file %s\n", tmpname);
   f = fopen(tmpname, "wb");
   if (f == NULL)
     errlog(ERRORMSG, "Error creating temporary file %s\n", tmpname);

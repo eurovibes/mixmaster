@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.38 2002/10/18 20:42:35 rabbi Exp $ */
+   $Id: mix.c,v 1.39 2002/12/05 04:23:33 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -73,7 +73,7 @@ char PGPREMPUBASC[PATHMAX];
 char PGPREMSECRING[PATHMAX];
 char NYMSECRING[PATHMAX];
 char NYMDB[PATHMAX];
-
+char STAREX[PATHMAX];
 
 /** config ***************************************************************/
 
@@ -392,7 +392,7 @@ static void mix_setdefaults()
 	strnncpy(PGPREMSECRING, DEFAULT_PGPREMSECRING);
 	strnncpy(NYMSECRING   , DEFAULT_NYMSECRING);
 	strnncpy(NYMDB        , DEFAULT_NYMDB);
-
+	strnncpy(STAREX       , DEFAULT_STAREX);
 
 	strnncpy(MIXDIR       , "");
 	strnncpy(POOLDIR      , "");
@@ -457,7 +457,7 @@ static void mix_setdefaults()
 
 	KEYLIFETIME      = 13 * 30 * 24 * 60 * 60;	/* validity period for keys. */
 	KEYOVERLAPPERIOD =  1 * 30 * 24 * 60 * 60;	/* when keys have this amount of time */
-                                                        /* left before expiration, create  */
+	                                                /* left before expiration, create  */
 	                                        	/* new ones when ./mix -K is run.*/
 	KEYGRACEPERIOD   =       7 * 24 * 60 * 60;	/* accept mail to the old key for this */
 	                                        	/* amount of time after it has expired. */
@@ -557,6 +557,7 @@ int mix_configline(char *line)
 	  read_conf(PUBRING) || read_conf(IDLOG) ||
 	  read_conf(STATS) || read_conf(DESTBLOCK) ||
 	  read_conf(DESTALLOW) || read_conf(SOURCEBLOCK) ||
+	  read_conf(STAREX) ||
 	  read_conf(HDRFILTER) || read_conf(REGULAR) ||
 	  read_conf(POOL) || read_conf(TYPE1LIST) ||
 	  read_conf(TYPE2REL) || read_conf(TYPE2LIST) ||

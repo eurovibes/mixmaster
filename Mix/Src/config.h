@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.26 2002/10/16 20:59:09 rabbi Exp $ */
+   $Id: config.h,v 1.27 2002/12/05 04:23:32 weaselp Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -199,6 +199,7 @@
 #define DEFAULT_PGPREMSECRING "secring.pgp"
 #define DEFAULT_NYMSECRING "nymsec.pgp"
 #define DEFAULT_NYMDB "secrets.mix"
+#define DEFAULT_STAREX "starex.txt"
 
 extern char MIXCONF[];
 extern char DISCLAIMFILE[];
@@ -231,6 +232,7 @@ extern char TYPE1LIST[];
 extern char TYPE2REL[];
 extern char TYPE2LIST[];
 extern char PIDFILE[];
+extern char STAREX[];
 
 extern char PGPREMPUBRING[];
 extern char PGPREMPUBASC[];
