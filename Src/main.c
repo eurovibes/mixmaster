@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.10 2002/08/07 21:45:59 weaselp Exp $ */
+   $Id: main.c,v 1.11 2002/08/20 19:39:24 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -102,6 +102,8 @@ int main(int argc, char *argv[])
 	  sendpool = 1, deflt = 0;
 	else if (streq(p, "read-mail"))
 	  readmail = 1, deflt = 0;
+	else if (streq(p, "store-mail"))
+	  readmail = 2, deflt = 0;
 #ifdef USE_SOCK
 	else if (streq(p, "pop-mail"))
 	  pop3 = 1, deflt = 0;
@@ -161,6 +163,9 @@ int main(int argc, char *argv[])
 	    break;
 	  case 'R':
 	    readmail = 1, deflt = 0;
+	    break;
+	  case 'I':
+	    readmail = 2, deflt = 0;
 	    break;
 	  case 'S':
 	    sendpool = 1, deflt = 0;
@@ -344,6 +349,7 @@ specified in the command line.\n\
 Remailer:\n\
 \n\
 -R, --read-mail                   read remailer message from stdin\n\
+-I, --store-mail                  read remailer msg from stdin, do not decrypt\n\
 -M, --remailer                    process the remailer pool\n\
 -D, --daemon                      remailer as background process\n"
 #ifdef USE_SOCK
@@ -393,8 +399,10 @@ WinNT service:\n\
     }
 
     if (f && buf_read(msg, f) != -1) {
-      if (readmail)
+      if (readmail == 1)
 	mix_decrypt(msg);
+      else if (readmail == 2)
+	pool_add(msg, "inf");
       if (send == MSG_MAIL || send == MSG_POST) {
 	BUFFER *sendmsg;
 	int numdest = 0;
