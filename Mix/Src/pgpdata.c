@@ -6,7 +6,7 @@
    details.
 
    OpenPGP data
-   $Id: pgpdata.c,v 1.18 2002/09/18 05:55:10 weaselp Exp $ */
+   $Id: pgpdata.c,v 1.19 2002/09/18 06:44:40 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -471,12 +471,13 @@ int pgp_getkey(int mode, int algo, int *psym, int *pmdc, long *pexpires, BUFFER 
  *	pass   - passprase or NULL
  *	keypacket - key, with key uid sig subkey packets, possibly encrypted
  *	keyid  - reyested (sub)keyid or empty buffer or NULL
- * OUT: psym   - found sym algo
- *	pmdc   - found mdc flag
+ * OUT: psym   - found sym algo (or NULL)
+ *	pmdc   - found mdc flag (or NULL)
  *	key    - found key, only key packet, decrypted
- *	keyid  - found (sub)keyid
- *	userid - found userid
- *	pexpires - expiry time, or 0 if don't expire
+ *	           may be the same buffer as keypacket
+ *	keyid  - found (sub)keyid (or NULL)
+ *	userid - found userid (or NULL)
+ *	pexpires - expiry time, or 0 if don't expire (or NULL)
  */
 {
   int tempbuf = 0;
