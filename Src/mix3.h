@@ -6,7 +6,7 @@
    details.
 
    Function prototypes
-   $Id: mix3.h,v 1.12 2002/08/25 13:27:40 weaselp Exp $ */
+   $Id: mix3.h,v 1.13 2002/08/26 19:38:51 weaselp Exp $ */
 
 
 #ifndef _MIX3_H
@@ -226,6 +226,7 @@ int pk_encrypt(BUFFER *plaintext, BUFFER *privkey);
 int check_seckey(BUFFER *buf, const byte id[]);
 int check_pubkey(BUFFER *buf, const byte id[]);
 int v2createkey(void);
+int getv2seckey(byte keyid[], BUFFER *key);
 int seckeytopub(BUFFER *pub, BUFFER *sec, byte keyid[]);
 
 /* configuration, general remailer functions */
