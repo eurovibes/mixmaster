@@ -1,9 +1,9 @@
-.TH MIX 1 "Mixmaster Version 3.0 beta"
+.TH MIXMASTER 1 "Mixmaster Version 3.0 beta"
 .\" $Id$
 .SH NAME
-mix \- anonymous remailer software
+mixmaster \- anonymous remailer software
 .SH SYNOPSIS
-.B mix
+.B mixmaster
 [\fB\-hpmdSvT\fR]
 [\fB\-t \fIuser@host\fR]
 [\fB\-g \fInewsgroup\fR]
@@ -14,10 +14,10 @@ mix \- anonymous remailer software
 [\fIuser@host\fR]
 [\fIfilename\fR]
 .PP
-.B mix
+.B mixmaster
 [\fB\-f\fR[\fBrfg\fR] \fIfilename\fR]
 .PP
-.B mix \fR[\fB\-RGKSP\fR]
+.B mixmaster \fR[\fB\-RGKSP\fR]
 .SH DESCRIPTION
 Mixmaster is an anonymous remailer. Remailers provide protection
 against traffic analysis and allow sending mail anonymously or
@@ -157,7 +157,7 @@ Remove the Mixmaster Service on Win32.
 Run the Mixmaster Service on Win32.
 .TP
 .B \-\-redirect
-Read a mixmaster packet from stdin and route it through a chain given with
+Read a Mixmaster packet from stdin and route it through a chain given with
 \fB\-\-chain\fP.
 Note that this may corrupt the packet if there is not enough space in the
 headers (that is, if there are more than 20 hops total).  This function is
@@ -179,7 +179,7 @@ script when setting up a remailer.
 .PP
 All configuration variables can be overridden from the command line,
 e.g.
-.B mix -S --POOLSIZE=0 --RATE=100
+.B mixmaster -S --POOLSIZE=0 --RATE=100
 will send all messages currently in the message pool.
 .SS Client configuration:
 .TP
@@ -248,7 +248,7 @@ If
 .B REMAIL
 is set to
 .BR n
-automatically flush the pool every time mixmaster is run. Default:
+automatically flush the pool every time Mixmaster is run. Default:
 .BR n .
 .TP
 .B SENDMAIL
@@ -988,7 +988,7 @@ Public Diffie-Hellman parameters used for El-Gamal key generation (\fBDHPARAMS\f
 .B dsaparam.mix
 Public DSA parameters used for DSA key generation (\fBDSAPARAMS\fP).
 .TP
-.B mix.pid
+.B mixmaster.pid
 Pid file in daemon mode (\fBPIDFILE\fP).
 .TP
 .BI pool/
