@@ -6,7 +6,7 @@
    details.
 
    OpenPGP messages
-   $Id: pgp.h,v 1.12 2002/09/26 22:14:00 weaselp Exp $ */
+   $Id: pgp.h,v 1.13 2002/09/26 22:28:25 weaselp Exp $ */
 
 
 #ifdef USE_PGP
@@ -171,12 +171,16 @@ typedef struct {
   BUFFER *db;
   LOCK *lock;
   int modified;
+  int type; /* undefined, public, private */
   char filename[LINELEN];
   BUFFER *encryptkey;
+#ifndef NDEBUG
+  int writer;
+#endif
 } KEYRING;
 
-KEYRING *pgpdb_new(char *keyring, int filetype, BUFFER *encryptkey);
-KEYRING *pgpdb_open(char *keyring, BUFFER *encryptkey, int writer);
+KEYRING *pgpdb_new(char *keyring, int filetype, BUFFER *encryptkey, int type);
+KEYRING *pgpdb_open(char *keyring, BUFFER *encryptkey, int writer, int type);
 int pgpdb_append(KEYRING *keydb, BUFFER *p);
 int pgpdb_getnext(KEYRING *keydb, BUFFER *p, BUFFER *keyid, BUFFER *userid);
 int pgpdb_close(KEYRING *keydb);

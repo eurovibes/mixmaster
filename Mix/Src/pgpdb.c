@@ -6,7 +6,7 @@
    details.
 
    OpenPGP key database
-   $Id: pgpdb.c,v 1.14 2002/09/26 22:14:00 weaselp Exp $ */
+   $Id: pgpdb.c,v 1.15 2002/09/26 22:28:25 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -67,11 +67,15 @@ end_greedy_dearmor:
   return (err);
 }
 
-KEYRING *pgpdb_open(char *keyring, BUFFER *encryptkey, int writer)
+KEYRING *pgpdb_open(char *keyring, BUFFER *encryptkey, int writer, int type)
 {
   KEYRING *keydb;
 
-  keydb = pgpdb_new(keyring, -1, encryptkey);
+  assert((! writer) && (type == PGP_TYPE_UNDEFINED));
+  keydb = pgpdb_new(keyring, -1, encryptkey, type);
+#ifndef NDEBUG
+  keydb->writer = writer;
+#endif
   if (writer)
     keydb->lock = lockfile(keyring);
   keydb->filetype = pgp_readkeyring(keydb->db, keyring);
@@ -89,7 +93,7 @@ KEYRING *pgpdb_open(char *keyring, BUFFER *encryptkey, int writer)
   return (keydb);
 }
 
-KEYRING *pgpdb_new(char *keyring, int filetype, BUFFER *encryptkey)
+KEYRING *pgpdb_new(char *keyring, int filetype, BUFFER *encryptkey, int type)
 {
   KEYRING *keydb;
 
@@ -100,6 +104,7 @@ KEYRING *pgpdb_new(char *keyring, int filetype, BUFFER *encryptkey)
   keydb->db = buf_new();
   keydb->modified = 0;
   keydb->lock = NULL;
+  keydb->type = type;
   strncpy(keydb->filename, keyring, sizeof(keydb->filename));
   keydb->filetype = filetype;
   if (encryptkey == NULL)
@@ -117,12 +122,15 @@ int pgpdb_close(KEYRING *keydb)
 
   if (keydb->modified) {
     FILE *f;
-
+#ifndef ndebug
+    assert(keydb->writer);
+#endif
     if (keydb->encryptkey && keydb->encryptkey->length)
       pgp_encrypt(PGP_NCONVENTIONAL | PGP_NOARMOR, keydb->db,
 		  keydb->encryptkey, NULL, NULL, NULL, NULL);
+    assert(keydb->type == PGP_TYPE_PRIVATE || keydb->type == PGP_TYPE_PUBLIC);
     if (keydb->filetype == ARMORED)
-      pgp_armor(keydb->db, PGP_ARMOR_KEY);
+      pgp_armor(keydb->db, keydb->type == PGP_TYPE_PUBLIC ? PGP_ARMOR_KEY : PGP_ARMOR_SECKEY);
     if (keydb->filetype == -1 || (f = mix_openfile(keydb->filename,
 						   keydb->filetype ==
 						   ARMORED ? "w" : "wb"))
@@ -218,6 +226,9 @@ int pgpdb_getnext(KEYRING *keydb, BUFFER *key, BUFFER *keyid, BUFFER *userid)
 int pgpdb_append(KEYRING *keydb, BUFFER *p)
 {
   assert(keydb->lock);
+#ifndef ndebug
+  assert(keydb->writer);
+#endif
   buf_cat(keydb->db, p);
   keydb->modified = 1;
   return (0);
@@ -237,19 +248,19 @@ int pgpdb_getkey(int mode, int algo, int *sym, int *mdc, long *expires, BUFFER *
   thisid = buf_new();
   thiskey = buf_new();
   if (keyring)
-    r = pgpdb_open(keyring, pass, 0);
+    r = pgpdb_open(keyring, pass, 0, PGP_TYPE_UNDEFINED);
   else
     switch (mode) {
     case PK_DECRYPT:
     case PK_SIGN:
-      r = pgpdb_open(PGPREMSECRING, NULL, 0);
+      r = pgpdb_open(PGPREMSECRING, NULL, 0, PGP_TYPE_PRIVATE);
       break;
     case PK_ENCRYPT:
     case PK_VERIFY:
-      r = pgpdb_open(PGPREMPUBRING, NULL, 0);
+      r = pgpdb_open(PGPREMPUBRING, NULL, 0, PGP_TYPE_PUBLIC);
       if (r != NULL && r->filetype == -1) {
 	pgpdb_close(r);
-	r = pgpdb_open(PGPREMPUBASC, NULL, 0);
+	r = pgpdb_open(PGPREMPUBASC, NULL, 0, PGP_TYPE_PUBLIC);
       }
       break;
     default:
@@ -364,7 +375,7 @@ int pgp_keymgt(int force)
      versions happy */
   err = -1;
   for (type = 0; type < 2; type++) {
-    keys = pgpdb_open(PGPREMSECRING, NULL, 0);
+    keys = pgpdb_open(PGPREMSECRING, NULL, 0, PGP_TYPE_PRIVATE);
     if (keys == NULL)
       goto end;
     while (pgpdb_getnext(keys, key, NULL, userid) != -1) {

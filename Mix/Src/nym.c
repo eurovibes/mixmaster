@@ -6,7 +6,7 @@
    details.
 
    Create nym server messages
-   $Id: nym.c,v 1.6 2002/09/26 22:14:00 weaselp Exp $ */
+   $Id: nym.c,v 1.7 2002/09/26 22:28:25 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -108,7 +108,7 @@ int nym_config(int mode, char *nym, char *nymserver, BUFFER *pseudonym,
     buf_appends(req, "Public-Key:\n");
 
   getkey:
-    r = pgpdb_open(NYMSECRING, userpass, 0);
+    r = pgpdb_open(NYMSECRING, userpass, 0, PGP_TYPE_PRIVATE);
     if (r == NULL) {
       err = -3;
       goto end;
