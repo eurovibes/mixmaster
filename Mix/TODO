@@ -12,7 +12,7 @@ Todo items before 3.0 release:
 * check and enforce expiration date
 * Apply --store|queue|get-mail patch
 * Implement mbox/Maildir mail input (597043)
-* futher debugging
+* further debugging
 
 Further wishlist:
 * Allow sending with middlemen remailers last
