@@ -6,7 +6,7 @@
    details.
 
    Key management
-   $Id: keymgt.c,v 1.22 2002/12/27 20:43:40 rabbi Exp $ */
+   $Id: keymgt.c,v 1.23 2003/08/20 20:33:00 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -224,6 +224,7 @@ int key(BUFFER *out)
   conf_premail(out);
   buf_nl(out);
 
+#ifdef USE_PGP
   if (PGP) {
     if (pgp_latestkeys(tmpkey, PGP_ES_RSA) == 0) {
       buf_appends(out, "Here is the RSA PGP key:\n\n");
@@ -238,6 +239,7 @@ int key(BUFFER *out)
       err = 0;
     }
   }
+#endif /* USE_PGP */
   if (MIX) {
     if ((f = mix_openfile(KEYFILE, "r")) != NULL) {
       buf_appends(out, "Here is the Mixmaster key:\n\n");
