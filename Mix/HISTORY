@@ -315,20 +315,19 @@
 2002-12-25      2.9.0      Release version. Minor documentation changes
                              and version number change only.
 
-2003-06-01      2.9.0.1    Several changes for the Windows build.
+2003-11-08      2.9.1      Several changes for the Windows build.
                            Some Install script fixes.
                            Fixed a problem in blockrequest() where a buffer
                              could have been used after it was free()'d which
                              resulted in segfaults.
-
-2003-xx-xx      xxxxxx     Windows build changes.
                            Check that feedback buffer is not null before
                              operating on it in chain_select().
                              Closes #631353, thanks Sami Farin.
-                           Make sure DH/DSA param file is actually opened before
-                             writing to it.  Fixes a segfault in case it is not.
+                           Make sure DH/DSA param file is actually opened 
+                             before writing to it. Fixes a segfault in 
+                             case it is not.
                            Handle a pool we cannot read correctly: don't close
-                             the NULL dir handle (segfaults on *bsd). We also
+                             the NULL dir handle (segfaults on *BSD). We also
                              print a warning in that case now.
-                           Fix stats a bit (gmtime vs localtime).
-                           Fix bits with pool stats.
+                           Minor stats fix (gmtime vs localtime).
+                           Fix pool stats bug.

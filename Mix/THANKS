@@ -1,12 +1,11 @@
-Mixmaster Version 2.9.0
-
+Mixmaster Version 2.9.1
 
 Many people have helped with the development of Mixmaster over the past
-eight years. Lance Cottrell wrote the original 1.x and 2.x versions. Ulf
+nine years. Lance Cottrell wrote the original 1.x and 2.x versions. Ulf
 Möller contributed significantly to the 2.0.x versions, and wrote the core
-code for 2.9 from scratch. I'd like to give special thanks to Peter
-Palfrader, for all of his hard work and assistance in helping me continue
-this project, and to Janis Jagars for his valuable code contributions.
+code for 2.9 from scratch. I'd like to give special thanks to Janis Jagars
+for his valuable code contributions, and to Peter Palfrader, whose 
+tireless efforts have made this release possible.
 
 Mixmaster uses Jean-loup Gailly and Mark Adler's compression library zlib,
 Philip Hazel's Perl Compatible Regular Expressions library, the ncurses
@@ -27,8 +26,8 @@ to anonymous speech is preserved.
 
 
 Len Sassaman
-25 December 2002
-San Francisco, California
+08 November 2003
+San Diego, California
 http://www.abditum.com/~rabbi/
 
 
@@ -59,6 +58,7 @@ Richard Johnson
 Alex de Joode
 Katherine
 Johannes Kroeger
+Hauke Lampe
 Ben Laurie
 Patrick J. LoPresti
 L. McCarthy
