@@ -6,7 +6,7 @@
    details.
 
    Function prototypes
-   $Id: mix3.h,v 1.18 2002/09/26 22:28:25 weaselp Exp $ */
+   $Id: mix3.h,v 1.19 2002/10/02 07:54:12 weaselp Exp $ */
 
 
 #ifndef _MIX3_H
@@ -275,6 +275,7 @@ int stats_out(int);
 #define PGP_TYPE_PUBLIC		2
 
 int pgp_keymgt(int force);
+int pgp_latestkeys(BUFFER* outtxt, int algo);
 int pgp_armor(BUFFER *buf, int mode);
 int pgp_dearmor(BUFFER *buf, BUFFER *out);
 int pgp_pubkeycert(BUFFER *userid, char *keyring, BUFFER *pass,

@@ -6,7 +6,7 @@
    details.
 
    OpenPGP data
-   $Id: pgpdata.c,v 1.24 2002/10/01 08:23:20 weaselp Exp $ */
+   $Id: pgpdata.c,v 1.25 2002/10/02 07:54:12 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -474,13 +474,13 @@ int pgp_getkey(int mode, int algo, int *psym, int *pmdc, long *pexpires, BUFFER 
  * OUT: psym   - found sym algo (or NULL)
  *	pmdc   - found mdc flag (or NULL)
  *	key    - found key, only key packet, decrypted
- *	           may be the same buffer as keypacket
+ *	           may be the same buffer as keypacket (or NULL)
  *	keyid  - found (sub)keyid (or NULL)
  *	userid - found userid (or NULL)
  *	pexpires - expiry time, or 0 if don't expire (or NULL)
  */
 {
-  int tempbuf = 0;
+  int tempbuf = 0, dummykey = 0;
   int keytype = -1, type, j;
   int thisalgo = 0, version, skalgo;
   int needsym = 0, symfound = 0, mdcfound = 0;
@@ -504,6 +504,10 @@ int pgp_getkey(int mode, int algo, int *psym, int *pmdc, long *pexpires, BUFFER 
     key = buf_new();
     tempbuf = 1;
   }
+  if (! key) {
+    key = buf_new();
+    dummykey = 1;
+  };
   if (userid)
     buf_clear(userid);
 
@@ -514,7 +518,7 @@ int pgp_getkey(int mode, int algo, int *psym, int *pmdc, long *pexpires, BUFFER 
       /* it is assumed that only valid keys have been imported */
       long a;
       int self = 0, certexpires = 0, suptype;
-      int sigtype, sigver = buf_getc(p1);
+      int sigtype = 0, sigver = buf_getc(p1);
       created = 0, expires = 0, primary = 0;
       if (sigver == 4) {
          sigtype = buf_getc(p1);
@@ -767,6 +771,9 @@ int pgp_getkey(int mode, int algo, int *psym, int *pmdc, long *pexpires, BUFFER 
   if (keyid) buf_set(keyid, thiskeyid);
   if (tempbuf) {
     buf_move(keypacket, key);
+    buf_free(key);
+  }
+  if (dummykey) {
     buf_free(key);
   }
   buf_free(p1);
