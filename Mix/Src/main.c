@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.10.2.5 2002/10/09 20:51:02 weaselp Exp $ */
+   $Id: main.c,v 1.10.2.6 2002/10/09 20:58:46 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -168,9 +168,9 @@ int main(int argc, char *argv[])
 	  case 'R':
 	    readmail = 1, deflt = 0;
 	    break;
-	case 'I':
-	  readmail = 2, deflt = 0;
-	  break;
+	  case 'I':
+	    readmail = 2, deflt = 0;
+	    break;
 	  case 'S':
 	    sendpool = 1, deflt = 0;
 	    break;
