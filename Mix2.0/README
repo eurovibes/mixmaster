@@ -23,7 +23,7 @@ these files are to be stored. This script will also obtain a list of reliable
 remailers (mix.list).  If you're paranoid, get them directly from 
 the remailers and slap them into the proper files yourself with your 
 favorite editor. The mix.list file can be obtained from the WWW by running
-"lynx -dump http://anon.efga.org/Remailers/mlist >$MIXPATH/mix.list".
+"lynx -dump http://stats.melontraffickers.com/mlist.txt >$MIXPATH/mix.list".
 This command can be run periodically using cron.
 
 
@@ -71,6 +71,7 @@ Thanks for help and valuable suggestions to:
   Nikolay Sturm <sturm@sec.informatik.tu-darmstadt.de>
   Rodney Thayer <rodney@tillerman.to>
   Dingo Admin <dingoadmin@dingoremailer.com>
+  Peter Palfrader <peter@palfrader.org>
 
   Mixmaster uses Jean-loup Gailly and Mark Adler's free compression library
   zlib and Philip Hazel's free regex library.
