@@ -1,6 +1,6 @@
 OBJS = bsafeeay.o
 SRC = bsafeeay.c
-INCLUDE = -I. -I../ssleay/include/openssl
+INCLUDE = -I. -I../ssleay/include -I../ssleay/include/openssl
 CC = gcc
 CFLAGS = -ggdb
 AR = ar
