@@ -80,7 +80,7 @@ Last Update: 1/7/03
 <br>
 <a href=#5>5. Policy</a><br>
 <a href=#5.1>5.1 Always Have A Posted Policy!</a><br>
-5.2 Responding to Abuse Complaints<br>
+<a href=#5.2>5.2 Responding to Abuse Complaints<br></a>
 5.3 To Monitor Or Not To Monitor?<br>
 <a href=#5.4>5.4 Cryptographically Signing Posts & E-mail<br></a>
 <a href=#5.4.1>5.4.1 How To<br></a>
@@ -350,7 +350,12 @@ While it is probably best to block abusive hosts at the firewall, in that this m
 <a name=5.1></a>
 <h3>5.1 Always Have A Posted Policy!</h3>
 Putting together and posting a well-thought-out abuse policy is a simple task that yields enormous dividends. If someone who has received abusive mailings through your remailer can see that you're doing your best to stop abuse, and that they have methods of recourse, they are infinitely less likely to complain to your ISP, try to crack your box, or otherwise harm you. Besides, making sure you're a good netizen by not tolerating abuse of your remailer is just good sense (not to mention good karma, if you belive in that sort of thing ;-).
+<a name=5.2></a>
 <h3>5.2 Responding to Abuse Complaints</h3>
+Making sure that you pay attention to abuse complaints is a key part of running a remailer. Not only is it good Netizenship, it's good PR for the cause: if someone experiences problems with you as a remop, chances are good they're going to think all remops and the whole concept of anonymous remailers are bad; if you're nice to them, then they'll think well of it all.<br><br>
+Responding to complaints from private citizens or companies is a rather simple process: unless there's some extreme reason not to, block them if they ask, and otherwise try to be accommodating of their wishes. Of course, if that includes "help me track down this SOB sending me these messages", well, you'll have to tell them the whole point of the service is that it's anonymous, and they're out of luck.<br><br>
+If a government entity asks you to block their address, you should probably point out that they have a legitimate requirement to listen to citizen concerns/complaints, and should probably only block an address if there are good supporting details -- i.e. it's someone's private address and complaints would be better received at a general mailbox, or if there was particularly pointless/offensive/etc. abuse or harrassment going on.<br><br>
+Most important of all, though, you need to have a clear policy already posted, so you can point to it and say, "Just follow my policy on this one." It should probably include when you will and won't block an address, what your philosophy is, why you're running the service, and have many good ways to contact you. Here's <a href=http://mixmaster.shinn.net/abuse.txt>an example</a>.
 <h3>5.3 To Monitor Or Not To Monitor?</h3>
 <a name=5.4></a>
 <h3>5.4 Cryptographically Signing Posts & E-mail</h3>
