@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.3 2002/07/10 04:57:06 rabbi Exp $
+# $Id: Install,v 1.4 2002/07/11 02:39:33 rabbi Exp $
 
 #whereis program default-path
 whereis()
@@ -402,7 +402,7 @@ then
   fi
  fi
 
- opensslinfo="Please get OpenSSL 0.9.6b from http://www.openssl.org/"
+ opensslinfo="Please get OpenSSL 0.9.4 or greater from http://www.openssl.org/"
  LIBDIR=/usr/local/ssl/lib
  INCDIR="/usr/include /usr/include/ssl /usr/lib/ssl/include /usr/local/ssl/include"
  SRCDIR="openssl*"
@@ -442,7 +442,10 @@ then
  fi 
 
  # Find the OpenSSL version header
- if [ -f $INCDIR/opensslv.h ]
+ if [ -f $INCDIR/openssl/opensslv.h ]
+ then
+  version=`grep 'SSL.*_VERSION_NUMBER.*0x' $INCDIR/openssl/opensslv.h | sed 's/.*0x0*//;s/[ 	].*//;s/L$//'`
+ elif [ -f $INCDIR/opensslv.h ]
  then
   version=`grep 'SSL.*_VERSION_NUMBER.*0x' $INCDIR/opensslv.h | sed 's/.*0x0*//;s/[ 	].*//;s/L$//'`
  fi
@@ -455,17 +458,29 @@ then
    echo $opensslinfo
    exit 1
   fi
- elif [ "16#$version" -lt "16#0920" ]
+ elif [ "16#$version" = "16#90581f" ]
+ then
+  echo "Compiling with OpenSSL 0.9.6a."
+ elif [ "16#$version" = "16#90602f" ]
+ then
+  echo "Compiling with OpenSSL 0.9.6b."
+ elif [ "16#$version" = "16#90603f" ]
+ then
+  echo "Compiling with OpenSSL 0.9.6c."
+ elif [ "16#$version" = "16#90604f" ]
+ then
+  echo "Compiling with OpenSSL 0.9.6d."
+ elif [ "$version" -lt "920" ]
  then
   echo "This version: ${version} of SSLeay is not supported."
   echo $opensslinfo
   exit 1
- elif [ "16#$version" -lt "16#00903100" ]
+ elif [ "$version" -lt "903100" ]
  then
   echo "This version: ${version} of OpenSSL is not supported."
   echo $opensslinfo
   exit 1
- elif [ "16#$version" -gt "16#00906000" ]
+ elif [ "$version" -gt "906000" ]
  then
   echo "Warning: This version: ${version} of OpenSSL is untested."
   readln "Continue anyway?" y
@@ -719,7 +734,7 @@ understand (If the address <$RMA> is also used"
  readln "Accept Mixmaster (Type II) messages?" y
  mix=$ans
 
- readln "Accept PGP (Type I) remailer messages?" y
+ readln "Accept PGP (Type I) remailer messages?" n
  pgp=$ans
 
  unencrypted=n
