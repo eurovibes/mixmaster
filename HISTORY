@@ -240,7 +240,7 @@
                              deliver an encrypted mix packet to the message pool
                              without attempting being decrypted.
                            Made minor updates for WIN32 DLL.
-                           When sending type II messages interactivly you may
+                           When sending type II messages interactively you may
                              now choose a middleman remailer as the last hop
                              in your chain (closes: #481244).
                            If a footer.txt file exists its content will be
@@ -456,3 +456,4 @@
                            Also sort mail into the various mboxes if autoreply
                              is not set.
                            Properly ignore whitespace in chain selection.
+                           Removed unused functions in keymgt.c.
