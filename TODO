@@ -1,7 +1,7 @@
 Mandatory todo items before 3.0 release:
 
 * autoconf installation script is needed
-  - mostly done -- Erik needs to check this in to CVS.
+  - mostly done -- a few bugs still need fixing
 * post-install scripts need to be reworked
   - follows item above.
 * provide a packaged Windows build to be used with QuickSilver
@@ -10,15 +10,7 @@ Mandatory todo items before 3.0 release:
   + list only these platforms as supported
   + test on Solaris 9 on SPARC.
 * keylifetime and key{grace,overlap}period needs to be documented once
-  it's finished; seems to work nicely for mixmaster keys so far, pgp
-  still giving problems
-  - move self/binding signatures to the secret keyrings
-  - display expiration date in ascii summary of keys
-  - if there is no expiration date on existing keys,
-    do _not_ add one, if there already is an expiration
-    date on they key, do _not_ change it
-  - only list the latest key of each type in pgpkeys.txt
-    (similar to how weasel's patch does it with mix keys)
+  it's finished
 * saner usage of /dev/[u]random is required
 * clean up documentation and tarball contents
   + ship with CVS ChangeLog
@@ -31,6 +23,8 @@ Items for 3.0 or 3.0.1
 
 * permit CRAM-MD5 SMTP AUTH in addition to LOGIN.
 * support a list of remailers not to be selected as *.
+  - a user suggested allowing filtering regexen over chains.
+    useful?  <20021001215010.28351.qmail@nym.alias.net>
 * allow for verification of clearsigned OpenPGP messages
 * AES support -- requires OpenSSL 0.9.7
 * further mpgp testing of AES/MDC packet support
@@ -39,8 +33,6 @@ Items for 3.0 or 3.0.1
 * Windows build instructions/files
 * documentation issues resolved
   + mpgp man page
-* find bug that is causing t* files to linger
-  + rabbi thinks this might have been fixed.
 * further debugging (if needed).
 
 
@@ -48,7 +40,6 @@ Further wishlist:
 
 * Automatic key handling:
   + requires implementing key signing, key deletion
-  + Automatically announce new keys?  - I don't think this is needed (PP)
     - implement remailer-key signing?
     - if yes, which key?
 * make mpgp friendlier
