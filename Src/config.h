@@ -215,7 +215,7 @@
 #else
 #define DEFAULT_TYPE2LIST "type2.list"
 #endif
-#define DEFAULT_PIDFILE "mix.pid"
+#define DEFAULT_PIDFILE "mixmaster.pid"
 
 #define DEFAULT_PGPREMPUBRING "pubring.pgp"
 #define DEFAULT_PGPREMPUBASC "pubring.asc"

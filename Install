@@ -587,17 +587,21 @@ elif [ "$version" = "90609f" ]
  then
   echo "Compiling with OpenSSL 0.9.7."
   opensslwarn 7
+  DEF="$DEF -DUSE_AES"
  elif [ "$version" = "90701f" ]
  then
   echo "Compiling with OpenSSL 0.9.7a."
   opensslwarn 7
+  DEF="$DEF -DUSE_AES"
  elif [ "$version" = "90702f" ]
  then
   echo "Compiling with OpenSSL 0.9.7b."
   opensslwarn 7
+  DEF="$DEF -DUSE_AES"
  elif [ "$version" = "90703f" ]
  then
   echo "Compiling with OpenSSL 0.9.7c."
+  DEF="$DEF -DUSE_AES"
  elif [ "$version" -lt "920" ]
  then
   echo "This version: ${version} of SSLeay is not supported."
@@ -616,6 +620,13 @@ elif [ "$version" = "90609f" ]
   then
    echo $opensslinfo
    exit 1
+  else 
+   echo "Does this version of OpenSSL contain AES support?"
+   readln "If unsure of the answer, say n" n
+    if [ "$ans" = "y" ]
+    then
+    DEF="$DEF -DUSE_AES"
+    fi
   fi
  fi
 
@@ -781,7 +792,7 @@ else
  fi
 fi
 
-if [ -x mix ]
+if [ -x mixmaster ]
 then
  echo
 else
@@ -804,11 +815,11 @@ then
  exit 0
 fi
 
-if [ -f mix.exe ]
+if [ -f mixmaster.exe ]
 then
- cp mix.exe "$MIXDEST"
+ cp mixmaster.exe "$MIXDEST"
 else
- cp mix "$MIXDEST"
+ cp mixmaster "$MIXDEST"
 fi
 
 cd "$MIXCFG"
@@ -1106,7 +1117,7 @@ then
 else
  echo "Updating secret keys..."
 fi
-./mix -K
+./mixmaster -K
 if [ -f key.txt ]
 then
  echo "Done."
@@ -1161,7 +1172,7 @@ fi
 if [ "$set" = y ]
 then
  echo "Set .forward to the following line:"
- echo "\"|${MIXDEST}/mix -RM\""
+ echo "\"|${MIXDEST}/mixmaster -RM\""
  if [ -f ~/.forward ]
  then
   readln "Overwrite now?" n
@@ -1170,7 +1181,7 @@ then
  fi
  if [ "$ans" = "y" ]
  then
-  echo "\"|${MIXDEST}/mix -RM\"" >~/.forward
+  echo "\"|${MIXDEST}/mixmaster -RM\"" >~/.forward
  fi
 fi
 
