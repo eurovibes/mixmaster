@@ -6,10 +6,11 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.13 2002/08/25 07:47:23 weaselp Exp $ */
+   $Id: main.c,v 1.14 2002/08/26 19:24:30 rabbi Exp $ */
 
 
 #include "mix3.h"
+#include "pgp.h"
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -572,10 +573,29 @@ end:
   buf_free(attachments);
 
   if (daemon) {
-#ifdef UNIX
-    int pid;
+    BUFFER *pass, *key;
+    pass = buf_new();
+    key = buf_new();
+    buf_sets(pass, PASSPHRASE);
+    while (pgpdb_getkey(PK_DECRYPT, PGP_ES_RSA, NULL, NULL, NULL, NULL,
+                         NULL, NULL, NULL, pass) < 0 &&
+           pgpdb_getkey(PK_DECRYPT, PGP_E_ELG,  NULL, NULL, NULL, NULL,
+                         NULL, NULL, NULL, pass) < 0 &&
+           getv2seckey(NULL, key) < 0)
+    {
+      user_delpass();
+      user_pass(pass);
+      strncpy(PASSPHRASE, pass->data, LINELEN);
+      PASSPHRASE[LINELEN-1] = 0;
+    }
+    user_delpass();
+    buf_free(pass);
+    buf_free(key);
 
+#ifdef UNIX
     if (! nodetach) {
+      int pid;
+
       fprintf(stderr, "Detaching.\n");
       /* Detach as suggested by the Unix Programming FAQ */
       pid = fork();

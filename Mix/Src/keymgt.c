@@ -6,14 +6,14 @@
    details.
 
    Key management
-   $Id: keymgt.c,v 1.9 2002/08/07 18:06:55 weaselp Exp $ */
+   $Id: keymgt.c,v 1.10 2002/08/26 19:24:30 rabbi Exp $ */
 
 
 #include "mix3.h"
 #include <string.h>
 #include <assert.h>
 
-static int getv2seckey(byte keyid[], BUFFER *key);
+int getv2seckey(byte keyid[], BUFFER *key);
 static int getv3seckey(byte keyid[], BUFFER *key);
 static int getv2pubkey(byte keyid[], BUFFER *key);
 static int getv3pubkey(byte keyid[], BUFFER *key);
@@ -45,31 +45,35 @@ static int getv3pubkey(byte keyid[], BUFFER *key)
 }
 
 #ifdef USE_RSA
-static int getv2seckey(byte keyid[], BUFFER *key)
+/* now accepts NULL keyid too, with NULL keyid any key
+ * will be matched, with valid passphrase of course */
+int getv2seckey(byte keyid[], BUFFER *key)
 {
   FILE *keyring;
   BUFFER *iv, *pass, *temp;
   char idstr[33];
   char line[LINELEN];
-  int err = 0;
+  int err = -1;
 
   pass = buf_new();
   iv = buf_new();
   temp = buf_new();
-  id_encode(keyid, idstr);
+  if (keyid)
+    id_encode(keyid, idstr);
+  else
+    idstr[0] = 0;
   strcat(idstr, "\n");
   if ((keyring = mix_openfile(SECRING, "r")) == NULL) {
     errlog(ERRORMSG, "No secret key file!\n");
-    err = -1;
-    goto end;
-  }
-  for (;;) {
+  } else
+   while (err == -1) {
+    buf_clear(key);
     if (fgets(line, sizeof(line), keyring) == NULL)
       break;
     if (strleft(line, begin_key)) {
       if (fgets(line, sizeof(line), keyring) == NULL)
 	break;
-      if (!streq(line, idstr))
+      if (keyid && !streq(line, idstr))
 	continue;
       fgets(line, sizeof(line), keyring);
       fgets(line, sizeof(line), keyring);
@@ -78,33 +82,26 @@ static int getv2seckey(byte keyid[], BUFFER *key)
       for (;;) {
 	if (fgets(line, sizeof(line), keyring) == NULL)
 	  break;
-	if (strleft(line, end_key))
+	if (strleft(line, end_key)) {
+	  if (decode(key, key) == -1) {
+	    errlog(ERRORMSG, "Corrupt secret key.\n");
+	    break;
+	  }
+	  buf_sets(pass, PASSPHRASE);
+	  digest_md5(pass, pass);
+	  buf_crypt(key, pass, iv, DECRYPT);
+	  err = check_seckey(key, keyid);
+	  if (err == -1)
+	    errlog(ERRORMSG, "Corrupt secret key. Bad passphrase?\n");
 	  break;
+	}
 	buf_append(key, line, strlen(line) - 1);
       }
       break;
     }
-  }
+   }
   fclose(keyring);
 
-  if (key->length == 0) {
-    errlog(ERRORMSG, "No such key: %s", idstr);
-    err = -1;
-  } else {
-    err = decode(key, key);
-    if (err == -1)
-      errlog(ERRORMSG, "Corrupt secret key.\n");
-  }
-  if (err == -1)
-    goto end;
-  buf_sets(pass, PASSPHRASE);
-  digest_md5(pass, pass);
-  buf_crypt(key, pass, iv, DECRYPT);
-
-  err = check_seckey(key, keyid);
-  if (err == -1)
-    errlog(ERRORMSG, "Corrupt secret key. Bad passphrase?\n");
-end:
   buf_free(pass);
   buf_free(iv);
   buf_free(temp);
@@ -169,7 +166,7 @@ end:
 }
 
 #else
-static int getv2seckey(byte keyid[], BUFFER *key)
+int getv2seckey(byte keyid[], BUFFER *key)
 {
   return -1;
 }
