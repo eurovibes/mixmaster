@@ -310,4 +310,7 @@
                              when storing a mail so that the mandatory empty
                              line is there.
 
-2002-12-16	2.9.0rc1   Release candidate. Packaging changes only.
+2002-12-16      2.9.0rc1   Release candidate. Packaging changes only.
+
+2002-12-25      2.9.0      Release version. Minor documentation changes
+                             and version number change only.
