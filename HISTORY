@@ -276,8 +276,9 @@
                              and the folder cleared every time Mixmaster
                              processes its pool, or at MAILINTIME intervals
                              (closes: #597043).
+                           The Mixmaster daemon now writes a pid file.
 
-2002-??-??      MAIN      Applied Maildir feature patch by drt@un.bewaff.net,
+2002-??-??      MAIN       Applied Maildir feature patch by drt@un.bewaff.net,
                              with some changes by PP:
                              MAILBOX can now be a Maildir (closes: #586223).
                            Mixmaster in daemon mode reloads configuration on
@@ -293,7 +294,6 @@
                              keyring.
                            Mixmaster now prompts for secret key passphrase when
                              started in daemon mode.
-                           The Mixmaster daemon now writes a pid file.
                            Mixmaster checks expiration and revocation status of
                              pgp keys, userids, and subkeys.
                            Mixmaster will not encrypt or sign with a revoked
