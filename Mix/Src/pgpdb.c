@@ -6,7 +6,7 @@
    details.
 
    OpenPGP key database
-   $Id: pgpdb.c,v 1.9 2002/08/26 19:17:31 weaselp Exp $ */
+   $Id: pgpdb.c,v 1.10 2002/09/12 17:26:00 disastry Exp $ */
 
 
 #include "mix3.h"
@@ -225,7 +225,7 @@ int pgpdb_append(KEYRING *keydb, BUFFER *p)
 
 #define pgp_preferredalgo PGP_ES_RSA
 
-int pgpdb_getkey(int mode, int algo, int *sym, int *mdc, BUFFER *key, BUFFER *userid,
+int pgpdb_getkey(int mode, int algo, int *sym, int *mdc, long *expires, BUFFER *key, BUFFER *userid,
 		 BUFFER *founduid, BUFFER *keyid, char *keyring, BUFFER *pass)
 {
   KEYRING *r;
@@ -264,7 +264,7 @@ int pgpdb_getkey(int mode, int algo, int *sym, int *mdc, BUFFER *key, BUFFER *us
       break;
     if (keyid) /* pgp_getkey has to chose subkey with given keyid */
       buf_set(thisid, keyid);
-    thisalgo = pgp_getkey(mode, algo, sym, mdc, thiskey, thiskey, thisid, founduid,
+    thisalgo = pgp_getkey(mode, algo, sym, mdc, expires, thiskey, thiskey, thisid, founduid,
 			  pass);
     if (thisalgo == PGP_PASS)
       needpass = 1;
@@ -319,7 +319,8 @@ int pgp_keymgt(int force)
   FILE *f = NULL;
   BUFFER *key, *keybak, *userid, *out, *outkey, *outtxt, *pass, *secout;
   KEYRING *keys;
-  int err = 0, type = 0;
+  int err = 0, type = 0, res;
+  long expires;
   LOCK *seclock;
 
   key = buf_new();
@@ -340,20 +341,22 @@ int pgp_keymgt(int force)
    * with IDEA.
    */
 #ifdef USE_IDEA
-  if (force == 2 || (pgpdb_getkey(PK_DECRYPT, PGP_ES_RSA, NULL, NULL, NULL, NULL,
-				  NULL, NULL, NULL, pass) < 0))
+  res = pgpdb_getkey(PK_DECRYPT, PGP_ES_RSA, NULL, NULL, &expires, NULL, NULL,
+				  NULL, NULL, NULL, pass);
+  if (force == 2 || res < 0 || (expires > 0 && expires - KEYOVERLAPPERIOD < time(NULL)))
     pgp_keygen(PGP_ES_RSA, 0, userid, pass, PGPKEY, PGPREMSECRING, 0);
 
-  if (force == 0 && (pgpdb_getkey(PK_ENCRYPT, PGP_ES_RSA, NULL, NULL, NULL, NULL,
+  if (force == 0 && (pgpdb_getkey(PK_ENCRYPT, PGP_ES_RSA, NULL, NULL, NULL, NULL, NULL,
 				  NULL, NULL, PGPKEY, NULL) < 0))
     goto end;
 #endif
 #endif
-  if (force == 2 || (pgpdb_getkey(PK_DECRYPT, PGP_E_ELG, NULL, NULL, NULL, NULL,
-				  NULL, NULL, NULL, pass) < 0))
+  res = pgpdb_getkey(PK_DECRYPT, PGP_E_ELG, NULL, NULL, &expires, NULL, NULL,
+				  NULL, NULL, NULL, pass);
+  if (force == 2 || res < 0 || (expires > 0 && expires - KEYOVERLAPPERIOD < time(NULL)))
     pgp_keygen(PGP_E_ELG, 0, userid, pass, PGPKEY, PGPREMSECRING, 0);
 
-  if (force == 0 && (pgpdb_getkey(PK_ENCRYPT, PGP_E_ELG, NULL, NULL, NULL, NULL,
+  if (force == 0 && (pgpdb_getkey(PK_ENCRYPT, PGP_E_ELG, NULL, NULL, NULL, NULL, NULL,
 				  NULL, NULL, PGPKEY, NULL) > 0))
     goto end;
 
@@ -448,7 +451,6 @@ int pgp_rkeylist(REMAILER remailer[], int keyid[], int n)
   BUFFER *userid;
   BUFFER *id;
   int i, err;
-  int mdc, sym;
 
   userid = buf_new();
   id = buf_new();
@@ -459,9 +461,8 @@ int pgp_rkeylist(REMAILER remailer[], int keyid[], int n)
 
     keyid[i]=0;
     if (remailer[i].flags.pgp) {
-      mdc = sym = 0;
       buf_clear(id);
-      err = pgpdb_getkey(PK_VERIFY, PGP_ANY, &sym, &mdc, NULL, userid, NULL, id, NULL, NULL);
+      err = pgpdb_getkey(PK_VERIFY, PGP_ANY, NULL, NULL, NULL, NULL, userid, NULL, id, NULL, NULL);
       if (id->length == 8) {
         /* printf("%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x %s\n",
 	   id->data[0], id->data[1], id->data[2], id->data[3], id->data[4], id->data[5], id->data[6], id->data[7], id->data[8], remailer[i].addr); */

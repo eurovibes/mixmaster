@@ -6,7 +6,7 @@
    details.
 
    Read OpenPGP packets
-   $Id: pgpget.c,v 1.8 2002/08/23 00:21:54 weaselp Exp $ */
+   $Id: pgpget.c,v 1.9 2002/09/12 17:26:00 disastry Exp $ */
 
 
 #include "mix3.h"
@@ -264,7 +264,7 @@ int pgp_getsig(BUFFER *p, pgpsig *sig, char *pubring)
   if (hashalgo != PGP_H_MD5)
     goto end;
   hash = buf_geti(p);
-  if (pgpdb_getkey(PK_VERIFY, algo, NULL, NULL, sigkey, NULL, sig->userid, id,
+  if (pgpdb_getkey(PK_VERIFY, algo, NULL, NULL, NULL, sigkey, NULL, sig->userid, id,
 		   pubring, NULL) < 0) {
     sig->ok = PGP_SIGNKEY;
     if (sig->userid)
@@ -743,6 +743,7 @@ int pgp_getsessionkey(BUFFER *in, BUFFER *pass, char *secring)
   int i, csum = 0;
   int algo = 0;
   int err = -1;
+  long expires;
 
   out = buf_new();
   key = buf_new();
@@ -752,10 +753,15 @@ int pgp_getsessionkey(BUFFER *in, BUFFER *pass, char *secring)
     goto end;
   buf_get(in, keyid, 8);
   algo = buf_getc(in);
-  err = pgpdb_getkey(PK_DECRYPT, algo, NULL, NULL, key, NULL, NULL, keyid,
+  err = pgpdb_getkey(PK_DECRYPT, algo, NULL, NULL, &expires, key, NULL, NULL, keyid,
 		     secring, pass);
   if (err < 0)
     goto end;
+  if (expires > 0 && (expires + KEYGRACEPERIOD < time(NULL))) {
+    errlog(DEBUGINFO, "Key expired.\n"); /* DEBUGINFO ? */
+    err = -1;
+    goto end;
+  }
   switch (algo) {
 #ifdef USE_RSA
   case PGP_ES_RSA:

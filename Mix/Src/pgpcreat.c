@@ -6,7 +6,7 @@
    details.
 
    Create OpenPGP packets
-   $Id: pgpcreat.c,v 1.8 2002/09/07 11:27:22 disastry Exp $ */
+   $Id: pgpcreat.c,v 1.9 2002/09/12 17:25:59 disastry Exp $ */
 
 
 #include "mix3.h"
@@ -454,7 +454,7 @@ int pgp_sessionkey(BUFFER *out, BUFFER *user, BUFFER *keyid, BUFFER *seskey,
     tempbuf = 1;
   }
   sym = seskey->data[0];
-  if ((algo = pgpdb_getkey(PK_ENCRYPT, PGP_ANY, &sym, NULL, key, user, NULL, keyid,
+  if ((algo = pgpdb_getkey(PK_ENCRYPT, PGP_ANY, &sym, NULL, NULL, key, user, NULL, keyid,
 			   pubring, NULL)) == -1)
     goto end;
 
@@ -628,7 +628,7 @@ int pgp_signhashalgo(BUFFER *algo, BUFFER *userid, char *secring, BUFFER *pass)
 {
   int pkalgo;
 
-  pkalgo = pgpdb_getkey(PK_SIGN, PGP_ANY, NULL, NULL, NULL, userid, NULL, NULL,
+  pkalgo = pgpdb_getkey(PK_SIGN, PGP_ANY, NULL, NULL, NULL, NULL, userid, NULL, NULL,
 			secring, pass);
   if (pkalgo == PGP_S_DSA)
     buf_sets(algo, "sha1");
@@ -670,9 +670,9 @@ int pgp_sign(BUFFER *msg, BUFFER *msg2, BUFFER *sig, BUFFER *userid,
   }
   if (keypacket) {
     buf_rewind(keypacket);
-    algo = pgp_getkey(PK_SIGN, PGP_ANY, NULL, NULL, keypacket, key, id, NULL, pass);
+    algo = pgp_getkey(PK_SIGN, PGP_ANY, NULL, NULL, NULL, keypacket, key, id, NULL, pass);
   } else
-    algo = pgpdb_getkey(PK_SIGN, PGP_ANY, NULL, NULL, key, userid, NULL, id, secring,
+    algo = pgpdb_getkey(PK_SIGN, PGP_ANY, NULL, NULL, NULL, key, userid, NULL, id, secring,
 			pass);
   if (algo <= -1) {
     err = algo;
@@ -686,10 +686,13 @@ int pgp_sign(BUFFER *msg, BUFFER *msg2, BUFFER *sig, BUFFER *userid,
     hashalgo = PGP_H_SHA1;
 
   if (!self && type != PGP_SIG_BINDSUBKEY)
-    version = 3; /* why this one? shouldn't it be removed? */
+    version = 3;
 
   switch (type) {
    case PGP_SIG_CERT:
+   case PGP_SIG_CERT1:
+   case PGP_SIG_CERT2:
+   case PGP_SIG_CERT3:
      type1 = pgp_getpacket(msg, d) == PGP_PUBKEY;
      assert (type1);
      buf_setc(msg, 0x99);
