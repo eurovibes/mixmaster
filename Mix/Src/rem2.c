@@ -141,7 +141,7 @@ static int isnewid(BUFFER *id, long timestamp)
     }
   }
   if (timestamp > now) {
-    errlog(LOG, "Ingoring message with future timestamp.\n");
+    errlog(LOG, "Ignoring message with future timestamp.\n");
     ret = -1;
     goto end;
   }
