@@ -6,7 +6,7 @@
    details.
 
    OpenPGP key database
-   $Id: pgpdb.c,v 1.17 2002/09/27 09:15:54 weaselp Exp $ */
+   $Id: pgpdb.c,v 1.18 2002/10/01 08:23:20 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -410,7 +410,7 @@ int pgp_keymgt(int force)
     while (pgpdb_getnext(keys, key, NULL, userid) != -1) {
       buf_clear(outtxt);
       buf_clear(outkey);
-        buf_appends(outtxt, "FIXME");
+      if (pgp_makekeyheader(PGP_PUBKEY, key, outtxt, pass, PGP_ANY) == 0) {
 	err = 0;
 	buf_appends(out, "Type Bits/KeyID     Date       User ID\n");
 	buf_cat(out, outtxt);
@@ -418,6 +418,7 @@ int pgp_keymgt(int force)
 	pgp_armor(key, PGP_ARMOR_KEY);
 	buf_cat(out, key);
 	buf_nl(out);
+      }
     }
     pgpdb_close(keys);
   }
@@ -433,7 +434,7 @@ int pgp_keymgt(int force)
     buf_clear(outkey);
     buf_clear(keybak);
     buf_cat(keybak, key);
-    if (pgp_makeseckey(key, outtxt, pass, PGP_ANY) == 0) {
+    if (pgp_makekeyheader(PGP_SECKEY, key, outtxt, pass, PGP_ANY) == 0) {
       err = 0;
       buf_appends(secout, "Type Bits/KeyID     Date       User ID\n");
       buf_cat(secout, outtxt);
