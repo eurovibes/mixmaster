@@ -6,7 +6,7 @@
    details.
 
    OpenPGP messages
-   $Id: pgp.c,v 1.14 2002/09/28 18:25:36 ulfm Exp $ */
+   $Id: pgp.c,v 1.15 2002/09/30 21:26:28 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -349,8 +349,10 @@ int pgp_dearmor(BUFFER *in, BUFFER *out)
     crc2 = (((unsigned long)temp->data[0])<<16) | (((unsigned long)temp->data[1])<<8) | temp->data[2];
     if (crc1 == crc2)
       err = buf_getline(in, line);
-    else
+    else {
+      errlog(NOTICE, "Message CRC does not match.\n");
       err = -1;
+    }
   } else
     err = -1;
   if (err == 0 && bufleft(line, end_pgp))
