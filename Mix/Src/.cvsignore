@@ -2,7 +2,7 @@ Makefile
 mix
 mpgp
 remailer
-test 
+test
 core
 gmon.out
 tmptst.c
