@@ -638,7 +638,7 @@ Remailer-Type: Mixmaster [version number]
             available.  Supported languages SHOULD be listed at the
             beginning of the "remailer-help" response.</t>
           <t hangText="remailer-key">Returns the remailer's public key as
-            described above<!-- XXX -->. It may also return the keys and attributes
+            described in <xref target="key-format"/>. It may also return the keys and attributes
             of other remailers it knows about.</t>
           <t hangText="remailer-stats">Returns information about the number
             of messages the remailer has processed per day.</t>
@@ -647,7 +647,7 @@ Remailer-Type: Mixmaster [version number]
             filtered headers, blocked newsgroups and domains, and the
             attribute strings for other remailers the remailer knows
             about.</t>
-          <t hangText="remailer-adminkey">Returns the OopenPGP <xref target="RFC2440"/>
+          <t hangText="remailer-adminkey">Returns the OpenPGP <xref target="RFC2440"/>
             key of the remailer's operator.</t>
         </list>
       </t>
