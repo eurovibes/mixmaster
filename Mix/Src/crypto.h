@@ -6,7 +6,7 @@
    details.
 
    Interface to cryptographic library
-   $Id: crypto.h,v 1.2.2.1 2002/10/09 20:29:44 weaselp Exp $ */
+   $Id: crypto.h,v 1.2.2.2 2002/10/16 20:32:57 rabbi Exp $ */
 
 
 #ifndef _CRYPTO_H
@@ -16,7 +16,7 @@
 #ifdef USE_OPENSSL
 #include <openssl/opensslv.h>
 #if (OPENSSL_VERSION_NUMBER < 0x0903100)
-#error "This version of OpenSSL is not supported. Please get a more current verion from http://www.openssl.org"
+#error "This version of OpenSSL is not supported. Please get a more current version from http://www.openssl.org"
 #endif /* version check */
 #include <openssl/des.h>
 #include <openssl/blowfish.h>
