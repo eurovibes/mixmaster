@@ -6,7 +6,7 @@
    details.
 
    Encrypt message for Mixmaster chain
-   $Id: chain2.c,v 1.9 2003/05/03 06:56:22 weaselp Exp $ */
+   $Id: chain2.c,v 1.10 2003/05/05 11:03:40 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -425,7 +425,7 @@ int mix2_encrypt(int type, BUFFER *message, char *chainstr, int numcopies,
     goto end;
   }
   if (chain[0] == 0) {
-    chain[0] = chain_randfinal(type, remailer, badchains, maxrem, 0, ( chainlen == 1 ? -1 : chain[1]));
+    chain[0] = chain_randfinal(type, remailer, badchains, maxrem, 0, chain, chainlen);
     fprintf(stderr,"bla %d\n", chain[0]);
   };
 
