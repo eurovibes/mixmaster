@@ -5,23 +5,18 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Makefile.in,v 1.6 2002/08/21 15:24:28 weaselp Exp $
+# $Id: Makefile.in,v 1.7 2002/10/01 13:01:39 dybbuk Exp $
 
 # Edit according to the libraries you want to use:
-INC = %INC
-DEF = %DEF -DUSE_SOCK %MIXDIR
-LIBS = %LIBS
-LDFLAGS = %LDFLAGS
+INC = @CPPFLAGS@
+DEF = -DUSE_SOCK @MIXDIR@
+LIBS = @LIBS@ @XLIBS@
+LDFLAGS = @LDFLAGS@ @LIBOBJS@
 
-OPT = -g -Wall
-# OPT = -g -pg -Wall -DDEBUG
-# OPT = -O2 -Wall
-
-CFLAGS = $(INC) $(DEF) $(OPT)
-CC = gcc
+CFLAGS = @CFLAGS@ $(INC) $(DEF)
+CC = @CC@
 AR = ar rc
-RANLIB = ranlib
-#MAKE = make
+RANLIB = @RANLIB@
 
 OBJ = mix.o rem.o rem1.o rem2.o rem3.o chain.o chain1.o chain2.o chain3.o nym.o pgp.o pgpdb.o pgpdata.o pgpget.o pgpcreat.o pool.o mail.o rfc822.o mime.o keymgt.o compress.o stats.o crypto.o random.o util.o buffers.o maildir.o
 
@@ -64,8 +59,10 @@ test:	$(OBJ) test.o $(NOMENUOBJ) $(LIBS)
 clean:
 	-rm -f *.o *.a *.res *~ mix *.exe remailer test mpgp core gmon.out
 
-allclean: clean
+realclean: clean
 	-rm -f Makefile
+
+distclean: realclean
 
 ci: clean
 	cd ~/mix3; ci -l * Mix/* Mix/Src/*; echo
