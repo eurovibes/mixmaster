@@ -215,3 +215,25 @@
                            List CAST5 and AES128 in cipher preferences.
                            Now displays Mixmaster version in the PGP version
                              header for non remailer/nym messages.
+
+2002-09-11      2.9b38     Install script deals with lack of patented IDEA
+                             algorithm in a sane way (closes: #479020).
+                           Compiled-in passphrase is now depricated.
+                           When expiring packet ids from id.log also expire
+                             packets that are dated more than half a year in 
+                             the future.  That way we get rid of invalid 
+                             packets introduced by the switch to a binary file.
+                           The stats in remailer-stats replies always had a 
+                             peak at 00:00 GMT which was wrong. Fixed. 
+                             (closes: #597688).
+                           Fixed a bug with reading armored keyrings consisting
+                             of more than one armored block or having comments
+                              in front of the one armored block.
+                           In RSA PGP keys, we now set e=0x11.
+                           Mixmaster now deletes error and temporary files
+                             older than PACKETEXP time along with expired 
+                             partial packets.
+                           Linux PPC fixes (and all other archs where char is
+                             unsigned).
+
+v
