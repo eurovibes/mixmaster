@@ -779,10 +779,18 @@ Remailer-Type: Mixmaster [version number]
       for packets encrypted to a key which has expired more than a week in
       the past.</t>
 
+    <t>The use of a link-level encryption protocol with an ephemeral key,
+      such as STARTTLS with SMTP <xref target="RFC2487"/>, provides for 
+      forward secrecy and further aids against replay attacks. Remailer 
+      operators should be encouraged to deploy such solutions at the MTA 
+      level whenever possible.</t>
+
     <t>Early implementations of Mixmaster did not generate a timestamp
       packet. Implementors should be aware of the partitioning attack
       implications if they chose to permit processing of packets without
-      timestamps.</t>
+      timestamps. Mixmaster versions 2.0.5 and greater in the 2.0.x tree 
+      as well as Mixmaster 3.0 in the 3.x tree do not permit processing of
+      such packets.</t>
 
     <t>Message integrity must be verified to prevent the adversary from
       performing chosen ciphertext attacks or replay attacks with modified
@@ -804,7 +812,9 @@ Remailer-Type: Mixmaster [version number]
       choose at random a fixed fraction of the messages in the pool for
       processing. There is no complete protection against flooding attacks in
       an open system, but if the number of messages required is high, an
-      attack is less likely to go unnoticed.</t>
+      attack is less likely to go unnoticed. Additional work has been done in 
+      the field of active flooding attack protection; future mix-net protocols
+      may wish to take advantage of this work <xref target="Danezis03"/>.</t>
 
     <t>If the adversary suppresses all Mixmaster messages from one particular
       sender and observes that anonymous messages of a certain kind are
@@ -876,7 +886,6 @@ Remailer-Type: Mixmaster [version number]
       </front>
     </reference>
 
-
     <reference anchor="Mazieres98"
       target="ftp://cag.lcs.mit.edu/pub/dm/papers/mazieres:pnym.ps.gz">
       <front>
@@ -891,6 +900,22 @@ Remailer-Type: Mixmaster [version number]
           <address/>
         </author>
         <date year="1998"/>
+      </front>
+    </reference>
+
+    <reference anchor="Danezis03"
+      target="http://www.cl.cam.ac.uk/users/gd216/p125_danezis.pdf">
+      <front>
+        <title>Heartbeat Traffic to Counter (n-1) Attacks</title>
+        <author initials="G." surname="Danezis" fullname="George Danezis">
+          <organization/><address/>
+        </author>
+        <author initials="L." surname="Sassaman" fullname="Len Sassaman">
+          <organization>Workshop on Privacy in the Electronic Society
+          </organization>
+          <address/>
+        </author>
+        <date month="October" year="2003"/>
       </front>
     </reference>
 
@@ -948,6 +973,7 @@ Remailer-Type: Mixmaster [version number]
     <?rfc include="reference.RFC.2311.xml" ?>
     <?rfc include="reference.RFC.2437.xml" ?>
     <?rfc include="reference.RFC.2440.xml" ?>
+    <?rfc include="reference.RFC.2487.xml" ?>
     <?rfc include="reference.RFC.2822.xml" ?>
 
   </references>
