@@ -444,7 +444,7 @@ then
  fi
 
  LIBDIR=
- INCDIR=
+ INCDIR="/usr/include /usr/include/pcre /usr/local/pcre/include"
  SRCDIR=pcre*
  findlib libpcre.a
  if [ "$found" != "" ]
