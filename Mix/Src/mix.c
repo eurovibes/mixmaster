@@ -63,6 +63,7 @@ char STATS[PATHMAX];
 char PGPMAXCOUNT[PATHMAX];
 char DESTBLOCK[PATHMAX];
 char DESTALLOW[PATHMAX];
+char DESTALLOW2[PATHMAX];
 char SOURCEBLOCK[PATHMAX];
 char HDRFILTER[PATHMAX];
 char REGULAR[PATHMAX];
@@ -394,6 +395,7 @@ static void mix_setdefaults()
 	strnncpy(PGPMAXCOUNT  , DEFAULT_PGPMAXCOUNT);
 	strnncpy(DESTBLOCK    , DEFAULT_DESTBLOCK);
 	strnncpy(DESTALLOW    , DEFAULT_DESTALLOW);
+	strnncpy(DESTALLOW2   , DEFAULT_DESTALLOW2);
 	strnncpy(SOURCEBLOCK  , DEFAULT_SOURCEBLOCK);
 	strnncpy(HDRFILTER    , DEFAULT_HDRFILTER);
 	strnncpy(REGULAR      , DEFAULT_REGULAR);
@@ -586,7 +588,8 @@ int mix_configline(char *line)
 	  read_conf(PUBRING) || read_conf(IDLOG) ||
 	  read_conf(STATS) || read_conf(DESTBLOCK) ||
 	  read_conf(PGPMAXCOUNT) ||
-	  read_conf(DESTALLOW) || read_conf(SOURCEBLOCK) ||
+	  read_conf(DESTALLOW) || read_conf(DESTALLOW2) ||
+	  read_conf(SOURCEBLOCK) ||
 	  read_conf(STAREX) ||
 	  read_conf(HDRFILTER) || read_conf(REGULAR) ||
 	  read_conf(POOL) || read_conf(TYPE1LIST) ||

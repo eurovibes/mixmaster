@@ -557,11 +557,12 @@ int allowmessage(BUFFER *in)
  * addresses are in dest.allow. If yes return 1; 0 otherwhise
  */
 {
-  BUFFER *out, *allow, *line, *line2;
+  BUFFER *out, *allow, *allow2, *line, *line2;
   int err=1;
   FILE *f;
 
   allow = buf_new();
+  allow2 = buf_new();
   out = buf_new();
   line = buf_new();
   line2 = buf_new();
@@ -570,6 +571,12 @@ int allowmessage(BUFFER *in)
   if (f != NULL) {
     buf_read(allow, f);
     fclose(f);
+  }
+  f = mix_openfile(DESTALLOW2, "r");
+  if (f != NULL) {
+    buf_read(allow2, f);
+    fclose(f);
+    buf_cat(allow, allow2);
   }
 
   /* Do header lines */
@@ -602,6 +609,7 @@ int allowmessage(BUFFER *in)
   buf_move(in, out);
   buf_free(out);
   buf_free(allow);
+  buf_free(allow2);
   buf_free(line);
   buf_free(line2);
   return (err);

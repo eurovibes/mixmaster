@@ -223,6 +223,7 @@
 /* Filenames must be seperated by one space.                   */
 #define DEFAULT_DESTBLOCK "dest.blk rab.blk"
 #define DEFAULT_DESTALLOW "dest.alw"
+#define DEFAULT_DESTALLOW2 "dest.alw.nonpublished"
 #define DEFAULT_SOURCEBLOCK "source.blk"
 #define DEFAULT_HDRFILTER "header.blk"
 #define DEFAULT_REGULAR "time.log"
@@ -268,6 +269,7 @@ extern char STATS[];
 extern char PGPMAXCOUNT[];
 extern char DESTBLOCK[];
 extern char DESTALLOW[];
+extern char DESTALLOW2[];
 extern char SOURCEBLOCK[];
 extern char HDRFILTER[];
 extern char REGULAR[];
