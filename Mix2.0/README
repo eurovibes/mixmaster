@@ -5,23 +5,25 @@ Mixmaster can be used with either of the cryptographic libraries
 RSAREF or OpenSSL. The Src directory should contain a directory (or
 symbolic link) named `rsaref' or `ssleay' (for legacy reasons). Mixmaster 
 also checks for OpenSSL in /usr/local/ssl. OpenSSL is available from
-<URL:http://www.openssl.org/source/openssl-0.9.6e.tar.gz>.
+<URL:http://www.openssl.org/source/openssl-0.9.6g.tar.gz>.
 
 Installation:
 -------------
 
 To install or upgrade Mixmaster, type `./Install'.
 
-The mixmaster remailer can be installed on any account that can
+The Mixmaster remailer can be installed on any account that can
 receive mail.  Non-remailer messages will be delivered as usual.  See
 the manual page mixmaster(1) for instructions on using Mixmaster and
 for details about Mixmaster as a remailer.
 
 You can get a list of Mixmaster remailers (type2.list) and their public
-keys (pubring.mix) from WWW page <URL:http://anon.efga.org/anon>. Or if
-you're paranoid, get them directly from the remailers and slap them into
-the proper files yourself with your favorite editor. You can get a list of
-relible remailers: "finger mlist@anon.efga.org >$MIXPATH/mix.list".
+keys (pubring.mix) by running the script "getlist" in the directory where 
+these files are to be stored. This script will also obtain a list of reliable
+remailers (mix.list).  If you're paranoid, get them directly from 
+the remailers and slap them into the proper files yourself with your 
+favorite editor. The mix.list file can be obtained from the WWW by running
+"lynx -dump http://anon.efga.org/Remailers/mlist >$MIXPATH/mix.list".
 This command can be run periodically using cron.
 
 
@@ -52,7 +54,8 @@ Lance Cottrell     1 Oct 1995
 ======================
 
 Modified by <um@idril.shnet.org>.
-Please report problems to <mix-l@jpunix.com>.
+Modified by Len Sassaman <rabbi@abditum.com>.
+Please report problems to <mixmaster-users@lists.sf.net>.
 
 Thanks for help and valuable suggestions to:
   Antonomasia <ant@notatla.demon.co.uk>
@@ -65,8 +68,10 @@ Thanks for help and valuable suggestions to:
   Medusa <medusa-admin@weasel.owl.de>
   Dave Del Torto <ddt@pgp.com>
   RProcess <rprocess@nym.alias.net>
+  Nikolay Sturm <sturm@sec.informatik.tu-darmstadt.de>
+  Rodney Thayer <rodney@tillerman.to>
 
   Mixmaster uses Jean-loup Gailly and Mark Adler's free compression library
   zlib and Philip Hazel's free regex library.
 
-$Id: README,v 1.2 2002/08/29 20:52:43 rabbi Exp $
+$Id: README,v 1.3 2002/09/10 19:08:49 rabbi Exp $

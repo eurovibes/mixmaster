@@ -1,6 +1,6 @@
 Version history.
 
-2.0.4b46 2002-09-01 rabbi
+2.0.4b46 2002-09-11 rabbi
         Security fixes for zlib and SSLeay. Now requires OpenSSL instead
         of SSLeay.
 
