@@ -6,7 +6,7 @@
    details.
 
    Interface to cryptographic library
-   $Id: crypto.c,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: crypto.c,v 1.2 2002/07/10 01:58:49 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -305,7 +305,7 @@ int v2createkey(void)
     f = mix_openfile(SECRING, "a");
     if (f != NULL) {
       id_encode(keyid, line);
-      buf_appends(ek, PASSPHRASE);
+      buf_appends(ek, PASS_PHRASE);
       digest_md5(ek, ek);
       buf_setrnd(iv, 8);
       buf_crypt(b, ek, iv, ENCRYPT);

@@ -6,7 +6,7 @@
    details.
 
    OpenPGP key database
-   $Id: pgpdb.c,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: pgpdb.c,v 1.2 2002/07/10 01:58:49 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -301,7 +301,7 @@ int pgp_keymgt(int force)
   userid = buf_new();
   buf_sets(userid, REMAILERNAME);
   pass = buf_new();
-  buf_sets(pass, PASSPHRASE);
+  buf_sets(pass, PASS_PHRASE);
   outtxt = buf_new();
   outkey = buf_new();
 

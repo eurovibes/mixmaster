@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.4 2002/01/10 23:59:16 rabbi Exp $ */
+   $Id: config.h,v 1.5 2002/07/10 01:58:49 rabbi Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -28,11 +28,6 @@
 /* Comment to be inserted when a binary attachment is filtered out: */
 #define BINDISCLAIMER \
  "[...]"
-
-/* Passphrase used to protect our secret keys */
-#ifndef PASSPHRASE
-#define PASSPHRASE ""
-#endif
 
 /* Character set for MIME-encoded mail header lines */
 #define MIMECHARSET "iso-8859-1"
@@ -252,6 +247,7 @@ extern int RELFINAL;
 extern long MAXLAT;
 extern char PGPPUBRING[];
 extern char PGPSECRING[];
+extern char PASS_PHRASE[];
 extern long POP3TIME;
 extern int POP3DEL;
 extern int POP3SIZELIMIT;
