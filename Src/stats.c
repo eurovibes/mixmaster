@@ -6,7 +6,7 @@
    details.
 
    Remailer statistics
-   $Id: stats.c,v 1.11 2002/08/22 05:25:22 weaselp Exp $ */
+   $Id: stats.c,v 1.12 2002/08/22 08:13:36 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -217,6 +217,11 @@ int conf(BUFFER *out)
   FILE *f;
   BUFFER *b, *line;
   int flag = 0;
+  REMAILER remailer[MAXREM];
+  int pgpkeyid[MAXREM];
+  int i, num;
+  char tmpline[LINELEN];
+
   b = buf_new();
   line = buf_new();
 
@@ -318,12 +323,19 @@ int conf(BUFFER *out)
     */ 
     
     buf_nl(out);
-    /* FIXME
     if (PGP) {
       buf_appends(out, "SUPPORTED CPUNK (TYPE I) REMAILERS\n");
+      num = t1_rlist(remailer);
+      pgp_rkeylist(remailer, pgpkeyid, num);
+      for (i=1; i<=num; i++) {
+	if (remailer[i].flags.pgp) {
+	  snprintf(tmpline, LINELEN, "0x%08X	\"%s <%s>\"\n", pgpkeyid[i], remailer[i].name, remailer[i].addr);
+	  tmpline[LINELEN-1] = '\0';
+	  buf_appends(out, tmpline);
+	}
+      }
       buf_nl(out);
     }
-    */
     if (MIX) {
       buf_appends(out, "SUPPORTED MIXMASTER (TYPE II) REMAILERS\n");
       prepare_type2list(out);
