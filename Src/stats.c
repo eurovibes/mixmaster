@@ -6,7 +6,7 @@
    details.
 
    Remailer statistics
-   $Id: stats.c,v 1.23 2003/06/29 22:35:01 weaselp Exp $ */
+   $Id: stats.c,v 1.24 2003/07/07 11:28:05 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -434,5 +434,7 @@ void conf_premail(BUFFER *out)
     buf_appends(out, " post");
   if (SIZELIMIT)
     buf_appendf(out, " klen%d", SIZELIMIT);
+  if (EXTFLAGS[0])
+    buf_appendf(out, " %s", EXTFLAGS);
   buf_appends(out, "\";\n");
 }

@@ -424,3 +424,5 @@
                           Remix-To chain is limited by max-randhops limit as
                             well.
                           Messages to more than one remailer are dropped.
+                          Config option EXTFLAGS allows appending additional
+                            flags to the capabilities string.  (Hauke Lampe)
