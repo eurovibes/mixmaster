@@ -221,3 +221,7 @@
                              MAILBOX can now be a Maildir (closes: #586223).
                            Install script deals with lack of patented IDEA
                              algorithm in a sane way (closes: #479020).
+                           New option MAILIN that can be set to either a mbox
+                             or Maildir folder. New mail will be read from it
+                             and the folder cleared every time Mixmaster
+                             processes its pool (closes: #597043).

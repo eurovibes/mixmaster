@@ -1,5 +1,5 @@
 .TH MIX 1 "Mixmaster Version 3.0 beta"
-.\" $Id: mix.1,v 1.9 2002/08/21 11:22:36 weaselp Exp $
+.\" $Id: mix.1,v 1.10 2002/08/21 19:28:03 weaselp Exp $
 .SH NAME
 mix \- anonymous remailer software
 .SH SYNOPSIS
@@ -369,6 +369,16 @@ is
 .BR stdout .
 Default:
 .BR mbox .
+.TP
+.B MAILIN
+If defined an additional mail folder where Mixmaster should read messages from
+when processing its pool. If it ends with a
+.B /
+it is threated as a Maildir, otherwise a standard mbox format file
+is expected. All messages are removed from the folder after reading.
+.B MAILIN
+is not set by default.
+It is an incredible bad idea to set this the same as \fBMAILBOX\fP.
 .TP
 .B MAILABUSE
 Mail folder for messages sent to the

@@ -6,7 +6,7 @@
    details.
 
    Utility functions
-   $Id: util.c,v 1.2 2001/11/06 23:41:58 rabbi Exp $ */
+   $Id: util.c,v 1.3 2002/08/21 19:28:04 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -110,12 +110,22 @@ void strcatn(char *dest, const char *src, int n)
 
 int mixfile(char *path, const char *name)
 {
+  char *h;
   assert(path != NULL && name != NULL);
 
-  if (name[0] == DIRSEP || (isalpha(name[0]) && name[1] == ':') || MIXDIR == NULL)
+#ifdef POSIX
+  if (name[0] == '~' && name[1] == DIRSEP && (h = getenv("HOME")) != NULL) {
+    strncpy(path, h, PATHMAX);
+    path[PATHMAX-1] = '\0';
+    strcatn(path, name + 1, PATHMAX);
+  } else
+#endif
+  if (name[0] == DIRSEP || (isalpha(name[0]) && name[1] == ':') || MIXDIR == NULL) {
     strncpy(path, name, PATHMAX);
-  else {
+    path[PATHMAX-1] = '\0';
+  } else {
     strncpy(path, MIXDIR, PATHMAX);
+    path[PATHMAX-1] = '\0';
     strcatn(path, name, PATHMAX);
   }
   return (0);

@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.10 2002/08/20 19:49:33 rabbi Exp $ */
+   $Id: config.h,v 1.11 2002/08/21 19:28:04 weaselp Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -304,6 +304,7 @@ extern long POP3TIME;
 extern int POP3DEL;
 extern int POP3SIZELIMIT;
 extern char MAILBOX[];
+extern char MAILIN[];
 extern char MAILABUSE[];
 extern char MAILBLOCK[];
 extern char MAILUSAGE[];
