@@ -1,5 +1,5 @@
 .TH MIX 1 "Mixmaster Version 3.0 beta"
-.\" $Id: mix.1,v 1.10 2002/08/21 19:28:03 weaselp Exp $
+.\" $Id: mix.1,v 1.11 2002/08/22 04:29:43 weaselp Exp $
 .SH NAME
 mix \- anonymous remailer software
 .SH SYNOPSIS
@@ -625,6 +625,12 @@ line and no
 .B fromdscl.txt
 file is available.
 .TP
+.B MSGFOOTER
+A default string to be inserted at the bottom of the message body
+of all anonymous messages and no
+.B footer.txt
+file is available.
+.TP
 .B BINDISCLAIMER
 A string to replace the body of a binary attachment when
 the remailer is configured to filter out binaries.
@@ -737,6 +743,11 @@ A string to be inserted at the top of the message body
 if an anonymous message contains a user-supplied
 .B From:
 line (\fBFROMDSCLFILE\fP).
+.TP
+.TP
+.B footer.txt
+A string to be inserted at the bottom of the message body
+of all anonymous messages (\fBMSGFOOTERFILE\fP).
 .TP
 .B help.txt
 Help file sent in response to

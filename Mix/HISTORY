@@ -228,3 +228,6 @@
                            When sending type II messages interactivly you may
                              now choose a middleman remailer as the last hop
                              in your chain (closes: #481244).
+                           If a footer.txt file exists its content will be
+                             appended to outgoing messages leaving the remailer
+                             network at this hop (closes: #490117).

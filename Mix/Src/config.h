@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.11 2002/08/21 19:28:04 weaselp Exp $ */
+   $Id: config.h,v 1.12 2002/08/22 04:29:43 weaselp Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -24,6 +24,10 @@
  * user-supplied From lines, e.g.
  * "NOTE: The above From: line has not been authenticated!\n\n" */
 #define FROMDISCLAIMER ""
+
+/* Additional disclaimer to be inserted at the bottom of the body of all
+ * messages */
+#define MSGFOOTER ""
 
 /* Comment to be inserted when a binary attachment is filtered out: */
 #define BINDISCLAIMER \
@@ -151,6 +155,7 @@
 #define DEFAULT_MIXCONF "mix.cfg"      /* mixmaster configuration file */
 #define DEFAULT_DISCLAIMFILE "disclaim.txt"
 #define DEFAULT_FROMDSCLFILE "fromdscl.txt"
+#define DEFAULT_MSGFOOTERFILE "footer.txt"
 #define DEFAULT_POP3CONF "pop3.cfg"
 #define DEFAULT_HELPFILE "help.txt"
 #define DEFAULT_ABUSEFILE "abuse.txt"
@@ -193,6 +198,7 @@
 extern char MIXCONF[];
 extern char DISCLAIMFILE[];
 extern char FROMDSCLFILE[];
+extern char MSGFOOTERFILE[];
 extern char POP3CONF[];
 extern char HELPFILE[];
 extern char ABUSEFILE[];

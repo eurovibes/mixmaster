@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.12 2002/08/21 19:28:04 weaselp Exp $ */
+   $Id: mix.c,v 1.13 2002/08/22 04:29:43 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -38,6 +38,7 @@ int buf_vappendf(BUFFER *b, char *fmt, va_list args);
 char MIXCONF[PATHMAX] = DEFAULT_MIXCONF;       /* mixmaster configuration file */
 char DISCLAIMFILE[PATHMAX] = DEFAULT_DISCLAIMFILE;
 char FROMDSCLFILE[PATHMAX] = DEFAULT_FROMDSCLFILE;
+char MSGFOOTERFILE[PATHMAX] = DEFAULT_MSGFOOTERFILE;
 char POP3CONF[PATHMAX] = DEFAULT_POP3CONF;
 char HELPFILE[PATHMAX] = DEFAULT_HELPFILE;
 char ABUSEFILE[PATHMAX] = DEFAULT_ABUSEFILE;
@@ -375,6 +376,7 @@ int mix_configline(char *line)
 	  read_conf(MAILBOUNCE) || read_conf(MAILIN) ||
 
 	  read_conf(DISCLAIMFILE) || read_conf(FROMDSCLFILE) ||
+	  read_conf(MSGFOOTERFILE) ||
 	  read_conf(POP3CONF) || read_conf(HELPFILE) ||
 	  read_conf(ABUSEFILE) || read_conf(REPLYFILE) ||
 	  read_conf(USAGEFILE) || read_conf(USAGELOG) ||

@@ -6,7 +6,7 @@
    details.
 
    Send messages from pool
-   $Id: pool.c,v 1.11 2002/08/21 19:28:04 weaselp Exp $ */
+   $Id: pool.c,v 1.12 2002/08/22 04:29:43 weaselp Exp $ */
 
 #include "mix3.h"
 #include <stdlib.h>
@@ -733,6 +733,13 @@ int filtermsg(BUFFER *in)
       buf_nl(out);
     }
   }
+
+  f = mix_openfile(MSGFOOTERFILE, "r");
+  if (f != NULL) {
+    buf_read(out, f);
+    fclose(f);
+  } else
+    buf_appends(out, MSGFOOTER);
 
   /* return 1 for user supplied From line */
   err = from;
