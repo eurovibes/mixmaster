@@ -6,7 +6,7 @@
    details.
 
    Socket-based mail transport services
-   $Id: mail.c,v 1.17 2003/06/01 18:53:11 weaselp Exp $ */
+   $Id: mail.c,v 1.18 2003/06/29 19:12:45 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -142,6 +142,7 @@ int sendmail(BUFFER *message, char *from, BUFFER *address)
   } else {
     buf_set(rcpt, address);
   }
+  buf_rewind(message);
 
   if ( REMAIL && strcmp(REMAILERADDR, rcpt->data) == 0) {
     buf_cat(head, message);
