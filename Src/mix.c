@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.37 2002/10/18 00:45:12 rabbi Exp $ */
+   $Id: mix.c,v 1.38 2002/10/18 20:42:35 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -452,7 +452,7 @@ static void mix_setdefaults()
 	LISTSUPPORTED = 1;		/* list supported remailers in remailer-conf reply? */
 	PACKETEXP     = 7 * SECONDSPERDAY;	/* Expiration time for old packets */
 	IDEXP         = 7 * SECONDSPERDAY;	/* 0 = no ID log !! */
-	SENDPOOLTIME  = 60 * 60;	/* frequency for sending pool messages */
+	SENDPOOLTIME  = 0;              /* frequency for sending pool messages */
 	MAILINTIME    = 5 * 60;		/* frequency for processing MAILIN mail */
 
 	KEYLIFETIME      = 13 * 30 * 24 * 60 * 60;	/* validity period for keys. */
