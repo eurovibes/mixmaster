@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.11 2002/08/19 19:55:58 rabbi Exp $ */
+   $Id: mix.c,v 1.12 2002/08/21 19:28:04 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -153,6 +153,7 @@ char PASSPHRASE[LINELEN] = COMPILEDPASS;
 #else
 char PASSPHRASE[LINELEN] = "";
 #endif
+char MAILIN[PATHMAX] = "";
 char MAILBOX[PATHMAX] = "mbox";
 char MAILABUSE[PATHMAX];
 char MAILBLOCK[PATHMAX];
@@ -371,7 +372,7 @@ int mix_configline(char *line)
 	  read_conf(MAILBOX) || read_conf(MAILABUSE) ||
 	  read_conf(MAILBLOCK) || read_conf(MAILUSAGE) ||
 	  read_conf(MAILANON) || read_conf(MAILERROR) ||
-	  read_conf(MAILBOUNCE) ||
+	  read_conf(MAILBOUNCE) || read_conf(MAILIN) ||
 
 	  read_conf(DISCLAIMFILE) || read_conf(FROMDSCLFILE) ||
 	  read_conf(POP3CONF) || read_conf(HELPFILE) ||
@@ -454,8 +455,7 @@ static int mix_config(void)
     mixdir(MIXDIR, 0);
   }
 
-  strncpy(POOLDIR, MIXDIR, PATHMAX - 32);
-  strcatn(POOLDIR, POOL, PATHMAX);
+  mixfile(POOLDIR, POOL);
   if (POOLDIR[strlen(POOLDIR) - 1] == DIRSEP)
     POOLDIR[strlen(POOLDIR) - 1] = '\0';
   if (stat(POOLDIR, &buf) != 0)

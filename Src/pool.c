@@ -6,7 +6,7 @@
    details.
 
    Send messages from pool
-   $Id: pool.c,v 1.10 2002/08/03 17:53:47 weaselp Exp $ */
+   $Id: pool.c,v 1.11 2002/08/21 19:28:04 weaselp Exp $ */
 
 #include "mix3.h"
 #include <stdlib.h>
@@ -141,6 +141,173 @@ int infile_read(void)
   return (size);
 }
 
+int mailin_maildir_one(char *dir)
+/** Read mails from one directory
+    This function reads all files from the directory passed and passes
+    them on to mix_decrypt(). Each file is unlinked when its is read.
+
+    @param dir	The directory in which files are to be read. No path finding
+    		voodoo is done to the path; It's passed it opendir() as is.
+    @author	PP
+    @return	Number of files read
+ */
+{
+  BUFFER *msg;
+  DIR *d;
+  FILE *f;
+  struct dirent *e;
+  int size = 0;
+  char path[PATHMAX];
+
+  msg = buf_new();
+  d = opendir(dir);
+  if (d != NULL)
+    for (;;) {
+      e = readdir(d);
+      if (e == NULL)
+	break;
+      if (e->d_name[0] != '.') {
+	sprintf(path, "%s%c%s", dir, DIRSEP, e->d_name);
+        path[PATHMAX-1]='\0';
+	f = fopen(path, "rb");
+	if (f != NULL) {
+	  buf_clear(msg);
+	  buf_read(msg, f);
+	  fclose(f);
+	  unlink(path);
+	  mix_decrypt(msg);
+	  size++;
+	}
+      }
+    }
+  closedir(d);
+  buf_free(msg);
+  return (size);
+}
+
+int mailin_maildir(char *maildir)
+/** Read mails from a mail folder in Maildir format
+    Reads all files from the Maildir using mailin_maildir_one().
+    All mails are removed after this function returns.
+
+    @param maildir	The Maildir to open. mixfile() is called to normalize the path.
+    @author	PP
+    @return	0
+ */
+{
+  char normalized[PATHMAX];
+  char path[PATHMAX];
+
+  mixfile(normalized, maildir);
+  sprintf(path, "%s%c%s", normalized, DIRSEP, "new");
+  path[PATHMAX-1]='\0';
+  mailin_maildir_one(path);
+  sprintf(path, "%s%c%s", normalized, DIRSEP, "cur");
+  path[PATHMAX-1]='\0';
+  mailin_maildir_one(path);
+  return (0);
+}
+
+int mailin_mbox(char *path)
+/** Read mails from a mail folder in mbox format
+    Reads all messages from the mbox filder passes as an argument. Mails are
+    handed over to mix_decrypt. After all mails have been read the mailbox
+    is truncated to zero size i.e. all mails are deleted. The mbox is
+    locked using lock() and unlock() during this operation.
+
+    @param maildir	Path to the mbox mail folder.
+    @author	PP
+    @return	0 on sucess, other on error
+ */
+{
+  char line[LINELEN];
+  FILE *f;
+  int state, eof;
+  BUFFER *msg;
+  int err=0;
+  
+  msg = buf_new();
+
+  f = mix_openfile(path, "r+");
+  if (f != NULL) {
+    if (lock(f) != 0) {
+      /* Locking failed */
+      err = 1;
+      goto end;
+    }
+    /* State machine
+     * 1 - Look for the first ^From_ line
+     * 2 - add messages as they come
+     */
+    state = 1;
+    eof = 0;
+    for(;;) {
+      if (fgets(line, sizeof(line), f) == NULL)
+	eof = 1;
+
+      switch (state) {
+	case 1:
+	  /* Initial state - Looking for first appearance of From_ */
+	  if (eof)
+	    goto end_state;
+	  if (strleft(line, "From ")) {
+	    // buf_appends(msg, line);
+	    state = 2;
+	    break;
+	  };
+	  break;
+	case 2:
+	  /* Within one mail - Adding lines to mail until we encounter another From_ or eof */
+	  if (eof || strleft(line, "From ")) {
+	    mix_decrypt(msg);
+	    buf_clear(msg);
+	  }
+	  if (eof)
+	    goto end_state;
+	  if (!strleft(line, "From "))
+	    buf_appends(msg, line);
+	  break;
+	default:
+	  assert(0);
+	  err=1;
+	  goto end_state;
+      }
+    }
+end_state:
+#ifndef WIN32
+    rewind(f);
+    ftruncate(fileno(f), 0);
+#else
+    chsize(fileno(f), 0);
+#endif
+    unlock(f);
+    fclose(f);
+  }
+end:
+  buf_free(msg);
+  return (err);
+}
+
+/** Process MAILIN if applicable
+    If MAILIN is defined this function calls either mailin_maildir() or
+    mailin_mbox() depending on whether the last character of MAILIN
+    is DIRSEP.
+
+    @param mailbox	Path to the mbox or Maildir mail folder.
+    @author	PP
+    @return	0 on sucess, other on error
+ */
+int mailin(char *mailbox)
+{
+  if (mailbox != NULL && (strcmp(MAILIN, "") != 0))
+    if (mailbox[strlen(mailbox)-1] == DIRSEP)
+      return mailin_maildir(mailbox);
+    else
+      return mailin_mbox(mailbox);
+  else
+    return 0;
+};
+
 int pool_add(BUFFER *msg, char *type)
 {
   char path[PATHMAX], pathtmp[PATHMAX];
@@ -238,6 +405,7 @@ int pool_send(void)
   BUFFER *pool;
   long int *ptr;
 
+  mailin(MAILIN);
   infile_read();
   latent_read();
   pool = buf_new();

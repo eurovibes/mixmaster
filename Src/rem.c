@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.21 2002/08/21 11:22:37 weaselp Exp $ */
+   $Id: rem.c,v 1.22 2002/08/21 19:28:04 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -348,7 +348,7 @@ void logmail(char *mailbox, BUFFER *message)
   isloop:
     buf_free(field);
     buf_free(content);
-  } else if (mailbox[strlen(mailbox)-1] == '/') {
+  } else if (mailbox[strlen(mailbox)-1] == DIRSEP) {
     /* the user is requesting Maildir delivery */
     if(maildirWrite(mailbox, message, 1) != 0) {
       errlog(ERRORMSG, "Can't write to maildir %s\n", mailbox);

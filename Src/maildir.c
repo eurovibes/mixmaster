@@ -43,12 +43,9 @@ int checkDirectory(char *dir, char *append, int create) {
   int err;
   
   tmp[0] = '\0';
-  strncat(tmp, dir, PATHMAX);
-  tmp[PATHMAX-1] = '\0';
-  if (append) {
-    strncat(tmp, append, PATHMAX);
-    tmp[PATHMAX-1] = '\0';
-  }
+  strcatn(tmp, dir, PATHMAX);
+  if (append)
+    strcatn(tmp, append, PATHMAX);
 
   err = stat(tmp, &buf);
   if (err == -1) {
@@ -82,6 +79,7 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
   char newname[MAX_SUBNAME];
   int messagesize;
   char olddirectory[PATHMAX] = "";
+  char normalizedmaildir[PATHMAX];
 
   /* Declare a handler for SIGALRM so we can time out. */ 
   /* set_handler(SIGALRM, alarm_handler);  */
@@ -91,10 +89,11 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
   gethostname(hostname, 63);
   hostname[63] = '\0';
 
-  if ((checkDirectory(maildir, NULL, create) != 0) ||
-      (checkDirectory(maildir, "tmp", create) != 0) ||
-      (checkDirectory(maildir, "cur", create) != 0) ||
-      (checkDirectory(maildir, "new", create) != 0)) {
+  mixfile(normalizedmaildir, maildir);
+  if ((checkDirectory(normalizedmaildir, NULL, create) != 0) ||
+      (checkDirectory(normalizedmaildir, "tmp", create) != 0) ||
+      (checkDirectory(normalizedmaildir, "cur", create) != 0) ||
+      (checkDirectory(normalizedmaildir, "new", create) != 0)) {
     returnValue = -1;
     goto realend;
   }
@@ -107,7 +106,7 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
     goto realend;
   }
   olddirectory[PATHMAX-1] = '\0';
-  if(chdir(maildir) != 0) {
+  if(chdir(normalizedmaildir) != 0) {
     returnValue = -1;
     goto functionExit;
   }
@@ -119,14 +118,10 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
     snprintf(basename, MAX_BASENAME, "%lu.%u_%lu.%s,S=%u",
       time(NULL), getpid(), namecounter++, hostname, messagesize);
     basename[MAX_BASENAME-1] = '\0';
-    strncat(tmpname, "tmp" DIRSEPSTR, MAX_SUBNAME);
-    tmpname[MAX_SUBNAME-1] = '\0';
-    strncat(tmpname, basename, MAX_SUBNAME);
-    tmpname[MAX_SUBNAME-1] = '\0';
-    strncat(newname, "new" DIRSEPSTR, MAX_SUBNAME);
-    newname[MAX_SUBNAME-1] = '\0';
-    strncat(newname, basename, MAX_SUBNAME);
-    newname[MAX_SUBNAME-1] = '\0';
+    strcatn(tmpname, "tmp" DIRSEPSTR, MAX_SUBNAME);
+    strcatn(tmpname, basename, MAX_SUBNAME);
+    strcatn(newname, "new" DIRSEPSTR, MAX_SUBNAME);
+    strcatn(newname, basename, MAX_SUBNAME);
 	
     if (stat(tmpname, &statbuf) == 0)
       errno = EEXIST;
@@ -206,10 +201,8 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
     snprintf(basename, MAX_BASENAME, "%lu.%u_%lu.%s,S=%u",
       time(NULL), getpid(), namecounter++, hostname, messagesize);
     basename[MAX_BASENAME-1] = '\0';
-    strncat(newname, "new" DIRSEPSTR, MAX_SUBNAME);
-    newname[MAX_SUBNAME-1] = '\0';
-    strncat(newname, basename, MAX_SUBNAME);
-    newname[MAX_SUBNAME-1] = '\0';
+    strcatn(newname, "new" DIRSEPSTR, MAX_SUBNAME);
+    strcatn(newname, basename, MAX_SUBNAME);
   }
 #else /* POSIX */
   /* On non POSIX systems we simply use rename(). Let's hobe DJB
