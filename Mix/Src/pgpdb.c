@@ -6,7 +6,7 @@
    details.
 
    OpenPGP key database
-   $Id: pgpdb.c,v 1.8 2002/08/25 13:27:40 weaselp Exp $ */
+   $Id: pgpdb.c,v 1.9 2002/08/26 19:17:31 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -43,9 +43,15 @@ static int pgp_readkeyring(BUFFER *keys, char *filename)
 	}
       while (!bufleft(line, begin_pgp)) ;
       buf_clear(tmp);
-      buf_appends(tmp, begin_pgp);
+      buf_cat(tmp, line);
       buf_appends(tmp, "\n");
-      buf_cat(tmp, armored);
+      do {
+	if (buf_getline(armored, line) == -1) {
+	  goto end_greedy_dearmor;
+	}
+      	buf_cat(tmp, line);
+      	buf_appends(tmp, "\n");
+      } while (!bufleft(line, end_pgp)) ;
 
       if (pgp_dearmor(tmp, tmp) == 0) {
 	err = ARMORED;
@@ -55,6 +61,7 @@ static int pgp_readkeyring(BUFFER *keys, char *filename)
 end_greedy_dearmor:
     buf_free(line);
     buf_free(tmp);
+
   }
   buf_free(armored);
   return (err);
@@ -310,12 +317,15 @@ end:
 int pgp_keymgt(int force)
 {
   FILE *f = NULL;
-  BUFFER *key, *userid, *out, *outkey, *outtxt, *pass;
+  BUFFER *key, *keybak, *userid, *out, *outkey, *outtxt, *pass, *secout;
   KEYRING *keys;
   int err = 0, type = 0;
+  LOCK *seclock;
 
   key = buf_new();
   out = buf_new();
+  keybak = buf_new();
+  secout = buf_new();
 
   userid = buf_new();
   buf_sets(userid, REMAILERNAME);
@@ -355,15 +365,28 @@ int pgp_keymgt(int force)
     if (keys == NULL)
       goto end;
     while (pgpdb_getnext(keys, key, NULL, userid) != -1) {
-      buf_clear(outkey);
       buf_clear(outtxt);
-      if (pgp_makepubkey(key, outtxt, outkey, pass,
+      buf_clear(outkey);
+      buf_clear(keybak);
+      buf_cat(keybak, key);
+      if (pgp_makeseckey(key, outtxt, pass,
+			 type == 0 ? PGP_ES_RSA : PGP_S_DSA) == 0) {
+        err = 0;
+	buf_appends(secout, "Type Bits/KeyID    Date       User ID\n");
+	buf_cat(secout, outtxt);
+	buf_nl(secout);
+	pgp_armor(key, PGP_ARMOR_SECKEY);
+	buf_cat(secout, key);
+	buf_nl(secout);
+      }
+      buf_clear(outtxt);
+      if (pgp_makepubkey(keybak, outtxt, outkey, pass,
 			 type == 0 ? PGP_ES_RSA : PGP_S_DSA) == 0) {
         err = 0;
 	buf_appends(out, "Type Bits/KeyID    Date       User ID\n");
 	buf_cat(out, outtxt);
-	pgp_armor(outkey, PGP_ARMOR_KEY);
 	buf_nl(out);
+	pgp_armor(outkey, PGP_ARMOR_KEY);
 	buf_cat(out, outkey);
 	buf_nl(out);
       }
@@ -371,18 +394,27 @@ int pgp_keymgt(int force)
     pgpdb_close(keys);
   }
 
+  seclock = lockfile(PGPREMSECRING);
+  if (err == 0 && (f = mix_openfile(PGPREMSECRING, "w")) != NULL) {
+    buf_write(secout, f);
+    fclose(f);
+  } else
+    err = -1;
+  unlockfile(seclock);
   if (err == 0 && (f = mix_openfile(PGPKEY, "w")) != NULL) {
-      buf_write(out, f);
-      fclose(f);
-    } else
-      err = -1;
+    buf_write(out, f);
+    fclose(f);
+  } else
+    err = -1;
 end:
   buf_free(key);
+  buf_free(keybak);
   buf_free(out);
   buf_free(userid);
   buf_free(pass);
   buf_free(outtxt);
   buf_free(outkey);
+  buf_free(secout);
   return (err);
 }
 
