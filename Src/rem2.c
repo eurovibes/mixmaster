@@ -6,7 +6,7 @@
    details.
 
    Process Mixmaster remailer messages
-   $Id: rem2.c,v 1.7 2003/09/25 22:53:43 weaselp Exp $ */
+   $Id: rem2.c,v 1.8 2003/10/13 11:29:48 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -79,6 +79,11 @@ end:
 }
 
 static int isnewid(BUFFER *id, long timestamp)
+/* return values:
+ *   0: ignore message, no error
+ *   1: ok, process message
+ *  -1: bad message, send reply
+ */
 {
   FILE *f;
   int ret = 1;
@@ -135,6 +140,11 @@ static int isnewid(BUFFER *id, long timestamp)
       goto end;
     }
   }
+  if (timestamp > now) {
+    errlog(LOG, "Ingoring message with future timestamp.\n");
+    ret = -1;
+    goto end;
+  }
   if (ftell(f)%sizeof(idlog_t)) fseek(f,0-(ftell(f)%sizeof(idlog_t)),SEEK_CUR); /* make sure that we're on sizeof(idlog_t) byte boundary */
   memcpy(idbuf.id,id->data,sizeof(idbuf.id));
   idbuf.time = now;
@@ -147,7 +157,9 @@ end:
 }
 
 int mix2_decrypt(BUFFER *m)
-     /* 0: ok  -1: error  -2: old message */
+     /*  0: ok
+      * -1: error
+      * -2: old message */
 {
   int err = 0;
   int i;
@@ -216,6 +228,10 @@ int mix2_decrypt(BUFFER *m)
       dec->data[dec->ptr + 4] == '\0') {
     dec->ptr += 5;
     timestamp = buf_geti_lo(dec);
+  } else {
+    errlog(LOG, "Ignoring message without timestamp.\n");
+    err = -1;
+    goto end;
   }
   buf_get(dec, digest, 16);
 
@@ -227,9 +243,11 @@ int mix2_decrypt(BUFFER *m)
     err = -1;
     goto end;
   }
-  if (!isnewid(packetid, timestamp * SECONDSPERDAY)) {
-    err = -2;
-    goto end;
+  switch (isnewid(packetid, timestamp * SECONDSPERDAY)) {
+    case  0: err = -2; /* redundant message */
+	     goto end;
+    case -1: err = -1; /* future timestamp */
+	     goto end; 
   }
   buf_append(body, m->data + 20 * 512, 10240);
 

@@ -8,18 +8,16 @@
 Items that need to be completed before the next HEAD release:
 
 - keylifetime and key{grace,overlap}period needs to be documented once
-  it's finished  (weasel)
+  it's finished  (rabbi)
 - Modify release tarball generation script to build the .tab.c file from
   parsedate.y, so we don't end up requiring bison on every system that
   wants to build mixmaster  (rabbi)
 - document experimental --redirect in mix.1  (weasel)
-- drop messages without timestamp (weasel)
+o drop messages without timestamp (weasel)
   - document somewhere  (rabbi)
-- drop messages without timestamp  (weasel)
+o drop messages with future timestamp  (weasel)
   - document somewhere  (rabbi)
-- drop messages with future timestamp  (weasel)
-  - document somewhere  (rabbi)
-- Remove nym stuff from the manpage  (weasel,rabbi)
+- Remove nym stuff from the manpage  (rabbi)
 - autoconf installation script is needed
   - mostly done -- a few bugs still need fixing  (dybbuk)
 - post-install scripts need to be reworked
