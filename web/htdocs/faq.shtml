@@ -14,27 +14,27 @@
 This FAQ is maintained by Alex Kirk <a href="mailto:alex@schnarff.com">< alex@schnarff.com ></a>. It is currently (11/26/02) being written for the first time. If you find an error, have a further question, or wish to make modifications/updates/additions, please notify him.
 <br>
 <h2>Table of Contents</h2><br>
-1. Introduction<br>
-1.1 Document Audience<br>
-1.2 What's an anonymous remailer?<br>
-1.3 Why should I run an anonymous remailer?<br>
-1.4 History of remailers/cryptography<br>
-1.5 Newsgroups/Mailing Lists<br>
-1.6 Important Reading<br>
+<a href=#1>1. Introduction<br></a>
+<a href=#1.1>1.1 Document Audience<br></a>
+<a href=#1.2>1.2 What's an anonymous remailer?<br></a>
+<a href=#1.3>1.3 Why should I run an anonymous remailer?<br></a>
+<a href=#1.4>1.4 History of remailers/cryptography<br></a>
+<a href=#1.5>1.5 Newsgroups/Mailing Lists<br></a>
+<a href=#1.6>1.6 Important Reading<br></a>
 <br>
-2. Planning<br>
-2.1 Requirements<br>
-2.1.1 Hardware<br>
-2.1.2 Internet Connectivity<br>
-2.1.3 Operating System<br>
-2.1.4 Software<br>
-2.1.5 Filesystem/Drive Space<br>
-2.2 Decisions<br>
-2.2.1 Uptime<br>
-2.2.2 Middleman<br>
-2.2.3 Nyms<br>
-2.2.4 Name<br>
-2.2.5 Policy<br>
+<a href=2>2. Planning<br></a>
+<a href=2.1>2.1 Requirements<br></a>
+<a href=2.1.1>2.1.1 Hardware<br></a>
+<a href=2.1.2>2.1.2 Internet Connectivity<br></a>
+<a href=2.1.3>2.1.3 Operating System<br></a>
+<a href=2.1.4>2.1.4 Software<br></a>
+<a href=2.1.5>2.1.5 Filesystem/Drive Space<br></a>
+<a href=2.2>2.2 Decisions<br></a>
+<a href=2.2.1>2.2.1 Uptime<br></a>
+<a href=2.2.2>2.2.2 Middleman<br></a>
+<a href=2.2.3>2.2.3 Nyms<br></a>
+<a href=2.2.4>2.2.4 Name<br></a>
+<a href=2.2.5>2.2.5 Policy<br></a>
 <br>
 3. Software Configuration<br>
 3.1 MTA (Mail Transport Agent)<br>
@@ -101,9 +101,12 @@ This FAQ is maintained by Alex Kirk <a href="mailto:alex@schnarff.com">< alex@sc
 7.3 Dial-Up/POP<br>
 
 
+<a name="1"></a>
 <h2>1. Introduction</h2>
+<a name="1.1"></a>
 <h3>1.1 Document Audience</h3>
 This document is intended for those who run or are thinking about running an anonymous remailer, mail2news gateway, or remail statistics pinger. It might answer some questions for those who want to know what these are, but the primary audience is administrators, potential or current.<br><br>
+<a name="1.2"></a>
 <h3>1.2 What's an anonymous remailer?</h3>
 From the <a href=http://www.andrebacard.com/remail.html>Anonymous Remailer FAQ</a>:
 
@@ -117,6 +120,7 @@ From the <a href=http://www.andrebacard.com/remail.html>Anonymous Remailer FAQ</
 "In the first version of this FAQ (published in 1995), all popular remailers were free-of-charge. Today, a number of services either charge user fees, or support themselves via advertisers.
 </i>
 </blockquote>
+<a name="1.3"></a>
 <h3>1.3 Why should I run an anonymous remailer?</h3>
 There are several good reasons for running an anonymous remailer. You might be interested if you want to:
 <ul>
@@ -126,9 +130,12 @@ There are several good reasons for running an anonymous remailer. You might be i
 <li>Promote cryptography and anonymity on the Internet
 <li>Learn more about running a mail server
 </ul>
+<a name="1.4"></a>
 <h3>1.4 History of remailers/cryptography</h3>
+<a name="1.5"></a>
 <h3>1.5 Newsgroups/Mailing Lists</h3>
 Those interested in running an anonymous remailer or mail2news gateway should subscribe to <a href="mailto:remailer-operators@anon.lcs.mit.edu?body=subscribe">remailer-operators@anon.lcs.mit.edu</a> (or its mirror, <a href="http://lexx.shinn.net/mailman/listinfo/remops">remops@freedom.gmsociety.org</a>). You should also frequent <a href="news://alt.privacy.anon-server">alt.privacy.anon-server</a> and <a href="news://alt.privacy">alt.privacy</a>.
+<a name="1.6"></a>
 <h3>1.6 Important Reading</h3>
 Papers of note include:<br>
 <a href=http://lexx.shinn.net/chaum-acm-1981.html>Chaums digital mixes</a><br>
@@ -136,16 +143,22 @@ Papers of note include:<br>
 <a href=http://obscura.com/~loki/remailer-essay.html>Mixmaster and remailer attacks</a>. An essay by Lance Cottrell, which motivates the original design of Mixmaster<br>
 <a href=http://www.andrebacard.com/remail.html>Anonymous Remailer FAQ</a> by Andre Bacard.
 <h3>
+<a name=2></a>
 <h3>2. Planning</h3>
+<a name=2.1></a>
 <h3>2.1 Requirements</h3>
+<a name=2.1.1></a>
 <h3>2.1.1 Hardware</h3>
 With the right operating system, you can run an anonymous remailer on the most paltry of hardware: some large remailers run on 486 DX 33MHz boxes. Of course, this can only be done if you're running a UNIX-style operating system and if the machine is dedicated to its task. More realistically, especially if you intend to use your hardware for anything else, you should have at least a Pentium 75MHz, with 16MB of RAM.<br><br>
 Windows users will need a bit more system resources: at least a Pentium II 200MHz with 64MB of RAM. This is due, of course, to the large overhead of keeping a GUI running.
+<a name=2.1.2></a>
 <h3>2.1.2 Internet Connectivity</h3>
 It is possible to run a remailer without a dedicated connection, as long as you have POP access and an account with a decent quota that won't bounce messages all over the place. This setup is not recommended, however, because it requires constant administrator intervention. Any form of broadband is preferable. Note that, on average, Type II remailers consume anywhere from 84-140 MB per day in bandwidth (3,500-5,000 messages * 28125 bytes/message). Type I remailers typically consume less bandwidth, as they are lower traffic, though this can change if you allow binaries to move through your remailer.
+<a name=2.1.3></a>
 <h3>2.1.3 Operating System</h3>
 Your best bet is probably UNIX, Linux, or a BSD, as these systems are generally free, stable, and relatively secure. Chances are, if you have a well configured machine running this type of operating system, it will be exremely low maintenance. My personal recommendation is <a href=http://www.openbsd.org>OpenBSD</a>, whose claim to fame -- six years with only one remotely exploitable hole in the default install -- is a good indicator of its security track record.<br><br>
 It is possible to run a remailer on a Windows system, but due to the massive security holes and general lack of stability, this is not recommended. If you do choose to run Windows, you will probably have the most success with Windows 2000, as it is the most stable and secure of the Windows operating systems.
+<a name=2.1.4></a>
 <h3>2.1.4 Software</h3>
 Remailers:
 <ul>
@@ -175,13 +188,38 @@ Pingers for Remailer Statistics:
   <li><a href=http://www.theinternet.cc/potatoware/reli/download.html>Reliable</a>
   </ul>
 </ul>
+<a name=2.1.5></a>
 <h3>2.1.5 Filesystem/Drive Space</h3>
+Actual drive space is probably less of a consideration now than it was in the past, due to the proliferation of extremely large drives. However, it is still good to know how much drive space you should set aside, especially for those running on older systems.<br><br>
+Remailers:
+<ul>
+<li>Type I
+  <ul>
+  <li>Program Software: 17 MB
+  <li>Pool: 10-20 MB
+  <li>Database Tables: 2-10 MB
+  <li>Outgoing Mail Spool/Queue: 20-300 MB
+  <li><b>Grand Total: 49-347 MB</b>
+  <li>Note that it's probably best to have flex room above the large end of the grand total, because you don't want to get caught with a full drive during a surge in message traffic.
+<a name=2.2></a>
 <h3>2.2 Decisions</h3>
+<a name=2.2>There are many decisions you will have to make about how to set up your remailer which will impact its ease of administration and performance. Note that you can successfully run a remailer no matter what you decide here; the only thing these considerations are relevant to are your level of involvement in administration.</a>
 <h3>2.2.1 Uptime</h3>
+<a name=2.2.1></a>Contrary to what one might first think, it is <b>not</b> necessary to have a box up 24/7 to run a remailer. While an always-on setup is obviously preferable, it is possible to run a remailer on a box without guaranteed uptime, so long as mail is POP'd through at least four times per day. If you cannot send mail through at this minimum rate -- including times when you are away on holiday or otherwise out of your daily -- you should not run a remailer. Doing so would cause unnecessary bottlenecks in the network, causing problems for everyone.
 <h3>2.2.2 Middleman</h3>
+<a name=2.2.2></a>
+In order for the remailer network to function properly, there is a need for "middleman" remailers -- boxes that don't actually send e-mails to recipients or posts to Usenet, but instead simply function as additional hops along the chain (remember, the more hops a message traverses, the more secure it is). These systems are also useful in nym reply blocks.
+<br>
+If you want to run a remailer, but are afraid of potential consequences from user complaints (i.e. your ISP cutting you off, your friendly neighborhood government getting upset with you), you should run a middleman remailer. Since you will never send messages to anyone but other remailers, you should never get any official complaints, and thus will avoid all of the unpleasantness of dealing with the general public.
 <h3>2.2.3 Nyms</h3>
+<a name=2.2.3></a>
 <h3>2.2.4 Name</h3>
+<a name=2.2.4></a>
+All remamilers must have a name to identify themselves within the network. This name must not exceed eight characters. Preferably, it should be something easily associated with the remailer, even something humorous, so that it can be easily remembered.
 <h3>2.2.5 Policy</h3>
+<a name=2.2.5></a>
+Before putting your remailer into action, you need to have a clearly articulated policy governing use and abuse of your system (even if you are a middleman, this is a good idea). It should be posted on your web site and be included in autoresponses to non-remailer generated messages (i.e. in abuse.txt). You should probably read <a href=http://mixmaster.shinn.net/abuse.txt>an example</a> before finalizing your own.<br>
+Reasons for doing this include: keeping unhappy end-users from escalating complaints by giving them an easy way to resolve problems; being a good netizen; making sure you really know what you're doing and why you're doing it before you start.
 <h3>
 <h3>3. Software Configuration</h3>
 <h3>3.1 MTA (Mail Transport Agent)</h3>
