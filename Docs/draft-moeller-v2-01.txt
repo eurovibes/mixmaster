@@ -104,9 +104,8 @@ sequence of mixes, one trusted mix is sufficient to provide anonymity
 and unobservability of communications against a powerful
 adversary. Mixmaster is a mix-net implementation for electronic mail.
 
-This memo describes version 2 of the Mixmaster message format, as used
-on the Internet since 1995. An improved protocol is described in a
-separate document.
+This memo describes version 2 of the Mixmaster message format, as used on
+the Internet since 1995.
 
 
 2. The Mix-Net Protocol
@@ -420,10 +419,6 @@ Timestamp: A timestamp is introduced with the byte sequence (48, 48, 48,
 subtracted from the number of days in order to obscure the origin of the
 message. 
 
-Early implementations of Mixmaster did not generate a timestamp packet.
-Implementors should be aware of the partitioning attack implications if
-they chose to permit processing of packets without timestamps.
-
 Message digest: MD5 digest computed over the preceding elements of the
 encrypted header part.
 
@@ -653,9 +648,22 @@ increases reliability but may also facilitate attacks. An optimum must
 be found according to the individual security needs and trust in the
 remailers.
 
-Active adversaries can also create, suppress or modify
-messages. Remailers must check the packet IDs to prevent replay
-attacks. Message integrity must be verified to prevent the adversary
+Active adversaries can also create, suppress or modify messages. Remailers
+must check the packet IDs to prevent replay attacks. To minimize the
+number of packet IDs that the remailer must retain, packets which bear a
+timestamp more than a reasonable number of days in the past may be
+discarded. Implementors should consider that packets maybe up to three
+days younger than indicated by the timestamp, and select an expiration
+value which allowsd sufficient time for legitimate messages to pass
+through the network. The number of packet IDs that the remailer must
+retain can be further minimized by discarding packet IDs for packets
+encrypted to a key which has expired more than a week in the past.
+
+Early implementations of Mixmaster did not generate a timestamp packet.
+Implementors should be aware of the partitioning attack implications if
+they chose to permit processing of packets without timestamps.
+
+Message integrity must be verified to prevent the adversary
 from performing chosen ciphertext attacks or replay attacks with
 modified packet IDs, and from encoding information in an intercepted
 message in a way not affected by decryption (e.g. by modifying the
