@@ -1,10 +1,3 @@
-        - Not done
-        * Top priority
-        . Partially done
-        o Done
-        D Deferred
-        X Abandoned
-
 Items that need to be completed before the next MAIN release:
 
 - delete secret keys securely after keygraceperiod expires
@@ -12,39 +5,40 @@ Items that need to be completed before the next MAIN release:
   "/bin/rm -P" or "/usr/bin/shred -fz -n3")? Does this even
   serve a purpose now that journaled FSes are the norm?
 
+- doallow() should check more than one email address in a line
+  (patch # 877312)
+- destblk request confirmation (patch # 873498)
+
 Packaging:
 - Modify release tarball generation script to build the .tab.c file from
   parsedate.y, so we don't end up requiring bison on every system that
   wants to build mixmaster  (rabbi)
 - rpm -- dybbuk
-- Windows build instructions/files  (rabbi)
+- Windows build instructions/files  (packbart?)
 - provide a packaged Windows build to be used with QuickSilver
   + Richard has an Installer we can use for this purpose  (rabbi)
 - Macintosh OS/X support  (rabbi)
 - Update Install script to put files in global system locations if
   invoked by root. Also update to be smart about AES support.
+  (dybbuk said he would do this, but status is unclear.)
 
 Wishlist:
 - permit CRAM-MD5 SMTP AUTH in addition to LOGIN.  n/a (patch welcome)
 - do full regression tests on as many platforms possible
   - list only these platforms as supported
   - test on Solaris 9 on SPARC.
-- saner usage of /dev/[u]random is required  -- throw warning when not in daemon mode
+- saner usage of /dev/[u]random is required -- throw warning when not in
+  daemon mode (patch 873497 -- needs work)
 - clean up documentation and tarball contents
   + reorganize directory structure
 - AES support -- requires OpenSSL 0.9.7  dybbuk
 
 
 Abandoned/Deferred:
-D allow for separate hard-coded remailer and client defaults.  n/a
 D allow for verification of clearsigned OpenPGP messages  disastry
 D honor key preferences when encrypting to multiple keys  ulf/disastry (n/a)
 D further mpgp testing of AES/MDC packet support  ulf
 D make mpgp friendlier
-  D mpgp man page  n/a
-X nym client needs major work.
-  X store nym public keys locally
-D find bug that is causing t* files to linger  n/a
 D COMMENT entire existing codebase!  (HAHA)
 D support for Borland compiler on Windows.
   D I'ld even go so far as drop Visual C (or whatever we're supporting at
