@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.43 2003/05/03 01:56:08 weaselp Exp $ */
+   $Id: mix.c,v 1.44 2003/07/07 11:18:20 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -171,6 +171,7 @@ char MAILERROR[PATHMAX];
 char MAILBOUNCE[PATHMAX];
 
 int CLIENTAUTOFLUSH;
+int MAXRECIPIENTS;
 
 char ENTEREDPASSPHRASE[LINELEN] = "";
 
@@ -455,7 +456,7 @@ static void mix_setdefaults()
 	strnncpy(FORWARDTO, "*");
 	SIZELIMIT     = 0;		/* maximal size of remailed messages */
 	INFLATEMAX    = 50;		/* maximal size of Inflate: padding */
-	MAXRANDHOPS   = 20;
+	MAXRANDHOPS   = 5;
 	BINFILTER     = 0;		/* filter binary attachments? */
 	LISTSUPPORTED = 1;		/* list supported remailers in remailer-conf reply? */
 	PACKETEXP     = 7 * SECONDSPERDAY;	/* Expiration time for old packets */
@@ -509,6 +510,7 @@ static void mix_setdefaults()
 	strnncpy(MAILBOUNCE, "");
 
 	CLIENTAUTOFLUSH = 1;
+	MAXRECIPIENTS   = 5;
 }
 
 int mix_configline(char *line)
@@ -578,7 +580,8 @@ int mix_configline(char *line)
 	  read_conf(PGPREMSECRING) || read_conf(NYMSECRING) ||
 	  read_conf(NYMDB) || read_conf(PIDFILE) ||
 	  
-	  read_conf_i(CLIENTAUTOFLUSH) );
+	  read_conf_i(CLIENTAUTOFLUSH) ||
+	  read_conf_i(MAXRECIPIENTS) );
 }
 
 int mix_config(void)
