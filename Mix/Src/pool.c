@@ -6,7 +6,7 @@
    details.
 
    Send messages from pool
-   $Id: pool.c,v 1.5 2001/12/14 21:22:11 rabbi Exp $ */
+   $Id: pool.c,v 1.6 2001/12/14 23:57:56 rabbi Exp $ */
 
 #include "mix3.h"
 #include <stdlib.h>
@@ -548,9 +548,9 @@ int filtermsg(BUFFER *in)
       inbinary++;
     else
       inbinary = 0, l = line->length;
-    if (bufileft(line, begin_pgp))
+    if (bufileft(line, begin_pgp) || bufileft(line, begin_key))
       inpgp = 1;
-    if (bufileft(line, end_pgp))
+    if (bufileft(line, end_pgp) || bufileft(line, end_key))
       inpgp = 0;
     if (inbinary < 10 || inpgp) {
       buf_cat(out, line);
