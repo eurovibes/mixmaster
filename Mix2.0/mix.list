@@ -1,50 +1,139 @@
-Last update: Tue 10 Sep 2002 18:45:08 GMT
+
+Broken type-I remailer chains:
+(* krotus)
+(antani senshi)
+(austria cf)
+(bigapple freedom)
+(cf aarg)
+(cf citrus)
+(cf cripto)
+(cf cthulu)
+(cmeclax hastio)
+(cmeclax starwars)
+(cripto cf)
+(cripto citrus)
+(cripto cmeclax)
+(cripto dingo)
+(cthulu bikikii)
+(cthulu dingo)
+(cthulu nitemare)
+(cthulu senshi)
+(cthulu starwars)
+(dingo cf)
+(dingo dot)
+(dingo hastio)
+(dizum bikikii)
+(dizum dot)
+(dizum lemuria)
+(dizum vger)
+(dot starwars)
+(edo bikikii)
+(edo frell)
+(futurew freedom)
+(futurew hermes)
+(harmless nitemare)
+(hermes hastio)
+(italy antani)
+(italy edo)
+(krotus *)
+(lemuria cf)
+(lemuria cthulu)
+(lemuria hastio)
+(lemuria senshi)
+(lemuria starwars)
+(riot amessage)
+(riot amigo)
+(riot willers)
+(starwars amessage)
+(vger senshi)
+(willers hermes)
+(willers senshi)
+
+Broken type-II remailer chains:
+(aarg amigo)
+(amigo amessage)
+(amigo paranoia)
+(austria cf)
+(austria lcs)
+(banana lcs)
+(bigapple freedom)
+(cmeclax lcs)
+(cmeclax starwars)
+(cripto lcs)
+(cthulu antani)
+(cthulu freedom)
+(cthulu starwars)
+(dingo cf)
+(dingo discord)
+(dingo dot)
+(dingo hastio)
+(dingo lcs)
+(dizum dot)
+(dizum lemuria)
+(dizum vger)
+(dot starwars)
+(futurew freedom)
+(hermes hastio)
+(hermes lcs)
+(italy antani)
+(krotus starwars)
+(lemuria cthulu)
+(lemuria hastio)
+(lemuria lcs)
+(lemuria starwars)
+(metacolo lcs)
+(paranoia lcs)
+(rot26 lcs)
+(starwars amessage)
+Last update: Tue 18 May 2004 10:45:11 GMT
 mixmaster           history  latency  uptime
 --------------------------------------------
-xganon2        ##    ####*#     3:50 100.00%
-cf             #*    *###*#     4:51 100.00%
-frog           **    ******     6:54 100.00%
-freedom        **    ******    11:45 100.00%
-havenco        *#    ******    12:36 100.00%
-jmbcv          **    ******    13:40 100.00%
-xganon         **    ***#+*    13:55 100.00%
-dizum          **    ***+**    18:41 100.00%
-randseed       **    ******    23:26 100.00%
-liberty        ##    #####+    24:43 100.00%
-dingo          **    ******    25:48 100.00%
-paranoia       +*    ******    29:13 100.00%
-aarg           **    **+***    31:22 100.00%
-lemuria        **    +***++    51:11 100.00%
-subzer0        *-    ******  2:48:38 100.00%
-boris                 ++-++  3:08:54 100.00%
-harmless       *-    **++++  3:14:55 100.00%
-xmailer        *-    *+-*#*  3:40:48 100.00%
-squirrel       +-    +++*+*  3:58:57 100.00%
-loopback       +-    ++++++  4:14:23 100.00%
-znar           +-    ++++++  4:44:57 100.00%
-cripto         **    ******     9:10  99.72%
-citrus         ++    +*++-+  2:13:44  99.38%
-bikikii        +__   -+++++ 11:58:25  99.29%
-rot26          +-    ++++++  4:05:16  99.19%
-passthru2      +-    +++-++  4:19:22  99.14%
-cthulu         +-    *+***+  3:13:06  99.13%
-anon           *-    **+***  2:40:10  99.11%
-cracker        ++    +++++*  1:32:46  97.92%
-passthru2      *-    +++++-  4:49:55  97.83%
-krotus         ++    +*****  1:07:10  97.67%
-farout         -.    ------ 13:20:26  97.63%
-cmeclax               --+++  4:00:37  97.00%
-axolotl        *+    -+*+++  1:58:13  96.35%
-sushi          **    +**+**  1:04:30  95.83%
-riot           --    ------  7:31:43  94.95%
-kork                  -.-+* 15:14:23  94.18%
-dismix         +*    ++**++  1:48:19  93.62%
-orange         *+    ****+-  1:07:46  91.67%
-sept                     *+    45:16  90.00%
-italy2         ++    ++++*+  2:01:15  89.58%
-noisebox       -+    ++++++  1:53:34  86.96%
-scream2               +----  5:25:38  85.29%
-notatla        __    ....-  37:31:35  75.00%
-austria              ******    10:13  73.91%
-tonga           *     *****    34:44  64.58%
-
+willers        ++++++++++++  2:12:26 100.00%
+lbrtynws                  +  1:56:56 100.00%
+gateway        *+++**+**+**    53:00 100.00%
+liberty                   *    37:59 100.00%
+rot26          ***********+    30:58 100.00%
+dizum          ************    30:55 100.00%
+starwars       ************    20:59 100.00%
+george         ************    18:57 100.00%
+paranoia       ************    18:57 100.00%
+cripto         ************    18:55 100.00%
+tonga          ************    17:56 100.00%
+lcs            ************    15:58 100.00%
+freedom        ************    15:29 100.00%
+amessage       ************    15:28 100.00%
+austria        ************    11:57 100.00%
+randseed       ************    10:29 100.00%
+discord        ****#*******    10:00 100.00%
+banana         **#*#***#***     7:00 100.00%
+metacolo       **#*#*******     6:56 100.00%
+citrus         ++++++++++++  1:46:59  99.95%
+futurew        ************    22:57  99.94%
+bikikii        +*+++-+---++  2:46:58  99.88%
+cside          -----++++-+-  4:04:54  99.86%
+antani         *******+****    31:56  99.82%
+cthulu         ****+**-+***    47:50  99.80%
+riot           --+-------++  5:45:27  99.78%
+panta          ++++++++++++  2:44:58  99.58%
+ashcroft       ++++++-+++++  2:19:58  99.54%
+italy          ************     7:59  99.49%
+lemuria        ************    37:58  99.47%
+aarg           *++*+*++++++  1:07:25  99.46%
+dingo          ****+*+*****    35:59  99.23%
+frell          +------+---+  5:06:59  99.13%
+mercler        ++++++++++++  1:50:57  98.90%
+vger           *+******+***    50:58  98.73%
+cf             **+-******-+    30:28  97.94%
+anon           ++++*+*++*++  1:06:58  97.93%
+hastio         *--+*+**+--+  1:15:59  97.85%
+bigapple       ************     7:59  97.81%
+amigo          ++**********    35:54  96.66%
+krotus         ************    24:56  95.99%
+harmless       +++++*++*+++  1:18:28  94.53%
+chicago        ************    30:58  90.32%
+gbnq           ++++++++++++  2:01:59  86.18%
+dot            ++++++++++-+  3:03:25  85.79%
+hermes         ++++-++++--+  2:04:58  84.75%
+edo            ++++++++*+++  1:20:56  82.95%
+bunker         ++++++++++++  2:22:59  74.06%
+cmeclax        --++++++++    3:15:57  68.61%

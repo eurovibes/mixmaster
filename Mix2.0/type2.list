@@ -1,47 +1,49 @@
-aarg remailer@aarg.net 475f3f9fe8da22896c10082695a92c2d 2.9b33 C
-anon mixmaster@anon.978.org 7384ba1eec585bfd7d2b0e9b307f0b1d 2.9b36 MCNm
-austria mixmaster@remailer.privacy.at 37586091b168b5e5b9a4b0d8cbe0e0de 2.9beta22 C
-axolotl axolotl@cotsebay.cotse.net 6b05e37d1a3a3ebd3395f5a4b132d924 2.0.4b45 CN
-bikikii remailer@bikikii.ath.cx 8eb65c6a087d9dde6dfcf761bdd04a90 2.0.4b45 MCN
-boris boris@noyb.org 35eb8057746f44108778e11f63fbf80c 2.9b37 MC
-cf mixmaster@remailer.cryptofortress.com d26234e7344b899a450398da70c81afc 2.9beta31 C
-citrus mix@outel.org 713677baeef79ede8089b2e0538127b5 2.9beta37 CM
-cmeclax cmeclax@ixazon.dynip.com fa92e0a08e062a81c961d474dc549f7e 2.9b33 MCN
-cracker remailer@gacracker.org 6da536e3043a8090174821b250931ddc 2.9b33 MC
-cripto anon@ecn.org 42e62a7198a5bb9ee64b027fe1a5e393 2.9beta31 CNm
+aarg remailer@aarg.net 475f3f9fe8da22896c10082695a92c2d 2:2.9.0.1 MC
+amessage mixmaster@remail.amessage.info 8d6b0c3b4c477211fc7dabe627ad9ccc 2:3.0b1 CNm 2004-03-22 2005-04-16
+amigo anon@remailer.org.uk bb4be5ed2fa58cca32949b512a6d9f17 2.0.4b46-reliable MC
+anon mixmaster@anon.978.org 7384ba1eec585bfd7d2b0e9b307f0b1d 2:3.0a9 MCNm
+antani mixmaster@firenze.linux.it a1bd6eac27bb35317fe49e3eb73aa5b8 2.9b40 CNm
+ashcroft ashcroft@socialistsushi.com 8494b6800726889bc8d97a5ae3a0351c 2:3.0a4 MC 2004-05-01 2005-05-26
+austria mixmaster@remailer.privacy.at 37586091b168b5e5b9a4b0d8cbe0e0de 2:2.9.1 C
+banana mix3@bananasplit.info 74cac85a87eb63c2e5fe88bd3eee79c7 2:3.0b2 MC 2003-07-07 2004-07-31
+bigapple remailer@optonline.net b25d660c4dd6c2446c61de81f26f44ac 2.0.4b46 CN
+bikikii remailer@bikikii.ath.cx d0addb68d4e84b48fb14de2a201407e3 2.0.4b46 MCNm 2003-12-11 2004-07-01
+bunker mixmaster@mixmaster.thebunker.net 0bd3320d57af38db5ea3432df2bf1f9e 2.9b38 CNm
+cf mixmaster@remailer.cryptofortress.com d26234e7344b899a450398da70c81afc 2:3.0a9+cvs C
+chicago remailer@xenophon.homeip.net f29a9f154590e9bc9ecbf82712b89461 2:2.9.1 MC
+citrus mix@outel.org 310b8456beb23663965c6483fc45aab7 2:3.0b1 MC
+cmeclax cmeclax@ixazon.dynip.com 7525679da68bf0cff931f4d8d1ed78cb 2.9b33 MCNp 2004-04-30 2005-01-15
+cripto anon@ecn.org 42e62a7198a5bb9ee64b027fe1a5e393 2:2.9.0 CNm
+cside cside@cside.dyndns.org 8145e8e2aa87c8f4b15af0b240546fc0 2:3.0b0+cvs MC 2004-02-28 2005-03-24
 cthulu mixmaster@cthulu.joatcrafts.org 03395f366dc6a70e673ac5d548ca8ec1 2.9beta32 MC
-dingo dingo1@dingoremailer.com 7b05f7a5a8c2dc48b5b86fee35cec491 2.0.4b45 MCN
-dismix mix@disastry.eu.org 1a945fbd5387f6a414e5630eb4f8feab 2.9b37 MC
-dizum remailer@dizum.com d0c04d1b7539af602c68182a59d885b9 2.9beta22 CNm
-farout farout@nuther-planet.net 5d156ffd383ae1d0aeb30fe5a338dcfd 2.0.4b45 CN
-freedom remailer@freedom.gmsociety.org 92ab68330fbab6aa8517d751e1ae44fe 2.9b34pre CNm
-frog frogremailer@frogadmin.yi.org 6aca459be1271d07b32127d0d34bcd74 2.0.4b45 CN
-harmless harmless@minder.net a4b4963fd61c6a02c284b8f57326b4b5 2.9beta23 MC
-havenco mix@remailer.havenco.com dcd835a6ecfc412ba8535949ff30be44 2.9b37 CNm
-italy2 italyremailer@iol.it 01ad19c850b3a59a29a9f9040819b234 2.0.4b1 MCN
-jmbcv remailer@mail.jmbcv.net 9160634361de51e5dfa7db9defc17def 2.9b36 CNm
-kork mix@kork.dyndns.org 116ff9e5b26bbf414c2899884a6b8f18 2.9beta23 C
+dingo dingo1@dingoremailer.com f70ae1a285a81d9ecf22a95313cfc1fc 2.0.4b45 MCN
+discord discord@erisiandiscord.de 3601fb103d2e11c87acac23962424dcc 2.9.0 C
+dizum remailer@dizum.com d0c04d1b7539af602c68182a59d885b9 2:2.9.0 CNm
+dot dot@remailer.hyperreal.info ae5f2fd0280deacd8841a78f4f2267ce 2.9b39 MC
+edo anon@cryptorebels.net 3a527adc40727755fdd2fbfb82c6f6c9 2:2.9.0 CNm
+freedom remailer@freedom.gmsociety.org 92ab68330fbab6aa8517d751e1ae44fe 2:2.9.0 CNm
+frell godot@remailer.frell.eu.org ed3682ccd85a4264930044a4e9c53bfd 2:2.9.0 CNm
+futurew mixmaster@mail.futureworlds.it 95ff9b0502e6ad42ab9bc66d755c52cf 2:2.9.0 CNm
+gateway mixmaster@mail.anonymizer.com e9f9a7315bb455284629f8cab05d7788 2:3.0b0 MC 2004-01-16 2005-02-09
+gbnq mixmaster@devspread.org c448d35d0423da75cca385744bcc9030 2:3.0a9 MC
+george mix@mixmaster.it ab3475256b54ca81e22654f3140059d1 2:3.0b1 CNm
+harmless harmless@minder.net a4b4963fd61c6a02c284b8f57326b4b5 2:2.9.0 MC
+hastio anon@remailer.hastio.org b7e2ef816ab51617efea106acbddaa88 2.0.4b45 CN
+hermes remailer@eocto.net 2bee9a765b68367e18d2d0c4a235ef98 2:2.9.1 MC
+italy aquarius@italy-anonymous-remailer.it 396c37c43f3f405b2d1ca3cd64a17386 2.0.4b46-reliable CN
 krotus mix@buckwheat.jwiz.org 04534c97e4797dc53aa574b39785dc7a 2.9beta8 C
+lbrtynws remailer@libertynews.org 11d98f1f778195dfeb2afdd9c3891d1e 2:2.9.1 MC
 lcs mix@anon.lcs.mit.edu 0a28e8a7bd2133d59cf7db80c773176e 2.0.3
-lemuria mix@nox.lemuria.org efde2d177c430ce6e1bde29aff44de2f 2.9b33 MC
-liberty remailer@libertynews.org daf49e9c81e153407383fea784c46f60 2.9b36 CNm
-loopback remailer@lo14.wroc.pl b99d36d12699c271541165cad9af36c2 2.9b33 MC
-noisebox remailer@noisebox.remailer.org c0130d496dd675c30707694b5e7bc8f8 2.9beta23 CNp
-notatla mixclient@notatla.demon.co.uk df0d1ae4aeebe37f3d9886b691ecede2 2.9b33 MC
-orange mix@arancio.net 37007072e18807c9903fed9668e5fd97 2.9beta23 C
-paranoia anon@paranoici.org 3aaf2ca2a4b0a5207a1523dd5a4fb11d 2.9b33 CNm
-passthru2 mixer@immd1.informatik.uni-erlangen.de c07b204924a69939651ec445fd5b2404 2.0.4b40 MC
-randseed randseed@melontraffickers.com b5f2983c8877b2ea0b31f42b2b8a0ef2 2.9b38pre3p1 CNm
-riot anon@riot.eu.org 6bb850dc8eee3a5b2e5847acf5e187be 2.9b33 MC
-rot26 rot26@mix.uucico.de 7f6d997678b19ccac110f6e669143126 2.9b33 MC
-scream2 scream2@tiscali.co.uk 41029900415203e091ef004e591b6a25 2.9b37 CNm
-sept mixmaster@mix.gotdns.org f5b89e81c5800a563cc4e6a20c76e2d6 2.9b37 MC
-squirrel mix@squirrel.owl.de 78aabe6738b513540594e1a1ab4e606a 2.9b33 CNm
-subzer0 cymix@subzer0.net 3521a8f826d7b0b209cf224523674a34 2.0.4b45 MCN
-sushi remailer@socialistsushi.com bde9e580f6042e87abece5dd52dad931 2.9b33 MC
-tonga remailer@cypherpunks.to 70d5742c277080317d4161f8c41b6592 2.9b37 CNm
-xganon remailer@xganon.com 10141e147fec6c5878999e0baa7354e3 2.9b33 CNm
-xganon2 remailer@remailer.xganon.com 1011a2efbb88714734da336e9ef246ce 2.9beta22 CNm
-xmailer remailer@xmailer.ods.org fe8c27d2a0eb1609a5ec0215d442b967 2.9b33 CNm
-znar ka5tkn@cox-internet.com 9273887e3ee193bb79617ef7b728219f 2.0.4b45 CN
-
+lemuria mix@nox.lemuria.org efde2d177c430ce6e1bde29aff44de2f 2.9b38 C
+liberty remailer@liberty.gmsociety.org 3de56777946581cc772fd95d56058484 2:3.0b1 CNm
+mercler mercler@geekhost.info e73279be5bd1c82a4418b6f5e4147850 2:3.0a9 MCNm
+metacolo mix@remailer.metacolo.com ae05e88b20ec3e276ae464e9901cd41a 2:3.0b1 CNm
+panta remailer@panta-rhei.dyndns.org d77f6452e6f024ead9e3408b30c034b0 2.0.4b46-reliable CN
+paranoia anon@paranoici.org 3aaf2ca2a4b0a5207a1523dd5a4fb11d 2:2.9.1 CNm
+randseed randseed@melontraffickers.com b5f2983c8877b2ea0b31f42b2b8a0ef2 2:2.9.1p1 CNm
+riot anon@riot.eu.org 6bb850dc8eee3a5b2e5847acf5e187be 2.9b40 MC
+rot26 rot26@mix.uucico.de c4818fe61b42c8d27e87a476fcd76b6f 2:3.0b1+ MC 2004-04-10 2005-05-05
+starwars mixmaster@tatooine.homelinux.net 912819a4f778f7ffd37dd6d1d96c3814 2:2.9.0 CNm
+tonga remailer@cypherpunks.to 70d5742c277080317d4161f8c41b6592 2:3.0a3 CNm 2002-09-12
+vger mix@vger.smbtech.com 3ad40b40176cdc8f149e5054ed4c6c90 2:2.9.1 MCNm
+willers mix@employees.org 1ef2e0bda319d724abab0be086abc4b3 2:2.9.1 MC
