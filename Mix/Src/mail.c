@@ -6,7 +6,7 @@
    details.
 
    Socket-based mail transport services
-   $Id: mail.c,v 1.7.2.9 2003/01/12 22:21:26 colintu Exp $ */
+   $Id: mail.c,v 1.7.2.10 2003/01/13 22:56:08 colintu Exp $ */
 
 
 #include "mix3.h"
@@ -154,10 +154,14 @@ int sendmail(BUFFER *message, char *from, BUFFER *address)
     for (count = 0;; count++) {
       snprintf(path, PATHMAX, "%s%cout.%lu.%u_%lu.%s,S=%lu.txt",
 	POOLDIR, DIRSEP, time(NULL),
- #ifdef POSIX
+#ifdef POSIX
 	getpid(),
- #else
+#else /* end of POSIX */
+#ifdef WIN32
+    _getpid(),
+#else /* end of defined(WIN32) */
 	0,
+#endif
 #endif
 	namecounter++, hostname, head->length + message->length);
 
