@@ -1,9 +1,9 @@
 # Process this file with autoconf to produce a configure script.
-# $Id: configure.ac,v 1.2 2003/10/14 14:58:51 dybbuk Exp $
+# $Id: configure.ac,v 1.3 2003/10/14 15:10:45 dybbuk Exp $
 AC_INIT(Src/version.h)
 AC_CONFIG_AUX_DIR(etc)
 AM_INIT_AUTOMAKE(mixmaster, [3.08+cvs], mixmaster-devel@lists.sourceforge.net)
-AC_CONFIG_HEADER([config.h])
+AM_CONFIG_HEADER([config.h])
 
 dnl Find system type
 AC_CANONICAL_HOST
@@ -22,6 +22,7 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_RANLIB
 AC_PROG_CPP
+AC_PROG_YACC
 
 # These are all Windows libraries -- autoscan said we'd need them, but
 # I have no Windows machine to test these on, so this undoubtedly is
