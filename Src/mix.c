@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.13 2002/08/22 04:29:43 weaselp Exp $ */
+   $Id: mix.c,v 1.14 2002/08/22 05:18:26 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -128,6 +128,7 @@ int SIZELIMIT = 0;		/* maximal size of remailed messages */
 int INFLATEMAX = 50;		/* maximal size of Inflate: padding */
 int MAXRANDHOPS = 20;
 int BINFILTER = 0;		/* filter binary attachments? */
+int LISTSUPPORTED = 1;		/* list supported remailers in remailer-conf reply? */
 long PACKETEXP = 7 * SECONDSPERDAY;	/* Expiration time for old packets */
 long IDEXP = 7 * SECONDSPERDAY;	/* 0 = no ID log !! */
 long SENDPOOLTIME = 60 * 60;	/* frequency for sending pool messages */
@@ -359,6 +360,7 @@ int mix_configline(char *line)
 	  read_conf_i(AUTOBLOCK) || read_conf(FORWARDTO) ||
 	  read_conf_i(SIZELIMIT) || read_conf_i(INFLATEMAX) ||
 	  read_conf_i(MAXRANDHOPS) || read_conf_i(BINFILTER) ||
+	  read_conf_i(LISTSUPPORTED) ||
 	  read_conf_t(PACKETEXP) || read_conf_t(IDEXP) ||
 	  read_conf_t(SENDPOOLTIME) || read_conf_i(NUMCOPIES) ||
 	  read_conf(CHAIN) || read_conf_i(VERBOSE) ||
