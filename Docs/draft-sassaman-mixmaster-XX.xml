@@ -12,6 +12,7 @@
 <front>
 
   <title abbrev="Mixmaster">Mixmaster Protocol Version 2</title>
+  <workgroup>The Mixmaster Project</workgroup>
 
   <author initials="U." surname="Moeller" fullname="Ulf Moeller">
     <organization>Secardeo GmbH</organization>
