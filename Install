@@ -347,9 +347,9 @@ then
     echo "You can either compile your secret passphrase into the binary
 or you can set it in your config file. Note that the former does not
 really increase security as the passphrase can still be discovered by
-running something like »strings mix«."
+running something like \`strings mix'."
     echo ""
-    echo "Most users should answer »n« to this question:"
+    echo "Most users should answer \`n' to this question:"
     echo ""
     readln "Do you want to compile the passphrase into the binary?" n
   fi
@@ -372,7 +372,7 @@ whenever you re-compile Mixmaster)."
     if [ "$PASSINCONFIG" != 1 ]
     then
       ans=""
-      echo "Please enter a passphrase for your remailer (it will be
+      echo "Please enter a passphrase for your remailer (it will be 
 stored in mix.cfg in clear)."
       read ans
 
@@ -419,7 +419,7 @@ then
 
  LIBDIR=
  INCDIR=
-# SRCDIR=zlib*
+ SRCDIR=zlib*
  findlib libz.a
  if [ "$found" = "" ]
  then
@@ -442,7 +442,7 @@ then
 
  LIBDIR=
  INCDIR=
-# SRCDIR=pcre*
+ SRCDIR=pcre*
  findlib libpcre.a
  if [ "$found" != "" ]
  then
@@ -625,7 +625,7 @@ elif [ "$version" = "90609f" ]
    exit 1
   else 
    echo "Does this version of OpenSSL contain AES support?"
-   readln "If unsure of the answer, say n" n
+   readln "If unsure of the answer, say \`n'" n
     if [ "$ans" = "y" ]
     then
     DEF="$DEF -DUSE_AES"
