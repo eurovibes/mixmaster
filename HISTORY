@@ -450,4 +450,4 @@
 
 2004-03-20      3.0b2-unreleased
                            Fall back to 3DES as Encrypt-Key cipher if we don't
-                             have IDEA. - Laurent Fousse <lfousse@ens-lyon.fr>
+                             have IDEA. - Laurent Fousse <laurent@komite.net>
