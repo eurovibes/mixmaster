@@ -53,15 +53,15 @@
     <organization>Nomen Abditum Services</organization>
     <address>
       <postal>
-        <street>P.O. Box 99282</street>
-        <city>Emeryville</city> <region>CA</region> <code>94662-9282</code>
+        <street>P.O. Box 900481</street>
+        <city>San Diego</city> <region>CA</region> <code>92190-0481</code>
         <country>USA</country>
       </postal>
       <email>rabbi@abditum.com</email>
     </address>
   </author>
 
-  <date month="April" year="2004"/>
+  <date month="May" year="2004"/>
 
   <abstract>
     <t>Most e-mail security protocols only protect the message body, leaving
@@ -71,8 +71,9 @@
       transfer protocol designed to protect electronic mail against traffic
       analysis.</t>
 
-    <t>Mixmaster is based on Chaum's mix-net protocol. A mix (remailer) is
-      a service that forwards messages, using public key cryptography to hide
+    <t>Mixmaster is based on Dr. David Chaum's mix-net protocol. A mix 
+      (remailer) is a service that forwards messages, using public key
+      cryptography to hide
       the correlation between its inputs and outputs. Sending messages
       through sequences of remailers achieves anonymity and unobservability
       of communications against a powerful adversary.</t>
