@@ -6,7 +6,7 @@
    details.
 
    OpenPGP messages
-   $Id: pgp.h,v 1.4 2002/07/26 23:29:45 rabbi Exp $ */
+   $Id: pgp.h,v 1.5 2002/08/16 19:03:37 rabbi Exp $ */
 
 
 #ifdef USE_PGP
@@ -62,6 +62,7 @@
 #define PGP_SUB_CREATIME 2
 #define PGP_SUB_PSYMMETRIC 11
 #define PGP_SUB_ISSUER 16
+#define PGP_SUB_FEATURES 30
 
 #define ARMORED 1
 
@@ -99,7 +100,7 @@ int pgp_rsa(BUFFER *buf, BUFFER *key, int mode);
 void pgp_sigcanonic(BUFFER *msg);
 int pgp_makepubkey(BUFFER *seckey, BUFFER *outtxt, BUFFER *pubkey,
 		   BUFFER *pass, int keyalgo);
-int pgp_getkey(int mode, int algo, int *sym, BUFFER *keypacket, BUFFER *key,
+int pgp_getkey(int mode, int algo, int *sym, int *mdc, BUFFER *keypacket, BUFFER *key,
 	       BUFFER *keyid, BUFFER *userid, BUFFER *pass);
 int pgp_rsakeygen(int bits, BUFFER *userid, BUFFER *pass, char *pubring,
 		  char *secring, int remail);
@@ -131,7 +132,7 @@ int pgp_getsymsessionkey(BUFFER *buf, BUFFER *pass);
 /* pgpcreat.c */
 int pgp_packet(BUFFER *buf, int type);
 int pgp_packet3(BUFFER *buf, int type);
-int pgp_symmetric(BUFFER *buf, BUFFER *key);
+int pgp_symmetric(BUFFER *buf, BUFFER *key, int mdc);
 int pgp_literal(BUFFER *buf, char *filename, int text);
 int pgp_compress(BUFFER *buf);
 int pgp_sessionkey(BUFFER *buf, BUFFER *user, BUFFER *keyid, BUFFER *seskey,
@@ -145,7 +146,7 @@ int pgp_digest(int hashalgo, BUFFER *in, BUFFER *d);
 
 /* pgpdb.c */
 
-int pgpdb_getkey(int mode, int algo, int *sym, BUFFER *key, BUFFER *user,
+int pgpdb_getkey(int mode, int algo, int *sym, int *mdc, BUFFER *key, BUFFER *user,
 		 BUFFER *founduid, BUFFER *keyid, char *keyring, BUFFER *pass);
 
 typedef struct {

@@ -6,7 +6,7 @@
    details.
 
    Read OpenPGP packets
-   $Id: pgpget.c,v 1.6 2002/08/03 17:08:02 weaselp Exp $ */
+   $Id: pgpget.c,v 1.7 2002/08/16 19:03:37 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -264,7 +264,7 @@ int pgp_getsig(BUFFER *p, pgpsig *sig, char *pubring)
   if (hashalgo != PGP_H_MD5)
     goto end;
   hash = buf_geti(p);
-  if (pgpdb_getkey(PK_VERIFY, algo, NULL, sigkey, NULL, sig->userid, id,
+  if (pgpdb_getkey(PK_VERIFY, algo, NULL, NULL, sigkey, NULL, sig->userid, id,
 		   pubring, NULL) < 0) {
     sig->ok = PGP_SIGNKEY;
     if (sig->userid)
@@ -752,7 +752,7 @@ int pgp_getsessionkey(BUFFER *in, BUFFER *pass, char *secring)
     goto end;
   buf_get(in, keyid, 8);
   algo = buf_getc(in);
-  err = pgpdb_getkey(PK_DECRYPT, algo, NULL, key, NULL, NULL, keyid,
+  err = pgpdb_getkey(PK_DECRYPT, algo, NULL, NULL, key, NULL, NULL, keyid,
 		     secring, pass);
   if (err < 0)
     goto end;

@@ -202,8 +202,14 @@
                            Detach correctly in daemon mode.
                            Minor Install script fixes.
 
-2002-??-??      N/A yet    Fix a small bug in pgpdata.c that stopped mixmaster
-                             from reading cipher preferences. (by Disastry).
+2002-??-??	2.9b37     OpenPGP enhancement release (fixes by Disastry).
+                           Fix a small bug in pgpdata.c that stopped mixmaster
+                             from reading cipher preferences.
                            Fixed Passphrase reading in mpgp (the test program)
-                             on Windows platform. (by Disastry).
-                           Several PGP fixes. (by Disastry).
+                             on Windows platform.
+                           Add Hash: header when clearsigning.
+                           Properly handle RSA keys whose key size is not a 
+                             multiple of 64.
+                           Remove leading zeros from MPI.
+                           Use MDC packets whenever possible.
+                           List CAST5 and AES128 in cipher preferences.
