@@ -6,7 +6,7 @@
    details.
 
    Process Mixmaster remailer messages
-   $Id: rem2.c,v 1.6 2003/09/23 17:50:50 weaselp Exp $ */
+   $Id: rem2.c,v 1.7 2003/09/25 22:53:43 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -97,9 +97,7 @@ static int isnewid(BUFFER *id, long timestamp)
   } else {
     if (IDEXP == 0) {
       if (timestamp > 0 && timestamp <= now - 7 * SECONDSPERDAY) {
-	char idstr[33];
-	id_encode(id->data, idstr);
-	errlog(LOG, "Ignoring redundant message: %s.\n", idstr);
+	errlog(LOG, "Ignoring old message.\n");
 	return (0);
       }
     } else {
@@ -130,7 +128,9 @@ static int isnewid(BUFFER *id, long timestamp)
   i = lockfile(IDLOG);
   while (fread(&idbuf, 1, sizeof(idlog_t), f) == sizeof(idlog_t)) {
     if (!memcmp(idbuf.id, id->data, sizeof(idbuf.id))) {
-      errlog(LOG, "Ignoring redundant message.\n");
+      char idstr[33];
+      id_encode(id->data, idstr);
+      errlog(LOG, "Ignoring redundant message: %s.\n", idstr);
       ret = 0;
       goto end;
     }
