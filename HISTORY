@@ -351,11 +351,11 @@
                              being chosen as random hops.
                            Have stats on intermediate vs. final hop count
                              (closes: #649900).
-                           Handle a pool we cannot read correctly: don't close
+
+2003-05-03      3.0a4      Handle a pool we cannot read correctly: don't close
                              the NULL dir handle (segfaults on *bsd). We also
                              print a warning in that case now.
-
-2003-02-15                 Add max capability for Type I.
+                           Add max capability for Type I.
                            Make sure DH/DSA param file is actually opened before
                              writing to it.  Fixes a segfault in case it is not.
                            Fix a problem in blockrequest() where a buffer
