@@ -6,7 +6,7 @@
    details.
 
    Send messages from pool
-   $Id: pool.c,v 1.22 2002/12/28 02:05:32 weaselp Exp $ */
+   $Id: pool.c,v 1.23 2003/09/29 01:06:54 weaselp Exp $ */
 
 #include "mix3.h"
 #include <stdlib.h>
@@ -503,7 +503,7 @@ int msg_send(char *name)
     if (err == -1)
       goto end;
     if (MIDDLEMAN && ! allowmessage(m)) {
-      mix2_encrypt(type, m, FORWARDTO, 1, NULL);
+      mix2_encrypt(type, m, FORWARDTO, 1, 1, NULL);
       stats_log(6);
     } else {
       err = filtermsg(m);
