@@ -8,6 +8,19 @@ Mandatory todo items before 3.0 release:
   + list only these platforms as supported
 * resolve any new critical issues
 * keylifetime needs to be documented once its finished
+  - apply patch by weasel
+  - move self/binding signatures to the secret keyrings
+  - display expiration date in ascii summary of keys
+  - if there is no expiration date on existing keys,
+    do _not_ add one, if there already is an expiration
+    date on they key, do _not_ change it
+  - only list the latest key of each type in pgpkeys.txt
+    (similar to how weasel's patch does it with mix keys)
+  - make keymgt(0|1) create new pgp keys if old ones are
+    expires/due to expire
+  - for later: do not encrypt to expired keys, do not
+    decrypt to keys that expired longer than graceperiod ago
+  
 
 Items for 3.0 or 3.0.1
 
