@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.9 2002/07/24 09:00:11 weaselp Exp $ */
+   $Id: config.h,v 1.10 2002/08/20 19:49:33 rabbi Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -123,6 +123,12 @@
 #error "The GUI requires Win32!"
 #endif
 
+#if defined(WIN32) && !defined(_USRDLL)
+#define DLLIMPORT __declspec(dllimport)
+#else
+#define DLLIMPORT
+#endif
+
 /** Constants *********************************************************/
 
 /* Give up if a file is larger than BUFFER_MAX bytes: */
@@ -217,7 +223,7 @@ extern char TYPE2LIST[];
 extern char PGPREMPUBRING[];
 extern char PGPREMPUBASC[];
 extern char PGPREMSECRING[];
-extern char NYMSECRING[];
+DLLIMPORT extern char NYMSECRING[];
 extern char NYMDB[];
 
 /* string constants */
@@ -283,7 +289,7 @@ extern int MAXRANDHOPS;
 extern int BINFILTER;
 extern long PACKETEXP;
 extern long IDEXP;
-extern int VERBOSE;
+DLLIMPORT extern int VERBOSE;
 extern long SENDPOOLTIME;
 extern int NUMCOPIES;
 extern char CHAIN[];
@@ -291,8 +297,8 @@ extern int DISTANCE;
 extern int MINREL;
 extern int RELFINAL;
 extern long MAXLAT;
-extern char PGPPUBRING[];
-extern char PGPSECRING[];
+DLLIMPORT extern char PGPPUBRING[];
+DLLIMPORT extern char PGPSECRING[];
 extern char PASSPHRASE[];
 extern long POP3TIME;
 extern int POP3DEL;
