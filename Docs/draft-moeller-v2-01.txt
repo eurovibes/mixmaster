@@ -466,14 +466,16 @@ attributes must not contain whitespace:
  expiration date:  date of the key's expiration
 
 The identifier consists of lowercase alphanumeric characters, beginning
-with an alphabetic character.
+with an alphabetic character. The identifier should consist of no more
+than eight characters in length.
 
 The encoded key packet consists of two bytes specifying the key length
-(1024 bits) in little-endian byte order, and of the RSA modulus and
-the public exponent in big-endian form using 128 bytes each, with
-preceding null bytes for the exponent if necessary. The packet is
-encoded in base 64 [RFC 1421], and broken into lines of 40 characters
-each (except that the last line is shorter). Its length (258 bytes) is given as a decimal number.
+(1024 bits) in little-endian byte order, and of the RSA modulus and the
+public exponent in big-endian form using 128 bytes each, with preceding
+null bytes for the exponent if necessary. The packet is encoded in base 64
+[RFC 1421], and broken into lines of 40 characters each (except that the
+last line is shorter). Its length (258 bytes) is given as a decimal
+number.
 
 The key ID is the MD5 message digest of the representation of the RSA
 public key (not including the length bytes). It is encoded as a
