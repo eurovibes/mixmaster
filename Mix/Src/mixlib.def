@@ -118,3 +118,4 @@ EXPORTS
     redirect_message                @113
     mix_check_timeskew              @114
     MIXCONF                         @115
+    menu_main                       @116
