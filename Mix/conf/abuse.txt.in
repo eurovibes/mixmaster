@@ -62,6 +62,16 @@ please send the following line as "root" or "postmaster" to
 DESTINATION-BLOCK @domain_to_be_blocked.com
 
 ==========================================================================
+Note that there are similar remailer systems in operation on the
+Internet that not affiliated with the Cypherpunks Tonga Remailer.
+
+Since the administrator of this remailer has no influence on those other
+systems and is likely to be unaware of many of these other systems, a
+destination block that you may choose to request by replying to this
+email is only effective for the Cypherpunks Tonga Remailer,
+not for similar systems that may exist on the Internet.
+
+==========================================================================
 
 How to obtain the name of the sender of an email that you received
 though this remailer:
