@@ -106,7 +106,7 @@ all messages have arrived.
 Announcing a new remailer to the public is most commonly done by posting
 the remailer keys and capabilities to alt.privacy.anon-server as well as
 the "remops" mailing list. Information about the remops list can be found
-here: http://lexx.shinn.net/mailman/listinfo/remops
+here: http://freedom.gmsociety.org/mailman/listinfo/remops
 
 To upgrade from a Mixmaster 2.0.* remailer installation, make a
 backup of your keys and configuration files before you run Install.
@@ -206,4 +206,4 @@ University of California, Berkeley and its contributors.
 
 All trademarks are the property of their respective owners.
 
-$Id: README,v 1.5.2.8 2002/12/17 21:31:29 rabbi Exp $
+$Id: README,v 1.5.2.9 2002/12/19 01:12:57 rabbi Exp $
