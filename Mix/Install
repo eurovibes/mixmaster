@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.8.2.16 2002/12/16 22:38:02 rabbi Exp $
+# $Id: Install,v 1.8.2.17 2002/12/16 23:25:11 ulfm Exp $
 
 #whereis program default-path
 whereis()
@@ -655,8 +655,11 @@ http://www.clark.net/pub/dickey/ncurses/ncurses.tar.gz"
  ideawarn()
  {
     echo "
-  WARNING: Building without IDEA. This means (among other things) that
-  Mixmaster will not create an RSA OpenPGP key (to avoid mail loss)"
+  WARNING: Your version of OpenSSL has been configured without IDEA support.
+  If you continue, Mixmaster will be installed with reduced functionality.
+  This means (among other things) that Mixmaster will not creade an RSA
+  OpenPGP key (to avoid mail loss). You may want to re-install OpenSSL
+  before proceeding."
     readln "Continue anyway?" y
     if [ "$ans" = "n" ]
     then
