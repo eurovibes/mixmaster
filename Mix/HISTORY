@@ -265,4 +265,6 @@
                            Mixmaster now handles <CR><LF> in pubring.mix.
                            Removed incorrect NT service checks in mix.c.
                            Mixmaster now keeps no stats in client mode.
+                           The pool is autmatically checked for waiting
+                             messages in the client configuration.
                            Documentation updates.
