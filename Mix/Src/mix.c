@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.18 2002/08/26 19:38:51 weaselp Exp $ */
+   $Id: mix.c,v 1.19 2002/08/28 09:35:25 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -66,6 +66,7 @@ char POOL[PATHMAX];
 char TYPE1LIST[PATHMAX];
 char TYPE2REL[PATHMAX];
 char TYPE2LIST[PATHMAX];
+char PIDFILE[PATHMAX];
 
 char PGPREMPUBRING[PATHMAX];
 char PGPREMPUBASC[PATHMAX];
@@ -363,6 +364,7 @@ void mix_setdefaults()
 	strnncpy(TYPE1LIST    , DEFAULT_TYPE1LIST);
 	strnncpy(TYPE2REL     , DEFAULT_TYPE2REL);
 	strnncpy(TYPE2LIST    , DEFAULT_TYPE2LIST);
+	strnncpy(PIDFILE      , DEFAULT_PIDFILE);
 
 	strnncpy(PGPREMPUBRING, DEFAULT_PGPREMPUBRING);
 	strnncpy(PGPREMPUBASC , DEFAULT_PGPREMPUBASC);
@@ -523,7 +525,7 @@ int mix_configline(char *line)
 	  read_conf(TYPE2REL) || read_conf(TYPE2LIST) ||
 	  read_conf(PGPREMPUBRING) || read_conf(PGPREMPUBASC) ||
 	  read_conf(PGPREMSECRING) || read_conf(NYMSECRING) ||
-	  read_conf(NYMDB) );
+	  read_conf(NYMDB) || read_conf(PIDFILE) );
 }
 
 static int mix_config(void)
@@ -956,7 +958,7 @@ int mix_daemon(void)
   setsignalhandler(1); /* set signal handlers and restart any interrupted system calls */
   for(;;) {
     if (terminatedaemon)
-      exit(0);
+      break;
     if (rereadconfig) {
       rereadconfig = 0;
       mix_config();
@@ -989,6 +991,7 @@ int mix_daemon(void)
       setsignalhandler(1); /* set signal handlers and restart any interrupted system calls */
     }
   }
+  return (0);
 }
 
 /** error ***************************************************************/

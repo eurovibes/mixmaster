@@ -257,3 +257,4 @@
                              keyring.
                            Mixmaster now prompts for secret key passphrase when
                              started in daemon mode.
+                           The Mixmaster damon now writes a pid file.
