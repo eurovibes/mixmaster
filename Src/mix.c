@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.14 2002/08/22 05:18:26 weaselp Exp $ */
+   $Id: mix.c,v 1.15 2002/08/23 03:25:48 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -658,13 +658,13 @@ int mix_regular(int force)
   if (f != NULL) {
     lock(f);
     fscanf(f, "%ld %ld %ld", &tpool, &tpop3, &tdaily);
-    if (now - tpool > SENDPOOLTIME)
+    if (now - tpool >= SENDPOOLTIME)
       force |= FORCE_POOL;
 #ifdef USE_SOCK
-    if (now - tpop3 > POP3TIME)
+    if (now - tpop3 >= POP3TIME)
       force |= FORCE_POP3;
 #endif
-    if (now - tdaily > SECONDSPERDAY)
+    if (now - tdaily >= SECONDSPERDAY)
       force |= FORCE_DAILY;
     if (force & FORCE_POOL)
       tpool = now;
