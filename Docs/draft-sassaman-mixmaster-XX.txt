@@ -19,13 +19,13 @@ Status of This Memo
      of Section 10 of RFC2026.
 
      Internet-Drafts are working documents of the Internet Engineering
-     Task Force (IETF), its areas, and its working groups.  Note that
+     Task Force (IETF), its areas, and its working groups. Note that
      other groups may also distribute working documents as
      Internet-Drafts.
 
      Internet-Drafts are draft documents valid for a maximum of six
      months and may be updated, replaced, or obsoleted by other
-     documents at any time.  It is inappropriate to use Internet-
+     documents at any time. It is inappropriate to use Internet-
      Drafts as reference material or to cite them other than as
      "work in progress."
 
@@ -46,11 +46,10 @@ Copyright Notice
 Abstract
 
 Most e-mail security protocols only protect the message body, leaving
-useful information such as the the identities of the conversing
-parties, sizes of messages and frequency of message exchange open to
-adversaries. This document describes Mixmaster (version 2), a mail
-transfer protocol designed to protect electronic mail against traffic
-analysis.
+useful information such as the identities of the conversing parties,
+sizes of messages and frequency of message exchange open to adversaries.
+This document describes Mixmaster (version 2), a mail transfer protocol
+designed to protect electronic mail against traffic analysis.
 
 Mixmaster is based on D. Chaum's mix-net protocol.
 A mix (remailer) is a service that forwards messages, using public key
@@ -93,7 +92,7 @@ Table of Contents
 This document describes a mail transfer protocol designed to protect
 electronic mail against traffic analysis. Most e-mail security
 protocols only protect the message body, leaving useful information
-such as the the identities of the conversing parties, sizes of
+such as the identities of the conversing parties, sizes of
 messages and frequency of message exchange open to adversaries.
 
 Message transmission can be protected against traffic analysis by the
@@ -143,7 +142,7 @@ to the first remailer in an appropriate transport encoding.
 
 To increase reliability, redundant copies of the message may be sent
 through different paths. The final remailer must be identical for all
-paths, so that duplicates can be detected and the message is delivered
+paths, so duplicates can be detected and the message is delivered
 only once.
 
 
@@ -153,18 +152,18 @@ When a remailer receives a message, it decrypts the first header section
 with its private key. By keeping track of a packet ID, the remailer
 verifies that the packet has not been processed before. The integrity of
 the message is verified by checking the packet length and verifying
-message digests included in the packet. Then the first header section is
-removed, the others are shifted up by one, and the last section is
-filled with random padding. All header sections and the packet body are
-decrypted with the symmetric key found in the header. This reveals a
-public key-encrypted header section for the next remailer at the top,
-and removes the old top header section. Transport encoding is applied to
-the resulting message per section 4.4 of this document.
+message digests included in the packet. Next, the first header section
+is removed, the others are shifted up by one, and the last section is
+filled with random padding. All header sections, as well as the packet
+body, are decrypted with the symmetric key found in the header. This
+reveals a public key-encrypted header section for the next remailer at
+the top, and removes the old top header section. Transport encoding is
+applied to the resulting message per section 4.4 of this document.
 
 The remailer must collect several encrypted messages before sending the
-resulting messages in random order. Thus the relation between the
-incoming and outgoing messages is obscured to outside adversaries even
-if the adversary can observe all messages sent. The message is
+resulting messages in random order. Thus, the relation between the
+incoming and outgoing messages is obscured to outside adversaries --
+even if the adversary can observe all messages sent. The message is
 effectively anonymized by sending it through a chain of independently
 operated remailers.
 
@@ -175,15 +174,15 @@ When a packet is sent to the final remailer, it contains an indication
 that the chain ends at that remailer, and whether the packet contains
 a complete message or part of a multi-part message. If the packet
 contains the entire message, the packet body is decrypted and after
-reordering messages the plain text is delivered to the recipient. For
+reordering messages, the plain text is delivered to the recipient. For
 partial messages, a message ID is used to identify the other parts as
 they arrive. When all parts have arrived, the message is reassembled,
 decompressed if necessary, and delivered. If the parts do not arrive
 within a time limit, the message is discarded.
 
 Only the last remailer in the chain can determine whether packets are
-part of a certain message. To all the others, they are completely
-independent.
+part of a specific message. To all of the other remailers, the packetsa
+ppear to be completely independent.
 
 2.4 Remixing
 
@@ -200,9 +199,9 @@ to its next hop, treat the processed message as opaque data which will comprise
 the body of a Mixmaster message. The remailer should then create a Mixmaster
 message with this body to be delivered to the next hop remailer.
 
-Ensuring that a remailer's keyring of keys for other remailers in the
-network is up-to-date is the responsibility of the given remailer's
-operator.
+Ensuring that a remailer's keyring containing the public keys for other
+remailers in the network remains up-to-date is the responsibility of the
+given remailer's operator.
 
 If the remailer receives a Mixmaster message that, when decrypted, reveals a
 message of another protocol which the remailer speaks, it should process the
@@ -213,11 +212,11 @@ message as though it had been delivered in the other protocol format initially.
 
 3.1 Timed Dynamic Pool Mix Algorithm
 
-In order to obfuscate the link between incoming and outgoing messages,
-Mixmaster uses a pooling scheme.  Messages that are to be forwarded
-anonymously are stored in a pool.  In regular intervals the remailer fires
-and sends some random messages from the pool to either the next hop or
-their final recipients.
+To obfuscate the link between incoming and outgoing messages, Mixmaster
+uses a pooling scheme. Messages that are to be forwarded anonymously
+are stored in a pool. In regular intervals the remailer fires and sends
+some random messages from the pool to either the next hop or their final
+recipients.
 
 The pooling scheme used in Mixmaster is a "Timed Dynamic Pool Mix", which has
 the following three parameters:
@@ -253,7 +252,7 @@ geometric distribution and adds that many dummy messages to the pool as
 well.
 
 The distributions' parameters are chosen so that on average the remailer
-creates one dummy for every 32 messages coming in and one every 9 mixing
+creates one dummy for every 32 inbound messages and one every 9 mixing
 rounds.
 
 
@@ -262,10 +261,10 @@ rounds.
 4.1 Payload Format
 
 The Mixmaster message payload can be an e-mail message, a Usenet
-message or a dummy message.
+message, or a dummy message.
 
 The messages use the formats specified in [RFC 822] and [RFC 1036]
-respectively, prepended with data specifying the payload type. An
+respectively, prefixed with data specifying the payload type. An
 additional, more restricted method of specifying message header lines
 is defined for reasons of backward compatibility.
 
@@ -277,9 +276,9 @@ The payload format is as follows:
   Header lines fields            [ 80 bytes each]
   User data section              [ up to ~2.5 MB]
 
-Each destination field consist of a string of up to 80 ASCII characters,
-padded with null-bytes to a total size of 80 bytes. The following
-strings are defined:
+Each destination field consists of a string of up to 80 ASCII
+characters, padded with null-bytes to a total size of 80 bytes. The
+following strings are defined:
 
   null:                 dummy message
   post:                Usenet message
@@ -292,8 +291,8 @@ If the destination field is "post: [newsgroup]", a "Newsgroups:
 [newsgroup]" field is added to the header of the resulting message. If
 the destination field is of the fourth type, a "To: [address]" field
 is added to the header of the resulting message. [address] and
-[newsgroup] are strings of ASCII characters.  If the message
-is a dummy message the node should discard it.
+[newsgroup] are strings of ASCII characters. The node should discard the
+message if it is a dummy message.
 
 Message headers can be specified in header line fields. Each header
 line field consists of a string of up to 80 ASCII characters, padded
@@ -302,11 +301,11 @@ with null-bytes to a total size of 80 bytes.
 There are three types of user data sections:
 
 A compressed user data section begins with the GZIP identification
-header (31, 139). It contains another user data section. The data are
-compressed using GZIP [RFC 1952]. The GZIP operating system field must
-be set to Unix, and file names must not be given. Compression may be
-used if the capabilities attribute of the final remailer contains the
-flag "C".
+header (31, 139). This header contains an additional user data section.
+The data are compressed using GZIP [RFC 1952]. The GZIP operating system
+field must be set to Unix, and file names must not be given. Compression
+may be used if the capabilities attribute of the final remailer contains
+the flag "C".
 
 An RFC 822 user data section begins with the identification "##<CR>"
 (35, 35, 13). It contains an e-mail message or a Usenet message as
@@ -342,11 +341,11 @@ remailers, and a body containing payload data. To ensure that
 packets are indistinguishable, the size of these encrypted data fields
 is fixed.
 
-The packet header consists of 20 header sections (specified in
-section 3.3.1) of 512 bytes each, resulting in a total header size
-of 10240 bytes. The header sections -- except for the first one -- and
-the packet body are encrypted with symmetric session keys specified in
-the first header section.
+The packet header consists of 20 header sections (specified in section
+3.3.1) of 512 bytes each, resulting in a total header size of 10240
+bytes. The header sections (except for the first one) and the packet
+body are encrypted with symmetric session keys specified in the first
+header section.
 
 
 4.3.1 Header Section Format
@@ -428,10 +427,11 @@ message.
 Message digest: MD5 digest computed over the preceding elements of the
 encrypted header part.
 
-In the case of packet type 0, header sections 2 .. 20 and the packet body
-each are decrypted separately using the respective initialization vectors.
-In the case of packet types 1 and 2, header sections 2 .. 20 are ignored,
-and the packet body is decrypted using the given initialization vector.
+In the case of packet type 0, header sections 2 .. 20, and the packet
+body, each are decrypted separately using the respective initialization
+vectors. In the case of packet types 1 and 2, header sections 2 .. 20
+are ignored, and the packet body is decrypted using the given
+initialization vector.
 
 
 4.3.2 Body Format
@@ -461,8 +461,8 @@ The length field always contains the decimal number "20480", since the
 size of Mixmaster packets is constant. An MD5 message digest [RFC
 1321] of the (un-encoded) packet is encoded in base64.
 
-The packet itself is encoded in base 64 encoding [RFC 1421], broken
-into lines of 40 characters (except that the last line is shorter).
+The packet itself is encoded in base 64 encoding [RFC 1421], broken into
+lines of 40 characters (except the last line, which is shorter).
 
 
 5. Key Format
@@ -516,10 +516,10 @@ The capabilities field is optional. It is a list of flags represented
 by a string of ASCII characters. Clients should ignore unknown
 flags. The following flags are used in version 2.0.4 through 3.0:
 
- C     accepts compressed messages.
- M     will forward messages to another mix when used as final hop.
- Nm    supports posting to Usenet through a mail-to-news gateway.
- Np    supports direct posting to Usenet.
+ C     accepts compressed messages
+ M     will forward messages to another mix when used as final hop
+ Nm    supports posting to Usenet through a mail-to-news gateway
+ Np    supports direct posting to Usenet
 
 The date fields introduced in version 3.0 are optional. They are ASCII
 date stamps in the format YYYY-MM-DD. The first date indicates the date
@@ -556,8 +556,8 @@ expiration, an expired remailer key should be securely destroyed.
 6. Administrative Commands
 
 The remailer software understands a number of specific administrative
-commands. These commands are sent via the Subject: line of an email to the
-email address of the remailer:
+commands. These commands are sent via the Subject: line of an e-mail to
+the email address of the remailer:
 
  remailer-help:     returns information on using the remailer
  remailer-key:      returns the remailer's public key
@@ -566,7 +566,7 @@ email address of the remailer:
  remailer-adminkey: returns the public key of the remailer operator
 
 Upon receiving an administrative request, the remailer returns its reply
-to the email address specified in the Reply-To: or From: header of the
+to the e-mail address specified in the Reply-To: or From: header of the
 request.
 
 The remailer-help request should return basic information on using the
@@ -595,14 +595,13 @@ communication with the remailer operator.
 7. Delivery of Anonymous Messages
 
 When anonymous messages are forwarded to third parties, remailer
-operators should be aware that senders might try to supply header
-fields that indicate a false identity or to send Usenet control
-messages [RFC 1036] unauthorized, which is a problem because many news
-servers accept control messages automatically without any
-authentication.
+operators should be aware that senders might try to supply header fields
+that indicate a false identity or to send Usenet control messages [RFC
+1036] unauthorized. This is a problem because many news servers accept
+control messages automatically without any authentication.
 
-For these reasons, remailer software should allow the operator
-to disable certain types of message headers, and to insert headers
+For these reasons, remailer software should allow the operator to
+disable certain types of message headers, and to insert headers
 automatically.
 
 Remailers usually add a "From:" field containing an address controlled
@@ -637,7 +636,7 @@ remailers should collect as many messages as possible while keeping
 the delay acceptable.
 
 Statistical traffic analysis is possible even if single messages are
-anonymized in a perfectly secure way: An eavesdropper may correlate
+anonymized in a perfectly secure way: an eavesdropper may correlate
 the times of Mixmaster packets being sent and anonymized messages
 being received. This is a powerful attack if several anonymous
 messages can be linked together (by their contents or because they are
@@ -651,7 +650,7 @@ randomness in the delay caused by trusted remailers.
 There is no anonymity if all remailers in a given chain collude with
 the adversary, or if they are compromised during the lifetime of their
 keys. Using a longer chain increases the assurance that the user's
-privacy will be preserved, but in the same time causes lower
+privacy will be preserved, but at the same time causes lower
 reliability and higher latency. Sending redundant copies of a message
 increases reliability but may also facilitate attacks. An optimum must
 be found according to the individual security needs and trust in the
