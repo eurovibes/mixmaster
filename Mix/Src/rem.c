@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: rem.c,v 1.2 2001/11/02 20:57:03 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -296,6 +296,10 @@ void pool_packetexp(void)
 
 void logmail(char *mailbox, BUFFER *message)
 {
+  time_t t;
+  struct tm *tc;
+  char line[LINELEN];
+
   /* mailbox is "|program", "user@host", "stdout" or "filename" */
   buf_rewind(message);
   if (mailbox[0] == '\0')	/* default action */
@@ -335,8 +339,12 @@ void logmail(char *mailbox, BUFFER *message)
       return;
     }
     lock(mbox);
-    if (!bufileft(message, "From "))
-      fprintf(mbox, "From Mixmaster Wed Jan 01 00:00:00 1970\n");
+    if (!bufileft(message, "From ")) {
+      t = time(NULL);
+      tc = localtime(&t);
+      strftime(line, LINELEN, "From Mixmaster %a %b %d %H:%M:%S %Y\n", tc);
+      fprintf(mbox, line);
+    }
     buf_write(message, mbox);
     fprintf(mbox, "\n");
     unlock(mbox);

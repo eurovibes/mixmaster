@@ -6,12 +6,13 @@
    details.
 
    Create nym server messages
-   $Id: nym.c,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: nym.c,v 1.2 2001/11/02 20:57:03 rabbi Exp $ */
 
 
 #include "mix3.h"
 #include "pgp.h"
 #include <string.h>
+#include <time.h>
 #include <assert.h>
 
 int nym_config(int mode, char *nym, char *nymserver, BUFFER *pseudonym,
@@ -299,6 +300,9 @@ int nym_decrypt(BUFFER *msg, char *thisnym, BUFFER *log)
   BUFFER *ek, *opt;
   int status;
   LOCK *nymlock;
+  time_t t;
+  struct tm *tc;
+  char timeline[LINELEN];
 
   pgpmsg = buf_new();
   out = buf_new();
@@ -340,8 +344,12 @@ int nym_decrypt(BUFFER *msg, char *thisnym, BUFFER *log)
 		buf_append(out, strchr(sig->data, '[') + 1,
 			   strchr(sig->data, ']') -
 			   strchr(sig->data, '[') - 1);
-	      else
-		buf_appends(out, "Wed Jan 01 00:00:00 1970");
+	      else {
+		t = time(NULL);
+		tc = localtime(&t);
+		strftime(timeline, LINELEN, "%a %b %d %H:%M:%S %Y", tc);
+		buf_appends(out, timeline);
+	      }
 	      buf_nl(out);
 	      if (err == PGP_SIGOK &&
 		  bufifind(sig, config->data)) {
