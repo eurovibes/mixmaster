@@ -6,7 +6,7 @@
    details.
 
    Key management
-   $Id: keymgt.c,v 1.8 2002/08/07 17:27:01 weaselp Exp $ */
+   $Id: keymgt.c,v 1.9 2002/08/07 18:06:55 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -270,7 +270,7 @@ int v2keymgt(int force)
     if ((f = mix_openfile(SECRING, "r")) == NULL)
       v2createkey();
     else
-      flcose(f);
+      fclose(f);
   }
 
   if (force == 0 && (f = mix_openfile(KEYFILE, "r")) != NULL) {
