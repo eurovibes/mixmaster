@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.8.2.10 2002/12/14 20:18:24 weaselp Exp $
+# $Id: Install,v 1.8.2.11 2002/12/14 20:46:32 weaselp Exp $
 
 #whereis program default-path
 whereis()
@@ -154,7 +154,11 @@ findlib()
  if [ "$type" = system ]
  then
   LIB=
-  LDFLAG=-l`echo $lib | sed 's/^lib//;s/\.a$//'`
+  LDFLAG="-l`echo $lib | sed 's/^lib//;s/\.a$//'` -L$found"
+  if [ "$found" = "/usr/local/lib" ]
+  then
+    INCDIR="/usr/local/include $INCDIR"
+  fi
  fi
 
  incdir=$INCDIR
