@@ -6,7 +6,7 @@
    details.
 
    Utility functions
-   $Id: util.c,v 1.6 2002/09/07 11:11:28 disastry Exp $ */
+   $Id: util.c,v 1.7 2002/09/12 04:48:58 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -305,7 +305,7 @@ int encode(BUFFER *in, int linelen)
 int decode(BUFFER *in, BUFFER *out)
 {
   int err = 0;
-  register byte c0, c1, c2, c3;
+  register byte c0 = 0, c1 = 0, c2 = 0, c3 = 0;
   register byte *a, *d, *end;
   int tempbuf = 0;
   int i;
