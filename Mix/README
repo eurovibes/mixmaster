@@ -127,6 +127,10 @@ available. If you get a "Can't open display" error when starting
 the Mixmaster menu, run "./configure --enable-termcap; make lib/libncurses.a"
 in the ncurses directory.
 
+Mixmaster assumes that gcc is present on the system. If you are compiling
+on systems without gcc installed by default, such as Macintosh OS X, you will
+need to make minor modifications to the Makefile.in files by hand  (or install 
+gcc). Mixmaster 3.0 will handle his more gracefully.
 
 Security notes:
 --------------
@@ -196,4 +200,4 @@ University of California, Berkeley and its contributors.
 
 All trademarks are the property of their respective owners.
 
-$Id: README,v 1.5.2.4 2002/12/16 22:54:32 rabbi Exp $
+$Id: README,v 1.5.2.5 2002/12/16 23:20:35 rabbi Exp $
