@@ -1,5 +1,5 @@
 .TH MIX 1 "Mixmaster Version 3.0 beta"
-.\" $Id: mix.1,v 1.6.2.6 2002/10/18 20:36:07 rabbi Exp $
+.\" $Id: mix.1,v 1.6.2.7 2002/12/14 22:57:41 weaselp Exp $
 .SH NAME
 mix \- anonymous remailer software
 .SH SYNOPSIS
@@ -32,7 +32,7 @@ In the non-interactive mode, Mixmaster reads a message from its
 standard input or from a file.  Destination address and input file can
 be specified in the command line.  If no address is given in the
 command line, the input file is expected to contain a message complete
-with mail headers.  Messages to be send under a pseudonym must contain
+with mail headers.  Messages to be sent under a pseudonym must contain
 a
 .I Nym:
 header rather than
@@ -166,7 +166,7 @@ internal files up\-to\-date.
 .TP
 .B \-D, \-\-daemon
 Detach from the console and process the pool, get mail and update the
-internal files in regular intervals.
+internal files at regular intervals.
 .TP
 .B -G, \-\-generate\-key
 Generate a new remailer key.
@@ -251,7 +251,7 @@ as the final remailer. Default:
 .BR 99 .
 .TP
 .B MAXLAT
-Only select remailers with a latency of maximally
+Only select remailers with a latency of at most
 .IR MAXLAT .
 Default:
 .BR 36h .
@@ -423,7 +423,7 @@ it is treated as a Maildir, otherwise a standard mbox format file
 is expected. All messages are removed from the folder after reading.
 .B MAILIN
 is not set by default.
-It is an incredible bad idea to set this the same as \fBMAILBOX\fP.
+It is an incredibly bad idea to set this the same as \fBMAILBOX\fP.
 .TP
 .B VERBOSE
 If
@@ -433,7 +433,7 @@ is set to
 Mixmaster will log error
 messages only. If it is set to
 .BR 1 ,
-error message and warnings are logged. If
+error messages and warnings are logged. If
 .B VERBOSE
 is set to
 .BR 2 ,
@@ -465,7 +465,7 @@ Enable remailer functionality. Default:
 .TP
 .B MIDDLEMAN
 Act as an intermediate hop only, forward anonymized
-messages to an other remailer. This mode can be used
+messages to another remailer. This mode can be used
 where complaints about anonymous messages must be
 avoided. (The variable
 .B FORWARDTO
@@ -545,14 +545,14 @@ many messages are received at a time, reducing the effect
 of flooding attacks.
 .TP
 .B SIZELIMIT
-Maximal size for anonymous messages in kB.
+Maximum size for anonymous messages in kB.
 .B 0
 means no limit.
 Default:
 .BR 0 .
 .TP
 .B POP3SIZELIMIT
-Maximal size for incoming messages in kB when using POP3.
+Maximum size for incoming messages in kB when using POP3.
 .B 0
 means no limit.
 Default:
@@ -564,7 +564,7 @@ is set to
 and left on the server otherwise.
 .TP
 .B INFLATEMAX
-Maximal size for
+Maximum size for
 .B Inflate:
 padding in kB.
 .B 0
@@ -574,7 +574,7 @@ Default:
 .BR kB .
 .TP
 .B MAXRANDHOPS
-Maximal chain length for message forwarding requested by
+Maximum chain length for message forwarding requested by
 .B Rand-Hop
 directives.
 Default:
@@ -630,7 +630,7 @@ no log is kept.
 .PP
 The following strings must be specified at compile-time in
 .BR config.h .
-Usually it is not necessary to modify any of these:
+It is not usually necessary to modify any of these:
 .TP
 .B
 DISCLAIMER
@@ -655,7 +655,7 @@ file is available.
 .TP
 .B MSGFOOTER
 A default string to be inserted at the bottom of the message body
-of all anonymous messages and no
+of all anonymous messages if no
 .B footer.txt
 file is available.
 .TP
@@ -669,7 +669,7 @@ The character set used for MIME-encoded header lines.
 .B DESTBLOCK
 A quoted list of files that contain blocked addresses.
 Files must be separated by one space. Mixmaster will choose
-the first file for writing
+the first file for writing if
 .B AUTOBLOCK
 is enabled.
 .PP
@@ -760,7 +760,6 @@ List of reliable type 2 remailers (\fBTYPE2REL\fP).
 .TP
 .B type2.list
 List of known type 2 remailers (optional) (\fBTYPE2LIST\fP).
-.SS Remailer files:
 .TP
 .B disclaim.txt
 A string to be inserted in the header of all anonymous
@@ -830,19 +829,19 @@ Mixmaster does not send mail to the blocked addresses listed in this file (\fBDE
 .B rab.blk
 Identical to
 .BR dest.blk ,
-except that Mixmaster will not write to this file.
+except Mixmaster will not write to this file.
 For use with external remailer abuse blocklists.
 .TP
 .B source.blk
 List of blocked source addresses.  If an incoming message originates
-from an address or IP in this in this list, it will be ignored. This
+from an address or IP in this list, it will be ignored. This
 feature can be used to avoid spam and other abusive mail (\fBSOURCEBLOCK\fP).
 .TP
 .B header.blk
 List of unwanted header fields. The file is used to delete unwanted
 header lines (e.g. lines that indicate a false identity, or Usenet
 control messages), and do other header filtering (\fBHDRFILTER\fP).
-.PP
+
 A destination address or header line is left out if it contains a
 search string or matches a regular expression specified in the block
 file. Lines in the block file that begin and end with a slash
