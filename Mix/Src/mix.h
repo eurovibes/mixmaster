@@ -21,7 +21,7 @@ Initialization
 
 int mix_init(char mixdir[]);
 
-  This funtion initializes internal data of the Mixmaster library,
+  This function initializes internal data of the Mixmaster library,
   such as the random number generator. This should be the first call
   to the Mixmaster library. It returns 0 on success. If the random
   number generator cannot be initialized, mix_init() terminates.
@@ -57,7 +57,7 @@ int rnd_mouse(UINT i, WPARAM w, LPARAM l);
   feedback on the progress of initializing the random number generator
   while asking the user to move the mouse. A runtime error will occur
   if any cryptographic functions are used before rnd_mouse() has
-  signalled success.
+  signaled success.
 
 
 Message I/O
@@ -122,7 +122,7 @@ int mix_encrypt(int type, BUFFER *message, char *chain, int numcopies,
    MSG_POST  Usenet news article
    MSG_NULL  dummy message, will be discarded
 
-  *chain is a string consisting of a comma-seperated list of remailer
+  *chain is a string consisting of a comma-separated list of remailer
   names that the message will be sent through. '*' means that a remailer
   will be chosen at random. If *chain is NULL, mix_encrypt() will use the
   default chain.
@@ -193,7 +193,7 @@ int nym_config(int mode, char *nym, char *nymserver, BUFFER *pseudonym,
   the Mixmaster message sent to the nymserver.
 
   chains contains a list of reply blocks, consisting of "To:",
-  "Newsgroups:", "Null:", "Latency:", "Chain:" and arbitracy header lines
+  "Newsgroups:", "Null:", "Latency:", "Chain:" and arbitrary header lines
   such as "Subject:". The "Chain:" line contains a remailer selection
   string for type 1 remailers. The reply blocks are separated by empty
   lines.
@@ -221,7 +221,7 @@ int nym_decrypt(BUFFER *msg, char *nym, BUFFER *log);
   it will return an empty msg buffer.
 
 
-Lowel-Level Remailer Functions
+Lower-Level Remailer Functions
 ==============================
 
 t1_decrypt(BUFFER *in);
@@ -246,10 +246,10 @@ OpenPGP encryption
 int pgp_encrypt(int mode, BUFFER *message, BUFFER *encr,
                BUFFER *sigid, BUFFER *pass, char *pubring,
 	       char *secring);
+	
+  This function encrypts and signs a message according to OpenPGP (RFC 2440).
 
-  This function encrypts and singed a message according to OpenPGP (RFC 2440).
-
-  mode is the bitwise or of on of PGP_ENCRYPT, PGP_CONVENTIONAL and PGP_SIGN,
+  mode is the bitwise or of one of PGP_ENCRYPT, PGP_CONVENTIONAL and PGP_SIGN,
   and any of PGP_TEXT, PGP_REMAIL and PGP_NOARMOR.
 
   PGP_CONVENTIONAL: the message is encrypted conventionally, using
@@ -296,11 +296,11 @@ int pgp_decrypt(BUFFER *message, BUFFER *pass, BUFFER *sig, char *pubring,
   NULL.
 
   If message is a detached signature, sig must contain the signed data.
-  It sig is NULL, the message will be decrypted without singature
+  It sig is NULL, the message will be decrypted without signature
   verification.
 
   pgp_getmsg() writes a string containing the signing time and
-  signator's user ID or the key ID of the unknown signature key to sig.
+  signer's user ID or the key ID of the unknown signature key to sig.
 
   pubring and secring can be NULL or specify the name of a key ring.
 
@@ -512,7 +512,7 @@ int buf_appendb(BUFFER *buf, BUFFER *p);
 
 
 int buf_getb(BUFFER *buf, BUFFER *p);
-  gets lenght information, then p from buf.
+  gets length information, then p from buf.
 
 
 int buf_getline(BUFFER *buf, BUFFER *line);
@@ -572,7 +572,7 @@ int buf_appendheader(BUFFER *buffer, BUFFER *field, BUFFER *content);
 
 int buf_rewind(BUFFER *buf);
 
-  This function sets the read conter of buf to the start of the buffer
+  This function sets the read counter of buf to the start of the buffer
   (equivalent to buf->ptr = 0).
 
 
