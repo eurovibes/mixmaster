@@ -36,7 +36,7 @@ For pingers and other remailer implementations see <a href="related.shtml">relat
 <p>
 <!-- 2004 -->
 Releases of Mixmaster are signed by Len Sassaman using the <em>Mixmaster Code
-Release Signing Key</em> (<a href="keys/8A277312.asc"><code>8A277312</code></a>).
+Release Signing Key 2004</em> (<a href="keys/8A277312.asc"><code>8A277312</code></a>).
 
 <pre>
 pub  1024D/8A277312 2004-01-01 Mixmaster Code Release Signing Key 2004
@@ -55,7 +55,7 @@ For a full list of signatures see <a href="http://keyserver.noreply.org/pks/look
 <!-- 2003 -->
 <h3>Releases in 2003</h3>
 Releases of Mixmaster in 2003 were signed by Len Sassaman using the <em>Mixmaster Code
-Release Signing Key</em> (<a href="keys/9260849A.asc"><code>9260849A</code></a>).
+Release Signing Key 2003</em> (<a href="keys/9260849A.asc"><code>9260849A</code></a>).
 
 <pre>
 pub  1024D/9260849A 2003-01-01 Mixmaster Code Release Signing Key 2003
