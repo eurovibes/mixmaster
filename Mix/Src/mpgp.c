@@ -1,8 +1,13 @@
-/* Test application for OpenPGP features */
+/* mpgp version 0.3.0 -- (C) 2000 - 2004 Ulf Moeller and others.
 
-/* This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
+   mpgp may be redistributed and modified under certain conditions.
+   This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
    ANY KIND, either express or implied. See the file COPYRIGHT for
-   details. */
+   details.
+
+   Test application for OpenPGP features
+   $Id: mpgp.c $ */
+
 
 #include "mix3.h"
 #include "pgp.h"

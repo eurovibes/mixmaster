@@ -1,5 +1,5 @@
 #!/bin/sh
-# Mixmaster version 3.0  --  (C) 1999-2003 Anonymizer Inc. and others.
+# Mixmaster version 3.0  --  (C) 1999-2004 Anonymizer Inc. and others.
 
 # Mixmaster may be redistributed and modified under certain conditions.
 # This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
@@ -225,6 +225,9 @@ findlib()
 ##########################################################################
 umask 077
 
+#FIXME -- Mixmaster now should be installed as root, and Install should
+#create a remailer user. /var/spool/mixmaster is a good home.
+
 if [ `whoami` = root ]
 then
  echo "Please create a new user, e.g, \`mix', and install Mixmaster under that
@@ -347,7 +350,7 @@ then
     echo "You can either compile your secret passphrase into the binary
 or you can set it in your config file. Note that the former does not
 really increase security as the passphrase can still be discovered by
-running something like \`strings mix'."
+running something like \`strings mixmaster'."
     echo ""
     echo "Most users should answer \`n' to this question:"
     echo ""
@@ -976,11 +979,15 @@ y)es, post locally; use m)ail-to-news gateway; n)o."
   fi
  fi
 
- echo "How many messages do you want to keep in the reordering pool?
-A larger pool is more secure, but also causes higher latency.
-0 means to remail immediately."
- readln "Pool size:" 20
- poolsize=$ans
+# Commented the poolsize question out, since poolsize is the least
+# important of the three pool parameters.
+#
+# echo "How many messages do you want to keep in the reordering pool?
+#A larger pool is more secure, but also causes higher latency.
+#0 means to remail immediately."
+# readln "Pool size:" 20
+# poolsize=$ans
+poolsize=25
 
  mbox=
  if [ -f ~/.forward ]
@@ -1055,11 +1062,11 @@ ORGANIZATION	$orga
 MID		$mid
 
 # Remailing strategy:
-SENDPOOLTIME    1h
+SENDPOOLTIME    10m
 POOLSIZE        $poolsize
-RATE            95
-INDUMMYP        20
-OUTDUMMYP       67
+RATE            30
+INDUMMYP        3
+OUTDUMMYP       10
 IDEXP           7d
 PACKETEXP       7d
 
@@ -1138,7 +1145,10 @@ fi
 umask 033
 
 # Set .forward?
+# 
 set=y
+# FIXME -- Mixmastger should run in daemon mode, not from procmail
+# Make the Install script do that.
 
 if grep procmail ~/.forward >/dev/null 2>/dev/null
 then
@@ -1187,6 +1197,9 @@ then
   echo "\"|${MIXDEST}/mixmaster -RM\"" >~/.forward
  fi
 fi
+
+#FIXME -- we need a second script that can re-generate help files
+# when the conf changes.
 
 if [ "$RMA" != "" ]
 then

@@ -392,9 +392,10 @@
                            Drop messages without timestamps and messages with
                              future timestamps.  This abandons backwards
                              compatibility with Mixmaster 2.0.3 and earlier.
-                           Try to detect timeskews and refuse to run as a
-                             remailer if there is a problem suspected.  Only
-                             applies to mixmaster in remailer mode.
+                           Mixmaster attempts to detect system clock
+                             misconfigurations and refuses to run as a
+                             remailer if there is a problem suspected.
+                             Only applies to Mixmaster in remailer mode.
 
                            BUG FIXES:
 
@@ -431,6 +432,8 @@
                              well.
                            Messages to more than one remailer are dropped.
                            Nym support is not compiled in by default anymore.
+                           The OpenPGP module mpgp now includes a man
+                             page (contributed by Trek).
                            Ignore 'No reliable remailers' problems when
                              randhopping messages in middleman mode.
                              That is better than dropping them.
@@ -444,4 +447,3 @@
                              If the total number of hops (which cannot be
                              known) exceeds 20 the message is damanged
                              and will fail at the 20th node.
-
