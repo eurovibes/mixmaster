@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.15 2002/08/26 19:38:51 weaselp Exp $ */
+   $Id: main.c,v 1.16 2002/08/27 06:46:13 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -23,6 +23,7 @@
 
 static char *largopt(char *p, char *opt, char *name, int *error);
 static void noarg(char *name, char p);
+static int check_get_pass(int force);
 
 /** main *****************************************************************/
 
@@ -408,9 +409,10 @@ WinNT service:\n\
     }
 
     if (f && buf_read(msg, f) != -1) {
-      if (readmail == 1)
+      if (readmail == 1) {
+        check_get_pass(1);
 	mix_decrypt(msg);
-      else if (readmail == 2)
+      } else if (readmail == 2)
 	pool_add(msg, "inf");
       if (send == MSG_MAIL || send == MSG_POST) {
 	BUFFER *sendmsg;
@@ -552,16 +554,20 @@ WinNT service:\n\
   }
 #endif
 
-  if (keygen)
+  if (keygen) {
+    check_get_pass(0);
     keymgt(keygen);
+  }
   if (sendpool)
     mix_send();
 #ifdef USE_SOCK
   if (pop3)
     pop3get();
 #endif
-  if (maint)
+  if (maint) {
+    check_get_pass(1);
     mix_regular(0);
+  }
 
 end:
   buf_free(field);
@@ -573,27 +579,7 @@ end:
   buf_free(attachments);
 
   if (daemon) {
-    BUFFER *pass, *key;
-    pass = buf_new();
-    key = buf_new();
-    buf_sets(pass, PASSPHRASE);
-    while (pgpdb_getkey(PK_DECRYPT, PGP_ES_RSA, NULL, NULL, NULL, NULL,
-                         NULL, NULL, NULL, pass) < 0 &&
-           pgpdb_getkey(PK_DECRYPT, PGP_E_ELG,  NULL, NULL, NULL, NULL,
-                         NULL, NULL, NULL, pass) < 0 &&
-           getv2seckey(NULL, key) < 0)
-    {
-      user_delpass();
-      user_pass(pass);
-      strncpy(PASSPHRASE, pass->data, LINELEN);
-      PASSPHRASE[LINELEN-1] = 0;
-      strncpy(ENTEREDPASSPHRASE, pass->data, LINELEN);
-      ENTEREDPASSPHRASE[LINELEN-1] = 0;
-    }
-    user_delpass();
-    buf_free(pass);
-    buf_free(key);
-
+    check_get_pass(1);
 #ifdef UNIX
     if (! nodetach) {
       int pid;
@@ -642,4 +628,45 @@ static char *largopt(char *p, char *opt, char *name, int *error)
 static void noarg(char *name, char p)
 {
   fprintf(stderr, "%s: Missing argument for option -%c\n", name, p);
+}
+
+static int check_get_pass(int force)
+/* get a passphrase and check against keys
+ * if force != 0 passphrase must much with some key */
+{
+    BUFFER *pass, *pass2, *key;
+    int n = 0;
+
+/* FIXME: check if stdin is tty, return if not */
+
+    pass = buf_new();
+    pass2 = buf_new();
+    key = buf_new();
+    buf_sets(pass, PASSPHRASE);
+    while (pgpdb_getkey(PK_DECRYPT, PGP_ES_RSA, NULL, NULL, NULL, NULL,
+                         NULL, NULL, NULL, pass) < 0 &&
+           pgpdb_getkey(PK_DECRYPT, PGP_E_ELG,  NULL, NULL, NULL, NULL,
+                         NULL, NULL, NULL, pass) < 0 &&
+           getv2seckey(NULL, key) < 0)
+    {
+      user_delpass();
+      if (n)
+	fprintf(stderr, "re-");
+      user_pass(pass);
+      strncpy(PASSPHRASE, pass->data, LINELEN);
+      PASSPHRASE[LINELEN-1] = 0;
+      if (!force) {
+	if (n && buf_eq(pass, pass2))
+	  break;
+	buf_set(pass2, pass);
+      }
+      n=1;
+    }
+    strncpy(ENTEREDPASSPHRASE, pass->data, LINELEN);
+    ENTEREDPASSPHRASE[LINELEN-1] = 0;
+    user_delpass();
+    buf_free(pass);
+    buf_free(pass2);
+    buf_free(key);
+    return 1;
 }
