@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.11 2002/08/19 19:55:58 rabbi Exp $ */
+   $Id: mix.c,v 1.11.2.1 2002/10/04 23:49:16 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -38,6 +38,7 @@ int buf_vappendf(BUFFER *b, char *fmt, va_list args);
 char MIXCONF[PATHMAX] = DEFAULT_MIXCONF;       /* mixmaster configuration file */
 char DISCLAIMFILE[PATHMAX] = DEFAULT_DISCLAIMFILE;
 char FROMDSCLFILE[PATHMAX] = DEFAULT_FROMDSCLFILE;
+char MSGFOOTERFILE[PATHMAX] = DEFAULT_MSGFOOTERFILE;
 char POP3CONF[PATHMAX] = DEFAULT_POP3CONF;
 char HELPFILE[PATHMAX] = DEFAULT_HELPFILE;
 char ABUSEFILE[PATHMAX] = DEFAULT_ABUSEFILE;
@@ -98,6 +99,8 @@ char ANONADDR[LINELEN];
 char COMPLAINTS[LINELEN];
 int AUTOREPLY;
 char SMTPRELAY[LINELEN];
+char SMTPUSERNAME[LINELEN];
+char SMTPPASSWORD[LINELEN];
 
 #ifdef USE_SOCK
 char HELONAME[LINELEN];
@@ -127,6 +130,7 @@ int SIZELIMIT = 0;		/* maximal size of remailed messages */
 int INFLATEMAX = 50;		/* maximal size of Inflate: padding */
 int MAXRANDHOPS = 20;
 int BINFILTER = 0;		/* filter binary attachments? */
+int LISTSUPPORTED = 1;                /* list supported remailers in remailer-conf reply? */
 long PACKETEXP = 7 * SECONDSPERDAY;	/* Expiration time for old packets */
 long IDEXP = 7 * SECONDSPERDAY;	/* 0 = no ID log !! */
 long SENDPOOLTIME = 60 * 60;	/* frequency for sending pool messages */
@@ -342,6 +346,7 @@ int mix_configline(char *line)
 	  read_conf(ANONADDR) || read_conf(REMAILERNAME) ||
 	  read_conf(ANONNAME) || read_conf(COMPLAINTS) ||
 	  read_conf_i(AUTOREPLY) || read_conf(SMTPRELAY) ||
+          read_conf(SMTPUSERNAME) || read_conf(SMTPPASSWORD) ||
 #ifdef USE_SOCK
 	  read_conf(HELONAME) || read_conf(ENVFROM) ||
 #endif
@@ -358,6 +363,7 @@ int mix_configline(char *line)
 	  read_conf_i(SIZELIMIT) || read_conf_i(INFLATEMAX) ||
 	  read_conf_i(MAXRANDHOPS) || read_conf_i(BINFILTER) ||
 	  read_conf_t(PACKETEXP) || read_conf_t(IDEXP) ||
+        read_conf_i(LISTSUPPORTED) ||
 	  read_conf_t(SENDPOOLTIME) || read_conf_i(NUMCOPIES) ||
 	  read_conf(CHAIN) || read_conf_i(VERBOSE) ||
 	  read_conf_i(DISTANCE) || read_conf_i(MINREL) ||
@@ -375,6 +381,7 @@ int mix_configline(char *line)
 
 	  read_conf(DISCLAIMFILE) || read_conf(FROMDSCLFILE) ||
 	  read_conf(POP3CONF) || read_conf(HELPFILE) ||
+        read_conf(MSGFOOTERFILE) ||
 	  read_conf(ABUSEFILE) || read_conf(REPLYFILE) ||
 	  read_conf(USAGEFILE) || read_conf(USAGELOG) ||
 	  read_conf(BLOCKFILE) || read_conf(ADMKEYFILE) ||
@@ -393,7 +400,7 @@ int mix_configline(char *line)
 
 }
 
-static int mix_config(void)
+int mix_config(void)
 {
   char *d;
   FILE *f;
@@ -483,6 +490,19 @@ static int mix_config(void)
 	mix_configline(line);
     fclose(f);
   }
+
+  mixfile(POOLDIR, POOL); /* set POOLDIR after reading POOL from cfg file */
+  if (POOLDIR[strlen(POOLDIR) - 1] == DIRSEP)
+    POOLDIR[strlen(POOLDIR) - 1] = '\0';
+  if (stat(POOLDIR, &buf) != 0)
+    if
+#ifndef POSIX
+      (mkdir(POOLDIR) != 0)
+#else /* end of not POSIX */
+      (mkdir(POOLDIR, S_IRWXU) == -1)
+#endif /* else if POSIX */
+      strncpy(POOLDIR, MIXDIR, PATHMAX);
+
   if (IDEXP > 0 && IDEXP < 5 * SECONDSPERDAY)
     IDEXP = 5 * SECONDSPERDAY;
   if (MAXRANDHOPS > 20)
@@ -654,13 +674,13 @@ int mix_regular(int force)
   if (f != NULL) {
     lock(f);
     fscanf(f, "%ld %ld %ld", &tpool, &tpop3, &tdaily);
-    if (now - tpool > SENDPOOLTIME)
+    if (now - tpool >= SENDPOOLTIME)
       force |= FORCE_POOL;
 #ifdef USE_SOCK
-    if (now - tpop3 > POP3TIME)
+    if (now - tpop3 >= POP3TIME)
       force |= FORCE_POP3;
 #endif
-    if (now - tdaily > SECONDSPERDAY)
+    if (now - tdaily >= SECONDSPERDAY)
       force |= FORCE_DAILY;
     if (force & FORCE_POOL)
       tpool = now;
@@ -725,28 +745,21 @@ int is_nt_service(void)
         if (VersionInfo.dwPlatformId != VER_PLATFORM_WIN32_NT)
             return issvc = 0; /* not NT - not the service */
 
-    if (!GetConsoleTitle(&VersionInfo,sizeof(VersionInfo))) 
-    /* reuse VersionInfo to save memory */
-        return issvc = 1; /* have no console - we are the service probably */
-
     GetStartupInfo(&StartupInfo);
     if (StartupInfo.lpDesktop[0] == 0)
         return issvc = 1; /* have no desktop - we are the service probably */
+#endif /* WIN32SERVICE */
 
-    if (_fileno(stdin) == -1 && _fileno(stdout) == -1 && _fileno(stderr) == -1)
-        return issvc = 1; /* have no stdin,stderr,stdout - probably service */
-#endif // WIN32SERVICE
-
-    return issvc = 0; // assume not the service
-} // is_nt_service
+    return issvc = 0; /* assume not the service */
+} /* is_nt_service */
 
 HANDLE hMustTerminate = NULL;
 void set_nt_exit_event(HANDLE h_svc_exit_event)
 {
     hMustTerminate = h_svc_exit_event;
-} // set_nt_exit_event
+} /* set_nt_exit_event */
 
-#endif // WIN32
+#endif /* WIN32 */
 
 int mix_daemon(void)
 {

@@ -6,7 +6,7 @@
    details.
 
    Encrypt message for Mixmaster chain
-   $Id: chain2.c,v 1.2 2002/07/24 07:00:16 rabbi Exp $ */
+   $Id: chain2.c,v 1.2.2.1 2002/10/04 23:49:16 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -20,7 +20,7 @@
 
 #define N(X) (isdigit(X) ? (X)-'0' : 0)
 
-int print_type2list()
+int prepare_type2list(BUFFER *out)
 {
   FILE *list;
   char line[LINELEN], name[LINELEN], addr[LINELEN], keyid[LINELEN],
@@ -40,7 +40,7 @@ int print_type2list()
       if (sscanf(line, "%127s %127s %127s %127s %127s", name,
 		 addr, keyid, version, flags) < 4)
 	continue;
-      printf("%s", line);
+      buf_appends(out, line);
     }
   }
   fclose(list);

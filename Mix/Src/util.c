@@ -6,7 +6,7 @@
    details.
 
    Utility functions
-   $Id: util.c,v 1.2 2001/11/06 23:41:58 rabbi Exp $ */
+   $Id: util.c,v 1.2.2.1 2002/10/04 23:49:16 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -292,7 +292,7 @@ int encode(BUFFER *in, int linelen)
 int decode(BUFFER *in, BUFFER *out)
 {
   int err = 0;
-  register byte c0, c1, c2, c3;
+  register byte c0 = 0, c1 = 0, c2 = 0, c3 = 0;
   register byte *a, *d, *end;
   int tempbuf = 0;
   int i;
@@ -319,7 +319,7 @@ int decode(BUFFER *in, BUFFER *out)
       } else if (a[0] == '\r' && a[1] == '\n') {	/* ignore crlf */
 	a += 2;
 	continue;
-      } else if (a[0] == '=' && a[1] == '4' && a[2] == '6') {
+      } else if (a[0] == '=' && a[1] == '4' && a[2] == '6' && !(asctobin[a[5]] & 0x80) ) {
 	a += 2;			/* '=46' at the left of a line really is 'F' */
 	*a = 'F';		/* fix in memory ... */
 	continue;

@@ -96,3 +96,15 @@ EXPORTS
     file_to_out                      @91
     is_nt_service                    @92
     set_nt_exit_event                @93
+    prepare_type2list                @94
+    NYMSECRING                       @95
+    pgp_dearmor                      @96
+    pgp_armor                        @97
+    pgp_compress                     @98
+    pgp_literal                      @99
+    PGPSECRING                      @100
+    PGPPUBRING                      @101
+    VERBOSE                         @102
+    pgp_signtxt                     @103
+    PASSPHRASE                      @104
+

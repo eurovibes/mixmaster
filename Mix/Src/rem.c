@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.20.2.2 2002/09/11 21:31:12 rabbi Exp $ */
+   $Id: rem.c,v 1.20.2.3 2002/10/04 23:49:16 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -287,7 +287,7 @@ void pool_packetexp(void)
   struct stat sb;
 
   d = opendir(POOLDIR);
-  errlog(NOTICE, "Checking for old parts.\n");
+  errlog(DEBUGINFO, "Checking for old parts.\n");
   if (d != NULL)
     for (;;) {
       e = readdir(d);

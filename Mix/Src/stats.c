@@ -6,7 +6,7 @@
    details.
 
    Remailer statistics
-   $Id: stats.c,v 1.8.2.1 2002/09/11 21:03:05 rabbi Exp $ */
+   $Id: stats.c,v 1.8.2.2 2002/10/04 23:49:16 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -224,6 +224,11 @@ int conf(BUFFER *out)
   FILE *f;
   BUFFER *b, *line;
   int flag = 0;
+  REMAILER remailer[MAXREM];
+  int pgpkeyid[MAXREM];
+  int i, num;
+  char tmpline[LINELEN];
+
   b = buf_new();
   line = buf_new();
 
@@ -250,7 +255,7 @@ int conf(BUFFER *out)
     buf_appendf(out, "Maximum message size: %d kB\n", SIZELIMIT);
 
   /* display destinations to which delivery is explicitly permitted
-     when in middleman mode (contents of DESTALLOWf file.)  */
+     when in middleman mode (contents of DESTALLOW file.)  */
 
   if (MIDDLEMAN) {
     f = mix_openfile(DESTALLOW, "r");
@@ -313,6 +318,39 @@ int conf(BUFFER *out)
 
   buf_nl(out);
   conf_premail(out);
+  
+  if (LISTSUPPORTED) {
+   /* SUPPORTED CPUNK (TYPE I) REMAILERS
+    * 0xDC7532F9      "Heex Remailer <remailer@xmailer.ods.org>"
+    * 0x759ED311      "znar <ka5tkn@cox-internet.com>"
+    *
+    * SUPPORTED MIXMASTER (TYPE II) REMAILERS
+    * aarg remailer@aarg.net 475f3f9fe8da22896c10082695a92c2d 2.9b33 C
+    * anon mixmaster@anon.978.org 7384ba1eec585bfd7d2b0e9b307f0b1d 2.9b36 MCNm
+    */ 
+    
+    buf_nl(out);
+    if (PGP) {
+      buf_appends(out, "SUPPORTED CPUNK (TYPE I) REMAILERS\n");
+      num = t1_rlist(remailer);
+      pgp_rkeylist(remailer, pgpkeyid, num);
+      for (i=1; i<=num; i++) {
+      if (remailer[i].flags.pgp) {
+        snprintf(tmpline, LINELEN, "0x%08X    \"%s <%s>\"\n", pgpkeyid[i], remailer[i].name, remailer[i].addr);
+        tmpline[LINELEN-1] = '\0';
+        buf_appends(out, tmpline);
+      }
+      }
+      buf_nl(out);
+    }
+    if (MIX) {
+      buf_appends(out, "SUPPORTED MIXMASTER (TYPE II) REMAILERS\n");
+      prepare_type2list(out);
+      buf_nl(out);
+    }
+  }
+
+  
   if ( b ) buf_free(b);
   buf_free(line);
   return (0);

@@ -1,5 +1,5 @@
 .TH MIX 1 "Mixmaster Version 3.0 beta"
-.\" $Id: mix.1,v 1.6.2.1 2002/09/11 21:36:29 rabbi Exp $
+.\" $Id: mix.1,v 1.6.2.2 2002/10/04 23:49:15 rabbi Exp $
 .SH NAME
 mix \- anonymous remailer software
 .SH SYNOPSIS
@@ -41,6 +41,9 @@ header rather than
 .TP
 .B "\-h, \-\-help"
 Print a summary of command line options.
+.TP
+.B "\-\-config=\fIfilename"
+Read configuration from an alternate file.
 .TP
 .B "\-t, \-\-to=\fIuser@host"
 Add the destination address(es) to the message header. The input file
@@ -107,7 +110,7 @@ Send the message(s) from the pool.
 Output informational messages.
 .TP
 .B "\-f\fR [\fIfile\fR]"
-Read a mail folder. This function requires ncurses support.
+Read a mail folder or news article. This function requires ncurses support.
 .TP
 .B "\-fr\fR [\fIfile\fR]"
 Reply to a message.
@@ -141,8 +144,16 @@ Reply chain latency.
 Reply chain for the pseudonym.
 .SS Remailer options:
 .TP
+.B "\-\-config=\fIfilename"
+Read configuration from an alternate file.
+.TP
 .B \-R, \-\-read\-mail
 Read a remailer message from standard input and store it in the pool.
+.TP
+.B \-I, \-\-store\-mail
+Read a remailer message from standard input and store it in the pool
+without decrypting it immediately. It will be processed the next time
+Mixmaster processes the queue (called with \fP-M\fP or in daemon mode).
 .TP
 .B \-P, \-\-pop-mail
 Read mail from the POP3 servers listed in
@@ -247,12 +258,12 @@ Default:
 .TP
 .B PGPPUBRING
 Path to your public PGP key ring. Default:
-.BR ~/.pgp/pubring.pgp .
+.BR ~/.pgp/pubring.pkr .
 (Windows default: PGP registry value.)
 .TP
 .B PGPSECRING
 Path to your secret PGP key ring. Default:
-.BR ~/.pgp/secring.pgp .
+.BR ~/.pgp/secring.skr .
 (Windows default: PGP registry value.)
 .SS Remailer configuration:
 .TP
@@ -275,10 +286,16 @@ rather than by
 .BR sendmail (1).
 .TP
 .B HELONAME
-Name used in the SMTP dialogue.
+Host name used in the SMTP dialogue.
 Default: The
 .I ENVFROM
 host name or the current network name associated with the socket.
+.TP
+.B SMTPUSERNAME
+Some mail servers require authentication for sending mail. This is
+the authenticated SMTP user name.
+.B SMTPPASSWORD
+Password for authenticated SMTP.
 .TP
 .B ENVFROM
 Envelope from address used in the SMTP dialogue. (When the client is
@@ -480,6 +497,10 @@ Default:
 Filter out binary attachments. Default:
 .BR n .
 .TP
+.B LISTSUPPORTED
+List known remailers and their keys in remailer-conf reply. Default:
+.BR y .
+.TP
 .B MID
 Use a hash of the message body as Message-ID, to avoid
 Usenet spam. Default:
@@ -609,6 +630,12 @@ line and no
 .B fromdscl.txt
 file is available.
 .TP
+.B MSGFOOTER
+A default string to be inserted at the bottom of the message body
+of all anonymous messages and no
+.B footer.txt
+file is available.
+.TP
 .B BINDISCLAIMER
 A string to replace the body of a binary attachment when
 the remailer is configured to filter out binaries.
@@ -722,6 +749,11 @@ if an anonymous message contains a user-supplied
 .B From:
 line (\fBFROMDSCLFILE\fP).
 .TP
+.TP
+.B footer.txt
+A string to be inserted at the bottom of the message body
+of all anonymous messages (\fBMSGFOOTERFILE\fP).
+.TP
 .B help.txt
 Help file sent in response to
 .B remailer-help
@@ -833,7 +865,7 @@ Remailer type 2 secret keys (\fBSECRING\fP).
 The public type 1 remailer key (\fBPGPKEY\fP).
 .TP
 .B key.txt
-The public type 2 remailer key (\fB\fP).
+The public type 2 remailer key (\fBKEYFILE\fP).
 .TP
 .B id.log
 Log file of messages already processed (\fBKEYFILE\fP).
@@ -850,8 +882,11 @@ Public Diffie-Hellman parameters used for El-Gamal key generation (\fBDHPARAMS\f
 .B dsaparam.mix
 Public DSA parameters used for DSA key generation (\fBDSAPARAMS\fP).
 .TP
+.BI pool/
+Message pool directory (\fBPOOL\fP).
+.TP
 .BI pool/m *
-Message pool.
+Message pool files.
 .TP
 .BI pool/p *
 Partial messages.

@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.10 2002/08/07 21:45:59 weaselp Exp $ */
+   $Id: main.c,v 1.10.2.1 2002/10/04 23:49:16 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -102,6 +102,8 @@ int main(int argc, char *argv[])
 	  sendpool = 1, deflt = 0;
 	else if (streq(p, "read-mail"))
 	  readmail = 1, deflt = 0;
+      else if (streq(p, "store-mail"))
+        readmail = 2, deflt = 0;
 #ifdef USE_SOCK
 	else if (streq(p, "pop-mail"))
 	  pop3 = 1, deflt = 0;
@@ -149,6 +151,10 @@ int main(int argc, char *argv[])
 #endif
 	else if ((q = largopt(p, "copies", argv[0], &error)) != NULL) {
 	  sscanf(q, "%d", &numcopies);
+        } else if ((q = largopt(p, "config", argv[0], &error)) != NULL) {
+          strncpy(MIXCONF, q, PATHMAX);
+          MIXCONF[PATHMAX-1] = 0;
+          mix_config(); /* configuration file changed - reread it */
 	} else if (error == 0 && mix_configline(p) == 0) {
 	  fprintf(stderr, "%s: Invalid option %s\n", argv[0], argv[i]);
 	  error = 1;
@@ -162,6 +168,9 @@ int main(int argc, char *argv[])
 	  case 'R':
 	    readmail = 1, deflt = 0;
 	    break;
+        case 'I':
+          readmail = 2, deflt = 0;
+          break;
 	  case 'S':
 	    sendpool = 1, deflt = 0;
 	    break;
@@ -297,10 +306,15 @@ int main(int argc, char *argv[])
     goto end;
   }
   if (type_list) {
-    if (print_type2list() < 0) {
+    BUFFER *type2list;
+    type2list = buf_new();
+    if (prepare_type2list(type2list) < 0) {
       fprintf(stderr, "Cannot print type2.list.\n");
       ret = 2;
-    }
+    } else {
+      printf("%s", type2list->data);
+    };
+    buf_free(type2list);
     goto end;
   }
   if (help || (isatty(fileno(stdin)) && isatty(fileno(stdout))))
@@ -344,14 +358,16 @@ specified in the command line.\n\
 Remailer:\n\
 \n\
 -R, --read-mail                   read remailer message from stdin\n\
+-I, --store-mail                  read remailer msg from stdin, do not decrypt\n\
 -M, --remailer                    process the remailer pool\n\
--D, --daemon                      remailer as background process\n"
+-D, --daemon                      remailer as background process\n\"
 #ifdef USE_SOCK
 	   "-S, --send                        force sending messages from the pool\n"
 #endif
 	   "-P, --pop-mail                    force getting messages from POP3 servers\n\
 -G, --generate-key                generate a new remailer key\n\
--K, --update-keys                 generate remailer keys if necessary\n"
+-K, --update-keys                 generate remailer keys if necessary\n\
+    --config=file                 use alternate configuration file\n"
 #ifdef WIN32SERVICE
 	   "\n\
 WinNT service:\n\
@@ -393,8 +409,10 @@ WinNT service:\n\
     }
 
     if (f && buf_read(msg, f) != -1) {
-      if (readmail)
+      if (readmail == 1)
 	mix_decrypt(msg);
+	else if (readmail == 2)
+	pool_add(msg, "inf");
       if (send == MSG_MAIL || send == MSG_POST) {
 	BUFFER *sendmsg;
 	int numdest = 0;

@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.9 2002/07/24 09:00:11 weaselp Exp $ */
+   $Id: config.h,v 1.9.2.1 2002/10/04 23:49:16 rabbi Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -24,6 +24,10 @@
  * user-supplied From lines, e.g.
  * "NOTE: The above From: line has not been authenticated!\n\n" */
 #define FROMDISCLAIMER ""
+
+/* Additional disclaimer to be inserted at the bottom of the body of all
+ * messages */
+#define MSGFOOTER ""
 
 /* Comment to be inserted when a binary attachment is filtered out: */
 #define BINDISCLAIMER \
@@ -123,6 +127,12 @@
 #error "The GUI requires Win32!"
 #endif
 
+#if defined(WIN32) && !defined(_USRDLL)
+#define DLLIMPORT __declspec(dllimport)
+#else
+#define DLLIMPORT
+#endif
+
 /** Constants *********************************************************/
 
 /* Give up if a file is larger than BUFFER_MAX bytes: */
@@ -145,6 +155,7 @@
 #define DEFAULT_MIXCONF "mix.cfg"      /* mixmaster configuration file */
 #define DEFAULT_DISCLAIMFILE "disclaim.txt"
 #define DEFAULT_FROMDSCLFILE "fromdscl.txt"
+#define DEFAULT_MSGFOOTERFILE "footer.txt"
 #define DEFAULT_POP3CONF "pop3.cfg"
 #define DEFAULT_HELPFILE "help.txt"
 #define DEFAULT_ABUSEFILE "abuse.txt"
@@ -187,6 +198,7 @@
 extern char MIXCONF[];
 extern char DISCLAIMFILE[];
 extern char FROMDSCLFILE[];
+extern char MSGFOOTERFILE[];
 extern char POP3CONF[];
 extern char HELPFILE[];
 extern char ABUSEFILE[];
@@ -217,7 +229,7 @@ extern char TYPE2LIST[];
 extern char PGPREMPUBRING[];
 extern char PGPREMPUBASC[];
 extern char PGPREMSECRING[];
-extern char NYMSECRING[];
+DLLIMPORT extern char NYMSECRING[];
 extern char NYMDB[];
 
 /* string constants */
@@ -232,6 +244,8 @@ extern char NYMDB[];
 #define end_pgpmsg "-----END PGP MESSAGE-----"
 #define begin_pgpkey "-----BEGIN PGP PUBLIC KEY BLOCK-----"
 #define end_pgpkey "-----END PGP PUBLIC KEY BLOCK-----"
+#define begin_pgpseckey "-----BEGIN PGP PRIVATE KEY BLOCK-----"
+#define end_pgpseckey "-----END PGP PRIVATE KEY BLOCK-----"
 #define begin_pgpsigned "-----BEGIN PGP SIGNED MESSAGE-----"
 #define begin_pgpsig "-----BEGIN PGP SIGNATURE-----"
 #define end_pgpsig "-----END PGP SIGNATURE-----"
@@ -255,6 +269,8 @@ extern char POOLDIR[];
 extern char SENDMAIL[];
 extern char SENDANONMAIL[];
 extern char SMTPRELAY[];
+extern char SMTPUSERNAME[];
+extern char SMTPPASSWORD[];
 extern char NEWS[];
 extern char MAILtoNEWS[];
 extern char ORGANIZATION[];
@@ -281,9 +297,10 @@ extern int SIZELIMIT;
 extern int INFLATEMAX;
 extern int MAXRANDHOPS;
 extern int BINFILTER;
+extern int LISTSUPPORTED;
 extern long PACKETEXP;
 extern long IDEXP;
-extern int VERBOSE;
+DLLIMPORT extern int VERBOSE;
 extern long SENDPOOLTIME;
 extern int NUMCOPIES;
 extern char CHAIN[];
@@ -291,9 +308,9 @@ extern int DISTANCE;
 extern int MINREL;
 extern int RELFINAL;
 extern long MAXLAT;
-extern char PGPPUBRING[];
-extern char PGPSECRING[];
-extern char PASSPHRASE[];
+DLLIMPORT extern char PGPPUBRING[];
+DLLIMPORT extern char PGPSECRING[];
+DLLIMPORT extern char PASSPHRASE[];
 extern long POP3TIME;
 extern int POP3DEL;
 extern int POP3SIZELIMIT;

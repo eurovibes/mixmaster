@@ -1,35 +1,8 @@
-Todo items before 3.0 release:
+Todo items before 2.9 release:
 
-* autoconf installation script is needed
-* post-install scripts need to be reworked
-* Macintosh OS/X support
-* further mpgp testing of AES/MDC packet support
-* Windows build instructions/files
-* documentation issues resolved
-  + mpgp man page
-* allow for verification of clearsigned OpenPGP messages
-* set an expiration date on OpenPGP keys
-* check and enforce expiration date
-* Apply --store|queue|get-mail patch
-* Implement mbox/Maildir mail input (597043)
-* further debugging
+* confirm backport of changes between 2.9b38 and MAIN was successful.
+* permit CRAM-MD5 SMTP AUTH in addition to LOGIN.
+* Fix Install script bug wrt overwriting mix
+* Look in proper locations for libs on OS X.
+* Check and enforce expiration/revocation of OpenPGP keys (?)
 
-Further wishlist:
-* Allow sending with middlemen remailers last
-  in chain in interactive mixmaster (481244)
-* Have supported cpunks/mixes in -conf reply
-  (480330)
-* investigate whether and how it is feasible to
-  add expiration/creation dates to mixmaster keys
-  if feasible, implement setting and checking
-* Add FOOTER setting (490117)
-* Automatic key handling:
-  + create new PGP keys automatically if
-    current keys are about to expire 
-  + requires implementing key signing, key deletion
-  + create new mixmaster keys automatically
-    if necessary 
-  + Automatically announce new keys?
-    - implement remailer-key signing?
-    - if yes, which key?
-* make mpgp friendlier

@@ -6,7 +6,7 @@
    details.
 
    Function prototypes
-   $Id: mix3.h,v 1.8 2002/07/29 23:52:00 weaselp Exp $ */
+   $Id: mix3.h,v 1.8.2.1 2002/10/04 23:49:16 rabbi Exp $ */
 
 
 #ifndef _MIX3_H
@@ -254,6 +254,13 @@ int stats_log(int);
 int stats_out(int);
 
 /* OpenPGP */
+#define PGP_ARMOR_NORMAL        0
+#define PGP_ARMOR_REM           1
+#define PGP_ARMOR_KEY           2
+#define PGP_ARMOR_NYMKEY        3
+#define PGP_ARMOR_NYMSIG        4
+#define PGP_ARMOR_SECKEY        5
+
 int pgp_keymgt(int force);
 int pgp_armor(BUFFER *buf, int mode);
 int pgp_dearmor(BUFFER *buf, BUFFER *out);
@@ -310,10 +317,11 @@ typedef struct {
 
 #define CHAINMAX 421
 #define MAXREM 100
-int print_type2list();
+int prepare_type2list(BUFFER *out);
 int mix2_rlist(REMAILER remailer[]);
 int t1_rlist(REMAILER remailer[]);
 int pgp_rlist(REMAILER remailer[], int n);
+int pgp_rkeylist(REMAILER remailer[], int keyid[], int n);
 int chain_select(int hop[], char *chainstr, int maxrem, REMAILER *remailer,
 		 int type, BUFFER *feedback);
 int chain_rand(REMAILER *remailer, int maxrem,

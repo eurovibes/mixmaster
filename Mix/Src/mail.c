@@ -6,7 +6,7 @@
    details.
 
    Socket-based mail transport services
-   $Id: mail.c,v 1.7.2.1 2002/09/11 21:20:28 rabbi Exp $ */
+   $Id: mail.c,v 1.7.2.2 2002/10/04 23:49:16 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -21,8 +21,12 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
-#include <fcntl.h>
 #endif
+#include <fcntl.h>
+#include <time.h>
+#include <sys/stat.h>
+#include <errno.h>
+
 
 int sendinfofile(char *name, char *logname, BUFFER *address, BUFFER *header)
 {
@@ -124,8 +128,8 @@ int sendmail(BUFFER *message, char *from, BUFFER *address)
   else if (strieq(SENDMAIL, "outfile")) {
     char path[PATHMAX];
     FILE *f = NULL;
+#ifdef SHORTNAMES
     int i;
-
     for (i = 0; i < 10000; i++) {
       sprintf(path, "%s%cout%i.txt", POOLDIR, DIRSEP, i);
       f = fopen(path, "r");
@@ -135,6 +139,38 @@ int sendmail(BUFFER *message, char *from, BUFFER *address)
 	break;
     }
     f = fopen(path, "w");
+#else /* SHORTNAMES */
+    static unsigned long namecounter = 0;
+    struct stat statbuf;
+    int count;
+    char hostname[64];
+
+    hostname[0] = '\0';
+    gethostname(hostname, 63);
+    hostname[63] = '\0';
+
+    /* Step 2:  Stat the file.  Wait for ENOENT as a response. */
+    for (count = 0;; count++) {
+      snprintf(path, PATHMAX, "%s%cout.%lu.%u_%lu.%s,S=%lu.txt",
+       POOLDIR, DIRSEP, time(NULL), getpid(), namecounter++, hostname, head->length + message->length);
+      path[PATHMAX-1] = '\0';
+
+      if (stat(path, &statbuf) == 0)
+       errno = EEXIST;
+      else if (errno == ENOENT) { /* create the file (at least try) */
+       f = fopen(path, "w");
+       if (f != NULL)
+         break; /* we managed to open the file */
+      }
+      if (count > 5)
+       break; /* Too many retries - give up */
+#ifdef WIN32
+      Sleep(2000); /* sleep and retry */
+#else
+      sleep(2); /* sleep and retry */
+#endif
+    }
+#endif /* SHORTNAMES */
     if (f != NULL) {
       err = buf_write(head, f);
       err = buf_write(message, f);
@@ -266,19 +302,25 @@ int sock_cat(SOCKET s, BUFFER *b)
 
 /* send messages by SMTP ************************************************/
 
-static int sock_getsmtp(SOCKET s, BUFFER *line)
+static int sock_getsmtp(SOCKET s, BUFFER *response)
 {
   int ret;
+  BUFFER *line;
+  line = buf_new();
 
-  do
+  buf_clear(response);
+  do {
     ret = sock_getline(s, line);
-  while (line->length >= 4 && line->data[3] == '-');
+    buf_cat(response, line);
+  } while (line->length >= 4 && line->data[3] == '-');
+  buf_free(line);
   return (ret);
 }
 
 SOCKET smtp_open(void)
 {
   int s = INVALID_SOCKET;
+  int esmtp = 0;
   BUFFER *line;
 
 #ifdef USE_SOCK
@@ -287,13 +329,18 @@ SOCKET smtp_open(void)
   if (s != INVALID_SOCKET) {
     line = buf_new();
     sock_getsmtp(s, line);
+    if (bufifind(line, "ESMTP"))
+      esmtp = 1;
     if (line->data[0] != '2') {
       errlog(ERRORMSG, "SMTP relay not ready. %b\n", line);
       closesocket(s);
       s = INVALID_SOCKET;
     } else {
       errlog(DEBUGINFO, "Opening SMTP connection.\n");
-      buf_sets(line, "HELO ");
+      if (esmtp)
+        buf_sets(line, "EHLO ");
+      else
+        buf_sets(line, "HELO ");
       if (HELONAME[0])
 	buf_appends(line, HELONAME);
       else if (strchr(ENVFROM, '@'))
@@ -312,6 +359,7 @@ SOCKET smtp_open(void)
 	else
 	  buf_appends(line, SHORTNAME);
       }
+      buf_chop(line);
       buf_appends(line, "\r\n");
       sock_cat(s, line);
       sock_getsmtp(s, line);
@@ -319,8 +367,33 @@ SOCKET smtp_open(void)
 	errlog(ERRORMSG, "SMTP relay refuses HELO: %b\n", line);
 	closesocket(s);
 	s = INVALID_SOCKET;
+      } else if (SMTPUSERNAME[0] && esmtp && bufifind(line, "AUTH") && bufifind(line, "LOGIN")) {
+        buf_sets(line, "AUTH LOGIN\r\n");
+        sock_cat(s, line);
+        sock_getsmtp(s, line);
+        if (!bufleft(line, "334")) {
+          errlog(ERRORMSG, "SMTP AUTH fails: %b\n", line);
+          goto err;
+        }
+        buf_sets(line, SMTPUSERNAME);
+        encode(line, 0);
+        buf_appends(line, "\r\n");
+        sock_cat(s, line);
+        sock_getsmtp(s, line);
+        if (!bufleft(line, "334")) {
+          errlog(ERRORMSG, "SMTP username rejected: %b\n", line);
+          goto err;
+        }
+        buf_sets(line, SMTPPASSWORD);
+        encode(line, 0);
+        buf_appends(line, "\r\n");
+        sock_cat(s, line);
+        sock_getsmtp(s, line);
+        if (!bufleft(line, "235"))
+          errlog(ERRORMSG, "SMTP authentication failed: %b\n", line); 
       }
     }
+err:
     buf_free(line);
   }
 #endif
@@ -364,7 +437,7 @@ int smtp_send(SOCKET relay, BUFFER *head, BUFFER *message, char *from)
       if (!bufifind(rcpt, content->data)) 
       /* Do not add the same recipient twice. 
          Needed for brain-dead MTAs.      */
-#endif //BROKEN_MTA
+#endif /* BROKEN_MTA */
 	rfc822_addr(content, rcpt);
   buf_rewind(head);
 
@@ -374,7 +447,7 @@ int smtp_send(SOCKET relay, BUFFER *head, BUFFER *message, char *from)
       if (!bufifind(rcpt, content->data)) 
       /* Do not add the same recipient twice. 
          Needed for brain-dead MTAs.      */
-#endif //BROKEN_MTA
+#endif /* BROKEN_MTA */
 	rfc822_addr(content, rcpt);
     }
     if (!bufieq(field, "bcc"))
@@ -406,6 +479,10 @@ int smtp_send(SOCKET relay, BUFFER *head, BUFFER *message, char *from)
     sock_getsmtp(relay, line);
     if (bufleft(line, "421")) {
       errlog(ERRORMSG, "SMTP relay error: %b\n", line);
+      goto end;
+    }
+    if (bufleft(line, "530")) {
+      errlog(ERRORMSG, "SMTP authentication required: %b\n", line);
       goto end;
     }
   }
@@ -671,6 +748,8 @@ void pop3get(void)
   f = mix_openfile(POP3CONF, "r");
   if (f != NULL)
     while (fgets(cfg, sizeof(cfg), f) != NULL) {
+      if (cfg[0] == '#')
+        continue;
       if (strchr(cfg, '@'))
 	strchr(cfg, '@')[0] = ' ';
       if (sscanf(cfg, "%127s %127s %127s %4s", user, host, pass, auth) < 3)

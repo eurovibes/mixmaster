@@ -6,7 +6,7 @@
    details.
 
    Read OpenPGP packets
-   $Id: pgpget.c,v 1.7 2002/08/16 19:03:37 rabbi Exp $ */
+   $Id: pgpget.c,v 1.7.2.1 2002/10/04 23:49:16 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -304,7 +304,7 @@ void pgp_verify(BUFFER *msg, BUFFER *detached, pgpsig *sig)
   sig->ok = PGP_SIGBAD;
 
   if (msg->length == 0) {	/* detached signature */
-    if (detached->length) {
+    if (detached && detached->length) {
       buf_move(msg, detached);
       if (sig->sigtype == PGP_SIG_CANONIC)
 	pgp_sigcanonic(msg); /* for cleartext signatures */
@@ -741,7 +741,7 @@ int pgp_getsessionkey(BUFFER *in, BUFFER *pass, char *secring)
   BUFFER *keyid;
   int type;
   int i, csum = 0;
-  int algo;
+  int algo = 0;
   int err = -1;
 
   out = buf_new();

@@ -6,7 +6,7 @@
    details.
 
    Key management
-   $Id: keymgt.c,v 1.9 2002/08/07 18:06:55 weaselp Exp $ */
+   $Id: keymgt.c,v 1.9.2.1 2002/10/04 23:49:16 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -123,7 +123,6 @@ static int getv2pubkey(byte keyid[], BUFFER *key)
   iv = buf_new();
   temp = buf_new();
   id_encode(keyid, idstr);
-  strcat(idstr, "\n");
   if ((keyring = mix_openfile(PUBRING, "r")) == NULL) {
     errlog(ERRORMSG, "Can't open %s!\n", PUBRING);
     err = -1;
@@ -135,6 +134,10 @@ static int getv2pubkey(byte keyid[], BUFFER *key)
     if (strleft(line, begin_key)) {
       if (fgets(line, sizeof(line), keyring) == NULL)
 	break;
+      if ((strlen(line) > 0) && (line[strlen(line)-1] == '\n'))
+        line[strlen(line)-1] = '\0';
+      if ((strlen(line) > 0) && (line[strlen(line)-1] == '\r'))
+        line[strlen(line)-1] = '\0';
       if (!streq(line, idstr))
 	continue;
       fgets(line, sizeof(line), keyring);	/* ignore length */
@@ -143,7 +146,7 @@ static int getv2pubkey(byte keyid[], BUFFER *key)
 	  goto done;
 	if (strleft(line, end_key))
 	  goto done;
-	buf_append(key, line, strlen(line) - 1);
+	buf_append(key, line, strlen(line));
       }
       break;
     }

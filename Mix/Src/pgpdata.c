@@ -6,7 +6,7 @@
    details.
 
    OpenPGP data
-   $Id: pgpdata.c,v 1.11.2.1 2002/09/11 21:43:11 rabbi Exp $ */
+   $Id: pgpdata.c,v 1.11.2.2 2002/10/04 23:49:16 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -74,7 +74,7 @@ int mpi_get(BUFFER *b, BUFFER *mpi)
 int mpi_bitcount(BUFFER *mpi)
 {
   int i, l;
-  while (!mpi->data[0] && mpi->length) // remove leading zeros from mpi
+  while (!mpi->data[0] && mpi->length) /* remove leading zeros from mpi */
     memmove(mpi->data, mpi->data+1, --mpi->length);
   l = mpi->length * 8;
   for (i = 7; i >= 0; i--)
@@ -464,7 +464,7 @@ int pgp_getkey(int mode, int algo, int *psym, int *pmdc, BUFFER *keypacket, BUFF
 	      len = buf_getl(p1);
 	    type = buf_getc(p1);
 	    if (len)
-	      buf_get(p1, i, len-1); // len-1 - exclude type
+	      buf_get(p1, i, len-1); /* len-1 - exclude type */
 	    else
 	      buf_clear(i);
 	    if (type == PGP_SUB_PSYMMETRIC) {
@@ -478,18 +478,18 @@ int pgp_getkey(int mode, int algo, int *psym, int *pmdc, BUFFER *keypacket, BUFF
 #endif
 		     ) && (a == needsym || needsym == 0)) {
 		  symfound = a;
-		  break; // while ((a = buf_getc(i)) != -1)
-		} // if ((a == PGP_K_3DES)...
-	    } // if (type == PGP_SUB_PSYMMETRIC)
+		  break; /* while ((a = buf_getc(i)) != -1) */
+		} /* if ((a == PGP_K_3DES)... */
+	    } /* if (type == PGP_SUB_PSYMMETRIC) */
 	    else if (type == PGP_SUB_FEATURES) {
 	      if ((a = buf_getc(i)) != -1)
 		if (a & 0x01)
 		  mdcfound = 1;
-	    } // if (type == PGP_SUB_FEATURES)
-	  } // while (p1->ptr < j)
-	} // if (buf_getc(p1) == PGP_SIG_CERT)
-      } // if (buf_getc(p1) == 4)
-      break; // switch (type)
+	    } /* if (type == PGP_SUB_FEATURES) */
+	  } /* while (p1->ptr < j) */
+	} /* if (buf_getc(p1) == PGP_SIG_CERT) */
+      } /* if (buf_getc(p1) == 4) */
+      break; /* switch (type) */
     case PGP_USERID:
       if (userid)
 	buf_move(userid, p1);
@@ -589,8 +589,8 @@ int pgp_getkey(int mode, int algo, int *psym, int *pmdc, BUFFER *keypacket, BUFF
      default:
       /* ignore trust packets etc */
       break;
-    } // switch (type)
-  } // while ((type = pgp_getpacket(keypacket, p1)) > 0)
+    } /* switch (type) */
+  } /* while ((type = pgp_getpacket(keypacket, p1)) > 0) */
  end:
   if (keyid) buf_set(keyid, thiskeyid);
   if (tempbuf) {
@@ -689,11 +689,11 @@ int pgp_makepkpacket(int type, BUFFER *p, BUFFER *outtxt, BUFFER *out,
      default:
       algoid = '?';
     }
-    buf_appendf(outtxt, "%s %4d%c/%02X%02X%02X%02X ", type == PGP_PUBSUBKEY ?
+    buf_appendf(outtxt, "%s %5d%c/%02X%02X%02X%02X ", type == PGP_PUBSUBKEY ?
 		"sub" : "pub", len, algoid,
 		id->data[4], id->data[5], id->data[6], id->data[7]);
     tc = localtime(created);
-    strftime(txt, LINELEN, "%Y/%m/%d ", tc);
+    strftime(txt, LINELEN, "%Y-%m-%d ", tc);
     buf_appends(outtxt, txt);
   }
  end:

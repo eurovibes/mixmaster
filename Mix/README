@@ -1,4 +1,4 @@
-Mixmaster version 3 -- anonymous remailer software -- (C) 1999 Anonymizer Inc.
+Mixmaster 2.9 -- anonymous remailer software -- (C) 1999 - 2002 Anonymizer Inc.
 ------------------------------------------------------------------------------
 
 PREVIEW VERSION  ---  WARNING: THIS SOFTWARE IS UNDER DEVELOPMENT!
@@ -24,9 +24,6 @@ This program consists of
 
 Please report any problems via the bug and patch trackers at
 http://sourceforge.net/projects/mixmaster/
-
-[Note: The final release of Mixmaster 3.0 will include the improved
-Mixmaster protocol version 3.]
 
 
 Installation:
@@ -198,4 +195,4 @@ University of California, Berkeley and its contributors.
 
 All trademarks are the property of their respective owners.
 
-$Id: README,v 1.5 2002/08/13 23:36:44 rabbi Exp $
+$Id: README,v 1.5.2.1 2002/10/04 23:49:15 rabbi Exp $

@@ -63,6 +63,7 @@ void usage(char *n)
   fprintf(stderr, "Usage: %s -e [-b] user@domain\n", n);
   fprintf(stderr, "       %s -s [-b] [yourname@domain]\n", n);
   fprintf(stderr, "       %s -c [-b]\n", n);
+  fprintf(stderr, "       %s -C [-b]\n", n);
   fprintf(stderr, "       %s -d [passphrase]\n", n);
   fprintf(stderr, "       %s -g[r] yourname@domain [bits]\n", n);
   fprintf(stderr, "       %s -a[+-] [-b]\n\n", n);
@@ -224,7 +225,7 @@ int main(int argc, char *argv[])
 	pgp_compress(u);
 	break;
       }
-      err = pgp_armor(u, 0);
+      err = pgp_armor(u, PGP_ARMOR_NORMAL);
       break;
     case 'd':
       err = decrypt(u, option, argv[0]);

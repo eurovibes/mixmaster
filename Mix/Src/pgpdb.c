@@ -6,7 +6,7 @@
    details.
 
    OpenPGP key database
-   $Id: pgpdb.c,v 1.6.2.1 2002/09/11 21:15:47 rabbi Exp $ */
+   $Id: pgpdb.c,v 1.6.2.2 2002/10/04 23:49:16 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -121,7 +121,7 @@ int pgpdb_close(KEYRING *keydb)
       pgp_encrypt(PGP_NCONVENTIONAL | PGP_NOARMOR, keydb->db,
 		  keydb->encryptkey, NULL, NULL, NULL, NULL);
     if (keydb->filetype == ARMORED)
-      pgp_armor(keydb->db, 2);
+      pgp_armor(keydb->db, PGP_ARMOR_KEY);
     if (keydb->filetype == -1 || (f = mix_openfile(keydb->filename,
 						   keydb->filetype ==
 						   ARMORED ? "w" : "wb"))
@@ -368,7 +368,7 @@ int pgp_keymgt(int force)
         err = 0;
 	buf_appends(out, "Type Bits/KeyID    Date       User ID\n");
 	buf_cat(out, outtxt);
-	pgp_armor(outkey, 2);
+	pgp_armor(outkey, PGP_ARMOR_KEY);
 	buf_nl(out);
 	buf_cat(out, outkey);
 	buf_nl(out);
@@ -413,6 +413,38 @@ int pgp_rlist(REMAILER remailer[], int n)
     remailer[i].flags.pgp = pgpkey[i];
   buf_free(p);
   buf_free(keyring);
+  return (0);
+}
+
+int pgp_rkeylist(REMAILER remailer[], int keyid[], int n)
+     /* Step through all remailers and get keyid */
+{
+  BUFFER *userid;
+  BUFFER *id;
+  int i, err;
+  int mdc, sym;
+
+  userid = buf_new();
+  id = buf_new();
+  
+  for (i = 1; i < n; i++) {
+    buf_clear(userid);
+    buf_setf(userid, "<%s>", remailer[i].addr);
+
+    keyid[i]=0;
+    if (remailer[i].flags.pgp) {
+      mdc = sym = 0;
+      buf_clear(id);
+      err = pgpdb_getkey(PK_VERIFY, PGP_ANY, &sym, &mdc, NULL, userid, NULL, id, NULL, NULL);
+      if (id->length == 8) {
+        /* printf("%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x %s\n",
+         id->data[0], id->data[1], id->data[2], id->data[3], id->data[4], id->data[5], id->data[6], id->data[7], id->data[8], remailer[i].addr); */
+        keyid[i] = (((((id->data[4] << 8) + id->data[5]) << 8) + id->data[6]) << 8) + id->data[7];
+      }
+    }
+  }
+
+  buf_free(userid);
   return (0);
 }
 

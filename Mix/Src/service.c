@@ -12,7 +12,7 @@
 #define SVCDISPLAYNAME "Mixmaster Service"
 
 
-// internal variables
+/* internal variables */
 static SERVICE_STATUS           ssStatus;
 static SERVICE_STATUS_HANDLE    sshStatusHandle;
 static BOOL                     not_service = FALSE;
@@ -20,7 +20,7 @@ static BOOL                     not_service = FALSE;
 static HANDLE hThread = NULL;
 static HANDLE hMustTerminate = NULL;
 
-// internal function prototypes
+/* internal function prototypes */
 VOID WINAPI service_ctrl(DWORD ctrl_code);
 VOID WINAPI service_main(DWORD argc, LPSTR *argv);
 static DWORD service_run(void);
@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
         event_log(1000, "Service not started: StartServiceCtrlDispatcher failed");
     }
     return 0;
-} // main
+} /* main */
 
 
 VOID WINAPI service_main(DWORD argc, LPSTR *argv)
@@ -81,16 +81,16 @@ VOID WINAPI service_main(DWORD argc, LPSTR *argv)
         err = service_run();
 
     send_status(SERVICE_STOPPED, err, 0, err ? 1030 : 30);
-} // service_main
+} /* service_main */
 
 
 VOID WINAPI service_ctrl(DWORD ctrl_code)
-{   // Handle the requested control code.
+{   /* Handle the requested control code. */
     if (ctrl_code == SERVICE_CONTROL_STOP || ctrl_code == SERVICE_CONTROL_SHUTDOWN)
         service_stop();
     else
         send_status(ssStatus.dwCurrentState, NO_ERROR, 0, 1040 + ctrl_code);
-} // service_ctrl
+} /* service_ctrl */
 
 
 static DWORD service_run(void)
@@ -122,7 +122,7 @@ static DWORD service_run(void)
 
     mix_main(2, svc_argv);
     return 0;
-} // service_run
+} /* service_run */
 
 
 static void service_stop(void)
@@ -146,11 +146,11 @@ static void service_stop(void)
         CloseHandle(hThread);
     hThread = NULL;
     ssStatus.dwCurrentState = SERVICE_STOPPED;
-} // service_stop
+} /* service_stop */
 
 
 static int set_stdfiles()
-{ // needed for _popen()
+{ /* needed for _popen() */
     static DWORD std_handles[]={STD_INPUT_HANDLE, STD_OUTPUT_HANDLE, STD_ERROR_HANDLE};
     FILE *stdfile[]={stdin, stdout, stderr};
     HANDLE hStd;
@@ -169,7 +169,7 @@ static int set_stdfiles()
         memcpy(stdfile[stf_fileno], fl, sizeof(FILE));
     }
     return 1;
-} // set_stdfiles
+} /* set_stdfiles */
 
 
 static BOOL send_status(DWORD current_state, DWORD exit_code, DWORD wait_hint, DWORD id)
@@ -191,7 +191,7 @@ static BOOL send_status(DWORD current_state, DWORD exit_code, DWORD wait_hint, D
     if (!(ret_val = SetServiceStatus(sshStatusHandle, &ssStatus)))
         event_log(id, "SetServiceStatus failed");
     return ret_val;
-} // send_status
+} /* send_status */
 
 
 static void event_log(DWORD id, char *eventmsg)
@@ -210,14 +210,14 @@ static void event_log(DWORD id, char *eventmsg)
     ReportEvent(hEventSource, (WORD)((id < 1000) ? EVENTLOG_SUCCESS : EVENTLOG_ERROR_TYPE),
         0, id, NULL, 2, 0, pStrings, NULL);
     DeregisterEventSource(hEventSource);
-} // event_log
+} /* event_log */
 
 
 static int run_notservice(int argc, char ** argv)
 {
     not_service = TRUE;
     return mix_main(argc, argv);
-} // run_notservice
+} /* run_notservice */
 
 
 static int install_service()
@@ -248,7 +248,7 @@ static int install_service()
 
     CloseServiceHandle(schSCManager);
     return 0;
-} // install_service
+} /* install_service */
 
 
 static int remove_service()
@@ -265,7 +265,7 @@ static int remove_service()
         printf("OpenService failed: %s\n", GetLastErrorText());
         return 1;
     }
-    // try to stop the service
+    /* try to stop the service */
     if (ControlService(schService, SERVICE_CONTROL_STOP, &ssStatus)) {
         printf("Stopping Mixmaster Service");
         do {
@@ -280,7 +280,7 @@ static int remove_service()
             printf("\n%Mixmaster Service failed to stop.\n");
     }
 
-    // now remove the service
+    /* now remove the service */
     if (!DeleteService(schService)) {
         ret_val = 1;
         printf("DeleteService failed: %s\n", GetLastErrorText());
@@ -290,7 +290,7 @@ static int remove_service()
     CloseServiceHandle(schService);
     CloseServiceHandle(schSCManager);
     return ret_val;
-} // remove_service
+} /* remove_service */
 
 
 static char *GetLastErrorText()
@@ -302,12 +302,12 @@ static char *GetLastErrorText()
     dwRet = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ARGUMENT_ARRAY,
                           NULL, err=GetLastError(), LANG_NEUTRAL, (LPSTR)&lpszTemp, 0, NULL);
 
-    // supplied buffer is not long enough
+    /* supplied buffer is not long enough */
     if (!dwRet || (256 < (long)dwRet+14))
         sprintf(error_buf, "Error (0x%x)", err);
     else {
         lpszTemp[lstrlen(lpszTemp)-2] = '\0';  
-        //remove cr and newline character
+        /* remove cr and newline character */
         sprintf(error_buf, "%s (0x%x)", lpszTemp, err);
     }
 
@@ -315,6 +315,6 @@ static char *GetLastErrorText()
         LocalFree((HLOCAL)lpszTemp);
 
     return error_buf;
-} // GetLastErrorText
+} /* GetLastErrorText */
 
 #endif
