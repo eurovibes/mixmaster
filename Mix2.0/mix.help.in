@@ -7,10 +7,12 @@ There is an automated mail handling program installed on this
 account which will take any message in the Mixmaster message format
 and automatically re-send it anonymously.
 
-You can get the Mixmaster client software from
-<ftp://ftp.zedz.net/pub/crypto/remailer/mixmaster/> (Netherlands)
-or <http://mixmaster.sf.net/> (USA).  Please
-read its manual page and README file for usage instructions.
+You can get the Mixmaster client software via FTP from
+<ftp://ftp.zedz.net/pub/crypto/remailer/mixmaster/> (Netherlands) or
+<ftp://download.mixmaster.anonymizer.com/pub/mixmaster/> (USA). You can
+get the Mixmaster client software via HTTP from <http://mixmaster.sf.net/>
+and <http://web.mixmaster.anonymizer.com/> (USA).  Please read its manual
+page and README file for usage instructions.
 
 More information about anonymous remailers is available at
 <http://www.stack.nl/~galactus/remailers/>.
