@@ -6,7 +6,7 @@
    details.
 
    Process Cypherpunk remailer messages
-   $Id: rem1.c,v 1.3 2001/12/14 19:35:24 rabbi Exp $ */
+   $Id: rem1.c,v 1.4 2002/01/10 23:59:16 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -99,7 +99,7 @@ static int t1msg(BUFFER *in, int hdr)
   int encrypted = 0;
   int type = -1;
   int latent = 0;
-  int remix = 0;
+  int remix = 0, repgp = 0;
   int inflate = 0;
 
   field = buf_new();
@@ -135,7 +135,12 @@ header:
     else if (PGP && bufieq(field, "encrypted"))
       encrypted = 1;
     else if (bufieq(field, "remix-to")) {
-      remix = 1;
+      remix = 1; repgp = 0;
+      buf_set(remixto, content);
+      if (type == -1)
+	type = MSG_MAIL;
+    } else if (bufieq(field, "encrypt-to")) {
+      repgp = remix = 1;
       buf_set(remixto, content);
       if (type == -1)
 	type = MSG_MAIL;
@@ -144,7 +149,7 @@ header:
 	       bufieq(field, "remail-to") ||
 	       bufieq(field, "anon-send-to")) {
       if (bufieq(field, "remail-to"))
-	remix = 0;
+	repgp = remix = 0;
       if (to->length > 0)
 	buf_appendc(to, ',');
       buf_cat(to, content);
@@ -442,20 +447,21 @@ end:
     err = 1;
     if (bufieq(to, REMAILERADDR)) /* don't remix to ourselves */
       remix = 0;
-    if (remix) {
-      if (remixto->length) {
-	err = mix_encrypt(type, out, remixto->data, 1, line);
-	if (err != 0)
-          errlog(NOTICE, "Can't remix-to %b -- %b\n", remixto, line);
-      } else /* transparent remixing */ {
-	err = mix_encrypt(type, out, to->data, 1, line);
-	if (err != 0) {
-	  errlog(DEBUGINFO, "Can't transparently remix to %b\n", to);
+    if (remix && remixto->length == 0)
+      buf_set(remixto, to);
+    if (remix && !repgp)
+      err = mix_encrypt(type, out, remixto->data, 1, line);
+    if (err != 0) {
+      if (remix == 1 && !repgp)
+	errlog(NOTICE, "Can't remix -- %b\n", line);
+      else {
+	if (remixto->length)
+	  err = t1_encrypt(type, out, remixto->data, 0, 0, line);
+	if (err != 0 && repgp)
+	  errlog(NOTICE, "Can't repgp -- %b\n", line);
+	else
 	  err = mix_pool(out, type, latent * 60);
-	}
       }
-    } else {
-      err = mix_pool(out, type, latent * 60);
     }
   }
 

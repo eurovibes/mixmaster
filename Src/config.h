@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.3 2001/12/12 19:06:41 rabbi Exp $ */
+   $Id: config.h,v 1.4 2002/01/10 23:59:16 rabbi Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -208,6 +208,7 @@ int MIX;
 int PGP;
 int UNENCRYPTED;
 int REMIX;
+int REPGP;
 extern char MIXDIR[];
 extern char POOLDIR[];
 extern char SENDMAIL[];

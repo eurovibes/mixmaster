@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.4 2001/12/12 18:50:09 rabbi Exp $ */
+   $Id: mix.c,v 1.5 2002/01/10 23:59:16 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -76,6 +76,7 @@ int MIX = 1;
 int PGP = 1;
 int UNENCRYPTED = 0;
 int REMIX = 1;
+int REPGP = 1;
 
 int POOLSIZE = 0;
 int RATE = 100;
@@ -303,6 +304,7 @@ int mix_configline(char *line)
 	  read_conf_i(REMAIL) || read_conf_i(MIX) ||
 	  read_conf_i(PGP) || read_conf_i(UNENCRYPTED) ||
 	  read_conf_i(REMIX) || read_conf(NEWS) ||
+	  read_conf_i(REPGP) ||
 	  read_conf(MAILtoNEWS) || read_conf(ERRLOG) ||
 	  read_conf(ORGANIZATION) || read_conf(MID) ||
 	  read_conf(TYPE1) || read_conf_i(POOLSIZE) ||

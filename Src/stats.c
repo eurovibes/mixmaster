@@ -6,7 +6,7 @@
    details.
 
    Remailer statistics
-   $Id: stats.c,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: stats.c,v 1.2 2002/01/10 23:59:16 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -305,6 +305,12 @@ void conf_premail(BUFFER *out)
     buf_appends(out, " pgp");
   if (PGP && !UNENCRYPTED)
     buf_appends(out, " pgponly");
+  if (REPGP) {
+    if (REMIX == 1)
+      buf_appends(out, " repgp");
+    else
+      buf_appends(out, " repgp2");
+  }
   if (REMIX == 1)
     buf_appends(out, " remix");
   else if (REMIX)
