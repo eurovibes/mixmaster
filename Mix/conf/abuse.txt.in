@@ -1,82 +1,101 @@
-Thank you for contacting <%CA>. The administrator will
-read your message and take appropriate action as soon as possible.
+Thank you for contacting the Abuse Complaint Administrator of <%RMN>.
 
-This system is a remailer which automatically anonymizes and forwards
-e-mail. As such it serves an important purpose for many of its users
-who could not otherwise express themselves freely, or who need to
-discuss sensitive personal topics.
+We sincerely apologize for any inconvenience that you may have
+experienced as a result of inappropriate use of this system by a
+particular individual.
 
-Of course, it is not intended to annoy or harass. In case you have
-received an unwanted message, the remailer offers a method to prevent
-this from happening again.
+The purpose of this anonymous remailer is to permit individuals
+including crime victims, domestic violence victims, persons in recovery,
+and others, such as those living under oppressive regimes, to
+communicate confidentially in a manner that ensures their privacy under
+even the most adverse conditions. Unfortunately, there will always be a
+very small percentage of individuals that choose to abuse the anonymity
+that this and similar systems worldwide afford to insult, harass, or
+send otherwise unwelcome email. The <%RMN> does not condone such
+messages, or their content, in any way.
 
-To block the remailer from sending mail to your address, please send
-a message containing the line
+Just as the Post Office is unable to prevent abuse of the mail system as
+long as there are public mailboxes into which a person can drop a letter
+without including a return address, the <%RMN> cannot preemptively
+prevent irresponsible individuals from using this system to send
+inappropriate messages. However, unlike the Post Office, this remailer
+enables you to assure that you will not be inconvenienced by users of
+this remailer in the future.
+=========================================================================
+
+How to block your email address from receiving email from the <%RMN>:
+
+To block the users of this remailer from sending email to your address,
+please send a message to <%RMA> containing the line
 
 DESTINATION-BLOCK
 
-to <%RMA>. You can simply hit `reply' and send back
-this entire message.
+anywhere in the body text of the email.  You can simply reply to this
+message using your email program and send back this entire message for
+your current email address to be permanently blocked from users of the
+<%RMN>.
 
+If you wish to block additional email addresses that you may use from
+receiving email though this remailer, please reply to this email with a
+line similar to
 
-Remailer Policy:
-================
+DESTINATION BLOCK my_other_email_address@my_domain.com
 
-The remailer administrator will take steps to prevent use of the
-remailer for any illegal purpose.
+You must include one such line per email address that you wish to block.
+You can include more than one line in your reply.
+==========================================================================
 
-The remailer is intended for communicating anonymously, not for
-sending unsolicited commercial mail (UCE or spam). If you ever receive
-UCE from the remailer, the remailer administrator would appreciate a
-complete copy of the message in order to prevent it in the future. UCE
-will typically contain a contact address or telephone number, which is
-sufficient to identify the sender and -- where applicable -- take
-legal action against the originator.
+How to block an entire domain from receiving email from the <%RMN>:
 
+If you are the legitimate root administrator or postmaster of a domain,
+you may request that all email addresses served by you domain are
+blocked from receiving email from the <%RMN>. To place this block,
+please send the following line as "root" or "postmaster" to <%CA> in the
+body text of your email:
 
-More information about blocking addresses:
-==========================================
+DESTINATION-BLOCK @domain_to_be_blocked.com
 
-If you wish to block other addresses you can do so by including one
-line of the type "destination-block user@domain" for each address.
+==========================================================================
+Note that there are similar remailer systems in operation on the
+Internet that are in no way affiliated with the <%RMN>. Since the
+administrator of the <%RNM> has no influence on those other systems and
+is likely to be unaware of many of these other systems, a destination
+block that you may choose to request by replying to this email is only
+effective for the <%RMN>, not for similar systems that may exist on the
+Internet.
 
-As a postmaster, you can block anonymous mail to your entire domain.
-To do so, please use the line "destination-block @your-domain.com".
+May, but not all, remailers subscribe to the Remailer Abuse Block list
+(RAB). You can block your email address from receiving email from all
+remailers subscribed to this block list by visiting
 
-If you do not want to read anonymous messages in mailing lists or
-newsgroups, please consult the manual of your mail reading program.
-The software will allow you to use `filters' or `kill files' to
-avoid being bothered by messages you do not want to read.
+http://www.paracrypt.com/remailerabuse/
 
+Should you receive unwanted email from other remailers after requesting
+to be place on the RAB, please contact the abuse administrator for the
+respective remailer.
+==========================================================================
 
-Purpose of Anonymous Remailers:
-===============================
+How to obtain the name of the sender of an email that you received
+though this remailer:
 
-It is easy to store electronic mail for a long time and to search huge
-amounts of data for information about people when they do not expect
-it. Thus, the information society may pose a hitherto unknown threat
-to everybody's privacy. In totalitarian regimes sending critical
-messages may even cause a threat to the senders' lives if their
-identity ever becomes known.
+This remailer uses the Mixmaster anonymous remailer software. The
+Mixmaster software has been carefully designed to withstand attack by
+even the most severe regimes in which torture is a common means of
+inquiry and basic human rights are nonexistent.  As such, it is
+impossible to determine the original sender of an email that has passed
+through this system.
 
-For that reason, anonymous remailers have been developed. Remailers
-use cryptographic methods to conceal the origin of messages. Each
-message is sent through a network of anonymizing servers so that not
-even the remailer administrators have any information about the origin
-of the message. It is impossible for us to determine the original
-sender of any message. Please don't ask, because we don't know either.
+The administrator of this system is technically unable to determine the
+original sender of a message that has passed through this remailer, no
+matter how much the administrator may desire to do so, even if the
+administrator were ordered to do so by legal or extra-legal means. We
+regret any inconvenience this necessary safety protection may cause to
+some recipients of undesired emails.
 
-More information is available from the following URLs:
+Remember: you can prevent future unwanted emails sent to you via this
+remailer by simply replying to this message.
 
-Technical information about untraceability:
-  http://www.obscura.com/~loki/remailer/remailer-essay.html
-  http://world.std.com/~franl/crypto/chaum-acm-1981.html
+Sincerely,
 
-Legal information about online anonymity:
-  http://www.epic.org/free_speech/mcintyre.html
-  http://www.law.miami.edu/~froomkin/articles/ocean.htm
+-- The <%RMN> Administrator
 
-Please do not hesitate to contact the remailer administrator again
-whenever a problem occurs or you have any questions.
-
-  -- %CA
