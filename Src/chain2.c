@@ -6,7 +6,7 @@
    details.
 
    Encrypt message for Mixmaster chain
-   $Id: chain2.c,v 1.6 2002/10/09 20:53:28 weaselp Exp $ */
+   $Id: chain2.c,v 1.7 2002/12/05 04:23:32 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -74,19 +74,29 @@ int prepare_type2list(BUFFER *out)
 
 int mix2_rlist(REMAILER remailer[])
 {
-  FILE *list;
+  FILE *list, *excl;
   int n, i, listed = 0;
 
   char line[LINELEN], name[LINELEN], addr[LINELEN], keyid[LINELEN],
   version[LINELEN], flags[LINELEN], createdstr[LINELEN], expiresstr[LINELEN];
   int assigned;
   time_t created, expires;
+  BUFFER *starex;
+
+  starex = buf_new();
+  excl = mix_openfile(STAREX, "r");
+  if (excl != NULL) {
+    buf_read(starex, excl);
+    fclose(excl);
+  }
 
   list = mix_openfile(TYPE2LIST, "r");
   if (list == NULL) {
     list = mix_openfile(PUBRING, "r");
-    if (list == NULL)
+    if (list == NULL) {
+      buf_free(starex);
       return (-1);
+    }
   }
   for (n = 1; fgets(line, sizeof(line), list) != NULL && n < MAXREM;)
     if (strleft(line, begin_key)) {
@@ -136,6 +146,7 @@ int mix2_rlist(REMAILER remailer[])
       remailer[n].info[0].reliability = 0;
       remailer[n].info[0].latency = 0;
       remailer[n].info[0].history[0] = '\0';
+      remailer[n].flags.star_ex = bufifind(starex, name);
       n++;
     }
   fclose(list);
@@ -165,6 +176,7 @@ int mix2_rlist(REMAILER remailer[])
   if (listed < 4)		/* we have no valid reliability info */
     for (i = 1; i < n; i++)
       remailer[i].info[0].reliability = 10000;
+  buf_free(starex);
   return (n);
 }
 

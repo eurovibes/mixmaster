@@ -6,7 +6,7 @@
    details.
 
    Encrypt message for Cypherpunk remailer chain
-   $Id: chain1.c,v 1.4 2002/10/09 20:53:28 weaselp Exp $ */
+   $Id: chain1.c,v 1.5 2002/12/05 04:23:32 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -18,14 +18,25 @@
 
 int t1_rlist(REMAILER remailer[])
 {
-  FILE *list;
+  FILE *list, *excl;
   int i, listed = 0;
   int n = 0;
   char line[2 * LINELEN], l2[LINELEN], name[LINELEN], *flags;
+  BUFFER *starex;
+
+  starex = buf_new();
+  excl = mix_openfile(STAREX, "r");
+  if (excl != NULL) {
+    buf_read(starex, excl);
+    fclose(excl);
+  }
 
   list = mix_openfile(TYPE1LIST, "r");
-  if (list == NULL)
+  if (list == NULL) {
+    buf_free(starex);
     return (-1);
+  }
+
   while (fgets(line, sizeof(line), list) != NULL && n < MAXREM) {
     if (strleft(line, "$remailer") &&
 	strchr(line, '<') && strchr(line, '>') &&
@@ -71,7 +82,8 @@ int t1_rlist(REMAILER remailer[])
       remailer[i].info[1].reliability = 0;
       remailer[i].info[1].latency = 0;
       remailer[i].info[1].history[0] = '\0';
-    }
+      remailer[i].flags.star_ex = bufifind(starex, name);
+   }
     if (strleft(line,
 		"-----------------------------------------------------------------------"))
       break;
@@ -102,6 +114,7 @@ int t1_rlist(REMAILER remailer[])
 #ifdef USE_PGP
   pgp_rlist(remailer, n);
 #endif /* USE_PGP */
+  buf_free(starex);
   return (n);
 }
 

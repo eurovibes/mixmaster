@@ -327,3 +327,6 @@
                                seemed sensible.
                            Mixmaster now generates dummy messages automatically
                              as mail enters and exits the pool.
+                           New Star-Exclude feature by Colin: Certain remailers
+                             can be excluded from chosen as random hops.
+                             as mail enters and exits the pool.

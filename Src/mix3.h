@@ -6,7 +6,7 @@
    details.
 
    Function prototypes
-   $Id: mix3.h,v 1.19 2002/10/02 07:54:12 weaselp Exp $ */
+   $Id: mix3.h,v 1.20 2002/12/05 04:23:33 weaselp Exp $ */
 
 
 #ifndef _MIX3_H
@@ -321,6 +321,8 @@ typedef struct {
 
     unsigned int post:1;
     unsigned int middle:1;
+
+    unsigned int star_ex:1;
   } flags;
   struct rinfo {
     int reliability;
