@@ -241,6 +241,8 @@
           <t>Select "count" messages from the pool at random and send
             them.</t>
         </list>
+      </t>
+      <t>
         In its default configuration, Mixmaster has a mixing interval of
         15 minutes, a minimum pool size of 45 messages, and permits a
         maximum of 65% of the pool to be sent in one round.
