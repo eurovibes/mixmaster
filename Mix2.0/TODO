@@ -1,5 +1,0 @@
-$Id: TODO,v 1.2 2002/09/10 19:08:50 rabbi Exp $
-
-* Why does SunOS `read' read 4 characters at a time?
-* free() allocated memory at various places
-* collect entropy from system resources
