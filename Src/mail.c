@@ -6,7 +6,7 @@
    details.
 
    Socket-based mail transport services
-   $Id: mail.c,v 1.18 2003/06/29 19:12:45 weaselp Exp $ */
+   $Id: mail.c,v 1.19 2003/07/07 11:18:20 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -97,6 +97,54 @@ int sendmail_loop(BUFFER *message, char *from, BUFFER *address)
   return(err);
 }
 
+/* Returns true if more than one of the recipients in the
+ * rcpt buffer is a remailer
+ */
+int has_more_than_one_remailer(BUFFER *rcpts)
+{
+  BUFFER *newlinelist;
+  BUFFER *line;
+  int remailers = 0;
+  REMAILER type1[MAXREM];
+  REMAILER type2[MAXREM];
+  int num1;
+  int num2;
+  int i;
+
+  newlinelist = buf_new();
+  line = buf_new();
+
+  num1 = t1_rlist(type1, NULL);
+  num2 = mix2_rlist(type2, NULL);
+
+  rfc822_addr(rcpts, newlinelist);
+
+  while (buf_getline(newlinelist, line) != -1) {
+    int found = 0;
+    printf("%s\n", line->data);
+
+    for (i = 0; i < num2; i++)
+      if (strcmp(type2[i].addr, line->data) == 0) {
+	found = 1;
+	break;
+      }
+    if (!found)
+      for (i = 0; i < num1; i++)
+	if (strcmp(type1[i].addr, line->data) == 0) {
+	  found = 1;
+	  break;
+	}
+    if (found)
+      remailers++;
+  }
+  printf("found %d\n", remailers);
+
+  buf_free(newlinelist);
+  buf_free(line);
+
+  return(remailers > 1);
+}
+
 int sendmail(BUFFER *message, char *from, BUFFER *address)
 {
   /* returns: 0: ok  1: problem, try again  -1: failed */
@@ -104,6 +152,7 @@ int sendmail(BUFFER *message, char *from, BUFFER *address)
   BUFFER *head, *block, *rcpt;
   FILE *f;
   int err = -1;
+  int rcpt_cnt = 0;
 
   head = buf_new();
   rcpt = buf_new();
@@ -125,27 +174,45 @@ int sendmail(BUFFER *message, char *from, BUFFER *address)
 
   buf_rewind(message);
 
-  /* search the to address */
+  /* search recipient addresses */
   if (address == NULL) {
     BUFFER *field, *content;
     field = buf_new();
     content = buf_new();
 
     while (buf_getheader(message, field, content) == 0) {
-      if (bufieq(field, "to")) {
-	buf_set(rcpt, content);
-	break;
+      if (bufieq(field, "to") || bufieq(field, "cc") || bufieq(field, "bcc")) {
+	int thislinercpts = 1;
+	char *tmp = content->data;
+	while ((tmp = strchr(tmp+1, ',')))
+	  thislinercpts ++;
+	rcpt_cnt += thislinercpts;
+
+	if ( rcpt->data[0] )
+	  buf_appends(rcpt, ", ");
+	buf_cat(rcpt, content);
       }
     }
     buf_free(field);
     buf_free(content);
   } else {
     buf_set(rcpt, address);
+    rcpt_cnt = 1;
   }
   buf_rewind(message);
 
-  if ( REMAIL && strcmp(REMAILERADDR, rcpt->data) == 0) {
+  if ( ! rcpt_cnt ) {
+    errlog(NOTICE, "No recipients found.\n");
+    err = 0;
+  } else if ( rcpt_cnt > MAXRECIPIENTS ) { 
+    errlog(NOTICE, "Too many recipients.  Dropping message.\n");
+    err = 0;
+  } else if ( rcpt_cnt > 1 && has_more_than_one_remailer(rcpt) ) {
+    errlog(NOTICE, "Message is destined to more than one remailer.  Dropping.\n");
+    err = 0;
+  } else if ( REMAIL && strcmp(REMAILERADDR, rcpt->data) == 0) {
     buf_cat(head, message);
+    errlog(LOG, "Message loops back to us; storing in pool rather than sending it.\n");
     err = pool_add(head, "inf");
   } else if (SMTPRELAY[0])
     err = smtpsend(head, message, from);

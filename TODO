@@ -2,7 +2,6 @@ Todo items before 2.9.1 release:
 
 * permit CRAM-MD5 SMTP AUTH in addition to LOGIN.
 * Check and enforce expiration/revocation of OpenPGP keys (?)
-* Apply fixes for any new bugs based on existing features
 * Update the nymservers in default dest.alw
 
 
@@ -16,13 +15,11 @@ Items that need to be completed before the next HEAD release:
 * Modify release tarball generation script to build the .tab.c file from
   parsedate.y, so we don't end up requiring bison on every system that
   wants to build mixmaster.
-* perhaps document --redirect in mix.1
+* document experimental --redirect in mix.1
 
 Mandatory todo items before 3.0 release:
 
-* Drop messages that have no recipients left
 * disable Nym stuff
-* drop anything that goes to more than one remailer
 * autoconf installation script is needed
   - mostly done -- a few bugs still need fixing
 * post-install scripts need to be reworked

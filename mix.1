@@ -1,5 +1,5 @@
 .TH MIX 1 "Mixmaster Version 3.0 beta"
-.\" $Id: mix.1,v 1.30 2003/06/06 01:23:27 weaselp Exp $
+.\" $Id: mix.1,v 1.31 2003/07/07 11:18:20 weaselp Exp $
 .SH NAME
 mix \- anonymous remailer software
 .SH SYNOPSIS
@@ -632,7 +632,12 @@ Maximum chain length for message forwarding requested by
 .B Rand-Hop
 directives.
 Default:
-.BR 20 .
+.BR 4 .
+.TP
+.B MAXRECIPIENTS
+limits the number of allowed recipients in outgoing mail.  Anything that exceeds this
+number is dropped silently.  Default:
+.BR 5 .
 .PP
 The following are time variables. They can be given as days, hours, or
 minutes.
