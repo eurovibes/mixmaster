@@ -11,7 +11,7 @@ Expires: August 31, 2004                                  Secardeo GmbH
 
 
                       Mixmaster Protocol Version 2
-		    draft-sassaman-mixmaster-XX.txt
+                    draft-sassaman-mixmaster-XX.txt
 
 Status of This Memo
 
