@@ -6,7 +6,7 @@
    details.
 
    Prepare messages for remailer chain
-   $Id: chain.c,v 1.9 2003/05/03 05:51:58 weaselp Exp $ */
+   $Id: chain.c,v 1.10 2003/05/03 06:15:09 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -298,6 +298,7 @@ float chain_reliability(char *chain, int chaintype,
   int error = 0;
   int maxrem;
   int i;
+  int previous = -1;
   REMAILER remailer[MAXREM];
   int badchains[MAXREM][MAXREM];
 
@@ -319,10 +320,15 @@ float chain_reliability(char *chain, int chaintype,
     for(i=0;
 	(i < maxrem) && (strcmp(remailer[i].name, remailer_name) != 0);
 	i++);
-    if(!strcmp(remailer[i].name, remailer_name)) /* Found it! */
+    if(!strcmp(remailer[i].name, remailer_name)) { /* Found it! */
       acc_reliability *=
 	((float) remailer[i].info[chaintype].reliability) / 10000;
-    else
+      if (previous != -1) {
+	if (badchains[previous][i] || badchains[0][i])
+	  acc_reliability = 0;
+      }
+      previous = i;
+    } else
       error = 1; /* Did not find this remailer. We can't calculate
 		    the reliablity for the whole chain. */
     name_start = name_end+sizeof(char);
