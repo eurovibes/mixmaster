@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.29 2003/05/03 01:56:08 weaselp Exp $ */
+   $Id: main.c,v 1.30 2003/05/03 11:20:41 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -20,6 +20,7 @@
 #else /* end of POSIX */
 #include <io.h>
 #endif /* else if not POSIX */
+#include <assert.h>
 
 static char *largopt(char *p, char *opt, char *name, int *error);
 static void noarg(char *name, char p);
@@ -56,6 +57,9 @@ int main(int argc, char *argv[])
   int numcopies = 0;		/* default value set in mix.cfg */
   BUFFER *msg, *chainlist, *field, *content;
   FILE *f;
+
+  /* Check if parse_yearmonthday works */
+  assert(parse_yearmonthday("2003-04-01") == 1049155200);
 
   mix_init(NULL);
 
