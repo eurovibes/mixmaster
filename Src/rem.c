@@ -332,10 +332,7 @@ int t2_decrypt(BUFFER *in)
   do {
     err = mix_dearmor(in, msg);
     if (err != -1) {
-      if (v3_magic(msg->data))
-	err = mix3_decrypt(msg);
-      else
-	err = mix2_decrypt(msg);
+      err = mix2_decrypt(msg);
     }
   }
   while (in->ptr + 1000 < in->length);	/* accept several packets in one message */
