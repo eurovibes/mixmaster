@@ -6,7 +6,7 @@
    details.
 
    OpenPGP key database
-   $Id: pgpdb.c,v 1.7 2002/08/22 08:13:36 weaselp Exp $ */
+   $Id: pgpdb.c,v 1.8 2002/08/25 13:27:40 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -115,7 +115,7 @@ int pgpdb_close(KEYRING *keydb)
       pgp_encrypt(PGP_NCONVENTIONAL | PGP_NOARMOR, keydb->db,
 		  keydb->encryptkey, NULL, NULL, NULL, NULL);
     if (keydb->filetype == ARMORED)
-      pgp_armor(keydb->db, 2);
+      pgp_armor(keydb->db, PGP_ARMOR_KEY);
     if (keydb->filetype == -1 || (f = mix_openfile(keydb->filename,
 						   keydb->filetype ==
 						   ARMORED ? "w" : "wb"))
@@ -362,7 +362,7 @@ int pgp_keymgt(int force)
         err = 0;
 	buf_appends(out, "Type Bits/KeyID    Date       User ID\n");
 	buf_cat(out, outtxt);
-	pgp_armor(outkey, 2);
+	pgp_armor(outkey, PGP_ARMOR_KEY);
 	buf_nl(out);
 	buf_cat(out, outkey);
 	buf_nl(out);

@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.13 2002/08/22 05:18:26 weaselp Exp $ */
+   $Id: config.h,v 1.14 2002/08/25 13:27:40 weaselp Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -244,6 +244,8 @@ extern char NYMDB[];
 #define end_pgpmsg "-----END PGP MESSAGE-----"
 #define begin_pgpkey "-----BEGIN PGP PUBLIC KEY BLOCK-----"
 #define end_pgpkey "-----END PGP PUBLIC KEY BLOCK-----"
+#define begin_pgpseckey "-----BEGIN PGP PRIVATE KEY BLOCK-----"
+#define end_pgpseckey "-----END PGP PRIVATE KEY BLOCK-----"
 #define begin_pgpsigned "-----BEGIN PGP SIGNED MESSAGE-----"
 #define begin_pgpsig "-----BEGIN PGP SIGNATURE-----"
 #define end_pgpsig "-----END PGP SIGNATURE-----"

@@ -224,7 +224,7 @@ int main(int argc, char *argv[])
 	pgp_compress(u);
 	break;
       }
-      err = pgp_armor(u, 0);
+      err = pgp_armor(u, PGP_ARMOR_NORMAL);
       break;
     case 'd':
       err = decrypt(u, option, argv[0]);

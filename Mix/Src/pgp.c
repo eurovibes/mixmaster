@@ -6,7 +6,7 @@
    details.
 
    OpenPGP messages
-   $Id: pgp.c,v 1.6 2002/08/20 06:50:38 rabbi Exp $ */
+   $Id: pgp.c,v 1.7 2002/08/25 13:27:40 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -198,7 +198,7 @@ int pgp_encrypt(int mode, BUFFER *in, BUFFER *to, BUFFER *sigid,
     if (mode & PGP_DETACHEDSIG) {
       buf_move(in, sig);
       if (!(mode & PGP_NOARMOR))
-	pgp_armor(in, 4);
+	pgp_armor(in, PGP_ARMOR_NYMSIG);
       goto end;
     }
   }
@@ -263,7 +263,7 @@ int pgp_encrypt(int mode, BUFFER *in, BUFFER *to, BUFFER *sigid,
     buf_move(in, out);
   }
   if (!(mode & PGP_NOARMOR))
-    pgp_armor(in, (mode & PGP_REMAIL) ? 1 : 0);
+    pgp_armor(in, (mode & PGP_REMAIL) ? PGP_ARMOR_REM : PGP_ARMOR_NORMAL);
 
 end:
   buf_free(out);
@@ -368,19 +368,21 @@ int pgp_armor(BUFFER *in, int mode)
   encode(in, 64);
 
   out = buf_new();
-  if (mode == 2 || mode == 3)
+  if (mode == PGP_ARMOR_KEY || mode == PGP_ARMOR_NYMKEY)
     buf_sets(out, begin_pgpkey);
-  else if (mode == 4)
+  else if (mode == PGP_ARMOR_NYMSIG)
     buf_sets(out, begin_pgpsig);
+  else if (mode == PGP_ARMOR_SECKEY)
+    buf_sets(out, begin_pgpseckey);
   else
     buf_sets(out, begin_pgpmsg);
   buf_nl(out);
 #ifdef CLOAK
-  if (mode == 1 || mode == 3 || mode == 4)
+  if (mode == PGP_ARMOR_REM || mode == PGP_ARMOR_NYMKEY || mode == PGP_ARMOR_NYMSIG)
     buf_appends(out, "Version: N/A\n");
   else
 #elif MIMIC
-  if (mode == 1 || mode == 3 || mode == 4)
+  if (mode == PGP_ARMOR_REM || mode == PGP_ARMOR_NYMKEY || mode == PGP_ARMOR_NYMSIG)
     buf_appends(out, "Version: 2.6.3i\n");
   else
 #endif
@@ -399,10 +401,12 @@ int pgp_armor(BUFFER *in, int mode)
   buf_appendc(out, '=');
   buf_cat(out, in);
   buf_nl(out);
-  if (mode == 2 || mode == 3)
+  if (mode == PGP_ARMOR_KEY || mode == PGP_ARMOR_NYMKEY)
     buf_appends(out, end_pgpkey);
-  else if (mode == 4)
+  else if (mode == PGP_ARMOR_NYMSIG)
     buf_appends(out, end_pgpsig);
+  else if (mode == PGP_ARMOR_SECKEY)
+    buf_appends(out, end_pgpseckey);
   else
     buf_appends(out, end_pgpmsg);
   buf_nl(out);

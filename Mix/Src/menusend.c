@@ -6,7 +6,7 @@
    details.
 
    Menu-based user interface -- send message
-   $Id: menusend.c,v 1.2 2001/11/06 23:41:58 rabbi Exp $ */
+   $Id: menusend.c,v 1.3 2002/08/25 13:27:40 weaselp Exp $ */
 
 
 #include "menu.h"
@@ -545,7 +545,7 @@ redraw:
 		      thisnym);
 	  user_pass(p);
 	  pgp_pubkeycert(uid, strleft(thisnym, NONANON) ?
-			 PGPSECRING : NYMSECRING, p, keytxt, 3);
+			 PGPSECRING : NYMSECRING, p, keytxt, PGP_ARMOR_NYMKEY);
 
 	  buf_clear(msg);
 	  if (!hdr)
