@@ -6,7 +6,7 @@
 <!-- change this to no to create a document with lots of whitespace -->
 <?rfc compact="yes"?>
 
-<rfc ipr="full2026" docName="draft-sassaman-mixmaster-01.txt">
+<rfc ipr="full2026" docName="draft-sassaman-mixmaster-02.txt">
 
 <front>
 
@@ -147,7 +147,7 @@
       <t>The sender next chooses a chain of up to 20 remailers
         for each packet. Each path is independent, and can be of
         a different length, but all paths must end at the same
-        remailer.  This final remailer is responsible detecting and
+        remailer.  This final remailer is responsible for detecting and
         discarding duplicate packets, reconstructing the message,
         and doing the final delivery.</t>
 
@@ -220,7 +220,7 @@
 
       <t>To obfuscate the link between incoming and outgoing messages,
         Mixmaster uses a pooling scheme. Messages to be forwarded are
-        stored in a pool. In regular intervals the remailer
+        stored in a pool. At regular intervals the remailer
         sends some random messages from the pool to either the next hop or
         their final recipients.</t>
 
@@ -235,8 +235,8 @@
         </texttable>
         The following steps are implemented every "t" seconds:
         <list style="numbers">
-          <t>Let "n" by the number of messages currently in the pool.</t>
-          <t>Let "count" is the smaller of "n - min" and "n * rate", or
+          <t>Let "n" be the number of messages currently in the pool.</t>
+          <t>Let "count" be the smaller of "n - min" and "n * rate", or
             zero if "n - min" is negative.</t>
           <t>Select "count" messages from the pool at random and send
             them.</t>
@@ -257,7 +257,7 @@
 
       <t>Dummy messages (see <xref target="payload-format"/>) are multi-hop
         messages with four randomly selected remailers as the chain. The
-        chain must selected such that no remailer will appear twice unless
+        chain be must selected such that no remailer will appear twice unless
         two other remailers separate them.</t>
 
       <t>Every time a message is placed in the pool, the remailer chooses
@@ -558,8 +558,8 @@ Remailer-Type: Mixmaster [version number]
     </t>
 
     <t>The identifier consists of lowercase alphanumeric characters,
-      beginning with an alphabetic character. The identifier should consist
-      of no more than eight characters in length.</t>
+      beginning with an alphabetic character. The identifier should be
+      no more than eight characters in length.</t>
 
     <t>The key ID is the MD5 message digest of the representation of the RSA
       public key (not including the length bytes). It is encoded as a
@@ -757,7 +757,7 @@ Remailer-Type: Mixmaster [version number]
       be linked together (by their contents or because they are sent under a
       pseudonym). To protect themselves, senders must mail Mixmaster packets
       stochastically independent of the actual messages they want to send.
-      This can be done by sending packets in regular intervals, using a dummy
+      This can be done by sending packets at regular intervals, using a dummy
       message whenever appropriate. To avoid leaking information, the
       intervals should not be smaller than the randomness in the delay caused
       by trusted remailers.</t>
@@ -839,12 +839,15 @@ Remailer-Type: Mixmaster [version number]
     <t>"Antonomasia" &lt;ant@notatla.org.uk&gt;,
       Adam Back &lt;adam@cypherspace.org&gt;,
       Marco A. Calamari &lt;marcoc@dada.it&gt;,
-      Bodo Moeller &lt;bmoeller@acm.org&gt;,
-      Jon Orbeton &lt;jono@networkcommand.com&gt;, and
-      Myles Conley &lt;miles@tenhand.com&gt; suggested improvements to this
-      document.  Rich Salz &lt;rsalz@datapower.com&gt; contributed
+      Colin Tuckley &lt;colin@tuckley.org&gt;,
+      Bodo Moeller &lt;bmoeller@acm.org&gt;, and
+      Jon Orbeton &lt;jono@networkcommand.com&gt;
+      suggested improvements to this document.
+      Rich Salz &lt;rsalz@datapower.com&gt; contributed
       significantly to this document by XMLifying it and rewording
-      many ambiguous sections.</t>
+      many ambiguous sections. Myles Conley &lt;miles@tenhand.com&gt; 
+      also reworded many ambiguous sections and contributed important 
+      suggestions for improving clarity.</t>
 
   </section>
 
