@@ -6,7 +6,7 @@
    details.
 
    Encrypt message for Cypherpunk remailer chain
-   $Id: chain1.c,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: chain1.c,v 1.2 2001/12/12 19:21:50 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -246,7 +246,7 @@ int t1_encrypt(int type, BUFFER *message, char *chainstr, int latency,
     buf_appends(b, "::\n");
     buf_cat(b, dest);
   } else {
-    buf_appendf(b, "%s: %s\n", ek ? "::\nAnon-To: " : "To: ",
+    buf_appendf(b, "%s: %s\n", ek ? "::\nAnon-To" : "To",
 		remailer[chain[chainlen - 1]].addr);
   }
   buf_nl(b);
