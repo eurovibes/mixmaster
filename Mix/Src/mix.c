@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.11.2.6 2002/10/10 10:43:18 weaselp Exp $ */
+   $Id: mix.c,v 1.11.2.7 2002/10/10 13:18:44 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -19,6 +19,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #ifdef POSIX
+#include <signal.h>
 #include <unistd.h>
 #include <pwd.h>
 #include <sys/utsname.h>
@@ -67,6 +68,7 @@ char POOL[PATHMAX] = DEFAULT_POOL;             /* remailer pool subdirectory */
 char TYPE1LIST[PATHMAX] = DEFAULT_TYPE1LIST;
 char TYPE2REL[PATHMAX] = DEFAULT_TYPE2REL;
 char TYPE2LIST[PATHMAX] = DEFAULT_TYPE2LIST;
+char PIDFILE[PATHMAX] = DEFAULT_PIDFILE;
 
 char PGPREMPUBRING[PATHMAX] = DEFAULT_PGPREMPUBRING;
 char PGPREMPUBASC[PATHMAX] = DEFAULT_PGPREMPUBASC;
@@ -172,6 +174,8 @@ char MAILANON[PATHMAX] = "/dev/null";
 char MAILERROR[PATHMAX] = "/dev/null";
 #endif /* else if not WIN32 */
 char MAILBOUNCE[PATHMAX];
+
+static int terminatedaemon = 0;
 
 #if defined(S_IFDIR) && !defined(S_ISDIR)
 #define S_ISDIR(m) (((m) & S_IFMT) == S_IFDIR)
@@ -399,7 +403,7 @@ int mix_configline(char *line)
 	  read_conf(TYPE2REL) || read_conf(TYPE2LIST) ||
 	  read_conf(PGPREMPUBRING) || read_conf(PGPREMPUBASC) ||
 	  read_conf(PGPREMSECRING) || read_conf(NYMSECRING) ||
-	  read_conf(NYMDB) );
+	  read_conf(NYMDB) || read_conf(PIDFILE) );
 
 }
 
@@ -721,6 +725,59 @@ int mix_daily(void)
   return (0);
 }
 
+/** Handle signals SIGHUP, SIGINT, and SIGTERM
+    This signal handler gets called if the daemon
+    process receives one of SIGHUP, SIGINT, or SIGTERM.
+    It then sets either rereadconfig of terminatedaemon
+    to true depending on the signal received.
+
+    @author	PP
+    @return	nothing
+ */
+#ifdef POSIX
+void sighandler(int signal) {
+  if (signal == SIGINT || signal == SIGTERM)
+    terminatedaemon = 1;
+};
+#endif /* POSIX */
+
+/** Set the signal handler for SIGHUP, SIGINT and SIGTERM
+    This function registers signal handlers so that
+    we can react on signals send by the user in daemon
+    mode. SIGHUP will instruct mixmaster to reload its
+    configuration while SIGINT and SIGTERM will instruct
+    it to shut down. Mixmaster will finish the current
+    pool run before it terminates.
+
+    @param restart  Whether or not system calls should be
+	            restarted. Usually we want this, the
+		    only excetion is the sleep() in the
+		    daemon mail loop.
+    @author         PP
+    @return         -1 if calling sigaction failed, 0 on
+	            no error
+  */
+int setsignalhandler(int restart)
+{
+#ifdef POSIX
+  struct sigaction hdl;
+  int err = 0;
+
+  memset(&hdl, 0, sizeof(hdl));
+  hdl.sa_handler = sighandler;
+  hdl.sa_flags = restart ? SA_RESTART : 0;
+
+  if (sigaction(SIGHUP, &hdl, NULL))
+    err = -1;
+  if (sigaction(SIGINT, &hdl, NULL))
+    err = -1;
+  if (sigaction(SIGTERM, &hdl, NULL))
+    err = -1;
+  return (err);
+#else /* POSIX */
+  return(0);
+#endif /* POSIX */
+}
 
 #ifdef WIN32
 /* Try to detect if we are the service or not...
@@ -759,7 +816,7 @@ void set_nt_exit_event(HANDLE h_svc_exit_event)
 
 int mix_daemon(void)
 {
-  long t;
+  long t, slept;
   t = SENDPOOLTIME;
   if (MAILINTIME < t && (MAILIN != NULL && MAILIN[0] != '\0'))
     t = MAILINTIME;
@@ -767,23 +824,38 @@ int mix_daemon(void)
   if (POP3TIME < t)
     t = POP3TIME;
 #endif /* USE_SOCK */
+  slept = t;
 
+  setsignalhandler(1); /* set signal handlers and restart any interrupted system calls */
   for(;;) {
-    mix_regular(0);
-#ifdef WIN32
+    if (terminatedaemon)
+      break;
+    if (slept >= t) {
+      mix_regular(0);
+      slept = 0;
+    }
+
 #ifdef WIN32SERVICE
     if (hMustTerminate) {
       if (WaitForSingleObject(hMustTerminate, t * 1000) == WAIT_OBJECT_0) {
 	CloseHandle(hMustTerminate);
-	return 0;
+	terminatedaemon = 1;
       }
-    } else
+    }
 #endif /* WIN32SERVICE */
-      Sleep(t * 1000);
+
+    if (!terminatedaemon) {
+      setsignalhandler(0); /* set signal handlers;  don't restart system calls */
+#ifdef WIN32
+      Sleep(t * 1000); /* how to get the real number of seconds slept? */
+      slept = t;
 #else /* end of WIN32 */
-    sleep(t);
+      slept += (t - slept) - sleep(t - slept);
 #endif /* else if not WIN32 */
+      setsignalhandler(1); /* set signal handlers and restart any interrupted system calls */
+    }
   }
+  return (0);
 }
 
 /** error ***************************************************************/

@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.9.2.3 2002/10/09 21:40:56 weaselp Exp $ */
+   $Id: config.h,v 1.9.2.4 2002/10/10 13:18:43 weaselp Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -188,6 +188,7 @@
 #else
 #define DEFAULT_TYPE2LIST "type2.list"
 #endif
+#define DEFAULT_PIDFILE "mix.pid"
 
 #define DEFAULT_PGPREMPUBRING "pubring.pgp"
 #define DEFAULT_PGPREMPUBASC "pubring.asc"
@@ -225,6 +226,7 @@ extern char POOL[];
 extern char TYPE1LIST[];
 extern char TYPE2REL[];
 extern char TYPE2LIST[];
+extern char PIDFILE[];
 
 extern char PGPREMPUBRING[];
 extern char PGPREMPUBASC[];

@@ -6,7 +6,7 @@
    details.
 
    Socket-based mail transport services
-   $Id: mail.c,v 1.7.2.6 2002/10/10 10:18:48 weaselp Exp $ */
+   $Id: mail.c,v 1.7.2.7 2002/10/10 13:18:43 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -161,7 +161,7 @@ int sendmail(BUFFER *message, char *from, BUFFER *address)
 	f = fopen(path, "w");
 	if (f != NULL)
 	  break; /* we managed to open the file */
-	}
+      }
       if (count > 5)
 	break; /* Too many retries - give up */
 #ifdef WIN32

@@ -6,7 +6,7 @@
    details.
 
    Utility functions
-   $Id: util.c,v 1.2.2.3 2002/10/09 20:51:09 weaselp Exp $ */
+   $Id: util.c,v 1.2.2.4 2002/10/10 13:18:45 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -17,6 +17,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #ifdef POSIX
+#include <signal.h>
+#include <errno.h>
 #include <unistd.h>
 #include <sys/file.h>
 #include <termios.h>
@@ -519,6 +521,77 @@ void user_delpass(void)
   if (userpass)
     buf_free(userpass);
   userpass = NULL;
+}
+
+int write_pidfile(char *pidfile)
+{
+  int err = 0;
+#ifdef POSIX
+  FILE *f;
+  char host[LINELEN], myhostname[LINELEN];
+  int pid, mypid;
+  int assigned;
+
+  mypid = getpid();
+  gethostname(myhostname, LINELEN);
+  myhostname[LINELEN-1] = '\0';
+
+  f = mix_openfile(pidfile, "r+");
+  if (f != NULL) {
+    assert(LINELEN > 71);
+    assigned = fscanf(f, "%d %70s", &pid, host);
+    if (assigned == 2) {
+      if (strcmp(host, myhostname) == 0) {
+	if (kill (pid, 0) == -1) {
+	  if (errno == ESRCH) {
+	    fprintf(stderr, "Ignoring stale pid file.\n");
+	    rewind(f);
+	    ftruncate(fileno(f), 0);
+	    fprintf(f, "%d %s\n", mypid, myhostname);
+	  } else {
+	    fprintf(stderr, "Pid file exists and process still running.\n");
+	    err = -1;
+	  }
+	} else {
+	  fprintf(stderr, "Pid file exists and process still running.\n");
+	  err = -1;
+	}
+      } else {
+	/* Pid file was written on another host, fail */
+	fprintf(stderr, "Pid file exists and was created on another host (%s).\n", host);
+	err = -1;
+      }
+    } else {
+      fprintf(stderr, "Pid file exists and and could not be parsed.\n");
+      err = -1;
+    }
+  } else {
+    if (errno == ENOENT) {
+      f = mix_openfile(pidfile, "w+");
+      if (f != NULL) {
+	fprintf(f, "%d %s\n", mypid, myhostname);
+      } else {
+	fprintf(stderr, "Could not open pidfile for writing: %s\n", strerror(errno));
+	err = -1;
+      }
+    } else {
+      fprintf(stderr, "Could not open pidfile for readwrite: %s\n", strerror(errno));
+      err = -1;
+    };
+  }
+  if(f)
+    fclose(f);
+#endif /* POSIX */
+  return (err);
+}
+
+int clear_pidfile(char *pidfile)
+{
+#ifdef POSIX
+  return (unlink(pidfile));
+#else /* end of POSIX */
+  return (0);
+#endif /* else if not POSIX */
 }
 
 /* functions missing on some systems *************************************/
