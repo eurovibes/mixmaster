@@ -6,7 +6,7 @@
    details.
 
    Utility functions
-   $Id: util.c,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: util.c,v 1.2 2001/11/06 23:41:58 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -112,7 +112,7 @@ int mixfile(char *path, const char *name)
 {
   assert(path != NULL && name != NULL);
 
-  if (name[0] == '/' || (isalpha(name[0]) && name[1] == ':') || MIXDIR == NULL)
+  if (name[0] == DIRSEP || (isalpha(name[0]) && name[1] == ':') || MIXDIR == NULL)
     strncpy(path, name, PATHMAX);
   else {
     strncpy(path, MIXDIR, PATHMAX);
@@ -135,6 +135,9 @@ FILE *openpipe(const char *prog)
 
 #ifdef POSIX
   p = popen(prog, "w");
+#endif
+#ifdef _MSC
+  p = _popen(prog, "w");
 #endif
 
   if (p == NULL)
@@ -163,6 +166,8 @@ int closepipe(FILE *p)
 {
 #ifdef POSIX
   return (pclose(p));
+#elif defined(_MSC)
+  return (_pclose(p));
 #else
   return -1;
 #endif
@@ -372,8 +377,8 @@ LOCK *lockfile(char *filename)
   char name[LINELEN];
 
   strcpy(name, "lck");
-  if (strchr(filename, '/'))
-    strcatn(name, strrchr(filename, '/'), LINELEN);
+  if (strchr(filename, DIRSEP))
+    strcatn(name, strrchr(filename, DIRSEP), LINELEN);
   else
     strcatn(name, filename, LINELEN);
   l = malloc(sizeof(LOCK));
@@ -531,11 +536,13 @@ int fileno(FILE *f)
 DIR *opendir(const char *name)
 {
   DIR *dir;
-  LPWIN32_FIND_DATA d;
+  WIN32_FIND_DATA d;
+  char path[PATHMAX];
 
   dir = malloc(sizeof(HANDLE));
 
-  *dir = FindFirstFile("*", d);
+  sprintf(path, "%s%c*", name, DIRSEP);
+  *dir = FindFirstFile(path, &d);
   /* first file found is "." -- can be safely ignored here */
 
   if (*dir == INVALID_HANDLE_VALUE) {
@@ -548,12 +555,12 @@ DIR *opendir(const char *name)
 struct dirent e;
 struct dirent *readdir(DIR *dir)
 {
-  LPWIN32_FIND_DATA d;
+  WIN32_FIND_DATA d;
   int ok;
 
-  ok = FindNextFile(*dir, d);
+  ok = FindNextFile(*dir, &d);
   if (ok) {
-    strncpy(e.d_name, d->cFileName, PATHMAX);
+    strncpy(e.d_name, d.cFileName, PATHMAX);
     return (&e);
   } else
     return (NULL);

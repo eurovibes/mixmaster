@@ -6,7 +6,7 @@
    details.
 
    Socket-based mail transport services
-   $Id: mail.c,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: mail.c,v 1.2 2001/11/06 23:41:58 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -112,7 +112,7 @@ int sendmail(BUFFER *message, char *from, BUFFER *address)
     int i;
 
     for (i = 0; i < 10000; i++) {
-      sprintf(path, "%s/out%i.txt", POOLDIR, i);
+      sprintf(path, "%s%cout%i.txt", POOLDIR, DIRSEP, i);
       f = fopen(path, "r");
       if (f)
 	fclose(f);
@@ -482,6 +482,7 @@ SOCKET pop3_open(char *user, char *host, char *pass, int auth)
     if (!bufleft(line, "+")) {
       errlog(WARNING, "No POP3 service at %s.\n", host);
       closesocket(server);
+      server = INVALID_SOCKET;
     }
   }
   if (server != INVALID_SOCKET) {
@@ -531,6 +532,7 @@ SOCKET pop3_open(char *user, char *host, char *pass, int auth)
     }
     if (!authenticated) {
       pop3_close(server);
+      closesocket(server);
       server = INVALID_SOCKET;
     }
   }
@@ -679,9 +681,12 @@ void pop3get(void)
 	    }
 	  }
 	pop3_close(server);
+	closesocket(server);
       }
     }
  end:
+  if (f != NULL)
+    fclose(f);
   buf_free(line);
   buf_free(msg);
 }

@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: mix.c,v 1.2 2001/11/06 23:41:58 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -40,7 +40,11 @@ char MIXDIR[PATHMAX];
 char POOLDIR[PATHMAX];
 
 /* programs */
+#ifdef WIN32
+char SENDMAIL[LINELEN] = "outfile";
+#else
 char SENDMAIL[LINELEN] = "/usr/lib/sendmail -t";
+#endif
 char SENDANONMAIL[LINELEN];
 char NEWS[LINELEN];
 char TYPE1[LINELEN];
@@ -128,7 +132,7 @@ static int mixdir(char *d, int create)
 
   if (d != MIXDIR)
     strncpy(MIXDIR, d, PATHMAX);
-  if (MIXDIR[strlen(MIXDIR) - 1] == '/')
+  if (MIXDIR[strlen(MIXDIR) - 1] == DIRSEP)
     MIXDIR[strlen(MIXDIR) - 1] = '\0';
   err = stat(MIXDIR, &buf);
   if (err == -1) {
@@ -145,7 +149,7 @@ static int mixdir(char *d, int create)
   } else if (!S_ISDIR(buf.st_mode))
     err = -1;
   if (err == 0)
-    strcatn(MIXDIR, "/", PATHMAX);
+    strcatn(MIXDIR, DIRSEPSTR, PATHMAX);
   return (err);
 }
 
@@ -370,8 +374,8 @@ static int mix_config(void)
 #ifdef POSIX
   if (err == -1 && pw != NULL) {
     strcatn(line, pw->pw_dir, PATHMAX);
-    if (line[strlen(line) - 1] != '/')
-      strcatn(line, "/", PATHMAX);
+    if (line[strlen(line) - 1] != DIRSEP)
+      strcatn(line, DIRSEPSTR, PATHMAX);
     strcatn(line, "Mix", PATHMAX);
     err = mixdir(line, 1);
   }
@@ -384,7 +388,7 @@ static int mix_config(void)
 
   strncpy(POOLDIR, MIXDIR, PATHMAX - 32);
   strcatn(POOLDIR, POOL, PATHMAX);
-  if (POOLDIR[strlen(POOLDIR) - 1] == '/')
+  if (POOLDIR[strlen(POOLDIR) - 1] == DIRSEP)
     POOLDIR[strlen(POOLDIR) - 1] = '\0';
   if (stat(POOLDIR, &buf) != 0)
     if
@@ -624,6 +628,10 @@ int mix_daily(void)
 int mix_daemon(void)
 {
   long t;
+#ifdef WIN32SERVICE
+  long t1;
+  HANDLE hMustTerminate = OpenEvent(EVENT_ALL_ACCESS, FALSE, "mixmaster-stop");
+#endif
   t = SENDPOOLTIME;
 #ifdef USE_SOCK
   if (POP3TIME < t)
@@ -633,7 +641,19 @@ int mix_daemon(void)
   for(;;) {
     mix_regular(0);
 #ifdef WIN32
+#ifdef WIN32SERVICE
+    t1 = t*2;
+    while (t1) {
+      if (hMustTerminate)
+        if (WaitForSingleObject(hMustTerminate, 500) == WAIT_OBJECT_0) {
+          CloseHandle(hMustTerminate);
+          return 0;
+        }
+      t1--;
+    }
+#else
     Sleep(t * 1000);
+#endif
 #else
     sleep(t);
 #endif

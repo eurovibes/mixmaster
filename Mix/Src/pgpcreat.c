@@ -6,7 +6,7 @@
    details.
 
    Create OpenPGP packets
-   $Id: pgpcreat.c,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: pgpcreat.c,v 1.2 2001/11/06 23:41:58 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -472,6 +472,7 @@ int pgp_sign(BUFFER *msg, BUFFER *msg2, BUFFER *sig, BUFFER *userid,
   BUFFER *key, *id, *d, *sub, *enc;
   int algo, err = -1;
   int version = 3, hashalgo;
+  int type1;
 
   id = buf_new();
   d = buf_new();
@@ -506,7 +507,8 @@ int pgp_sign(BUFFER *msg, BUFFER *msg2, BUFFER *sig, BUFFER *userid,
 
   switch (type) {
    case PGP_SIG_CERT:
-     assert (pgp_getpacket(msg, d) == PGP_PUBKEY);
+     type1 = pgp_getpacket(msg, d);
+     assert (type1 == PGP_PUBKEY);
      buf_setc(msg, 0x99);
      buf_appendi(msg, d->length);
      buf_cat(msg, d);
@@ -524,13 +526,15 @@ int pgp_sign(BUFFER *msg, BUFFER *msg2, BUFFER *sig, BUFFER *userid,
      }
      break;
    case PGP_SIG_BINDSUBKEY:
-     assert (pgp_getpacket(msg, d) == PGP_PUBKEY);
+     type1 = pgp_getpacket(msg, d);
+     assert (type1 == PGP_PUBKEY);
      buf_clear(msg);
      buf_appendc(msg, 0x99);
      buf_appendi(msg, d->length);
      buf_cat(msg, d);
      
-     assert (pgp_getpacket(msg2, d) == PGP_PUBSUBKEY);
+     type1 = pgp_getpacket(msg2, d);
+     assert (type1 == PGP_PUBSUBKEY);
      buf_appendc(msg, 0x99);
      buf_appendi(msg, d->length);
      buf_cat(msg, d);
