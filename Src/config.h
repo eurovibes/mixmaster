@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.19 2002/08/29 08:49:59 weaselp Exp $ */
+   $Id: config.h,v 1.20 2002/09/05 01:21:54 weaselp Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -304,6 +304,8 @@ DLLIMPORT extern int VERBOSE;
 extern long SENDPOOLTIME;
 extern long MAILINTIME;
 extern long KEYLIFETIME;
+extern long KEYOVERLAPPERIOD;
+extern long KEYGRACEPERIOD;
 extern int NUMCOPIES;
 extern char CHAIN[];
 extern int DISTANCE;

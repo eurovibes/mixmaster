@@ -6,7 +6,7 @@
    details.
 
    Function prototypes
-   $Id: mix3.h,v 1.14 2002/08/28 09:35:25 weaselp Exp $ */
+   $Id: mix3.h,v 1.15 2002/09/05 01:21:54 weaselp Exp $ */
 
 
 #ifndef _MIX3_H
@@ -33,6 +33,8 @@
 
 #define NOT_IMPLEMENTED {printf("Function not implemented.\n");return -1;}
 #define SECONDSPERDAY 86400
+
+#include <time.h>
 
 /* Dynamically allocated buffers */
 
@@ -122,6 +124,7 @@ int closepipe(FILE *fp);
 int maildirWrite(char *maildir, BUFFER *message, int create);
 int write_pidfile(char *pidfile);
 int clear_pidfile(char *pidfile);
+time_t parse_yearmonthday(char* str);
 
 
 typedef struct {

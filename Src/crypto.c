@@ -6,13 +6,14 @@
    details.
 
    Interface to cryptographic library
-   $Id: crypto.c,v 1.5 2002/08/03 17:08:01 weaselp Exp $ */
+   $Id: crypto.c,v 1.6 2002/09/05 01:21:54 weaselp Exp $ */
 
 
 #include "mix3.h"
 #include "crypto.h"
 #include <assert.h>
 #include <string.h>
+#include <time.h>
 
 #ifdef USE_OPENSSL
 int digestmem_md5(byte *b, int n, BUFFER *md)
@@ -305,6 +306,17 @@ int v2createkey(void)
   if (err == 0) {
     f = mix_openfile(SECRING, "a");
     if (f != NULL) {
+      time_t now = time(NULL);
+      struct tm *gt;
+      gt = gmtime(&now);
+      strftime(line, LINELEN, "%Y-%m-%d", gt);
+      fprintf(f, "%s\nCreated: %s\n", begin_key, line);
+      if (KEYLIFETIME) {
+	now += KEYLIFETIME;
+	gt = gmtime(&now);
+	strftime(line, LINELEN, "%Y-%m-%d", gt);
+	fprintf(f, "Expires: %s\n", line);
+      }
       id_encode(keyid, line);
       buf_appends(ek, PASSPHRASE);
       digest_md5(ek, ek);
@@ -312,7 +324,7 @@ int v2createkey(void)
       buf_crypt(b, ek, iv, ENCRYPT);
       encode(b, 40);
       encode(iv, 0);
-      fprintf(f, "%s\n%s\n0\n%s\n", begin_key, line, iv->data);
+      fprintf(f, "%s\n0\n%s\n", line, iv->data);
       buf_write(b, f);
       fprintf(f, "%s\n\n", end_key);
       fclose(f);

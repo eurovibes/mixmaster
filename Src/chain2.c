@@ -6,7 +6,7 @@
    details.
 
    Encrypt message for Mixmaster chain
-   $Id: chain2.c,v 1.3 2002/08/22 05:18:26 weaselp Exp $ */
+   $Id: chain2.c,v 1.4 2002/09/05 01:21:54 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -24,7 +24,9 @@ int prepare_type2list(BUFFER *out)
 {
   FILE *list;
   char line[LINELEN], name[LINELEN], addr[LINELEN], keyid[LINELEN],
-  version[LINELEN], flags[LINELEN];
+  version[LINELEN], flags[LINELEN], createdstr[LINELEN], expiresstr[LINELEN];
+  int assigned;
+  time_t created, expires;
 
   list = mix_openfile(TYPE2LIST, "r");
   if (list == NULL) {
@@ -37,9 +39,32 @@ int prepare_type2list(BUFFER *out)
       while (fgets(line, sizeof(line), list) != NULL &&
 	     !strleft(line, end_key)) ;
     } else if (strlen(line) > 36 && line[0] != '#') {
-      if (sscanf(line, "%127s %127s %127s %127s %127s", name,
-		 addr, keyid, version, flags) < 4)
+      assigned = sscanf(line, "%127s %127s %127s %127s %127s %127s %127s",
+		 name, addr, keyid, version, flags, createdstr, expiresstr);
+      if (assigned < 4)
 	continue;
+      if (assigned >= 6) {
+	created = parse_yearmonthday(createdstr);
+	if (created == 0 || created == -1) {
+	  errlog(WARNING, "Cannot parse creation date of key %s.\n", keyid);
+	  continue;
+        };
+	if (created > time(NULL)) {
+	  errlog(WARNING, "Key %s created in the future.\n", keyid);
+	  continue;
+        };
+      }
+      if (assigned >= 7) {
+	expires = parse_yearmonthday(expiresstr);
+	if (expires == 0 || expires == -1) {
+	  errlog(WARNING, "Cannot parse expiration date of key %s.\n", keyid);
+	  continue;
+        };
+	if (expires < time(NULL)) {
+	  errlog(WARNING, "Key %s has expired.\n", keyid);
+	  continue;
+        };
+      }
       buf_appends(out, line);
     }
   }
@@ -53,7 +78,9 @@ int mix2_rlist(REMAILER remailer[])
   int n, i, listed = 0;
 
   char line[LINELEN], name[LINELEN], addr[LINELEN], keyid[LINELEN],
-  version[LINELEN], flags[LINELEN];
+  version[LINELEN], flags[LINELEN], createdstr[LINELEN], expiresstr[LINELEN];
+  int assigned;
+  time_t created, expires;
 
   list = mix_openfile(TYPE2LIST, "r");
   if (list == NULL) {
@@ -67,9 +94,32 @@ int mix2_rlist(REMAILER remailer[])
 	     !strleft(line, end_key)) ;
     } else if (strlen(line) > 36 && line[0] != '#') {
       flags[0] = '\0';
-      if (sscanf(line, "%127s %127s %127s %127s %127s", name,
-		 addr, keyid, version, flags) < 4)
+      assigned = sscanf(line, "%127s %127s %127s %127s %127s %127s %127s",
+		 name, addr, keyid, version, flags, createdstr, expiresstr);
+      if (assigned < 4)
 	continue;
+      if (assigned >= 6) {
+	created = parse_yearmonthday(createdstr);
+	if (created == 0 || created == -1) {
+	  errlog(WARNING, "Cannot parse creation date of key %s.\n", keyid);
+	  continue;
+        };
+	if (created > time(NULL)) {
+	  errlog(WARNING, "Key %s created in the future.\n", keyid);
+	  continue;
+        };
+      }
+      if (assigned >= 7) {
+	expires = parse_yearmonthday(expiresstr);
+	if (expires == 0 || expires == -1) {
+	  errlog(WARNING, "Cannot parse expiration date of key %s.\n", keyid);
+	  continue;
+        };
+	if (expires < time(NULL)) {
+	  errlog(WARNING, "Key %s has expired.\n", keyid);
+	  continue;
+        };
+      }
       strncpy(remailer[n].name, name, sizeof(remailer[n].name));
       remailer[n].name[sizeof(remailer[n].name) - 1] = '\0';
       strncpy(remailer[n].addr, addr, sizeof(remailer[n].addr));

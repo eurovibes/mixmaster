@@ -6,7 +6,7 @@
    details.
 
    Utility functions
-   $Id: util.c,v 1.4 2002/08/28 09:35:25 weaselp Exp $ */
+   $Id: util.c,v 1.5 2002/09/05 01:21:54 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -604,6 +604,33 @@ int clear_pidfile(char *pidfile)
   return (0);
 #endif
 }
+
+time_t parse_yearmonthday(char* str)
+{
+  time_t date;
+  int day, month, year;
+
+  if (sscanf( str, "%d-%d-%d", &year, &month, &day) == 3 ) {
+    struct tm timestruct;
+    char *tz;
+    tz = getenv("TZ");
+    setenv("TZ", "", 1);
+    tzset();
+    memset(&timestruct, 0, sizeof(timestruct));
+    timestruct.tm_mday = day;
+    timestruct.tm_mon = month - 1;
+    timestruct.tm_year = year - 1900;
+    date = mktime(&timestruct);
+    if (tz)
+      setenv("TZ", tz, 1);
+    else
+      unsetenv("TZ");
+    tzset();
+    return date;
+  } else
+    return -1;
+}
+
 /* functions missing on some systems *************************************/
 
 #ifdef __RSXNT__

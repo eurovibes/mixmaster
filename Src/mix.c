@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.22 2002/08/29 08:49:59 weaselp Exp $ */
+   $Id: mix.c,v 1.23 2002/09/05 01:21:54 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -131,6 +131,8 @@ long SENDPOOLTIME;	/* frequency for sending pool messages */
 long MAILINTIME;	/* frequency for processing MAILIN mail */
 
 long KEYLIFETIME;
+long KEYOVERLAPPERIOD;
+long KEYGRACEPERIOD;
 
 char ERRLOG[LINELEN];
 char ADDRESS[LINELEN];
@@ -444,7 +446,12 @@ void mix_setdefaults()
 	SENDPOOLTIME  = 60 * 60;	/* frequency for sending pool messages */
 	MAILINTIME    = 5 * 60;		/* frequency for processing MAILIN mail */
 
-	KEYLIFETIME   = 8 * 30 * 24 * 60 * 60;	/* expire time for PGP keys */
+	KEYLIFETIME      = 8 * 30 * 24 * 60 * 60;	/* expire time for keys */
+	KEYOVERLAPPERIOD = 1 * 30 * 24 * 60 * 60;	/* if old keys are only still valid for that time */
+	                                        	/* create new ones with ./mix -K */
+	KEYGRACEPERIOD   = 1 * 30 * 24 * 60 * 60;	/* accept mail to the old one for that long after */
+	                                        	/* it has expired */
+
 
 	strnncpy(ERRLOG      , "");
 	strnncpy(ADDRESS     , "");
@@ -515,6 +522,7 @@ int mix_configline(char *line)
 	  read_conf_i(RELFINAL) || read_conf_t(MAXLAT) ||
 	  read_conf(PGPPUBRING) || read_conf(PGPSECRING) ||
 	  read_conf(PASSPHRASE) || read_conf_t(KEYLIFETIME) ||
+	  read_conf_t(KEYGRACEPERIOD) || read_conf_t(KEYOVERLAPPERIOD) ||
 #ifdef USE_SOCK
 	  read_conf_i(POP3DEL) || read_conf_i(POP3SIZELIMIT) ||
 	  read_conf_t(POP3TIME) ||
