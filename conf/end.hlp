@@ -1,0 +1,28 @@
+Abuse Policy:
+============
+
+I consider the following to be inappropriate use of this anonymous
+remailer, and will take steps to prevent anyone from doing any of the
+following:
+
+- Sending messages intended primarily to be harassing or annoying.
+- Use of the remailer for any illegal purpose.
+
+
+If you do not want to receive anonymous mail, send a message
+containing the line
+
+DESTINATION-BLOCK
+
+to <%RMA>.
+
+To get the remailer's public keys, send mail with Subject: remailer-key
+or see <http://anon.efga.org> to get the keys of all active remailers.
+
+You can get a list of statistics on remailer usage by sending mail to
+<%RMA> with Subject: remailer-stats
+
+For a copy of these instructions, send mail with Subject: remailer-help
+to <%RMA>.
+
+To reach the operator, direct your mail to <%CA>.
