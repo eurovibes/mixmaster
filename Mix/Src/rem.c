@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.24 2002/09/06 00:46:26 rabbi Exp $ */
+   $Id: rem.c,v 1.25 2002/09/06 07:38:08 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -27,6 +27,7 @@
 #include <assert.h>
 
 int blockrequest(BUFFER *message);
+int create_dummy_mailin();
 
 #define REQUESTHELP  100
 #define REQUESTSTATS 101
@@ -164,7 +165,8 @@ hdrend:
       errlog(LOG, "Invalid type 1 message from %b\n", replyto);
       sendinfofile(USAGEFILE, USAGELOG, replyto, NULL);
       logmail(err == -2 ? MAILUSAGE : MAILERROR, message);
-    }
+    } else
+      create_dummy_mailin();
     break;
   case MIXMSG:
     err = t2_decrypt(message);
@@ -172,7 +174,8 @@ hdrend:
       errlog(LOG, "Invalid type 2 message from %b\n", replyto);
       sendinfofile(USAGEFILE, USAGELOG, replyto, NULL);
       logmail(MAILERROR, message);
-    }
+    } else
+      create_dummy_mailin();
     break;
   case BLOCKREQUEST:
     blockrequest(message);
@@ -220,6 +223,16 @@ end:
   buf_free(block);
   buf_free(subject);
   return (err);
+}
+
+int create_dummy_mailin()
+{
+  while (rnd_number(100) < DUMMYMAILINPROBABILITY) {
+    errlog(DEBUGINFO, "Generating dummy message with incoming mail.\n");
+    if (mix_encrypt(MSG_NULL, NULL, NULL, 1, NULL) == -1)
+      return -1;
+  }
+  return 0;
 }
 
 int t2_decrypt(BUFFER *in)

@@ -22,7 +22,6 @@ Mandatory todo items before 3.0 release:
   - for later: do not encrypt to expired keys, do not
     decrypt to keys that expired longer than graceperiod ago
 * saner usage of /dev/[u]random is required
-* create internally-generated dummy messages
 
 
 Items for 3.0 or 3.0.1

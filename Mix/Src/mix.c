@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.23 2002/09/05 01:21:54 weaselp Exp $ */
+   $Id: mix.c,v 1.24 2002/09/06 07:38:08 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -117,6 +117,8 @@ int REPGP;
 
 int POOLSIZE;
 int RATE;
+int DUMMYMAILINPROBABILITY;
+int DUMMYMAILOUTPROBABILITY;
 int MIDDLEMAN;
 int AUTOBLOCK;
 char FORWARDTO[LINELEN];
@@ -124,9 +126,9 @@ int SIZELIMIT;		/* maximal size of remailed messages */
 int INFLATEMAX;		/* maximal size of Inflate: padding */
 int MAXRANDHOPS;
 int BINFILTER;		/* filter binary attachments? */
-int LISTSUPPORTED;		/* list supported remailers in remailer-conf reply? */
-long PACKETEXP;	/* Expiration time for old packets */
-long IDEXP;	/* 0 = no ID log !! */
+int LISTSUPPORTED;	/* list supported remailers in remailer-conf reply? */
+long PACKETEXP;		/* Expiration time for old packets */
+long IDEXP;		/* 0 = no ID log !! */
 long SENDPOOLTIME;	/* frequency for sending pool messages */
 long MAILINTIME;	/* frequency for processing MAILIN mail */
 
@@ -433,7 +435,9 @@ void mix_setdefaults()
 
 	POOLSIZE      = 0;
 	RATE          = 100;
-	MIDDLEMAN     = 0;
+	DUMMYMAILINPROBABILITY = 20;	/* add dummy messages with probability p for each message added to the pool */
+	DUMMYMAILOUTPROBABILITY = 80;	/* add dummy messages with probability p each time we send from the pool */
+	MIDDLEMAN     = 0;		/* for both of the above:  while (rnd < p) { senddummy(); }  */
 	AUTOBLOCK     = 1;
 	strnncpy(FORWARDTO, "*");
 	SIZELIMIT     = 0;		/* maximal size of remailed messages */

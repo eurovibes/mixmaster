@@ -226,7 +226,7 @@
                              and the folder cleared every time Mixmaster
                              processes its pool, or at MAILINTIME intervals
                              (closes: #597043).
-                           When sending type II messages interactivly you may
+                           When sending type II messages interactively you may
                              now choose a middleman remailer as the last hop
                              in your chain (closes: #481244).
                            If a footer.txt file exists its content will be
@@ -257,7 +257,7 @@
                              keyring.
                            Mixmaster now prompts for secret key passphrase when
                              started in daemon mode.
-                           The Mixmaster damon now writes a pid file.
+                           The Mixmaster daemon now writes a pid file.
                            The files created with "SENDMAIL outfile" have
                              different names now to scale beyond 10k files
                              (closes: #587593).
@@ -270,9 +270,15 @@
                              - the remailer refuses to decrypt messages to keys
                                that expired one month ago or earlier.
                              - the remailer automatically creates new mixmaster
-                               keys if the current one are about to expire or
+                               keys if the current ones are about to expire or
                                already are expired.
                              - the latest key from secring.mix is written to
                                key.txt. It used to be the first one. Since
                                creation of new mix key appends the key, this
                                seemed sensible.
+                           In RSA PGP keys, we now set e=0x11.
+                           Mixmaster now deletes error and temporary files
+                             older than PACKETEXP time along with expired 
+                             partial packets.
+                           Mixmaster now generates dummy messages automatically
+                             as mail enters and exits the pool (by PP).
