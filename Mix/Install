@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.13 2002/08/31 09:28:21 rabbi Exp $
+# $Id: Install,v 1.14 2002/08/31 09:45:11 rabbi Exp $
 
 #whereis program default-path
 whereis()
@@ -504,36 +504,47 @@ then
    echo $opensslinfo
    exit 1
   fi
- elif [ "16#$version" = "16#90581f" ]
+ elif [ "$version" = "90581f" ]
  then
   echo "Compiling with OpenSSL 0.9.5a."
   opensslwarn
- elif [ "16#$version" = "16#90601f" ]
+ elif [ "$version" = "90601f" ]
  then
   echo "Compiling with OpenSSL 0.9.6a."
   opensslwarn
- elif [ "16#$version" = "16#90602f" ]
+ elif [ "$version" = "90602f" ]
  then
   echo "Compiling with OpenSSL 0.9.6b."
   opensslwarn
- elif [ "16#$version" = "16#90603f" ]
+ elif [ "$version" = "90603f" ]
  then
   echo "Compiling with OpenSSL 0.9.6c."
   opensslwarn
- elif [ "16#$version" = "16#90604f" ]
+ elif [ "$version" = "90604f" ]
  then
   echo "Compiling with OpenSSL 0.9.6d."
   opensslwarn
- elif [ "16#$version" = "16#90605f" ]
+ elif [ "$version" = "90605f" ]
  then
   echo "Compiling with OpenSSL 0.9.6e."
   opensslwarn
- elif [ "16#$version" = "16#90606f" ]
+ elif [ "$version" = "90606f" ]
  then
   echo "Compiling with OpenSSL 0.9.6f."
- elif [ "16#$version" = "16#90607f" ]
+ elif [ "$version" = "90607f" ]
  then
   echo "Compiling with OpenSSL 0.9.6g."
+ elif [ "$version" = "907001" ]
+ then
+  echo "Compiling with OpenSSL 0.9.7beta1."
+  opensslwarn
+ elif [ "$version" = "907002" ]
+ then
+  echo "Compiling with OpenSSL 0.9.7beta2."
+  opensslwarn
+ elif [ "$version" = "907003" ]
+ then
+  echo "Compiling with OpenSSL 0.9.7beta3."
  elif [ "$version" -lt "920" ]
  then
   echo "This version: ${version} of SSLeay is not supported."
