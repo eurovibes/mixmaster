@@ -237,3 +237,8 @@
                              packets that are dated more than half a year in the
                              future.  That way we get rid of invalid packets
                              introduced by the switch to a binary file.
+                           The stats in remailer-stats replies always had a peak at
+                             00:00 GMT which was wrong. Fixed. (closes: #597688)
+                           Mixmaster in daemon mode reloads configuration on SIGHUP.
+                             Upon receiving SIGTERM or SIGINT it will finish its
+                             current queue run and then exit successfully.
