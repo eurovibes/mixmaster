@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.21 2002/10/18 22:04:13 rabbi Exp $
+# $Id: Install,v 1.22 2002/12/05 04:59:09 weaselp Exp $
 
 #whereis program default-path
 whereis()
@@ -661,10 +661,12 @@ Mixmaster will not create an RSA OpenPGP key (to cut down mail loss)"
    cat <<END >tmptst.c
 #include <openssl/idea.h>
 int main() {
+  void *dummy;
+  dummy = idea_cfb64_encrypt;
   exit(0);
 }
 END
-   if gcc $INC tmptst.c -c -o /dev/null
+   if gcc $INC tmptst.c -o /dev/null
    then
      DEF="$DEF -DUSE_IDEA"
    else
@@ -701,7 +703,7 @@ fi
 
 
 echo "Compiling. Please wait."
-whereis gmake make
+whereis make
 make=$found
 
 if [ "$system" = win32 ]
