@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.2 2001/12/11 20:56:07 rabbi Exp $ */
+   $Id: config.h,v 1.3 2001/12/12 19:06:41 rabbi Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -121,11 +121,6 @@
 #undef USE_SOCK
 #endif
 #endif
-
-#ifdef WIN32
-#define BROKEN_MTA 
-/* Used if the MTA can't delete duplicate addresses */
-#endif 
 
 #if defined(USE_WINGUI) && !defined(WIN32)
 #error "The GUI requires Win32!"
