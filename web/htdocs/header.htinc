@@ -4,14 +4,15 @@
     </div> -->
     <hr>
     <div align="center">
-      <a href="./">Mixmaster Home</a> | 
+      <a href="./">Mixmaster Home</a> |
       <a href="related.shtml">Related Software/Resources</a><br>
       <a href="http://sourceforge.net/project/showfiles.php?group_id=37891">Download</a> |
-      <a href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/mixmaster/Mix/HISTORY?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">Changelog</a> |
-      <a href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/mixmaster/Mix/COPYRIGHT?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">License</a><br>
+      <a href="https://source.mixmaster.anonymizer.com/svn/mixmaster/trunk/Mix/HISTORY">Changelog</a> |
+      <a href="https://source.mixmaster.anonymizer.com/svn/mixmaster/trunk/Mix/COPYRIGHT">License</a><br>
       <a href="http://sourceforge.net/mail/?group_id=37891">Lists</a> |
       <a href="http://mixmaster.sourceforge.net/faq.shtml">FAQ</a> |
-      <a href="http://sourceforge.net/cvs/?group_id=37891">CVS</a> |
+      <a href="https://source.mixmaster.anonymizer.com/svn/mixmaster/trunk/Mix/">Source (via http/svn)</a> |
+      <a href="https://source.mixmaster.anonymizer.com/">Source (via viewcvs)</a> |
       <a href="http://sourceforge.net/tracker/?group_id=37891&amp;atid=423727">Bugs</a> |
       <a href="http://sourceforge.net/tracker/?group_id=37891&amp;atid=423729">Patches</a> |
       <a href="http://sourceforge.net/projects/mixmaster/">Sourceforge</a>

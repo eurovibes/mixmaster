@@ -17,5 +17,5 @@
           <input type="hidden" name="tax" value="0">
           <input type="image" align="right" src="https://www.paypal.com/images/x-click-but04.gif" border="0" name="submit" alt="Please help support Mixmaster development!">
       </form>
-      <!--<a href="mailto:web@palfrader.org">Peter Palfrader</a>--><a href="mailto:mixmaster-devel@lists.sourceforge.net">mixmaster-devel@lists.sourceforge.net</a></address>
+      <!--<a href="mailto:web@palfrader.org">Peter Palfrader</a>--><a href="mailto:mixmaster-devel@lists.sourceforge.net">mixmaster-devel@lists.sourceforge.net</a></address><br>
     <!-- vim:set syntax=html: -->
