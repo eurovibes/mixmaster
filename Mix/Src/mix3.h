@@ -6,7 +6,7 @@
    details.
 
    Function prototypes
-   $Id: mix3.h,v 1.20 2002/12/05 04:23:33 weaselp Exp $ */
+   $Id: mix3.h,v 1.21 2003/02/15 00:29:36 weaselp Exp $ */
 
 
 #ifndef _MIX3_H
@@ -251,6 +251,7 @@ int mix_pool(BUFFER *msg, int type, long latent);
 int pool_packetfile(char *fname, BUFFER *mid, int packetnum);
 void pool_packetexp(void);
 int idexp(void);
+int pgpmaxexp(void);
 void pop3get(void);
 
 typedef struct {  /* added for binary id.log change */

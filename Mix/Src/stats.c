@@ -6,7 +6,7 @@
    details.
 
    Remailer statistics
-   $Id: stats.c,v 1.17 2002/12/08 00:56:23 weaselp Exp $ */
+   $Id: stats.c,v 1.18 2003/02/15 00:29:36 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -387,7 +387,7 @@ void conf_premail(BUFFER *out)
   buf_appends(out, REMAILERADDR);
   buf_appendc(out, '>');
   if (PGP || UNENCRYPTED)
-    buf_appends(out, " cpunk");
+    buf_appends(out, " cpunk max");
   if (MIX)
     buf_appends(out, " mix");
   if (MIDDLEMAN)

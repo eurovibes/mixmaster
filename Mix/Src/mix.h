@@ -803,6 +803,7 @@ int buf_unzip(BUFFER *buf, int type);
 #define _MIXLIB_H
 
 #include <stdio.h>
+#include <time.h>
 #ifdef WIN32
 #include <windows.h>
 #endif /* WIN32 */
@@ -897,4 +898,9 @@ int pgp_decrypt(BUFFER *message, BUFFER *pass, BUFFER *sig, char *pubring,
 int pgp_keygen(int algo, int bits, BUFFER *userid, BUFFER *pass,
 		  char *pubring, char *secring, int remail);
 #endif /* USE_PGP */
+
+
+/* parsedate */
+time_t parsedate(char *p);
+
 #endif /* not _MIXLIB_H */

@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.28 2002/12/08 00:56:23 weaselp Exp $ */
+   $Id: config.h,v 1.29 2003/02/15 00:29:36 weaselp Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -177,6 +177,7 @@
 #define DEFAULT_PUBRING "pubring.mix"
 #define DEFAULT_IDLOG "id.log"
 #define DEFAULT_STATS "stats.log"
+#define DEFAULT_PGPMAXCOUNT "pgpmaxcount.log"
 /* To enable multiple dest.blk files, edit the following line. */
 /* Filenames must be seperated by one space.                   */
 #define DEFAULT_DESTBLOCK "dest.blk rab.blk"
@@ -222,6 +223,7 @@ extern char SECRING[];
 extern char PUBRING[];
 extern char IDLOG[];
 extern char STATS[];
+extern char PGPMAXCOUNT[];
 extern char DESTBLOCK[];
 extern char DESTALLOW[];
 extern char SOURCEBLOCK[];
