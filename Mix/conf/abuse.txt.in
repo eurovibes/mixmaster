@@ -1,0 +1,82 @@
+Thank you for contacting <%CA>. The administrator will
+read your message and take appropriate action as soon as possible.
+
+This system is a remailer which automatically anonymizes and forwards
+e-mail. As such it serves an important purpose for many of its users
+who could not otherwise express themselves freely, or who need to
+discuss sensitive personal topics.
+
+Of course, it is not intended to annoy or harass. In case you have
+received an unwanted message, the remailer offers a method to prevent
+this from happening again.
+
+To block the remailer from sending mail to your address, please send
+a message containing the line
+
+DESTINATION-BLOCK
+
+to <%RMA>. You can simply hit `reply' and send back
+this entire message.
+
+
+Remailer Policy:
+================
+
+The remailer administrator will take steps to prevent use of the
+remailer for any illegal purpose.
+
+The remailer is intended for communicating anonymously, not for
+sending unsolicited commercial mail (UCE or spam). If you ever receive
+UCE from the remailer, the remailer administrator would appreciate a
+complete copy of the message in order to prevent it in the future. UCE
+will typically contain a contact address or telephone number, which is
+sufficient to identify the sender and -- where applicable -- take
+legal action against the originator.
+
+
+More information about blocking addresses:
+==========================================
+
+If you wish to block other addresses you can do so by including one
+line of the type "destination-block user@domain" for each address.
+
+As a postmaster, you can block anonymous mail to your entire domain.
+To do so, please use the line "destination-block @your-domain.com".
+
+If you do not want to read anonymous messages in mailing lists or
+newsgroups, please consult the manual of your mail reading program.
+The software will allow you to use `filters' or `kill files' to
+avoid being bothered by messages you do not want to read.
+
+
+Purpose of Anonymous Remailers:
+===============================
+
+It is easy to store electronic mail for a long time and to search huge
+amounts of data for information about people when they do not expect
+it. Thus, the information society may pose a hitherto unknown threat
+to everybody's privacy. In totalitarian regimes sending critical
+messages may even cause a threat to the senders' lives if their
+identity ever becomes known.
+
+For that reason, anonymous remailers have been developed. Remailers
+use cryptographic methods to conceal the origin of messages. Each
+message is sent through a network of anonymizing servers so that not
+even the remailer administrators have any information about the origin
+of the message. It is impossible for us to determine the original
+sender of any message. Please don't ask, because we don't know either.
+
+More information is available from the following URLs:
+
+Technical information about untraceability:
+  http://www.obscura.com/~loki/remailer/remailer-essay.html
+  http://world.std.com/~franl/crypto/chaum-acm-1981.html
+
+Legal information about online anonymity:
+  http://www.epic.org/free_speech/mcintyre.html
+  http://www.law.miami.edu/~froomkin/articles/ocean.htm
+
+Please do not hesitate to contact the remailer administrator again
+whenever a problem occurs or you have any questions.
+
+  -- %CA

@@ -1,0 +1,20 @@
+You can use Mixmaster, a program specially designed to send anonymous
+messages in a very secure way. The software is freely available from
+<ftp://mixmaster.anonymizer.com/>. If you use Windows, you can use the
+remailer client software Jack B. Nymle from
+<http://www.bigfoot.com/~potatoware/jbn/>.
+
+Mixmaster uses a message format based on RSA and Triple-DES
+encryption. Messages are multiply encrypted and formatted so as to
+appear identical to other Mixmaster messages. Message are sent through
+chains of remailers. Each remailer removes one layer of encryption,
+and forwards the message. When the final remailer delivers the
+decrypted message to the recipient, it is impossible to find out where
+it came from, even if part of the remailers in the chain are
+dishonest. At the time of this writing, Mixmaster remailers are
+operated independently be individuals in twelve countries in America,
+Asia, Australia and Europe.
+
+                                *
+
+
