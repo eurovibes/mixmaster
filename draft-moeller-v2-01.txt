@@ -1,5 +1,5 @@
 Internet-Draft                                              Ulf Moeller
-Expires: August 31, 2004
+Expires: August 31, 2004                                  Secardeo GmbH
                                                          Lance Cottrell
                                                         Anonymizer Inc.
                                                         Peter Palfrader
@@ -759,8 +759,12 @@ Specifications, Version 2.0", RFC 2437, October 1998.
 
 
  Ulf Moeller
+ Secardeo GmbH
+ Betastr. 9a
+ 85774 Unterfoehring
+ Germany
 
- EMail: mail@ulfm.de
+ EMail: ulf.moeller@secardeo.com
 
 
  Lance Cottrell
