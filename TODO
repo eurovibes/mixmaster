@@ -29,7 +29,6 @@ Further wishlist:
 * investigate whether and how it is feasible to
   add expiration/creation dates to mixmaster keys
   if feasible, implement setting and checking
-* Add FOOTER setting (490117)
 * Automatic key handling:
   + create new PGP keys automatically if
     current keys are about to expire 
