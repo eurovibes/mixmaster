@@ -11,6 +11,8 @@ Mandatory todo items before 3.0 release:
 
 Items for 3.0 or 3.0.1
 
+* create internally-generated dummy messages
+* support a list of remailers not to be selected as *.
 * allow for verification of clearsigned OpenPGP messages
 * AES support -- requires OpenSSL 0.9.7
 * further mpgp testing of AES/MDC packet support
@@ -38,3 +40,4 @@ Further wishlist:
     - implement remailer-key signing?
     - if yes, which key?
 * make mpgp friendlier
+* store nym public keys locally
