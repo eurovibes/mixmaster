@@ -411,3 +411,6 @@
                             messages so that they will get processed with the
                             next pool run.
                           Hopefully fix a bug with pool stats.
+
+2003-06-27      3.0a7     Two minor fixes for bugs introduced in 3.0a6 and
+                            3.0a4.
