@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.9 2001/12/17 00:32:42 rabbi Exp $ */
+   $Id: rem.c,v 1.10 2001/12/17 01:46:35 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -417,6 +417,12 @@ int blockrequest(BUFFER *message)
       };
       if (bufieq(addr, REMAILERADDR)) {
 	errlog(LOG, "Ignoring blocking request for %b from %b.\n", addr, from);
+	return (2);
+      }
+      if (bufleft(addr, "@")) {
+	errlog(LOG, "Ignoring blocking request: %b from %b: "
+	  "We do not block entire domains.\n",
+	  addr, from);
 	return (2);
       }
       if (bufleft(addr, "/")) {
