@@ -71,7 +71,7 @@
       transfer protocol designed to protect electronic mail against traffic
       analysis.</t>
 
-    <t>Mixmaster is based on Dr. David Chaum's mix-net protocol. A mix 
+    <t>Mixmaster is based on Dr. David Chaum's mix-net concept. A mix 
       (remailer) is a service that forwards messages, using public key
       cryptography to hide
       the correlation between its inputs and outputs. Sending messages
@@ -241,6 +241,9 @@
           <t>Select "count" messages from the pool at random and send
             them.</t>
         </list>
+        In its default configuration, Mixmaster has a mixing interval of
+        15 minutes, a minimum pool size of 45 messages, and permits a
+        maximum of 65% of the pool to be sent in one round.
       </t>
 
       <!-- XXX: give the default Mix 3.0 parameters here for reference?
