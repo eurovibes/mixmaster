@@ -6,7 +6,7 @@
    details.
 
    Read OpenPGP packets
-   $Id: pgpget.c,v 1.4 2002/07/22 17:54:48 rabbi Exp $ */
+   $Id: pgpget.c,v 1.5 2002/07/26 23:29:45 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -46,6 +46,7 @@ int pgp_getmsg(BUFFER *in, BUFFER *key, BUFFER *sig, char *pubring,
 	buf_move(out, p);
       break;
     case PGP_ENCRYPTED:
+    case PGP_ENCRYPTEDMDC:
       if (!key) {
 	err = -1;
 	break;
@@ -55,7 +56,7 @@ int pgp_getmsg(BUFFER *in, BUFFER *key, BUFFER *sig, char *pubring,
 	digest_md5(key, key);
       }
       if (key->length > 0)
-	err = pgp_getsymmetric(p, key, algo);
+	err = pgp_getsymmetric(p, key, algo, type==PGP_ENCRYPTEDMDC);
       else
 	err = -1;
       if (err == 0)
@@ -337,18 +338,26 @@ void pgp_verify(BUFFER *msg, BUFFER *detached, pgpsig *sig)
 }
 
 #ifdef USE_IDEA
-static int pgp_ideadecrypt(BUFFER *in, BUFFER *out, BUFFER *key)
+static int pgp_ideadecrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
 {
   int err = 0;
   byte iv[8];
   byte hdr[10];
   int i, n;
   IDEA_KEY_SCHEDULE ks;
+  SHA_CTX c;
+  char md[20]; /* we could make hdr 20 bytes long and reuse it for md */
 
-  if (key->length != 16 || in->length <= 10)
+  if (key->length != 16 || in->length <= (mdc?(1+10+22):10))
     return (-1);
 
-  buf_prepare(out, in->length - 10);
+  if (mdc) {
+    mdc = 1;
+    if (in->data[0] != 1)
+      return (-1);
+  }
+
+  buf_prepare(out, in->length - 10 - mdc);
 
   for (i = 0; i < 8; i++)
     iv[i] = 0;
@@ -356,22 +365,40 @@ static int pgp_ideadecrypt(BUFFER *in, BUFFER *out, BUFFER *key)
   idea_set_encrypt_key(key->data, &ks);
 
   n = 0;
-  idea_cfb64_encrypt(in->data, hdr, 10, &ks, iv, &n, IDEA_DECRYPT);
+  idea_cfb64_encrypt(in->data + mdc, hdr, 10, &ks, iv, &n, IDEA_DECRYPT);
   if (n != 2 || hdr[8] != hdr[6] || hdr[9] != hdr[7]) {
     err = -1;
     goto end;
   }
-  iv[6] = iv[0], iv[7] = iv[1];
-  memcpy(iv, in->data + 2, 6);
-  n = 0;
-  idea_cfb64_encrypt(in->data + 10, out->data, in->length - 10, &ks, iv, &n,
+  if (mdc) {
+    SHA1_Init(&c);
+    SHA1_Update(&c, hdr, 10);
+  } else {
+    iv[6] = iv[0], iv[7] = iv[1];
+    memcpy(iv, in->data + 2, 6);
+    n = 0;
+  }
+  idea_cfb64_encrypt(in->data + 10 + mdc, out->data, in->length - 10 - mdc, &ks, iv, &n,
 		     IDEA_DECRYPT);
+  if (mdc) {
+    if (out->length > 22) {
+      out->length -= 22;
+      if (out->data[out->length] == 0xD3 && out->data[out->length + 1] == 0x14) {
+        SHA1_Update(&c, out->data, out->length + 2);
+        SHA1_Final(md, &c);
+        if (memcmp(out->data + out->length + 2, md, 20))
+          err = -1;
+      } else
+        err = -1;
+    } else
+      err = -1;
+  }
 end:
   return (err);
 }
 #endif
 
-static int pgp_3desdecrypt(BUFFER *in, BUFFER *out, BUFFER *key)
+static int pgp_3desdecrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
 {
   int err = 0;
   des_cblock iv;
@@ -380,11 +407,19 @@ static int pgp_3desdecrypt(BUFFER *in, BUFFER *out, BUFFER *key)
   des_key_schedule ks1;
   des_key_schedule ks2;
   des_key_schedule ks3;
+  SHA_CTX c;
+  char md[20]; /* we could make hdr 20 bytes long and reuse it for md */
 
-  if (key->length != 24 || in->length <= 10)
+  if (key->length != 24 || in->length <= (mdc?(1+10+22):10))
     return (-1);
 
-  buf_prepare(out, in->length - 10);
+  if (mdc) {
+    mdc = 1;
+    if (in->data[0] != 1)
+      return (-1);
+  }
+
+  buf_prepare(out, in->length - 10 - mdc);
 
   for (i = 0; i < 8; i++)
     iv[i] = 0;
@@ -394,33 +429,59 @@ static int pgp_3desdecrypt(BUFFER *in, BUFFER *out, BUFFER *key)
   des_set_key((const_des_cblock *) (key->data+ 16), ks3);
 
   n = 0;
-  des_ede3_cfb64_encrypt(in->data, hdr, 10, ks1, ks2, ks3, &iv, &n, DECRYPT);
+  des_ede3_cfb64_encrypt(in->data + mdc, hdr, 10, ks1, ks2, ks3, &iv, &n, DECRYPT);
   if (n != 2 || hdr[8] != hdr[6] || hdr[9] != hdr[7]) {
     err = -1;
     goto end;
   }
-  iv[6] = iv[0], iv[7] = iv[1];
-  memcpy(iv, in->data + 2, 6);
-  n = 0;
-  des_ede3_cfb64_encrypt(in->data + 10, out->data, in->length - 10, ks1,
+  if (mdc) {
+    SHA1_Init(&c);
+    SHA1_Update(&c, hdr, 10);
+  } else {
+    iv[6] = iv[0], iv[7] = iv[1];
+    memcpy(iv, in->data + 2, 6);
+    n = 0;
+  }
+  des_ede3_cfb64_encrypt(in->data + 10 + mdc, out->data, in->length - 10 + mdc, ks1,
 			 ks2, ks3, &iv, &n, DECRYPT);
+  if (mdc) {
+    if (out->length > 22) {
+      out->length -= 22;
+      if (out->data[out->length] == 0xD3 && out->data[out->length + 1] == 0x14) {
+        SHA1_Update(&c, out->data, out->length + 2);
+        SHA1_Final(md, &c);
+        if (memcmp(out->data + out->length + 2, md, 20))
+          err = -1;
+      } else
+        err = -1;
+    } else
+      err = -1;
+  }
 end:
   return (err);
 }
 
-static int pgp_castdecrypt(BUFFER *in, BUFFER *out, BUFFER *key)
+static int pgp_castdecrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
 {
   int err = 0;
   byte iv[8];
   byte hdr[10];
   int i, n;
+  SHA_CTX c;
+  char md[20]; /* we could make hdr 20 bytes long and reuse it for md */
 
   CAST_KEY ks;
 
-  if (key->length != 16 || in->length <= 10)
+  if (key->length != 16 || in->length <= (mdc?(1+10+22):10))
     return (-1);
 
-  buf_prepare(out, in->length - 10);
+  if (mdc) {
+    mdc = 1;
+    if (in->data[0] != 1)
+      return (-1);
+  }
+
+  buf_prepare(out, in->length - 10 - mdc);
 
   for (i = 0; i < 8; i++)
     iv[i] = 0;
@@ -428,33 +489,59 @@ static int pgp_castdecrypt(BUFFER *in, BUFFER *out, BUFFER *key)
   CAST_set_key(&ks, 16, key->data);
 
   n = 0;
-  CAST_cfb64_encrypt(in->data, hdr, 10, &ks, iv, &n, CAST_DECRYPT);
+  CAST_cfb64_encrypt(in->data + mdc, hdr, 10, &ks, iv, &n, CAST_DECRYPT);
   if (n != 2 || hdr[8] != hdr[6] || hdr[9] != hdr[7]) {
     err = -1;
     goto end;
   }
-  iv[6] = iv[0], iv[7] = iv[1];
-  memcpy(iv, in->data + 2, 6);
-  n = 0;
-  CAST_cfb64_encrypt(in->data + 10, out->data, in->length - 10, &ks,
+  if (mdc) {
+    SHA1_Init(&c);
+    SHA1_Update(&c, hdr, 10);
+  } else {
+    iv[6] = iv[0], iv[7] = iv[1];
+    memcpy(iv, in->data + 2, 6);
+    n = 0;
+  }
+  CAST_cfb64_encrypt(in->data + 10 + mdc, out->data, in->length - 10 - mdc, &ks,
 		     iv, &n, CAST_DECRYPT);
+  if (mdc) {
+    if (out->length > 22) {
+      out->length -= 22;
+      if (out->data[out->length] == 0xD3 && out->data[out->length + 1] == 0x14) {
+        SHA1_Update(&c, out->data, out->length + 2);
+        SHA1_Final(md, &c);
+        if (memcmp(out->data + out->length + 2, md, 20))
+          err = -1;
+      } else
+        err = -1;
+    } else
+      err = -1;
+  }
 end:
   return (err);
 }
 
-static int pgp_bfdecrypt(BUFFER *in, BUFFER *out, BUFFER *key)
+static int pgp_bfdecrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
 {
   int err = 0;
   byte iv[8];
   byte hdr[10];
   int i, n;
+  SHA_CTX c;
+  char md[20]; /* we could make hdr 20 bytes long and reuse it for md */
 
   BF_KEY ks;
 
-  if (key->length != 16 || in->length <= 10)
+  if (key->length != 16 || in->length <= (mdc?(1+10+22):10))
     return (-1);
 
-  buf_prepare(out, in->length - 10);
+  if (mdc) {
+    mdc = 1;
+    if (in->data[0] != 1)
+      return (-1);
+  }
+
+  buf_prepare(out, in->length - 10 - mdc);
 
   for (i = 0; i < 8; i++)
     iv[i] = 0;
@@ -462,34 +549,60 @@ static int pgp_bfdecrypt(BUFFER *in, BUFFER *out, BUFFER *key)
   BF_set_key(&ks, 16, key->data);
 
   n = 0;
-  BF_cfb64_encrypt(in->data, hdr, 10, &ks, iv, &n, BF_DECRYPT);
+  BF_cfb64_encrypt(in->data + mdc, hdr, 10, &ks, iv, &n, BF_DECRYPT);
   if (n != 2 || hdr[8] != hdr[6] || hdr[9] != hdr[7]) {
     err = -1;
     goto end;
   }
-  iv[6] = iv[0], iv[7] = iv[1];
-  memcpy(iv, in->data + 2, 6);
-  n = 0;
-  BF_cfb64_encrypt(in->data + 10, out->data, in->length - 10, &ks,
+  if (mdc) {
+    SHA1_Init(&c);
+    SHA1_Update(&c, hdr, 10);
+  } else {
+    iv[6] = iv[0], iv[7] = iv[1];
+    memcpy(iv, in->data + 2, 6);
+    n = 0;
+  }
+  BF_cfb64_encrypt(in->data + 10 + mdc, out->data, in->length - 10 - mdc, &ks,
 		   iv, &n, BF_DECRYPT);
+  if (mdc) {
+    if (out->length > 22) {
+      out->length -= 22;
+      if (out->data[out->length] == 0xD3 && out->data[out->length + 1] == 0x14) {
+        SHA1_Update(&c, out->data, out->length + 2);
+        SHA1_Final(md, &c);
+        if (memcmp(out->data + out->length + 2, md, 20))
+          err = -1;
+      } else
+        err = -1;
+    } else
+      err = -1;
+  }
 end:
   return (err);
 }
 
 #ifdef USE_AES
-static int pgp_aesdecrypt(BUFFER *in, BUFFER *out, BUFFER *key)
+static int pgp_aesdecrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
 {
   int err = 0;
   byte iv[16];
   byte hdr[18];
   int i, n;
+  SHA_CTX c;
+  char md[20]; /* we could make hdr 20 bytes long and reuse it for md */
 
   AES_KEY ks;
 
-  if ((key->length != 16 && key->length != 24 && key->length != 32) || in->length <= 18)
+  if ((key->length != 16 && key->length != 24 && key->length != 32) || in->length <= (mdc?(1+18+22):18))
     return (-1);
 
-  buf_prepare(out, in->length - 18);
+  if (mdc) {
+    mdc = 1;
+    if (in->data[0] != 1)
+      return (-1);
+  }
+
+  buf_prepare(out, in->length - 18 - mdc);
 
   for (i = 0; i < 16; i++)
     iv[i] = 0;
@@ -497,22 +610,40 @@ static int pgp_aesdecrypt(BUFFER *in, BUFFER *out, BUFFER *key)
   AES_set_encrypt_key(key->data, key->length<<3, &ks);
 
   n = 0;
-  AES_cfb128_encrypt(in->data, hdr, 18, &ks, iv, &n, AES_DECRYPT);
+  AES_cfb128_encrypt(in->data + mdc, hdr, 18, &ks, iv, &n, AES_DECRYPT);
   if (n != 2 || hdr[16] != hdr[14] || hdr[17] != hdr[15]) {
     err = -1;
     goto end;
   }
-  iv[14] = iv[0], iv[15] = iv[1];
-  memcpy(iv, in->data + 2, 14);
-  n = 0;
-  AES_cfb128_encrypt(in->data + 18, out->data, in->length - 18, &ks,
+  if (mdc) {
+    SHA1_Init(&c);
+    SHA1_Update(&c, hdr, 18);
+  } else {
+    iv[14] = iv[0], iv[15] = iv[1];
+    memcpy(iv, in->data + 2, 14);
+    n = 0;
+  }
+  AES_cfb128_encrypt(in->data + 18 + mdc, out->data, in->length - 18 - mdc, &ks,
 		   iv, &n, AES_DECRYPT);
+  if (mdc) {
+    if (out->length > 22) {
+      out->length -= 22;
+      if (out->data[out->length] == 0xD3 && out->data[out->length + 1] == 0x14) {
+        SHA1_Update(&c, out->data, out->length + 2);
+        SHA1_Final(md, &c);
+        if (memcmp(out->data + out->length + 2, md, 20))
+          err = -1;
+      } else
+        err = -1;
+    } else
+      err = -1;
+  }
 end:
   return (err);
 }
 #endif
 
-int pgp_getsymmetric(BUFFER *in, BUFFER *key, int algo)
+int pgp_getsymmetric(BUFFER *in, BUFFER *key, int algo, int mdc)
 {
   int err = -1;
   BUFFER *out;
@@ -524,22 +655,22 @@ int pgp_getsymmetric(BUFFER *in, BUFFER *key, int algo)
    case PGP_K_AES128:
    case PGP_K_AES192:
    case PGP_K_AES256:
-    err = pgp_aesdecrypt(in, out, key);
+    err = pgp_aesdecrypt(in, out, key, mdc);
     break;
 #endif
 #ifdef USE_IDEA
    case PGP_K_IDEA:
-    err = pgp_ideadecrypt(in, out, key);
+    err = pgp_ideadecrypt(in, out, key, mdc);
     break;
 #endif
    case PGP_K_3DES:
-    err = pgp_3desdecrypt(in, out, key);
+    err = pgp_3desdecrypt(in, out, key, mdc);
     break;
    case PGP_K_CAST5:
-    err = pgp_castdecrypt(in, out, key);
+    err = pgp_castdecrypt(in, out, key, mdc);
     break;
   case PGP_K_BF:
-    err = pgp_bfdecrypt(in, out, key);
+    err = pgp_bfdecrypt(in, out, key, mdc);
     break;
   }
 
