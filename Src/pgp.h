@@ -6,7 +6,7 @@
    details.
 
    OpenPGP messages
-   $Id: pgp.h,v 1.7 2002/08/26 19:17:31 weaselp Exp $ */
+   $Id: pgp.h,v 1.8 2002/08/29 08:50:00 weaselp Exp $ */
 
 
 #ifdef USE_PGP
@@ -64,6 +64,7 @@
 
 /* signature subpacket types */
 #define PGP_SUB_CREATIME 2
+#define PGP_SUB_KEYEXPIRETIME 9
 #define PGP_SUB_PSYMMETRIC 11
 #define PGP_SUB_ISSUER 16
 #define PGP_SUB_FEATURES 30

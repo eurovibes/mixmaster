@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.21 2002/08/28 16:29:28 weaselp Exp $ */
+   $Id: mix.c,v 1.22 2002/08/29 08:49:59 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -129,6 +129,8 @@ long PACKETEXP;	/* Expiration time for old packets */
 long IDEXP;	/* 0 = no ID log !! */
 long SENDPOOLTIME;	/* frequency for sending pool messages */
 long MAILINTIME;	/* frequency for processing MAILIN mail */
+
+long KEYLIFETIME;
 
 char ERRLOG[LINELEN];
 char ADDRESS[LINELEN];
@@ -311,13 +313,25 @@ static int readtconfline(char *line, char *name, int namelen, long *var)
       while (isspace(*line))
 	line++;
       switch (tolower(*line)) {
-      case 'd':
+      case 'y': /* years */
+	l += 365 * 24 * 60 * 60 * n;
+	break;
+      case 'b': /* months */
+	l += 30 * 24 * 60 * 60 * n;
+	break;
+      case 'w': /* weeks */
+	l += 7 * 24 * 60 * 60 * n;
+	break;
+      case 'd': /* days */
 	l += 24 * 60 * 60 * n;
 	break;
-      case 'm':
+      case 's': /* seconds */
+	l += n;
+	break;
+      case 'm': /* minutes */
 	l += 60 * n;
 	break;
-      case 'h':
+      case 'h': /* hours - default */
       default:
 	l += 60 * 60 * n;
 	break;
@@ -430,6 +444,8 @@ void mix_setdefaults()
 	SENDPOOLTIME  = 60 * 60;	/* frequency for sending pool messages */
 	MAILINTIME    = 5 * 60;		/* frequency for processing MAILIN mail */
 
+	KEYLIFETIME   = 8 * 30 * 24 * 60 * 60;	/* expire time for PGP keys */
+
 	strnncpy(ERRLOG      , "");
 	strnncpy(ADDRESS     , "");
 	strnncpy(NAME        , "");
@@ -498,7 +514,7 @@ int mix_configline(char *line)
 	  read_conf_i(DISTANCE) || read_conf_i(MINREL) ||
 	  read_conf_i(RELFINAL) || read_conf_t(MAXLAT) ||
 	  read_conf(PGPPUBRING) || read_conf(PGPSECRING) ||
-	  read_conf(PASSPHRASE) ||
+	  read_conf(PASSPHRASE) || read_conf_t(KEYLIFETIME) ||
 #ifdef USE_SOCK
 	  read_conf_i(POP3DEL) || read_conf_i(POP3SIZELIMIT) ||
 	  read_conf_t(POP3TIME) ||
