@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.21 2002/09/06 07:38:08 rabbi Exp $ */
+   $Id: config.h,v 1.22 2002/09/06 21:04:15 rabbi Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -290,8 +290,8 @@ extern char ENVFROM[];
 extern char SHORTNAME[];
 extern int POOLSIZE;
 extern int RATE;
-extern int DUMMYMAILINPROBABILITY;
-extern int DUMMYMAILOUTPROBABILITY;
+extern int INDUMMYP;
+extern int OUTDUMMYP;
 extern int MIDDLEMAN;
 extern int AUTOBLOCK;
 extern char FORWARDTO[];

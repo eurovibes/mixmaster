@@ -6,7 +6,7 @@
    details.
 
    Send messages from pool
-   $Id: pool.c,v 1.15 2002/09/06 07:38:08 rabbi Exp $ */
+   $Id: pool.c,v 1.16 2002/09/06 21:04:16 rabbi Exp $ */
 
 #include "mix3.h"
 #include <stdlib.h>
@@ -408,7 +408,7 @@ int process_mailin()
 
 int create_dummy_mailout()
 {
-  while (rnd_number(100) < DUMMYMAILOUTPROBABILITY) {
+  while (rnd_number(100) < OUTDUMMYP) {
     errlog(DEBUGINFO, "Generating dummy message with outgoing mail.\n");
     if (mix_encrypt(MSG_NULL, NULL, NULL, 1, NULL) == -1)
       return -1;

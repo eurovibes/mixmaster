@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.25 2002/09/06 07:38:08 rabbi Exp $ */
+   $Id: rem.c,v 1.26 2002/09/06 21:04:16 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -227,7 +227,7 @@ end:
 
 int create_dummy_mailin()
 {
-  while (rnd_number(100) < DUMMYMAILINPROBABILITY) {
+  while (rnd_number(100) < INDUMMYP) {
     errlog(DEBUGINFO, "Generating dummy message with incoming mail.\n");
     if (mix_encrypt(MSG_NULL, NULL, NULL, 1, NULL) == -1)
       return -1;

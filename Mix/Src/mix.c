@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.25 2002/09/06 11:34:10 weaselp Exp $ */
+   $Id: mix.c,v 1.26 2002/09/06 21:04:15 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -117,8 +117,10 @@ int REPGP;
 
 int POOLSIZE;
 int RATE;
-int DUMMYMAILINPROBABILITY;
-int DUMMYMAILOUTPROBABILITY;
+int INDUMMYP;
+int OUTDUMMYP;
+int INDUMMYMAXP;
+int OUTDUMMYMAXP;
 int MIDDLEMAN;
 int AUTOBLOCK;
 char FORWARDTO[LINELEN];
@@ -435,9 +437,11 @@ void mix_setdefaults()
 
 	POOLSIZE      = 0;
 	RATE          = 100;
-	DUMMYMAILINPROBABILITY = 20;	/* add dummy messages with probability p for each message added to the pool */
-	DUMMYMAILOUTPROBABILITY = 80;	/* add dummy messages with probability p each time we send from the pool */
-	MIDDLEMAN     = 0;		/* for both of the above:  while (rnd < p) { senddummy(); }  */
+	INDUMMYP      = 3;	/* add dummy messages with probability p for each message added to the pool */
+	OUTDUMMYP     = 10;	/* add dummy messages with probability p each time we send from the pool */
+	INDUMMYMAXP   = 84;	/* for both of the above:  while (rnd < p) { senddummy(); }  */
+        OUTDUMMYMAXP  = 96;     /* set max INDUMMYP and OUTDUMMYP such that 24 and 5.25 dummy messages will */
+	MIDDLEMAN     = 0;      /* be generated on average. More than this is insane. */
 	AUTOBLOCK     = 1;
 	strnncpy(FORWARDTO, "*");
 	SIZELIMIT     = 0;		/* maximal size of remailed messages */
@@ -514,7 +518,8 @@ int mix_configline(char *line)
 	  read_conf(ORGANIZATION) || read_conf(MID) ||
 	  read_conf(TYPE1) || read_conf_i(POOLSIZE) ||
 	  read_conf_i(RATE) || read_conf_i(MIDDLEMAN) ||
-	  read_conf_i(DUMMYMAILINPROBABILITY) || read_conf_i(DUMMYMAILOUTPROBABILITY) ||
+	  read_conf_i(INDUMMYP) || 
+	  read_conf_i(OUTDUMMYP) ||
 	  read_conf_i(AUTOBLOCK) || read_conf(FORWARDTO) ||
 	  read_conf_i(SIZELIMIT) || read_conf_i(INFLATEMAX) ||
 	  read_conf_i(MAXRANDHOPS) || read_conf_i(BINFILTER) ||
@@ -649,6 +654,10 @@ static int mix_config(void)
     IDEXP = 5 * SECONDSPERDAY;
   if (MAXRANDHOPS > 20)
     MAXRANDHOPS = 20;
+  if (INDUMMYP > INDUMMYMAXP)
+    INDUMMYP = INDUMMYMAXP;
+  if (OUTDUMMYP > OUTDUMMYMAXP)
+    OUTDUMMYP = OUTDUMMYMAXP;
 
   if (strchr(SHORTNAME, '.'))
     *strchr(SHORTNAME, '.') = '\0';
