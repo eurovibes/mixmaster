@@ -6,7 +6,7 @@
    details.
 
    OpenPGP data
-   $Id: pgpdata.c,v 1.11 2002/08/16 19:03:37 rabbi Exp $ */
+   $Id: pgpdata.c,v 1.12 2002/08/26 19:17:31 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -689,8 +689,12 @@ int pgp_makepkpacket(int type, BUFFER *p, BUFFER *outtxt, BUFFER *out,
      default:
       algoid = '?';
     }
-    buf_appendf(outtxt, "%s %4d%c/%02X%02X%02X%02X ", type == PGP_PUBSUBKEY ?
-		"sub" : "pub", len, algoid,
+    buf_appendf(outtxt, "%s %4d%c/%02X%02X%02X%02X ",
+		type == PGP_PUBSUBKEY ?  "sub" : 
+		type == PGP_PUBKEY ? "pub" :
+		type == PGP_SECKEY ? "sec" : 
+		type == PGP_SECSUBKEY ? "ssb" :
+		"???", len, algoid,
 		id->data[4], id->data[5], id->data[6], id->data[7]);
     tc = localtime(created);
     strftime(txt, LINELEN, "%Y/%m/%d ", tc);
@@ -757,6 +761,56 @@ end:
   buf_free(subkey);
   buf_free(sig);
   buf_free(p);
+  buf_free(tmp);
+  return (err);
+}
+
+int pgp_makeseckey(BUFFER *keypacket, BUFFER *outtxt,
+		   BUFFER *pass, int keyalgo)
+{
+  BUFFER *p, *pubkey, *seckey, *subkey, *sig, *tmp, *dummy;
+  int type, thisalgo, err = -1;
+  time_t created;
+
+  p = buf_new();
+  seckey = buf_new();
+  pubkey = buf_new();
+  subkey = buf_new();
+  sig = buf_new();
+  tmp = buf_new();
+  dummy = buf_new();
+
+  buf_set(seckey, keypacket);
+  type = pgp_getpacket(keypacket, p);
+  if (type != PGP_SECKEY)
+    goto end;
+
+  thisalgo = pgp_makepkpacket(PGP_SECKEY, p, outtxt, tmp, pubkey, pass,
+			      &created);
+  if (thisalgo == -1 || (keyalgo != 0 && keyalgo != thisalgo))
+    goto end;
+
+  while ((type = pgp_getpacket(keypacket, p)) > 0) {
+    if (type == PGP_SECSUBKEY) {
+      if (pgp_makepkpacket(PGP_SECSUBKEY, p, outtxt, dummy, subkey, pass,
+			   &created) == -1)
+	goto end;
+      buf_nl(outtxt);
+    } else if (type == PGP_USERID) {
+      buf_cat(outtxt, p);
+      buf_nl(outtxt);
+      pgp_packet(p, PGP_USERID);
+    } else if (type == PGP_PUBKEY || type == PGP_SECKEY)
+      break;
+  }
+  err = 0;
+end:
+  buf_free(pubkey);
+  buf_free(seckey);
+  buf_free(subkey);
+  buf_free(sig);
+  buf_free(p);
+  buf_free(dummy);
   buf_free(tmp);
   return (err);
 }
@@ -835,7 +889,7 @@ int pgp_rsakeygen(int bits, BUFFER *userid, BUFFER *pass, char *pubring,
     goto end;
   }
   if (keydb->filetype == -1)
-    keydb->filetype = 0;
+    keydb->filetype = ARMORED;
   pgpdb_append(keydb, skey);
   pgpdb_close(keydb);
 
@@ -1058,7 +1112,7 @@ int pgp_dhkeygen(int bits, BUFFER *userid, BUFFER *pass, char *pubring,
     goto end;
   }
   if (keydb->filetype == -1)
-    keydb->filetype = 0;
+    keydb->filetype = ARMORED;
   pgpdb_append(keydb, skey);
   pgpdb_close(keydb);
 

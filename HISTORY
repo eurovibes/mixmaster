@@ -243,3 +243,12 @@
                            Mixmaster in daemon mode reloads configuration on SIGHUP.
                              Upon receiving SIGTERM or SIGINT it will finish its
                              current queue run and then exit successfully.
+                           Fixed a bug with reading armored keyrings consisting of
+                             more than one armored block or having comments in front
+                             of the one armored block.
+                           The secret pgp keyring is now stored ASCII armored with
+                             one key per ascii armor.
+                           NB: Due to the bug with reading armored keyrings and
+                             secring beeing stored armored now, it is not adviseable
+                             to downgrade mixmaster unless special action is taked
+                             to preserve the secret pgp keyring.
