@@ -24,6 +24,18 @@ a very popular remailer software for Microsoft Windows. It is type I
 (cypherpunk) only but has type II callbacks. So if you additionally install
 Mix2 or Mix3 on your system it can also do type II. 
 
+<h2>Nymservers</h2>
+
+<p>
+The source for the original newnym style nymserver that runs nym.alias.net can be
+dowloaded via finger from
+<a href="finger:source@nym.alias.net"><code>finger:source@nym.alias.net</code></a>
+(you can also send an email to <a href="mailto:source@nym.alias.net">source@nym.alias.net</a>).
+
+<p>
+There also is a project that makes the nym.alias.net source work with newer PGP
+and GnuPG versions. The project web site is at
+<a href="http://sourceforge.net/projects/nymserv">http://sourceforge.net/projects/nymserv</a>.
 
 <h2>Pingers</h2>
 
