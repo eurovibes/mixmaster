@@ -11,7 +11,7 @@
 
 #ifndef _MIX3_H
 #define _MIX3_H
-#define COPYRIGHT "Copyright Anonymizer Inc."
+#define COPYRIGHT "Copyright Anonymizer Inc. et al."
 
 #include "config.h"
 #include "mix.h"
