@@ -126,10 +126,14 @@
                            Removed redundant "encoded" variable in mime.c.
                            Fixed Installer bugs.
 
-2001-xx-xx	2.9beta32  POP sockets now properly close.
+2001-11-06	2.9beta32  Client functionality updates.
+                           POP sockets now properly close.
                            Memory may be freed without allocating.
                            Correct time is written to mbox.
                            Key flags correctly set in key.txt. (all by 
                              Disastry).
                            OpenSSL and OpenBSD Install script issues 
                              addressed.
+
+2001-xx-xx      2.9beta33  Support for Mixmaster as a service on Windows
+                             platforms added (by Disastry).
