@@ -45,20 +45,16 @@ This FAQ is maintained by Alex Kirk <a href="mailto:alex@schnarff.com">< alex@sc
 3.1.5 Add-Ons<br>
 3.1.5.1 TLS-SSL<br>
 3.1.5.2 RBLs<br>
-3.2 Downloading Software<br>
-3.2.1 Mixmaster Remailer<br>
-3.2.1.1 UNIX/Linux/BSD<br>
-3.2.1.2 Windows<br>
-3.2.1.3 Web Frontends<br>
-3.2.2 mail2news Gateway<br>
-3.2.2.1 UNIX/Linux/BSD<br>
-3.2.3 Pingers<br>
-3.2.3.1 UNIX/Linux/BSD<br>
-3.2.3.1.1 Stable<br>
-3.2.3.1.2 Experimental<br>
-3.2.3.2 Windows<br>
-3.2.3.2.1 Stable<br>
-3.2.3.2.2 Experimental<br>
+<a href=3.2>3.2 Downloading Software<br></a>
+<a href=3.2.1>3.2.1 Remailers<br></a>
+<a href=3.2.1.1>3.2.1.1 UNIX/Linux/BSD<br></a>
+<a href=3.2.1.2>3.2.1.2 Windows<br></a>
+<a href=3.2.1.3>3.2.1.3 Web Frontends<br></a>
+<a href=3.2.2>3.2.2 mail2news Gateway<br></a>
+<a href=3.2.2.1>3.2.2.1 UNIX/Linux/BSD<br></a>
+<a href=3.2.3>3.2.3 Pingers<br></a>
+<a href=3.2.3.1>3.2.3 UNIX/Linux/BSD<br></a>
+<a href=3.2.3.2>3.2.3 Windows<br></a>
 3.3 Installing Software<br>
 3.3.1 Mixmaster Remailer<br>
 3.3.2 mail2news Gateway<br>
@@ -231,19 +227,36 @@ Reasons for doing this include: keeping unhappy end-users from escalating compla
 <h3>3.1.5.1 TLS-SSL</h3>
 <h3>3.1.5.2 RBLs</h3>
 <h3>3.2 Downloading Software</h3>
-<h3>3.2.1 Mixmaster Remailer</h3>
+<a name=3.2></a>
+<h3>3.2.1 Remailers</h3>
+<a name=3.2.1></a>
 <h3>3.2.1.1 UNIX/Linux/BSD</h3>
+<a name=3.2.1.1></a>
+<a href=ftp://ftp.shinn.net/pub/remailer/mixmaster>Mixmaster</a> -- Type I & II remailer (ftp://ftp.shinn.net/pub/remailer/mixmaster)<br>
+<a href=ftp://ftp.shinn.net/pub/remailer/nymserv>Nymserv</a> -- Nym remailer (ftp://ftp.shinn.net/pub/remailer/nymserv)
 <h3>3.2.1.2 Windows</h3>
+<a name=3.2.1.2></a>
+<a href=http://www.theinternet.cc/potatoware/reli/download.html>Reliable</a> (<a href=http://ftp.shinn.net/pub/remailer/potato_software>Mirror) -- All-Purpose remailer (http://www.theinternet.cc/potatoware/reli/download.html and http://ftp.shinn.net/pub/remailer/potato_software)<br>
+Reliable's <a href=http://www.skuz.net/potatoware/reli/UserMan.htm>manual is available online</a>.
 <h3>3.2.1.3 Web Frontends</h3>
+<a name=3.2.1.3></a>
+<a href=ftp://ftp.shinn.net/pub/freedom-remailer>Freedom</a> -- modified version of the original cypherpunk web frontend, used by <a href=http://freedom.gmsociety.org>the GMS/GILC remailer</a> (ftp://ftp.shinn.net/pub/freedom-remailer)<br>
+<a href=http://www.cotse.com/privres.htm>COTSE</a> -- Church Of The Swimming Elephant -- Many resources available here
 <h3>3.2.2 mail2news Gateway</h3>
+<a name=3.2.2></a>
 <h3>3.2.2.1 UNIX/Linux/BSD</h3>
+<a href=ftp://ftp.shinn.net/pub/remailer/mail2news_gateway>Multipost</a> (ftp://ftp.shinn.net/pub/remailer/mail2news_gateway)
+<a name=3.2.2.1></a>
 <h3>3.2.3 Pingers</h3>
+<a name=3.2.3></a>
 <h3>3.2.3.1 UNIX/Linux/BSD</h3>
-<h3>3.2.3.1.1 Stable</h3>
-<h3>3.2.3.1.2 Experimental</h3>
+<a name=3.2.3.1></a>
+<a href=ftp://ftp.shinn.net/pub/remailer/rlist-plus-pinger-1.0.tar.gz>rlist</a> (ftp://ftp.shinn.net/pub/remailer/rlist-plus-pinger-1.0.tar.gz)<br>
+<a href=http://www.tahina.priv.at/~cm/hacks/>remlist</a> (http://www.tahina.priv.at/~cm/hacks/)<br>
+<a href=http://lexx.shinn.net/cmeclax/pingstats.html>Pingstats</a> -- This pinger needs only a Unix account with gpg, Mix 2.9, a mail server, procmail, and a random device; it does not need a database or premail. Capstrings and keyrings are automatically updated and (if tmpwatch is installed) expired. It generates stats in both formats for both Mixmaster and Cypherpunk remailers (but no nymservers yet). To get the source, send a message with subject "get-pingstats" to cmeclax@ixazon.dynip.com. Please allow for the latency of this remailer for delivery (it may take a day or more on a busy day). (http://lexx.shinn.net/cmeclax/pingstats.html)
 <h3>3.2.3.2 Windows</h3>
-<h3>3.2.3.2.1 Stable</h3>
-<h3>3.2.3.2.2 Experimental</h3>
+<a href=http://www.theinternet.cc/potatoware/reli/download.html>Reliable</a> (<a href=http://ftp.shinn.net/pub/remailer/potato_software>Mirror) -- Includes statistics (http://www.theinternet.cc/potatoware/reli/download.html and http://ftp.shinn.net/pub/remailer/potato_software)<br>
+<a name=3.2.3.2></a>
 <h3>3.3 Installing Software</h3>
 <h3>3.3.1 Mixmaster Remailer</h3>
 <h3>3.3.2 mail2news Gateway</h3>
@@ -252,9 +265,14 @@ Reasons for doing this include: keeping unhappy end-users from escalating compla
 <h3>
 <h3>4. Security</h3>
 <h3>4.1 Host System Security</h3>
+<a name=4.1></a>
+Ensuring that the system your remailer runs on is secure is of the highest priority. After all, if the host you are using is cracked, the intruder could do any manner of horrible things, including abusing your mailer and getting your IP blacklisted, shutting down your mailer, compromising your private key, etc. There are several things you can do to protect your host, many of which are one-time-only, policy-oriented fixes.
 <h3>4.1.1 Philosophy</h3>
 <h3>4.1.2 Firewalls</h3>
 <h3>4.1.3 Minimalism/Unnecessary Software</h3>
+Most operating systems come with a great deal of programs and services enabled that you, the administrator, are unaware of and will never use. The number of such programs varies greatly, with Windows in all its forms being the worst offender down to <a href=http://www.openbsd.org>OpenBSD</a>, which ships with almost everything turned off.<br><br>
+The reason these programs are relevant to security is simple: if you have a service running that you know nothing about, you're not likely to keep up on exploits related to it. Thus, you're likely to end up with any number of remotely exploitable holes on your system that you're completely unaware of.<br><br>
+Your best bet in solving this problem -- besides picking an O/S that isn't a major offender here -- is to scan your box and to find out what services it's running, and then shut down those that aren't relevant to your operations (including, for the most part, those that you have no idea what they do). For UNIX-based systems, first use the "ps" command to check for actively running programs; you can usually turn them off permanently by editing a file like /etc/rc.conf and commenting them out. More importantly, no matter what your O/S is, you should run a port scan from a remote machine, and then go about shutting down ports that offer unnecessary services.
 <h3>4.1.4 Local Attacks</h3>
 <h3>4.1.5 Patches/Updates/Upgrades</h3>
 <h3>4.2 Key Security</h3>
