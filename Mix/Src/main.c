@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.14 2002/08/26 19:24:30 rabbi Exp $ */
+   $Id: main.c,v 1.15 2002/08/26 19:38:51 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -587,6 +587,8 @@ end:
       user_pass(pass);
       strncpy(PASSPHRASE, pass->data, LINELEN);
       PASSPHRASE[LINELEN-1] = 0;
+      strncpy(ENTEREDPASSPHRASE, pass->data, LINELEN);
+      ENTEREDPASSPHRASE[LINELEN-1] = 0;
     }
     user_delpass();
     buf_free(pass);
