@@ -949,6 +949,11 @@ keyword "apop" or "pass" to select an authentication method (\fBPOP3CONF\fP).
 .B dest.alw
 List of addresses to which Mixmaster will deliver, even in middleman mode (\fBDESTALLOW\fP).
 .TP
+.B dest.alw.nonpublished
+Similar to
+.BR dest.alw ,
+with the only difference that this list is not published in remailer-conf replies (\fBDESTALLOW2\fP).
+.TP
 .B dest.blk
 List of blocked destination addresses.
 Mixmaster does not send mail to the blocked addresses listed in this file (\fBDESTBLOCK\fP).
