@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.10 2002/08/21 16:00:31 weaselp Exp $
+# $Id: Install,v 1.11 2002/08/22 23:21:43 weaselp Exp $
 
 #whereis program default-path
 whereis()
@@ -629,7 +629,7 @@ int main() {
   exit(0);
 }
 END
-   if gcc tmptst.c -o /dev/null $LIBS $LDFLAGS
+   if gcc $INC tmptst.c -c -o /dev/null
    then
      DEF="$DEF -DUSE_IDEA"
    else
