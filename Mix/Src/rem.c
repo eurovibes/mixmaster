@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.3 2001/11/06 23:41:58 rabbi Exp $ */
+   $Id: rem.c,v 1.4 2001/12/11 20:59:26 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -371,7 +371,9 @@ int blockrequest(BUFFER *message)
     if (bufieq(field, "from"))
       buf_set(from, content);
     else if (bufieq(field, "subject"))
-      buf_cat(message, content);
+      buf_cat(message, content); 
+   /* Append the subject to the message body so destination block requests 
+      in the subject line work too (we process the body a few lines down) */
   while (buf_getline(message, line) != -1)
     if (bufifind(line, "destination-block")) {
       buf_clear(addr);

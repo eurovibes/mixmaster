@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.2 2001/11/06 23:41:58 rabbi Exp $ */
+   $Id: mix.c,v 1.3 2001/12/11 20:59:26 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -625,13 +625,55 @@ int mix_daily(void)
   return (0);
 }
 
+
+#ifdef WIN32
+
+int is_nt_service(void)
+{ // Try to detect if we are the service or not... seems there is no easy reliable way :-(
+    static int issvc = -1;
+#ifdef WIN32SERVICE
+    STARTUPINFO StartupInfo;
+    OSVERSIONINFO VersionInfo;
+    DWORD dwsize;
+
+    if (issvc != -1) //do it only once
+        return issvc;
+
+    VersionInfo.dwOSVersionInfoSize = sizeof(VersionInfo);
+    if (GetVersionEx(&VersionInfo))
+        if (VersionInfo.dwPlatformId != VER_PLATFORM_WIN32_NT)
+            return issvc = 0; // not NT - not the service
+
+    if (!GetConsoleTitle(&VersionInfo,sizeof(VersionInfo))) // reuse VersionInfo to save memory
+        return issvc = 1; // have no console - we are the service probably...
+
+    dwsize = sizeof(VersionInfo);
+    if (GetUserName(&VersionInfo,&dwsize)) // reuse VersionInfo again
+        if (!strcmp(&VersionInfo, "SYSTEM"))
+            return issvc = 1; // SYSTEM user - we are the service probably...
+
+    GetStartupInfo(&StartupInfo);
+    if (StartupInfo.lpDesktop[0] == 0)
+        return issvc = 1; // have no desktop - we are the service probably...
+
+    if (_fileno(stdin) == -1 && _fileno(stdout) == -1 && _fileno(stderr) == -1)
+        return issvc = 1; // have no stdin,stderr,stdout - we are the service probably...
+#endif // WIN32SERVICE
+
+    return issvc = 0; // assume not the service
+} // is_nt_service
+
+HANDLE hMustTerminate = NULL;
+void set_nt_exit_event(HANDLE h_svc_exit_event)
+{
+    hMustTerminate = h_svc_exit_event;
+} // set_nt_exit_event
+
+#endif // WIN32
+
 int mix_daemon(void)
 {
   long t;
-#ifdef WIN32SERVICE
-  long t1;
-  HANDLE hMustTerminate = OpenEvent(EVENT_ALL_ACCESS, FALSE, "mixmaster-stop");
-#endif
   t = SENDPOOLTIME;
 #ifdef USE_SOCK
   if (POP3TIME < t)
@@ -642,18 +684,14 @@ int mix_daemon(void)
     mix_regular(0);
 #ifdef WIN32
 #ifdef WIN32SERVICE
-    t1 = t*2;
-    while (t1) {
-      if (hMustTerminate)
-        if (WaitForSingleObject(hMustTerminate, 500) == WAIT_OBJECT_0) {
-          CloseHandle(hMustTerminate);
-          return 0;
-        }
-      t1--;
-    }
-#else
-    Sleep(t * 1000);
+    if (hMustTerminate) {
+      if (WaitForSingleObject(hMustTerminate, t * 1000) == WAIT_OBJECT_0) {
+        CloseHandle(hMustTerminate);
+        return 0;
+      }
+    } else
 #endif
+      Sleep(t * 1000);
 #else
     sleep(t);
 #endif
