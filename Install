@@ -416,7 +416,7 @@ then
 
  LIBDIR=
  INCDIR=
- SRCDIR=zlib*
+# SRCDIR=zlib*
  findlib libz.a
  if [ "$found" = "" ]
  then
@@ -439,7 +439,7 @@ then
 
  LIBDIR=
  INCDIR=
- SRCDIR=pcre*
+# SRCDIR=pcre*
  findlib libpcre.a
  if [ "$found" != "" ]
  then
