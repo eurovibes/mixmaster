@@ -6,7 +6,7 @@
    details.
 
    Key management
-   $Id: keymgt.c,v 1.10 2002/08/26 19:24:30 rabbi Exp $ */
+   $Id: keymgt.c,v 1.11 2002/08/28 08:13:59 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -65,42 +65,43 @@ int getv2seckey(byte keyid[], BUFFER *key)
   strcat(idstr, "\n");
   if ((keyring = mix_openfile(SECRING, "r")) == NULL) {
     errlog(ERRORMSG, "No secret key file!\n");
-  } else
-   while (err == -1) {
-    buf_clear(key);
-    if (fgets(line, sizeof(line), keyring) == NULL)
-      break;
-    if (strleft(line, begin_key)) {
+  } else {
+    while (err == -1) {
+      buf_clear(key);
       if (fgets(line, sizeof(line), keyring) == NULL)
 	break;
-      if (keyid && !streq(line, idstr))
-	continue;
-      fgets(line, sizeof(line), keyring);
-      fgets(line, sizeof(line), keyring);
-      buf_sets(iv, line);
-      decode(iv, iv);
-      for (;;) {
+      if (strleft(line, begin_key)) {
 	if (fgets(line, sizeof(line), keyring) == NULL)
 	  break;
-	if (strleft(line, end_key)) {
-	  if (decode(key, key) == -1) {
-	    errlog(ERRORMSG, "Corrupt secret key.\n");
+	if (keyid && !streq(line, idstr))
+	  continue;
+	fgets(line, sizeof(line), keyring);
+	fgets(line, sizeof(line), keyring);
+	buf_sets(iv, line);
+	decode(iv, iv);
+	for (;;) {
+	  if (fgets(line, sizeof(line), keyring) == NULL)
+	    break;
+	  if (strleft(line, end_key)) {
+	    if (decode(key, key) == -1) {
+	      errlog(ERRORMSG, "Corrupt secret key.\n");
+	      break;
+	    }
+	    buf_sets(pass, PASSPHRASE);
+	    digest_md5(pass, pass);
+	    buf_crypt(key, pass, iv, DECRYPT);
+	    err = check_seckey(key, keyid);
+	    if (err == -1)
+	      errlog(ERRORMSG, "Corrupt secret key. Bad passphrase?\n");
 	    break;
 	  }
-	  buf_sets(pass, PASSPHRASE);
-	  digest_md5(pass, pass);
-	  buf_crypt(key, pass, iv, DECRYPT);
-	  err = check_seckey(key, keyid);
-	  if (err == -1)
-	    errlog(ERRORMSG, "Corrupt secret key. Bad passphrase?\n");
-	  break;
+	  buf_append(key, line, strlen(line) - 1);
 	}
-	buf_append(key, line, strlen(line) - 1);
+	break;
       }
-      break;
     }
-   }
-  fclose(keyring);
+    fclose(keyring);
+  }
 
   buf_free(pass);
   buf_free(iv);
