@@ -6,7 +6,7 @@
    details.
 
    Prepare messages for remailer chain
-   $Id: chain.c,v 1.8 2003/05/03 05:31:07 weaselp Exp $ */
+   $Id: chain.c,v 1.9 2003/05/03 05:51:58 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -190,7 +190,10 @@ int chain_randfinal(int type, REMAILER *remailer, int badchains[MAXREM][MAXREM],
 	(type == MSG_NULL || !remailer[i].flags.middle) &&   /* remailer is not middleman */
 	!remailer[i].flags.star_ex &&                        /* remailer is not excluded from random selection */
 	(remailer[i].flags.post || type != MSG_POST) &&      /* remailer supports post when this is a post */
-	((secondtolasthop == -1) || !badchains[secondtolasthop][i]);/* we only have hop or the previous one can send to this (may be random) */
+	((secondtolasthop == -1) ||
+	   (!badchains[secondtolasthop][i] &&
+	    !badchains[secondtolasthop][0] &&
+	    !badchains[0][i]));/* we only have hop or the previous one can send to this (may be random) */
     num += select[i];
   }
   if (num == 0)
@@ -231,7 +234,11 @@ int chain_rand(REMAILER *remailer, int badchains[MAXREM][MAXREM], int maxrem,
 	  !remailer[i].flags.star_ex &&                          /* remailer is not excluded from random selection */
 	  remailer[i].info[t].latency <= MAXLAT &&               /* remailer has small enough latency */
 	  !badchains[i][0] && !badchains[i][thischain[hop-1]] && /* remailer can send to the next one */
-	  (hop == chainlen-1 || !badchains[thischain[hop+1]][i]);/* we are at the first hop or the previous one can send to this (may be random) */
+	                      !badchains[0][thischain[hop-1]] &&
+	  (hop == chainlen-1 ||
+	     ( !badchains[thischain[hop+1]][i] &&
+	       !badchains[thischain[hop+1]][0] &&
+	       !badchains[0][i] ));/* we are at the first hop or the previous one can send to this (may be random) */
 	randavail += select[i];
       }
 
