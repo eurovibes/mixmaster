@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.16 2002/08/27 06:46:13 weaselp Exp $ */
+   $Id: main.c,v 1.17 2002/08/28 08:34:26 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -637,36 +637,37 @@ static int check_get_pass(int force)
     BUFFER *pass, *pass2, *key;
     int n = 0;
 
-/* FIXME: check if stdin is tty, return if not */
-
-    pass = buf_new();
-    pass2 = buf_new();
-    key = buf_new();
-    buf_sets(pass, PASSPHRASE);
-    while (pgpdb_getkey(PK_DECRYPT, PGP_ES_RSA, NULL, NULL, NULL, NULL,
-                         NULL, NULL, NULL, pass) < 0 &&
-           pgpdb_getkey(PK_DECRYPT, PGP_E_ELG,  NULL, NULL, NULL, NULL,
-                         NULL, NULL, NULL, pass) < 0 &&
-           getv2seckey(NULL, key) < 0)
-    {
-      user_delpass();
-      if (n)
-	fprintf(stderr, "re-");
-      user_pass(pass);
-      strncpy(PASSPHRASE, pass->data, LINELEN);
-      PASSPHRASE[LINELEN-1] = 0;
-      if (!force) {
-	if (n && buf_eq(pass, pass2))
-	  break;
-	buf_set(pass2, pass);
+    if (PASSPHRASE[0] == '\0' && isatty(fileno(stdin))) {
+      pass = buf_new();
+      pass2 = buf_new();
+      key = buf_new();
+      buf_sets(pass, PASSPHRASE);
+      while (pgpdb_getkey(PK_DECRYPT, PGP_ES_RSA, NULL, NULL, NULL, NULL,
+			   NULL, NULL, NULL, pass) < 0 &&
+	     pgpdb_getkey(PK_DECRYPT, PGP_E_ELG,  NULL, NULL, NULL, NULL,
+			   NULL, NULL, NULL, pass) < 0 &&
+	     getv2seckey(NULL, key) < 0)
+      {
+	user_delpass();
+	if (n)
+	  fprintf(stderr, "re-");
+	user_pass(pass);
+	strncpy(PASSPHRASE, pass->data, LINELEN);
+	PASSPHRASE[LINELEN-1] = 0;
+	if (!force) {
+	  if (n && buf_eq(pass, pass2))
+	    break;
+	  buf_set(pass2, pass);
+	}
+	n=1;
       }
-      n=1;
+      user_delpass();
+      buf_free(pass);
+      buf_free(pass2);
+      buf_free(key);
+
+      strncpy(ENTEREDPASSPHRASE, PASSPHRASE, LINELEN);
+      ENTEREDPASSPHRASE[LINELEN-1] = 0;
     }
-    strncpy(ENTEREDPASSPHRASE, pass->data, LINELEN);
-    ENTEREDPASSPHRASE[LINELEN-1] = 0;
-    user_delpass();
-    buf_free(pass);
-    buf_free(pass2);
-    buf_free(key);
     return 1;
 }
