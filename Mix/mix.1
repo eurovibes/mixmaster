@@ -1,5 +1,5 @@
 .TH MIX 1 "Mixmaster Version 3.0 beta"
-.\" $Id: mix.1,v 1.11 2002/08/22 04:29:43 weaselp Exp $
+.\" $Id: mix.1,v 1.12 2002/08/22 05:18:26 weaselp Exp $
 .SH NAME
 mix \- anonymous remailer software
 .SH SYNOPSIS
@@ -496,6 +496,10 @@ Default:
 .B BINFILTER
 Filter out binary attachments. Default:
 .BR n .
+.TP
+.B LISTSUPPORTED
+List known remailers and their keys in remailer-conf reply. Default:
+.BR y .
 .TP
 .B MID
 Use a hash of the message body as Message-ID, to avoid

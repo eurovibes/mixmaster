@@ -6,7 +6,7 @@
    details.
 
    Remailer statistics
-   $Id: stats.c,v 1.9 2002/08/20 20:07:33 weaselp Exp $ */
+   $Id: stats.c,v 1.10 2002/08/22 05:18:26 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -306,6 +306,28 @@ int conf(BUFFER *out)
 
   buf_nl(out);
   conf_premail(out);
+  
+  if (LISTSUPPORTED) {
+   /* SUPPORTED CPUNK (TYPE I) REMAILERS
+    * 0xDC7532F9	"Heex Remailer <remailer@xmailer.ods.org>"
+    * 0x759ED311	"znar <ka5tkn@cox-internet.com>"
+    *
+    * SUPPORTED MIXMASTER (TYPE II) REMAILERS
+    * aarg remailer@aarg.net 475f3f9fe8da22896c10082695a92c2d 2.9b33 C
+    * anon mixmaster@anon.978.org 7384ba1eec585bfd7d2b0e9b307f0b1d 2.9b36 MCNm
+    */ 
+    
+    /*buf_nl(out);
+    buf_appends(out, "SUPPORTED CPUNK (TYPE I) REMAILERS\n");
+    FIXME
+    */
+    buf_nl(out);
+    buf_appends(out, "SUPPORTED MIXMASTER (TYPE II) REMAILERS\n");
+    prepare_type2list(out);
+    buf_nl(out);
+  }
+
+  
   if ( b ) buf_free(b);
   buf_free(line);
   return (0);

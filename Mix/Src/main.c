@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.11 2002/08/20 19:39:24 rabbi Exp $ */
+   $Id: main.c,v 1.12 2002/08/22 05:18:26 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -302,10 +302,15 @@ int main(int argc, char *argv[])
     goto end;
   }
   if (type_list) {
-    if (print_type2list() < 0) {
+    BUFFER *type2list;
+    type2list = buf_new();
+    if (prepare_type2list(type2list) < 0) {
       fprintf(stderr, "Cannot print type2.list.\n");
       ret = 2;
-    }
+    } else {
+      printf("%s", type2list->data);
+    };
+    buf_free(type2list);
     goto end;
   }
   if (help || (isatty(fileno(stdin)) && isatty(fileno(stdout))))

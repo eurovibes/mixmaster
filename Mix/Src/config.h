@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.12 2002/08/22 04:29:43 weaselp Exp $ */
+   $Id: config.h,v 1.13 2002/08/22 05:18:26 weaselp Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -293,6 +293,7 @@ extern int SIZELIMIT;
 extern int INFLATEMAX;
 extern int MAXRANDHOPS;
 extern int BINFILTER;
+extern int LISTSUPPORTED;
 extern long PACKETEXP;
 extern long IDEXP;
 DLLIMPORT extern int VERBOSE;

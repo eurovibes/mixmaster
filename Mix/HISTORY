@@ -231,3 +231,4 @@
                            If a footer.txt file exists its content will be
                              appended to outgoing messages leaving the remailer
                              network at this hop (closes: #490117).
+                           List known mixmasters in remailer-conf reply.
