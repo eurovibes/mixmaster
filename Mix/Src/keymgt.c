@@ -6,7 +6,7 @@
    details.
 
    Key management
-   $Id: keymgt.c,v 1.20 2002/10/16 20:59:09 rabbi Exp $ */
+   $Id: keymgt.c,v 1.21 2002/10/18 05:23:25 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -94,7 +94,7 @@ int getv2seckey(byte keyid[], BUFFER *key)
 	if (keyid && !streq(line, idstr))
 	  continue;
 	if (created != 0 && (created > time(NULL))) {
-	  errlog(ERRORMSG, "Key is not valid yet (create date in the future): %s", idstr);
+	  errlog(ERRORMSG, "Key is not valid yet (creation date in the future): %s", idstr);
 	  break;
 	}
 	if (expires != 0 && (expires + KEYGRACEPERIOD < time(NULL))) {
@@ -289,9 +289,9 @@ int v2keymgt(int force)
  *
  * This function triggers creation of mix keys (see parameter force) which are
  * stored in secring.mix. One public mix key is also written to key.txt. This
- * is the key with the latest expire date (keys with no expiration date are
- * always considered newer if they appear later in the secret mix file - key
- * creation appends keys).
+ * is the key with the latest expiration date (keys with no expiration date
+ * are always considered newer if they appear later in the secret mix file 
+ * - key creation appends keys).
  *
  * force:
  *   0, 1: create key when necessary:
