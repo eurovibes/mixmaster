@@ -6,7 +6,7 @@
    details.
 
    Interface to cryptographic library
-   $Id: crypto.c,v 1.5.2.2 2002/12/16 22:38:05 rabbi Exp $ */
+   $Id: crypto.c,v 1.5.2.3 2002/12/16 23:40:55 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -298,7 +298,7 @@ int v2createkey(void)
   ek = buf_new();
   iv = buf_new();
 
-  errlog(NOTICE, "Generating RSA key.\n");
+  errlog(NOTICE, "Generating Mix RSA key.\n");
   k = RSA_generate_key(1024, 65537, NULL, NULL);
   err = write_seckey(b, k, keyid);
   RSA_free(k);
