@@ -188,3 +188,4 @@
                            Add global mix.cfg support (compile time option).
 			   The -G option now forces creation of new keys even in
 			     client mode (Closes: #585176).
+			   Random Documentation updates.
