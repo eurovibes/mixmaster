@@ -6,7 +6,7 @@
    details.
 
    Menu-based user interface
-   $Id: menu.c,v 1.4 2002/08/26 21:29:52 rabbi Exp $ */
+   $Id: menu.c,v 1.5 2002/08/26 21:34:49 rabbi Exp $ */
 
 
 #include "menu.h"
@@ -927,9 +927,10 @@ void menu_chain(char *chainstr, int chaintype, int post)
     refresh();
     c = getch();
     if (c == '\n' || c == '\r') {
+    /*  beep in case the user made a mistake */
       if (middlemanlast) { 
-        beep();             /*  beep and pause in case the user 
-        sleep(2);               made a mistake in chain selection  */
+        beep();             
+        sleep(2);           
       }
       if (ok || middlemanlast)
 	break;
