@@ -286,3 +286,4 @@
                                seemed sensible.
                            Mixmaster now generates dummy messages automatically
                              as mail enters and exits the pool.
+                           Mixmaster now handles CRLF in pubring.mix.
