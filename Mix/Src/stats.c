@@ -107,8 +107,8 @@ int stats(BUFFER *b)
 	  poold[0][(now - then) / (60 * 60)] += num;
 	  poold[1][(now - then) / (60 * 60)] += i;
 	} else if (today - then < 80 * SECONDSPERDAY) {
-	  poold[0][(today - then) / (24 * 60 * 60)] += num;
-	  poold[1][(today - then) / (24 * 60 * 60)] += i;
+	  pool[0][(today - then) / (24 * 60 * 60)] += num;
+	  pool[1][(today - then) / (24 * 60 * 60)] += i;
 	}
 	if (havestats == 0 || then < havestats)
 	  havestats = then;
