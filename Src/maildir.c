@@ -55,6 +55,8 @@ int checkDirectory(char *dir, char *append, int create) {
 }
 
 /* Write "message" to "maildir", retunr 0 on success, -1 on failure */
+#define MAX_BASENAME 113 /* actual length should be smaller than 111 bytes */
+#define MAX_SUBNAME 123 /* actual length should be smaller than 115 bytes */
 int maildirWrite(char *maildir, BUFFER *message, int create) {
   int fd;
   int currDir;
@@ -62,9 +64,10 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
   int returnValue;
   char hostname[64];
   struct stat statbuf;
-  char basename[100]; /* actual length should be smaller than 98 bytes */
-  char tmpname[110];  /* actual length should be smaller than 102 bytes */
-  char newname[110];  /* actual length should be smaller than 102 bytes */
+  char basename[MAX_BASENAME];
+  char tmpname[MAX_SUBNAME];
+  char newname[MAX_SUBNAME];
+  int messagesize;
 
   /* Declare a handler for SIGALRM so we can time out. */ 
   /* set_handler(SIGALRM, alarm_handler);  */
@@ -82,6 +85,8 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
     goto realend;
   }
 
+  messagesize = message->length;
+
   /* Step 1: chdir to maildir (and save actual dir by opening it) */
   if((currDir = open(".", O_RDONLY)) < 0) {
     returnValue = -1;
@@ -96,12 +101,15 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
   for (count = 0;; count++) {
     tmpname[0] = '\0';
     newname[0] = '\0';
-    sprintf(basename, "%lu.%lu-%u.%s", time(NULL), namecounter, getpid(), hostname);
-    strcat(tmpname, "tmp/");
-    strncat(tmpname, basename, 100);
-    strcat(newname, "new/");
-    strncat(newname, basename, 100);
-    namecounter++;
+    snprintf(basename, MAX_BASENAME, "%lu.%u_%lu.%s,S=%u",
+      time(NULL), getpid(), namecounter++, hostname, messagesize);
+    basename[MAX_BASENAME-1] = '\0';
+    strncat(tmpname, "tmp/", MAX_SUBNAME);
+    strncat(tmpname, basename, MAX_SUBNAME);
+    tmpname[MAX_SUBNAME-1] = '\0';
+    strncat(newname, "new/", MAX_SUBNAME);
+    strncat(newname, basename, MAX_SUBNAME);
+    newname[MAX_SUBNAME-1] = '\0';
 	
     if (stat(tmpname, &statbuf) == 0)
       errno = EEXIST;
@@ -141,25 +149,49 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
 
   /* Step 6: move message to 'cur' */
 #ifdef POSIX
-  if(link(tmpname, newname) != 0) {
-    if (errno == EXDEV) {
-      /* We probably are on coda or some other filesystem that does not allow
-       * hardlinks. rename() the file instead of link() and unlink()
-       * I know, It's evil (PP).
-       */
-      if (rename(tmpname, newname) != 0) {
+  for (count = 0;; count++) {
+    if(link(tmpname, newname) != 0) {
+      if (errno == EXDEV || errno == EPERM) {
+	/* We probably are on coda or some other filesystem that does not allow
+	 * hardlinks. rename() the file instead of link() and unlink()
+	 * I know, It's evil (PP).
+	 */
+	if (rename(tmpname, newname) != 0) {
+	  returnValue = -1;
+	  goto functionExit;
+	};
+	break;
+      } else if (errno != EEXIST) {
 	returnValue = -1;
 	goto functionExit;
-      };
+      }
+    } else {
+      /* We successfully linked the message in new/. Now let's get
+       * rid of our tmp/ entry
+       */
+      if(unlink(tmpname) != 0) {
+	/* unlinking failed */
+	returnValue = -1;
+	goto functionExit;
+      }
+      break;
     }
-    returnValue = -1;
-    goto functionExit;
-  } else {
-    if(unlink(tmpname) != 0) {
-      /* unlinking failed */
+
+    if (count > 5) {
+      /* Too many retries - give up */	  
+      errlog(ERRORMSG, "Can't move message to %s/new/\n", maildir);
       returnValue = -1;
       goto functionExit;
     }
+
+    sleep(2);
+    newname[0] = '\0';
+    snprintf(basename, MAX_BASENAME, "%lu.%u_%lu.%s,S=%u",
+      time(NULL), getpid(), namecounter++, hostname, messagesize);
+    basename[MAX_BASENAME-1] = '\0';
+    strncat(newname, "new/", MAX_SUBNAME);
+    strncat(newname, basename, MAX_SUBNAME);
+    newname[MAX_SUBNAME-1] = '\0';
   }
 #else /* POSIX */
   /* On non POSIX systems we simply use rename(). Let's hobe DJB
