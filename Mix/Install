@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.8.2.5 2002/10/16 00:13:40 rabbi Exp $
+# $Id: Install,v 1.8.2.6 2002/10/17 21:48:53 rabbi Exp $
 
 #whereis program default-path
 whereis()
@@ -316,6 +316,9 @@ then
     then
       PASSINCONFIG=1
     fi
+    if [ ! grep REMAIL $MIXDEST/mix.cfg >/dev/null ]
+    then
+      echo "REMAIL          y" >> $MIXDEST/mix.cfg
   else
     readln "Do you want to set up a remailer?" n
     remailer=$ans
