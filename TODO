@@ -1,10 +1,11 @@
 Todo items before 2.9 release:
 
-* confirm backport of changes between 2.9b38 and MAIN was successful.
+* confirm backport of changes between 2.9b38 and MAIN was successful
 * permit CRAM-MD5 SMTP AUTH in addition to LOGIN.
-* Fix Install script bug wrt overwriting mix
-* Look in proper locations for libs on OS X.
+* Fix Install script bug wrt overwriting mix while in use
+* Look in proper locations for libs on OS X
 * Check and enforce expiration/revocation of OpenPGP keys (?)
+* Apply fixes for any new bugs based on existing features
 
 
 Items that need to be completed before the next HEAD release:
@@ -45,6 +46,7 @@ Items for 3.0 or 3.0.1
 * Windows build instructions/files
 * documentation issues resolved
   + mpgp man page
+* find bug that is causing t* files to linger
 * further debugging (if needed).
 
 
