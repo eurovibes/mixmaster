@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.30 2002/09/25 23:02:44 ulfm Exp $ */
+   $Id: mix.c,v 1.31 2002/09/26 12:34:53 disastry Exp $ */
 
 
 #include "mix3.h"
@@ -965,16 +965,9 @@ int is_nt_service(void)
         if (VersionInfo.dwPlatformId != VER_PLATFORM_WIN32_NT)
             return issvc = 0; /* not NT - not the service */
 
-    if (!GetConsoleTitle(&VersionInfo,sizeof(VersionInfo))) 
-    /* reuse VersionInfo to save memory */
-        return issvc = 1; /* have no console - we are the service probably */
-
     GetStartupInfo(&StartupInfo);
     if (StartupInfo.lpDesktop[0] == 0)
         return issvc = 1; /* have no desktop - we are the service probably */
-
-    if (_fileno(stdin) == -1 && _fileno(stdout) == -1 && _fileno(stderr) == -1)
-        return issvc = 1; /* have no stdin,stderr,stdout - probably service */
 #endif /* WIN32SERVICE */
 
     return issvc = 0; /* assume not the service */
