@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.12 2002/01/10 23:59:16 rabbi Exp $ */
+   $Id: rem.c,v 1.13 2002/02/21 09:38:01 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -319,7 +319,7 @@ void logmail(char *mailbox, BUFFER *message)
   else if (mailbox[0] == '|') {
     FILE *p;
 
-    errlog(DEBUGINFO, "Piping message to %s.", mailbox + 1);
+    errlog(DEBUGINFO, "Piping message to %s.\n", mailbox + 1);
     p = openpipe(mailbox + 1);
     if (p != NULL) {
       buf_write(message, p);
