@@ -128,11 +128,14 @@ the Mixmaster menu, run "./configure --enable-termcap; make lib/libncurses.a"
 in the ncurses directory.
 
 Mixmaster assumes that gcc is present on the system. If you are compiling
-on systems without gcc installed by default (such as Macintosh OS X), you
-will need to make minor modifications to the Makefile.in files by hand.
-Alternaively, since Mixmaster will compile successfully on OS X using gcc,
-you can install the gcc compiler. Mixmaster 3.0 will handle this issue
-more gracefully.
+on systems without gcc installed by default, or on systems where the
+compiler is not named "gcc" (such as Mac OS X), you will need to make
+minor modifications to the Makefile.in files by hand. Alternatively, since
+Mixmaster will compile successfully on Mac OS X using gcc, you can create
+a symbolic link (the equivalent of an alias) from "gcc" to "cc", as the
+compiler is known. Ex: "ln -s /usr/bin/cc /usr/local/bin/gcc".
+
+Mixmaster 3.0 will handle this issue more gracefully.
 
 
 Security notes:
@@ -203,4 +206,4 @@ University of California, Berkeley and its contributors.
 
 All trademarks are the property of their respective owners.
 
-$Id: README,v 1.5.2.6 2002/12/16 23:26:26 rabbi Exp $
+$Id: README,v 1.5.2.7 2002/12/17 19:54:05 rabbi Exp $

@@ -303,6 +303,9 @@
                              submitted by Trek. Vulnerability originally
                              discovered by noise and rabbi.)
                            Minor documentation fixes.
+
+2002-12-16      2.9b42     Minor documentation fixes.
+                           Clarified log message wording.
                            Append another newline character to mbox folders
                              when storing a mail so that the mandatory empty
                              line is there.

@@ -6,7 +6,7 @@
    details.
 
    Version definition file.
-   $Id: version.h,v 1.7.2.8 2002/12/16 22:51:21 rabbi Exp $ */
+   $Id: version.h,v 1.7.2.9 2002/12/17 19:54:05 rabbi Exp $ */
 
 
-#define VERSION "2.9b41"
+#define VERSION "2.9b42"
