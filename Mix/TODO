@@ -1,6 +1,7 @@
 Todo items before 2.9.1 release:
 
-* Correctly build with local pcre on FreeBSD.
 * Permit CRAM-MD5 SMTP AUTH in addition to LOGIN.
+* Backport improved stats logging.
+* Backport remailer exclusion capability.
 * Backport expiration/revocation checking of OpenPGP keys.
 * Fix ncurses support with command line arguments.

@@ -283,10 +283,18 @@
                            Minor code formating cleanup and Install script
                              fixes.
 
-2002-xx-xx      STABLE     The Mixmaster protocol version is now prepended 
+2002-12-14      2.0b41     The Mixmaster protocol version is now prepended 
                              to the software version in the Mixmaster cap-
                              string.
                            Minor configuration default changes and Install 
                              script fixes.
                            Install script now always uses "make" and not  
                              "gmake". IDEA detection is fixed.
+                           Install now properly identifies system-wide
+                             installations of pcre and/or zlib if they 
+                             are installed in /usr/local/. 
+                           Mixmaster will now ensure that an address
+                             submitted in a blocking request does not
+                             match that of a known remailer before
+                             adding it to the dest.blk file.
+                           Minor documentation fixes.

@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.8.2.12 2002/12/14 20:55:24 weaselp Exp $
+# $Id: Install,v 1.8.2.13 2002/12/14 23:32:49 rabbi Exp $
 
 #whereis program default-path
 whereis()
@@ -555,6 +555,9 @@ then
  elif [ "$version" = "90607f" ]
  then
   echo "Compiling with OpenSSL 0.9.6g."
+ elif [ "$version" = "90608f" ]
+ then
+  echo "Compiling with OpenSSL 0.9.6h."
  elif [ "$version" = "907001" ]
  then
   echo "Compiling with OpenSSL 0.9.7beta1."
@@ -566,6 +569,12 @@ then
  elif [ "$version" = "907003" ]
  then
   echo "Compiling with OpenSSL 0.9.7beta3."
+ elif [ "$version" = "907004" ]
+ then
+  echo "Compiling with OpenSSL 0.9.7beta4."
+ elif [ "$version" = "907005" ]
+ then
+  echo "Compiling with OpenSSL 0.9.7beta5."
  elif [ "$version" -lt "920" ]
  then
   echo "This version: ${version} of SSLeay is not supported."
