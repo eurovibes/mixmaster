@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.8.2.4 2002/10/15 23:28:47 rabbi Exp $
+# $Id: Install,v 1.8.2.5 2002/10/16 00:13:40 rabbi Exp $
 
 #whereis program default-path
 whereis()
@@ -750,11 +750,11 @@ if [ -f mix.exe ]
 then
  cp mix.exe $MIXDEST
 else
- cp mix $MIXDEST
+ cp -f mix $MIXDEST
 fi
 
 cd $MIXCFG
-for i in mlist.txt pubring.mix rlist.txt pubring.asc type2.list
+for i in mlist.txt pubring.mix rlist.txt pubring.asc
 do
  if [ ! -f $MIXDEST/$i ]
  then

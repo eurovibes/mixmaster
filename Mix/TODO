@@ -1,6 +1,5 @@
 Todo items before 2.9 release:
 
-* Fix Install script bug wrt overwriting mix executable.
 * Fix ncurses support with --config option.
 
 Optionally:
