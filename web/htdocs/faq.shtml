@@ -70,7 +70,7 @@ Last Update: 1/7/03
 4.1.5 Patches/Updates/Upgrades<br>
 4.2 Key Security<br>
 <a href=#4.3>4.3 Logging<br></a>
-4.4 Floods & Spam<br>
+<a href=#4.4>4.4 Floods & Spam</a><br>
 4.4.1 MTA<br>
 <a href=#4.4.2>4.4.2 Asian ISPs & Subnet Filtering<br></a>
 <a href=#4.4.3>4.4.3 Prevent Massive Crossposting</a><br>
@@ -78,12 +78,12 @@ Last Update: 1/7/03
 4.4.5 Duplicate Detection<br>
 <a href=#4.4.6>4.4.6 Blocking Obnoxious Hosts</a><br>
 <br>
-5. Policy<br>
-5.1 Always Have A Posted Policy!<br>
+<a href=#5>5. Policy</a><br>
+<a href=#5.1>5.1 Always Have A Posted Policy!</a><br>
 5.2 Responding to Abuse Complaints<br>
 5.3 To Monitor Or Not To Monitor?<br>
 <a href=#5.4>5.4 Cryptographically Signing Posts & E-mail<br></a>
-<a href=5.4.1>5.4.1 How To<br></a>
+<a href=#5.4.1>5.4.1 How To<br></a>
 5.5 Changing Remailer Keys<br>
 <a href=#5.6>5.6 Legal Links<br></a>
 <br>
@@ -222,7 +222,7 @@ Reasons for doing this include: keeping unhappy end-users from escalating compla
 <a name=3.1.5.1></a>
 <h3>3.1.5.1 TLS-SSL</h3>
 TLS-SSL stands for Transport Layer Security-Secure Socket Layer, and it is intended to add an extra layer of security to your mail server's communications. It does so by encrypting all header information when sending mail between MTAs that support it. As any extra level of security is generally a good thing when running a remailer, you are strongly encouraged to install TLS-SSL on your MTA.<br><br>
-For those running Qmail, the procedure is rather straightforwrad. Download the <a href=http://inoa.net/qmail/qmail-1.03-tls.patch>patch</a>, apply it to your source tree with "patch < tls.patch", make your server certificates as mentioned in the patch instructions, and re-run "make setup check" to install the updated binaries. Make certain you have run "make clean" first, and that Qmail is shut down during the recompilation (and of course turned back on once successful ;-).
+For those running Qmail, the procedure is rather straightforwrad. Download the <a href=http://inoa.net/qmail/qmail-1.03-tls.patch>patch</a>, apply it to your source tree with <tt>patch < tls.patch</tt>, make your server certificates as mentioned in the patch instructions, and re-run <tt>make setup check</tt> to install the updated binaries. Make certain you have run <tt>make clean</tt> first, and that Qmail is shut down during the recompilation (and of course turned back on once successful ;-).
 <h3>3.1.5.2 RBLs</h3>
 <a name=3.2></a>
 <h3>3.2 Downloading Software</h3>
@@ -256,9 +256,9 @@ Getting Mixmaster software to function on your system is a straightforward task,
 <h3>3.3.1 Mixmaster Remailer</h3>
 Follow these steps to make sure you've set up your remailer properly:
 <ul>
-<li>Ensure that you have a user "mix" on your system, or some other user that the remailer will run as. You'll want to make sure that this account is particularly difficult to compromise, as any breaches here can lead to serious problems with your remailer. It is suggested that you have either a particularly difficult password or no login capability at all for this account (obviously, the latter would be implemented after installation).</li>
-<li>Download the latest sources from <a href=http://sourceforge.net/project/showfiles.php?group_id=37891&release_id=129918>the SourceForge download section</a>. You'll wan to verify that you didn't get a Trojan horse by grabbing the release-signing key from <a href=http://mixmaster.sourceforge.net>mixmaster.sourceforge.net</a>, adding it to your keyring, and using GPG to verify the file's signature (which you should have downloaded at the same time as the source distribution). Doing this check is as simple as "gpg --verify mixmaster-2.x.tar.gz.sig"; note that this will only work if your signature file is named <checkfile.sig>, otherwise you'll have to specify the file you're checking. (Note to Lynx users: make sure that Lynx doesn't append a .gz to your sigfile -- it did to mine, and caused me quite a bit of consternation.)</li>
-<li>Unpack them somewhere handy, and then cd over to that directory. (Note that you will want to do the following either as root, to make sure you have proper permissions.) To build the binaries, type "./Install" in the directory you unpacked to and follow the prompts:
+<li>Ensure that you have a user <tt>mix</tt> on your system, or some other user that the remailer will run as. You'll want to make sure that this account is particularly difficult to compromise, as any breaches here can lead to serious problems with your remailer. It is suggested that you have either a particularly difficult password or no login capability at all for this account (obviously, the latter would be implemented after installation).</li>
+<li>Download the latest sources from <a href=http://sourceforge.net/project/showfiles.php?group_id=37891&release_id=129918>the SourceForge download section</a>. You'll wan to verify that you didn't get a Trojan horse by grabbing the release-signing key from <a href=http://mixmaster.sourceforge.net>mixmaster.sourceforge.net</a>, adding it to your keyring, and using GPG to verify the file's signature (which you should have downloaded at the same time as the source distribution). Doing this check is as simple as <tt>gpg --verify mixmaster-2.x.tar.gz.sig</tt>; note that this will only work if your signature file is named <checkfile.sig>, otherwise you'll have to specify the file you're checking. (Note to Lynx users: make sure that Lynx doesn't append a .gz to your sigfile -- it did to mine, and caused me quite a bit of consternation.)</li>
+<li>Unpack them somewhere handy, and then cd over to that directory. (Note that you will want to do the following either as root, to make sure you have proper permissions.) To build the binaries, type <tt>./Install</tt> in the directory you unpacked to and follow the prompts:
 <ul>
 <li><tt>Mixmaster directory?</tt>: Where you want all of the Mixmaster files, along with your remailing pool, to live. Probably /home/mix/Mix; make sure that this directory lives on a partition with space as discussed <a href=#2.1.5>above</a>, and that any parent directories are created (i.e. don't put it in /home/mix if you've not created the mix user).</li>
 <li><tt>Do you want to set up a remailer?</tt>: If you're reading this document, the answer is yes.</li>
@@ -284,20 +284,10 @@ Follow these steps to make sure you've set up your remailer properly:
 <li>Installation should be complete at this point.</li>
 </ul>
 </li>
-<li>Configure mix.cfg
-<li>Setup your abuse.txt file</li>
-<li>Setup your help.txt file</li>
-<li>Sign your remailers public key</li>
-<li>backup the mix binary to removeable media</li>
-<li>Secure the backup of the mix binary</li>
-<li>Sign your abuse.txt file</li>
-<li>Sign your help.txt file</li>
-<li>Allowing auto blocks or not?</li>
-<li>Blocking binaries, or not?</li>
-<li>Setup your remailing strategy</li>
-<li>Setup your MTA </li>
-<li>Setup your input throttling system (if any)</li>
-<li>Setup your output throttling system (if any)</li>
+<li>Configure your remailer through the mix.cfg file. Most options should be left alone, as they are the result of what you answered while running the Install script. If you do need to tweak these options, they are documented in the <a href=mix.manpage>mix(1)</a> manpage. NOTE: On some systems, your manpage may not install properly. If <tt>man mix</tt> cannot find a manpage, go to the directory with your source distribution, and use <tt>nroff -mandoc mix.1 | more</tt> to view the manpage. To install it permanently, copy the mix.1 file to your system's manpage directory (typically <tt>/usr/local/man/</tt>).
+<li>Customize your *.txt files. Go to the directory you installed Mixmaster in and individually edit abuse.txt, blocked.txt, help.txt, reply.txt, and usage.txt to your liking; you probably won't need to do much, as the standard files are very good. Next, sign all of these files, to prove to any recipients of these messages that you are the one who sent them. The typical command is <tt>gpg --sign abuse.txt</tt>; make sure you replace the unsigned file with the signed one after you've done this.
+<li>Sign your remailer's public key, the adminkey.txt file, using the same procedure as above.</li>
+<li>Setup your remailing strategy. This is controlle through your SENDPOOLTIME, POOLSIZE, RATE, IDEXP, and PACKETEXP values in mix.cfg. The first two values should be set higher for greater latency in your remailer. RATE can be lowered if you are worried about floods; since this determines the percent of messages that go out each mailing, setting a lower number here slows output of messages that have flooded into your remailer. PACKETEXP determines how long you hold onto partial messages while waiting for their other pieces to come in; a long value here is probably good. IDEXP determines how long a list of message IDs is kept, to help prevent replay attacks; while this cannot be set below 5 days, it is probably a good idea to have a low value here, since legitimate messages should have almost no ID duplication.<li>
 <li>How to allow full from: line forging</li>
 <li>How to just configure mix to allow from: nick names (not full from line: forging)</li>
 <li>How to add in a disclaimer to the body of the message if allowing user defined from: lines</li>
@@ -312,7 +302,7 @@ cmeclax po'u le cmevi'u ke'umrs written <a href=http://ixazon.dynip.com/~cmeclax
 <br><br>
 To use it, you need to first put the entireity of the bounced messages into one big file. Alex Kirk has <a href=http://www.schnarff.com/mixmaster/combine>a script</a> (http://www.schnarff.com/mixmaster/combine) which will do this automatically for those running Maildirs.
 <br><br>
-Once you have your messages in this file, simply run "resend <filename> <remailer@domain>", prefereably as the "mix" user (since, if you were to run this as example_user, messages appear to be coming from example_user@yourdomain). You should probably pick a remailer besides the one that has ben bouncing messages to you, and probably go with one that has a good uptime/statistics history.<br><br>
+Once you have your messages in this file, simply run <tt>resend <filename> <remailer@domain></tt>, prefereably as the <tt>mix</tt> user (since, if you were to run this as example_user, messages appear to be coming from example_user@yourdomain). You should probably pick a remailer besides the one that has ben bouncing messages to you, and probably go with one that has a good uptime/statistics history.<br><br>
 Keep in mind that this procedure should be repeated regularly, so that a) messages actually get through with some sense of timeliness, and b) you don't end up shooting out hundreds of messages to a particular remailer in one go.
 <h3>4. Security</h3>
 <a name=4.1></a>
@@ -324,7 +314,7 @@ Ensuring that the system your remailer runs on is secure is of the highest prior
 <h3>4.1.3 Minimalism/Unnecessary Software</h3>
 Most operating systems come with a great deal of programs and services enabled that you, the administrator, are unaware of and will never use. The number of such programs varies greatly, with Windows in all its forms being the worst offender down to <a href=http://www.openbsd.org>OpenBSD</a>, which ships with almost everything turned off.<br><br>
 The reason these programs are relevant to security is simple: if you have a service running that you know nothing about, you're not likely to keep up on exploits related to it. Thus, you're likely to end up with any number of remotely exploitable holes on your system that you're completely unaware of.<br><br>
-Your best bet in solving this problem -- besides picking an O/S that isn't a major offender here -- is to scan your box and to find out what services it's running, and then shut down those that aren't relevant to your operations (including, for the most part, those that you have no idea what they do). For UNIX-based systems, first use the "ps" command to check for actively running programs; you can usually turn them off permanently by editing a file like /etc/rc.conf and commenting them out. <br><br>
+Your best bet in solving this problem -- besides picking an O/S that isn't a major offender here -- is to scan your box and to find out what services it's running, and then shut down those that aren't relevant to your operations (including, for the most part, those that you have no idea what they do). For UNIX-based systems, first use the <tt>ps</tt> command to check for actively running programs; you can usually turn them off permanently by editing a file like /etc/rc.conf and commenting them out. <br><br>
 More importantly, no matter what your O/S is, you should run a port scan from a remote machine, and then go about shutting down ports that offer unnecessary services. A good free web-based port scanner is at <a href=http://crypto.yashy.com/nmap.php>crypto.yashy.com/nmap.php</a>; hitting this URL will tell you what ports you have open and what's running on them.
 <h3>4.1.4 Local Attacks</h3>
 <h3>4.1.5 Patches/Updates/Upgrades</h3>
@@ -334,6 +324,7 @@ More importantly, no matter what your O/S is, you should run a port scan from a 
 To log or not to log? That is every remailer's question. ;-)<br><br>
 Seriously, though, whether or not you keep your mail server logs is an important decision. The information contained in them could be valuable to any number of malicious entities -- crackers, someone seeking to track down an anonymous message sender, even government entities (which have been known to use subpoenas and other, more devious tactics to obtain logs).<br><br>
 If you are serious about protecting the identities of those who mail through you -- particularly if you're not just a middleman remailer, and your server interacts with real users regularly -- you should take precautions regarding your mail server logs. The simplest of these, of course, would be to simply turn your logs off altogether; that way no one can possibly break into them, and even if your records are subpoenaed, you can truthfully and legally say, "But I have none." If you're one of those people who simply can't function without running logs, you should at least use CFS or some other filesystem encryption scheme to protect your logs. Keep in mind that, if you do have logs that you need to erase, no standard O/S delete function will really delete them -- the data will remain recoverable on your hard drive unless you use special data-wiping software (and even then, it may still be recoverable given the proper amount of effort/resources on the attacker's part). Note that some UNIX systems have a flag to rm that will attempt to fully delete a file; so far, none of these perform the necessary steps (with the exception of OpenBSD 3.3 when it is released in April, as a patch was recently added to perform full overwriting). For more info on secure deletion, see <a href=http://www.cs.auckland.nz/~pgut001/pubs/secure_del.html>Peter Guttman's 1996 USENIX paper</a> Note that some UNIX systems have a flag to rm that will attempt to fully delete a file; so far, none of these perform the necessary steps (with the exception of OpenBSD 3.3 when it is released in April, as a patch was recently added to perform full overwriting). For more info on secure deletion, see <a href=http://www.cs.auckland.nz/~pgut001/pubs/secure_del.html>Peter Guttman's 1996 USENIX paper</a>, "Secure Deletion of Data from Magnetic and Solid-State Memory."
+<a name=4.4></a>
 <h3>4.4 Floods & Spam</h3>
 <h3>4.4.1 MTA</h3>
 <a name=4.4.2></a>
@@ -354,19 +345,34 @@ You can use Michael Shinn's <a href=ftp://ftp.shinn.net/pub/spamshield/output/sp
 <a name=4.4.6></a>
 <h3>4.4.6 Blocking Obnoxious Hosts</h3>
 While it is probably best to block abusive hosts at the firewall, in that this method uses up the smallest amount of system resources, there are cases where this is not possible -- when one does not have access to modify the firewall, or when an abusive address lives at a domain so widely used that it cannot be blocked (i.e. yahoo.com, hotmail.com). In these cases, you should add the abusive address(es) to your source.blk file. If this file does not exist, simply create a textfile of that name, listing addresses one per line. Regular expressions are permitted, so if you want to block off an entire domain, you could use *@domain.com.
+<a name=5></a>
 <h3>5. Policy</h3>
+<a name=5.1></a>
 <h3>5.1 Always Have A Posted Policy!</h3>
+Putting together and posting a well-thought-out abuse policy is a simple task that yields enormous dividends. If someone who has received abusive mailings through your remailer can see that you're doing your best to stop abuse, and that they have methods of recourse, they are infinitely less likely to complain to your ISP, try to crack your box, or otherwise harm you. Besides, making sure you're a good netizen by not tolerating abuse of your remailer is just good sense (not to mention good karma, if you belive in that sort of thing ;-).
 <h3>5.2 Responding to Abuse Complaints</h3>
 <h3>5.3 To Monitor Or Not To Monitor?</h3>
 <a name=5.4></a>
 <h3>5.4 Cryptographically Signing Posts & E-mail</h3>
 If you're running a remailer, you probably have at least the basic concepts of cryptography down -- at least enough to know that it's possible to cryptographically sign mail messages and Usenet posts, and that doing so helps verify your identity in the message. What you may not realize is that there have been (and will probably continue to be) extremely good forgeries of messages from remailer operators on the official mailing lists. Since someone forging a message could do really nasty things, such as issue bogus keys for your remailer, it is of the utmost importance that you *always* sign your messages, so that a forgery will be obvious (and if a forger has access to your keys to sign your messages, well, you've got bigger problems). Remember, if you only sign messages some of the time, it will be very easy for someone to sneak in and act as you (thought the occasional unsigned post followed two minutes later with a "Crap! Forgot to sign that last one!" post will be understood. ;-).<br><br>
 It is even worth your while to sign things like your abuse autoresponse, as forgeries have been known to occur in them as well (particularly when people are accusing you of abuse, and are trying to claim that your abuse policy is not strong enough).
-<a name=5.4></a>
+<a name=5.4.1></a>
 <h3>5.4.1 How To</h3>
 The first thing you'll need to do is have <a href=http://www.pgpi.com>PGP</a> or <a href=http://www.gnupg.org>GPG</a>installed. Chances are, if you're here, you've already done this.<br><br>
 Once this is done, you'll want to establish a key seperate from your remailer keys as your administrator key. If you've already got a keyset you're officially using, simply use it; if not, generate a new keyset, preferably RSA (as this is stronger than DSS), and at least 1024 bits (thought 2048 wouldn't be bad at all, especially for the paranoid amongst us).<br><br>
-As far as getting your mail client to work with PGP/GPG, well, it all depends. For many Windows systems, such as Outlook (Express), Eudora, etc., you can simply use the PGP plug-in. For Mozilla, you'll want to use <a href=http://enigmail.mozdev.org/>Enigmail</a>, which is freely available for all major operating systems. If you use a webmail system, you'll need to check its documentation.
+As far as getting your mail client to work with PGP/GPG, well, it all depends. For many Windows systems, such as Outlook (Express), Eudora, etc., you can simply use the PGP plug-in. For Mozilla, you'll want to use <a href=http://enigmail.mozdev.org/>Enigmail</a>, which is freely available for all major operating systems. If you use a webmail system, you'll need to check its documentation.<br><br>
+For those who are running a *NIX, particularly with the X Windows system, your range of choices is much larger (list from http://www.mandrakeuser.org/docs/secure/sgpg2.html):
+<ul>
+<li><a href=http://www.newplanetsoftware.com/arrow/>Arrow</a>, a lightweight mail client for X. </li>
+<li><a href=http://www.beedub.com/exmh/>Exmh</a>, X front end for the MH mailing system. </li>
+<li><a href=http://devel-home.kde.org/~kmail/>KMail</a>, KDE's standard mail client. </li>
+<li><a href=http://www.mew.org/index.html>Mew</a>, a MIME mail reader for (X)Emacs. </li>
+<li><a href=http://www.mutt.org/>Mutt</a>, a very popular console based mail reader. </li>
+<li><a href=http://www.washington.edu/pine/>Pine</a>, another popular console based mail reader. You will need an add-on like <a href=http://pgp4pine.flatline.de>pgp4pine</a>. </li>
+<li><a href=http://www.postilion.org/>Postilion</a>, a next-ish mail application for X. </li>
+<li><a href=http://spruce.sourceforge.net/>Spruce</a>, a GTK+ mail client. </li>
+<li><a href=http://xfmail.slappy.org/>XFMail</a>, a very powerful MUA for X.</li>
+</ul>
 <h3>5.5 Changing Remailer Keys</h3>
 <a name=5.6></a>
 <h3>5.6 Legal Links</h3>
