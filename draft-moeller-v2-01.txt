@@ -11,7 +11,7 @@ Expires: August 31, 2004
 
 
                       Mixmaster Protocol Version 2
-                       <draft-moeller-v2-01.txt>
+		    draft-sassaman-mixmaster-XX.txt
 
 Status of This Memo
 
@@ -190,8 +190,8 @@ independent.
 
 Some remailers may understand multiple remailer protocols. In the interest of
 creating a unified anonymity set, remailers which speak multiple remailer
-protocols should attempt to remix messages that use the older protocols whenever
-possible.
+protocols should attempt to remix messages that use the older protocols
+whenever possible.
 
 When a remailer receives a message in the older protocol format, it should
 determine if the message destination is another remailer which also speaks the
@@ -420,7 +420,7 @@ Timestamp: A timestamp is introduced with the byte sequence (48, 48, 48,
 48, 0). The following two bytes specify the number of days since Jan 1,
 1970, given in little-endian byte order. A random number of up to 3 may be
 subtracted from the number of days in order to obscure the origin of the
-message. 
+message.
 
 Message digest: MD5 digest computed over the preceding elements of the
 encrypted header part.
