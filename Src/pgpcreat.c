@@ -6,7 +6,7 @@
    details.
 
    Create OpenPGP packets
-   $Id: pgpcreat.c,v 1.3 2001/11/07 00:44:09 rabbi Exp $ */
+   $Id: pgpcreat.c,v 1.4 2002/08/03 17:08:02 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -15,7 +15,7 @@
 #include "crypto.h"
 #include <assert.h>
 #include <time.h>
-#include <time.h>
+#include <string.h>
 
 int pgp_packet(BUFFER *in, int type)
 {

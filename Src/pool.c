@@ -6,7 +6,7 @@
    details.
 
    Send messages from pool
-   $Id: pool.c,v 1.8 2002/05/11 00:58:26 rabbi Exp $ */
+   $Id: pool.c,v 1.9 2002/08/03 17:08:02 weaselp Exp $ */
 
 #include "mix3.h"
 #include <stdlib.h>
@@ -236,7 +236,7 @@ int pool_send(void)
 {
   int size, max, i, r;
   BUFFER *pool;
-  int *ptr;
+  long int *ptr;
 
   infile_read();
   latent_read();
@@ -245,7 +245,7 @@ int pool_send(void)
   if (size <= POOLSIZE)
     goto end;
 
-  ptr = malloc(size * sizeof(int));
+  ptr = malloc(size * sizeof(long int));
 
   if (ptr == NULL)
     goto end;

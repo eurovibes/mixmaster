@@ -6,7 +6,7 @@
    details.
 
    Key management
-   $Id: keymgt.c,v 1.6 2002/07/25 14:11:37 weaselp Exp $ */
+   $Id: keymgt.c,v 1.7 2002/08/03 17:08:01 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -246,7 +246,7 @@ int adminkey(BUFFER *out)
 }
 
 #ifdef USE_RSA
-int v2keymgt(force)
+int v2keymgt(int force)
 {
   /* scan secring, write the pubkey. function will be rewritten
      for advanced key management in v3 */

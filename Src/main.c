@@ -6,13 +6,14 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.8 2002/07/24 07:00:16 rabbi Exp $ */
+   $Id: main.c,v 1.9 2002/08/03 17:08:02 weaselp Exp $ */
 
 
 #include "mix3.h"
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdlib.h>
 #ifdef POSIX
 #include <unistd.h>
 #else
@@ -222,7 +223,7 @@ int main(int argc, char *argv[])
 	    break;
 	  case 'r':
 	    if (i < argc - 1)
-	      buf_appendf(msg, "Reply-Chain: %s\n, argv[++i]");
+	      buf_appendf(msg, "Reply-Chain: %s\n", argv[++i]);
 	    else {
 	      noarg(argv[0], *p);
 	      error = 1;
@@ -520,9 +521,9 @@ WinNT service:\n\
       else
 	buf_nl(chains);
     }
-    if (strchr(nym, '@')) {
-      strncpy(nymserver, strchr(nym, '@'), sizeof(nymserver));
-      *strchr(nym, '@') = '\0';
+    if (strrchr(nym, '@')) {
+      strncpy(nymserver, strrchr(nym, '@'), sizeof(nymserver));
+      *strrchr(nym, '@') = '\0';
     }
     if (nym_config(NYM_CREATE, nym, nymserver, pseudonym,
 		   chain, numcopies, chains, nymopt) < 0) {

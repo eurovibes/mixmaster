@@ -6,7 +6,7 @@
    details.
 
    OpenPGP data
-   $Id: pgpdata.c,v 1.7 2002/07/22 17:54:48 rabbi Exp $ */
+   $Id: pgpdata.c,v 1.8 2002/08/03 17:08:02 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -15,7 +15,7 @@
 #include "crypto.h"
 #include <assert.h>
 #include <time.h>
-#include <time.h>
+#include <string.h>
 
 int pgp_keylen(int symalgo)
 {
@@ -419,7 +419,7 @@ int pgp_getkey(int mode, int algo, int *psym, BUFFER *keypacket, BUFFER *key,
 {
   int tempbuf = 0;
   int keytype = -1, type, j;
-  int thisalgo, version, skalgo;
+  int thisalgo = 0, version, skalgo;
   int needsym = 0, symfound = 0;
   BUFFER *p1, *iv, *sk, *i, *thiskeyid;
   int ivlen;
@@ -1139,7 +1139,8 @@ int pgp_dosign(int algo, BUFFER *data, BUFFER *key)
 
 int pgp_elgdecrypt(BUFFER *in, BUFFER *key)
 {
-  BIGNUM *a, *b, *c, *p, *g, *x;
+  BIGNUM *a = NULL, *b = NULL, *c = NULL,
+         *p = NULL, *g = NULL, *x = NULL;
   BN_CTX *ctx;
   BUFFER *i;
   int err = -1;
@@ -1192,7 +1193,7 @@ int pgp_elgdecrypt(BUFFER *in, BUFFER *key)
 
 int pgp_elgencrypt(BUFFER *in, BUFFER *key)
 {
-  BIGNUM *m, *k, *a, *b, *c, *p, *g, *y;
+  BIGNUM *m, *k, *a, *b, *c, *p, *g, *y = NULL;
   BN_CTX *ctx;
   BUFFER *i;
   int err = -1;

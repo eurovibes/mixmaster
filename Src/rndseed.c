@@ -6,7 +6,7 @@
    details.
 
    Get randomness from device or user
-   $Id: rndseed.c,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: rndseed.c,v 1.2 2002/08/03 17:08:02 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -14,6 +14,7 @@
 #include <time.h>
 #include <fcntl.h>
 #include <time.h>
+#include <stdlib.h>
 #ifdef POSIX
 #include <unistd.h>
 #include <termios.h>
@@ -125,7 +126,11 @@ int rnd_seed(void)
 #ifdef DEV_RANDOM
   else {
     bytes = read(fd, b, sizeof(b));
-    rnd_add(b, sizeof(b));
+    if (bytes > 0) {
+      rnd_add(b, bytes);
+    } else {
+      bytes = 0;
+    }
     close(fd);
     if (bytes < NEEDED) {
       fd = open(DEV_RANDOM, O_RDONLY);	/* re-open in blocking mode */
