@@ -11,9 +11,25 @@
 
 <h2>Remailer Clients</h2>
 
-Please see
+<p>
+The <a href="http://sourceforge.net/projects/jbn">JBN</a> project on
+sourceforge was just started in order to maintain JBN again and bring it up to
+date.
+
+<p>
+<a href="http://sourceforge.net/projects/mixlet">Mixlet</a> is a Mix Client in
+Java.  It does not rely on Mixmaster itself to build the messages but rather
+implements the required procedures itself.
+
+<p>
+<a href="http://quicksilver.skuz.net/">QuickSilver</a> is an actively
+maintained and developed client for Win32.  It doesn't call the Mixmaster
+binary but instead links against the mix.dll build from Mixmaster's sources.
+
+<p>
 <a href="http://www.eskimo.com/~turing/remailer/FAQ/faq.6.html">Section 6 of the alt.privacy.anon-server FAQ</a>
-for a list of remailer clients.
+perhaps has a list of more remailer clients.
+
 
 <h2>Other Remailers</h2>
 
@@ -23,6 +39,15 @@ for a list of remailer clients.
 a very popular remailer software for Microsoft Windows. It is type I
 (cypherpunk) only but has type II callbacks. So if you additionally install
 Mix2 or Mix3 on your system it can also do type II. 
+
+<p>
+Deacon also created the <a href="http://sourceforge.net/projects/reliable2">Reliable2</a>
+project here on SourceForge in order to bring it up to current standards.
+
+<p>
+<a href="http://www.mixminion.net">Mixminion</a> will become the next
+generation remailing network (Type III).  It's not yet ready to provide you
+with anonymity but it's well on its way.
 
 <h2>Nymservers</h2>
 
@@ -36,6 +61,11 @@ dowloaded via finger from
 There also is a project that makes the nym.alias.net source work with newer PGP
 and GnuPG versions. The project web site is at
 <a href="http://sourceforge.net/projects/nymserv">http://sourceforge.net/projects/nymserv</a>.
+
+<p>
+Deacon also is developing a <a href="http://sourceforge.net/projects/nymproxy">Nym-Proxy</a>
+which lets you use your usual Mail and News clients while still using a Nym.
+This is for Unixes.
 
 <h2>Pingers</h2>
 
