@@ -38,7 +38,7 @@ Libraries:
   ftp://mixmaster.anonymizer.com/ and extract them in the Src
   directory first.
 
-  The Perl Compatable Regular Expressions library can be obtained from
+  The Perl Compatible Regular Expressions library can be obtained from
   ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/
 
   The zlib compression libraries can be obtained at
@@ -206,4 +206,4 @@ University of California, Berkeley and its contributors.
 
 All trademarks are the property of their respective owners.
 
-$Id: README,v 1.5.2.7 2002/12/17 19:54:05 rabbi Exp $
+$Id: README,v 1.5.2.8 2002/12/17 21:31:29 rabbi Exp $
