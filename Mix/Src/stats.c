@@ -6,7 +6,7 @@
    details.
 
    Remailer statistics
-   $Id: stats.c,v 1.8 2002/08/20 18:46:33 rabbi Exp $ */
+   $Id: stats.c,v 1.9 2002/08/20 20:07:33 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -243,7 +243,7 @@ int conf(BUFFER *out)
     buf_appendf(out, "Maximum message size: %d kB\n", SIZELIMIT);
 
   /* display destinations to which delivery is explicitly permitted
-     when in middleman mode (contents of DESTALLOWf file.)  */
+     when in middleman mode (contents of DESTALLOW file.)  */
 
   if (MIDDLEMAN) {
     f = mix_openfile(DESTALLOW, "r");
