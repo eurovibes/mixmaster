@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.8.2.20 2002/12/19 18:48:53 rabbi Exp $
+# $Id: Install,v 1.8.2.21 2003/02/17 20:36:53 ulfm Exp $
 
 #whereis program default-path
 whereis()
@@ -559,26 +559,9 @@ then
  elif [ "$version" = "90608f" ]
  then
   echo "Compiling with OpenSSL 0.9.6h."
- elif [ "$version" = "907001" ]
+ elif [ "$version" = "90700f" ]
  then
-  echo "Compiling with OpenSSL 0.9.7-beta1."
-  opensslwarn
- elif [ "$version" = "907002" ]
- then
-  echo "Compiling with OpenSSL 0.9.7-beta2."
-  opensslwarn
- elif [ "$version" = "907003" ]
- then
-  echo "Compiling with OpenSSL 0.9.7-beta3."
- elif [ "$version" = "907004" ]
- then
-  echo "Compiling with OpenSSL 0.9.7-beta4."
- elif [ "$version" = "907005" ]
- then
-  echo "Compiling with OpenSSL 0.9.7-beta5."
- elif [ "$version" = "907006" ]
- then
-  echo "Compiling with OpenSSL 0.9.7-beta6."
+  echo "Compiling with OpenSSL 0.9.7."
  elif [ "$version" -lt "920" ]
  then
   echo "This version: ${version} of SSLeay is not supported."
@@ -696,6 +679,7 @@ http://www.clark.net/pub/dickey/ncurses/ncurses.tar.gz"
  then
   DEF="$DEF -DUSE_IDEA"
  else
+   echo "Checking for IDEA support..."
    cat <<END >tmptst.c
 #include <openssl/idea.h>
 int main() {
@@ -704,8 +688,9 @@ int main() {
   exit(0);
 }
 END
-   if gcc $LDFLAGS $INC tmptst.c -o /dev/null $OPENSSLLIB
+   if gcc $LDFLAGS $INC tmptst.c -o tmptst $OPENSSLLIB
    then
+     echo ok
      DEF="$DEF -DUSE_IDEA"
    else
      ideawarn
