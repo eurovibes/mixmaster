@@ -6,7 +6,7 @@
    details.
 
    Prepare messages for remailer chain
-   $Id: chain.c,v 1.7 2003/05/03 05:08:53 weaselp Exp $ */
+   $Id: chain.c,v 1.8 2003/05/03 05:31:07 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -23,6 +23,72 @@ void clienterr(BUFFER *msgbuf, char *err)
   } else
     errlog(ERRORMSG, "%s\n", err);
 }
+
+void parse_badchains(int badchains[MAXREM][MAXREM], char *file, char *startindicator, REMAILER *remailer, int maxrem) {
+  int i,j;
+  FILE *list;
+  char line[LINELEN];
+
+  if (!badchains)
+    return;
+
+  for (i = 0; i < maxrem; i++ )
+    for (j = 0; j < maxrem; j++ )
+      badchains[i][j] = 0;
+  list = mix_openfile(TYPE2REL, "r");
+  if (list != NULL) {
+    while (fgets(line, sizeof(line), list) != NULL &&
+      !strleft(line, startindicator)) ;
+    while (fgets(line, sizeof(line), list) != NULL &&
+      strleft(line, "(")) {
+      char *left, *right, *tmp;
+      int lefti, righti;
+
+      left = line + 1;
+      while (*left == ' ')
+	left ++;
+
+      tmp = left + 1;
+      while (*tmp != ' ' && *tmp != '\0' && *tmp != ')')
+	tmp ++;
+      if (*tmp == '\0' || *tmp == ')')
+	/* parsing this line failed */
+	continue;
+      *tmp = '\0';
+
+      right = tmp+1;
+      while (*right == ' ')
+	right ++;
+      tmp = right + 1;
+      while (*tmp != ' ' && *tmp != '\0' && *tmp != ')')
+	tmp ++;
+      if (*tmp == '\0')
+	/* parsing this line failed */
+	continue;
+      *tmp = '\0';
+
+      lefti = -1;
+      righti = -1;
+      for (i = 1; i < maxrem; i++) {
+	if (strcmp(remailer[i].name, left) == 0)
+	  lefti = i;
+	if (strcmp(remailer[i].name, right) == 0)
+	  righti = i;
+      }
+      if (strcmp(left, "*") == 0)
+	lefti = 0;
+      if (strcmp(right, "*") == 0)
+	righti = 0;
+
+      if (lefti == -1 || righti == -1)
+	/* we don't know about one or both remailers */
+	continue;
+      badchains[lefti][righti] = 1;
+    }
+  }
+  fclose(list);
+}
+
 
 int chain_select(int hop[], char *chainstr, int maxrem, REMAILER *remailer,
 		 int type, BUFFER *feedback)
@@ -102,11 +168,12 @@ end:
   return len;
 }
 
-int chain_randfinal(int type, REMAILER *remailer, int maxrem, int rtype)
+int chain_randfinal(int type, REMAILER *remailer, int badchains[MAXREM][MAXREM], int maxrem, int rtype, int secondtolasthop)
 {
   int num = 0;
   int i;
   int t;
+  int select[MAXREM];
 
   t = rtype;
   if (rtype == 2)
@@ -114,36 +181,34 @@ int chain_randfinal(int type, REMAILER *remailer, int maxrem, int rtype)
 
   /* select a random final hop */
   for (i = 1; i < maxrem; i++) {
-    if (((remailer[i].flags.mix && rtype == 0) ||
+    select[i] = 
+       ((remailer[i].flags.mix && rtype == 0) ||             /* remailer supports type */
 	 (remailer[i].flags.pgp && remailer[i].flags.ek && rtype == 1) ||
 	 (remailer[i].flags.newnym && rtype == 2)) &&
-	remailer[i].info[t].reliability >= 100 * RELFINAL &&
-	remailer[i].info[t].latency <= MAXLAT &&
-	(type == MSG_NULL || !remailer[i].flags.middle) &&
-	!remailer[i].flags.star_ex &&
-	(remailer[i].flags.post || type != MSG_POST))
-      num++;
+	remailer[i].info[t].reliability >= 100 * RELFINAL && /* remailer has sufficient reliability */
+	remailer[i].info[t].latency <= MAXLAT &&             /* remailer has small enough latency */
+	(type == MSG_NULL || !remailer[i].flags.middle) &&   /* remailer is not middleman */
+	!remailer[i].flags.star_ex &&                        /* remailer is not excluded from random selection */
+	(remailer[i].flags.post || type != MSG_POST) &&      /* remailer supports post when this is a post */
+	((secondtolasthop == -1) || !badchains[secondtolasthop][i]);/* we only have hop or the previous one can send to this (may be random) */
+    num += select[i];
   }
   if (num == 0)
     i = -1;
   else {
     do
       i = rnd_number(maxrem - 1) + 1;
-    while (!(((remailer[i].flags.mix && rtype == 0) ||
-	      (remailer[i].flags.pgp && remailer[i].flags.ek && rtype == 1) ||
-	      (remailer[i].flags.newnym && rtype == 2)) &&
-	     remailer[i].info[t].reliability >= 100 * RELFINAL &&
-	     remailer[i].info[t].latency <= MAXLAT &&
-	     (type == MSG_NULL || !remailer[i].flags.middle) &&
-	     !remailer[i].flags.star_ex &&
-	     (remailer[i].flags.post || type != MSG_POST)));
+    while (!select[i]);
   }
   return (i);
 }
 
-int chain_rand(REMAILER *remailer, int maxrem,
+int chain_rand(REMAILER *remailer, int badchains[MAXREM][MAXREM], int maxrem,
 	       int thischain[], int chainlen, int t)
      /* set random chain. returns 0 if not random, 1 if random, -1 on error */
+/* t... 0 for mixmaster Type II
+ *      1 for cypherpunk Type I
+ */
 {
   int hop;
   int err = 0;
@@ -157,17 +222,25 @@ int chain_rand(REMAILER *remailer, int maxrem,
       int i;
 
       err = 1;
-      for (i = 1; i < maxrem; i++)
-	select[i] = ((remailer[i].flags.mix && t == 0) ||
+      if (hop > 0)
+	assert(thischain[hop-1]); /* we already should have chosen a remailer after this one */
+      for (i = 1; i < maxrem; i++) {
+	select[i] = ((remailer[i].flags.mix && t == 0) ||        /* remailer supports type */
 		     (remailer[i].flags.pgp && remailer[i].flags.ek && t == 1))
-	  && remailer[i].info[t].reliability >= 100 * MINREL &&
-	  !remailer[i].flags.star_ex &&
-	  remailer[i].info[t].latency <= MAXLAT,
-	  randavail += select[i];
+	  && remailer[i].info[t].reliability >= 100 * MINREL &&  /* remailer has sufficient reliability */
+	  !remailer[i].flags.star_ex &&                          /* remailer is not excluded from random selection */
+	  remailer[i].info[t].latency <= MAXLAT &&               /* remailer has small enough latency */
+	  !badchains[i][0] && !badchains[i][thischain[hop-1]] && /* remailer can send to the next one */
+	  (hop == chainlen-1 || !badchains[thischain[hop+1]][i]);/* we are at the first hop or the previous one can send to this (may be random) */
+	randavail += select[i];
+      }
 
       for (i = hop - DISTANCE; i <= hop + DISTANCE; i++)
-	if (i >= 0 && i < chainlen && select[thischain[i]])
-	  select[thischain[i]] = 0, randavail--;
+	if (i >= 0 && i < chainlen && select[thischain[i]]) {
+	  select[thischain[i]] = 0;
+	  randavail--;
+	}
+
 
       if (randavail < 1) {
 	err = -1;
@@ -219,10 +292,11 @@ float chain_reliability(char *chain, int chaintype,
   int maxrem;
   int i;
   REMAILER remailer[MAXREM];
+  int badchains[MAXREM][MAXREM];
 
   /* chaintype 0=mix 1=ek 2=newnym */
   assert((chaintype == 0) || (chaintype == 1));
-  maxrem = (chaintype == 0 ? mix2_rlist(remailer) : t1_rlist(remailer));
+  maxrem = (chaintype == 0 ? mix2_rlist(remailer, badchains) : t1_rlist(remailer, badchains));
 
   /* Dissect chain */
   name_start = chain;

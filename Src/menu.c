@@ -6,7 +6,7 @@
    details.
 
    Menu-based user interface
-   $Id: menu.c,v 1.14 2003/04/10 17:37:34 weaselp Exp $ */
+   $Id: menu.c,v 1.15 2003/05/03 05:31:07 weaselp Exp $ */
 
 
 #include "menu.h"
@@ -820,6 +820,7 @@ void menu_chain(char *chainstr, int chaintype, int post)
      /* chaintype 0=mix 1=ek 2=newnym */
 {
   REMAILER remailer[MAXREM];
+  int badchains[MAXREM][MAXREM];
   int rlist[2 * MAXREM];
   char newchain[CHAINMAX];
   char info[LINELEN];
@@ -842,9 +843,9 @@ void menu_chain(char *chainstr, int chaintype, int post)
   standend();
 
   if (chaintype == 1)
-    num = t1_rlist(remailer);
+    num = t1_rlist(remailer, badchains);
   else
-    num = mix2_rlist(remailer);
+    num = mix2_rlist(remailer, badchains);
 
   if (num < 1) {
     mix_status("Can't read remailer list.");

@@ -6,7 +6,7 @@
    details.
 
    Function prototypes
-   $Id: mix3.h,v 1.21 2003/02/15 00:29:36 weaselp Exp $ */
+   $Id: mix3.h,v 1.22 2003/05/03 05:31:07 weaselp Exp $ */
 
 
 #ifndef _MIX3_H
@@ -335,15 +335,16 @@ typedef struct {
 #define CHAINMAX 421
 #define MAXREM 100
 int prepare_type2list(BUFFER *out);
-int mix2_rlist(REMAILER remailer[]);
-int t1_rlist(REMAILER remailer[]);
+int mix2_rlist(REMAILER remailer[], int badchains[MAXREM][MAXREM]);
+int t1_rlist(REMAILER remailer[], int badchains[MAXREM][MAXREM]);
 int pgp_rlist(REMAILER remailer[], int n);
 int pgp_rkeylist(REMAILER remailer[], int keyid[], int n);
+void parse_badchains(int badchains[MAXREM][MAXREM], char *file, char *startindicator, REMAILER *remailer, int maxrem);
 int chain_select(int hop[], char *chainstr, int maxrem, REMAILER *remailer,
 		 int type, BUFFER *feedback);
-int chain_rand(REMAILER *remailer, int maxrem,
+int chain_rand(REMAILER *remailer, int badchains[MAXREM][MAXREM], int maxrem,
 	       int thischain[], int chainlen, int t);
-int chain_randfinal(int type, REMAILER *remailer, int maxrem, int t);
+int chain_randfinal(int type, REMAILER *remailer, int badchains[MAXREM][MAXREM], int maxrem, int rtype, int secondtolasthop);
 
 float chain_reliability(char *chain, int chaintype,
 			char *reliability_string);

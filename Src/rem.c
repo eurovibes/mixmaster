@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.35 2003/04/09 10:36:34 weaselp Exp $ */
+   $Id: rem.c,v 1.36 2003/05/03 05:31:07 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -548,7 +548,7 @@ int blockrequest(BUFFER *message)
 	goto end;
       }
       /* Check if some evil person tries to block a known type II remailer */
-      num = mix2_rlist(remailer);
+      num = mix2_rlist(remailer, NULL);
       for (i = 0; i < num; i++) {
 	buf_sets(remailer_addr, remailer[i].addr);
 	if (doblock(remailer_addr, copy_addr, 1)) {
@@ -558,7 +558,7 @@ int blockrequest(BUFFER *message)
 	}
       }
       /* Check if some evil person tries to block a known type I remailer */
-      num = t1_rlist(remailer);
+      num = t1_rlist(remailer, NULL);
       for (i = 0; i < num; i++) {
 	buf_sets(remailer_addr, remailer[i].addr);
 	if (doblock(remailer_addr, copy_addr, 1)) {

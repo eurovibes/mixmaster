@@ -6,7 +6,7 @@
    details.
 
    Create nym server messages
-   $Id: nym.c,v 1.8 2002/10/09 20:53:30 weaselp Exp $ */
+   $Id: nym.c,v 1.9 2003/05/03 05:31:07 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -23,6 +23,7 @@ int nym_config(int mode, char *nym, char *nymserver, BUFFER *pseudonym,
   return (-1);
 #else /* end of not USE_PGP */
   REMAILER remailer[MAXREM];
+  int badchains[MAXREM][MAXREM];
   KEYRING *r;
   int maxrem;
   int chain[20];
@@ -60,13 +61,13 @@ int nym_config(int mode, char *nym, char *nymserver, BUFFER *pseudonym,
   }
 
   if (nymserver) {
-    maxrem = t1_rlist(remailer);
+    maxrem = t1_rlist(remailer, badchains);
     if (maxrem < 1)
       return (-1);
     if (chain_select(chain, nymserver, maxrem, remailer, 2, NULL) != 1)
       return (-1);
     if (chain[0] == 0)
-      chain[0] = chain_randfinal(MSG_MAIL, remailer, maxrem, 2);
+      chain[0] = chain_randfinal(MSG_MAIL, remailer, badchains, maxrem, 2, -1);
     if (chain[0] == -1)
       return (-1);
     assert(strchr(nym, '@') == NULL && strchr(remailer[chain[0]].addr, '@'));
