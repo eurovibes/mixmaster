@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.46 2003/07/07 11:32:45 weaselp Exp $ */
+   $Id: mix.c,v 1.47 2003/09/23 19:03:48 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -734,9 +734,6 @@ int mix_config(void)
   if (TYPE1[0] == '\0')
     PGP = 0;
 #endif /* not USE_PGP */
-#ifndef USE_RSA
-  MIX = 0;
-#endif /* not USE_RSA */
 
 #ifdef WIN32
   if (RegOpenKeyEx(regsw, "PGP", 0, KEY_ALL_ACCESS, &regpgp) == 0)
