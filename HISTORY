@@ -418,7 +418,7 @@
 2003-06-30      3.0a8     Minor stats fix.  The date in remailer-stats was
                             sometimes wrong.
 
-2003-??-??      CVS       Don't try to send a message if there are no
+2003-10-12      3.0a9     Don't try to send a message if there are no
                             recipients left.
                           Set default max-randhops from 20 to 4.
                           Remix-To chain is limited by max-randhops limit as
