@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.8 2002/08/09 18:00:06 rabbi Exp $
+# $Id: Install,v 1.9 2002/08/21 15:24:27 weaselp Exp $
 
 #whereis program default-path
 whereis()
@@ -307,6 +307,10 @@ then
   if [ -f $MIXDEST/secring.mix ]
   then
     remailer=y
+    if grep PASSPHRASE $MIXDEST/mix.cfg >/dev/null
+    then
+      PASSINCONFIG=1
+    fi
   else
     readln "Do you want to set up a remailer?" n
     remailer=$ans
@@ -320,6 +324,52 @@ else
   remailer=$ans
 fi
 
+
+ans=""
+if [ "$remailer" = "y" ]
+then
+  ans="n"
+  if [ "$PASSINCONFIG" != 1 ]
+  then
+    echo "You can eiter compile your secret pass phrase into the binary
+or you can set it in your config file. Note that the former does not
+really increase security as the passphrase can still be found out
+by running something like »strings mix«."
+    readln "Do you want to compile the passphrase into the binary?" y
+  fi
+
+  rm -f "$MIXSRC/mix.o" # make sure our new passphrase takes effect
+  if [ "$ans" = "y" ]
+  then
+    ans=""
+    echo "Please enter a pass phrase for your remailer (must be the same
+whenever you re-compile Mixmaster)."
+    read ans
+
+    if [ "$ans" != "" ]
+    then
+      PASS="PASS=$ans"
+    else
+      echo "WARNING: not setting a passphrase"
+    fi
+  else
+    if [ "$PASSINCONFIG" != 1 ]
+    then
+      ans=""
+      echo "Please enter a pass phrase for your remailer (it will be
+stored in mix.cfg in clear)."
+      read ans
+
+      if [ "$ans" == "" ]
+      then
+	echo "WARNING: setting empty passphrase"
+      fi
+      PASSPHRASE="PASSPHRASE      $ans"
+    fi
+  fi
+fi
+
+
 cd $MIXSRC
 if [ ! -f Makefile ]
 then
@@ -327,6 +377,11 @@ then
  INC=
  DEF=
  LDFLAGS=
+
+ if [ ! -z "$PASS" ]
+ then
+   DEF="$DEF -DCOMPILEDPASS='\"\$(PASS)\"'"
+ fi
 
  if [ "$system" = msdos ]
  then
@@ -589,18 +644,9 @@ http://www.clark.net/pub/dickey/ncurses/ncurses.tar.gz"
  echo "$OPENSSL" >>Makefile
 fi
 
-ans=""
-if [ "$remailer" = "y" ]
-then
-  echo "Please enter a pass phrase for your remailer (must be the same
-whenever you re-compile Mixmaster)."
-  read ans
-fi
 
-if [ "$ans" != "" ]
-then
- PASS="PASS=$ans"
-fi
+
+
 
 echo "Compiling. Please wait."
 whereis gmake make
@@ -892,8 +938,12 @@ RATE            100
 IDEXP           7d
 PACKETEXP       7d
 
+$PASSPHRASE
+
 END
-fi
+
+fi # not yet installed
+
 
 REPLACE="s/%RMN/$RMN/g;s/%RMA/$RMA/g;s/%CA/$CA/g;s/%RAA/$RAA/g"
 if [ "$installed" = "n" ]
