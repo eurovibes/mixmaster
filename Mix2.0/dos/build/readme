@@ -1,4 +1,4 @@
-Some notes on building version 2.0.4 for DOS/Windows:
+Some notes on building version 2.0.5 for DOS/Windows:
 
 Download the DJGPP packages bnu213b, djdev203b, fil41b, gcc31b, mak3791b
 (or newer) from SimTel (see http://www.delorie.com/djgpp/getting.html)

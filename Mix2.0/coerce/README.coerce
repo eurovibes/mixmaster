@@ -29,15 +29,15 @@ plan to use the MIDDLE function, you may inspect and possibly alter that
 recipe. Certainly you should see what everything does before using it.
 Things which are indented depend on the thing immediately above being
 enabled. REMIX and MIDDLE depend pretty heavily upon Mixmaster 2.0.3+.
-DISABLEBINARYPOSTS won't work correctly with Mixmaster 2.0.3, but see
-the comments for how to fix it. Mixmaster 2.0.4 has it's own middleman
-feature (messages to other Mixmasters are sent directly, all others are
-chained through a random Mixmaster). MIDDLE does the same, but also
-directly remails PGP messages, which is generally a low-risk operation.
-You probably don't want to use both. Unless you have my eat-spam Python
-script, you will probably want to set EATSPAM=internal. I think the
-Python script is probably faster (a better database), but the internal
-version is pretty good. Write me if you want the Python version.
+DISABLEBINARYPOSTS won't work correctly with Mixmaster 2.0.3, but see the
+comments for how to fix it. Mixmaster 2.0.4 and greater have their own
+middleman feature (messages to other Mixmasters are sent directly, all
+others are chained through a random Mixmaster). MIDDLE does the same, but
+also directly remails PGP messages, which is generally a low-risk
+operation. You probably don't want to use both. Unless you have my
+eat-spam Python script, you will probably want to set EATSPAM=internal. I
+think the Python script is probably faster (a better database), but the
+internal version is pretty good. Write me if you want the Python version.
 
 New feature: Will reject messages with more than 20 recipients.
 No configuration option for this, unfortunately; you'll just have to

@@ -14,7 +14,7 @@
  * main().
  *
  * Revision 1.1.1.1  2002/08/28 20:06:50  rabbi
- * Mixmaster 2.0.4 source.
+ * Mixmaster 2.0.5 source.
  *
  * Revision 2.13  1998/08/21  13:26:08  um
  * *** empty log message ***

@@ -10,12 +10,12 @@ Mixmaster and Potato Software    (ReadMe.POT)
     If your version number is higher, check the program documentation for the
     latest information or changes.
 
-    This document is intended for distribution with Mixmaster 2.0.4.
+    This document is intended for distribution with Mixmaster 2.0.5.
 
 
-Installing Mixmaster 2.0.4
+Installing Mixmaster 2.0.5
 --------------------------
-    Download the Mixmaster DOS binary ("mix204xxx.zip").  Create a directory
+    Download the Mixmaster DOS binary ("mix205.zip").  Create a directory
     named "C:\MIX", or similar. Unzip the archive to this directory.
 
     If you use Jack B. Nymble:
@@ -44,13 +44,13 @@ Installing Mixmaster 2.0.4
     you may wish to set the MIXPATH environment variable in Autoexec.bat,
     particularly if you are using the older Mixmaster 2.0.3 independently, or
     with other software. However, neither Potato nor Jack B. Nymble require
-    this variable with Mixmaster 2.0.4.
+    this variable with Mixmaster 2.0.4 or 2.0.5.
 
 
 
 Using Jack B. Nymble with Mixmaster
 -----------------------------------
-    Jack B. Nymble supports all current client features of Mixmaster 2.0.4,
+    Jack B. Nymble supports all current client features of Mixmaster 2.0.5,
     including multi-part messages, random remailers, and redundant message
     chains.
 
@@ -71,7 +71,7 @@ Using Jack B. Nymble with Mixmaster
 
 Using Potato with Mixmaster
 ---------------------------
-    Potato supports all current client features of Mixmaster 2.0.4, including
+    Potato supports all current client features of Mixmaster 2.0.5, including
     multi-part messages, random remailers, and redundant message chains.
 
     Press Alt-M to toggle CPunk/Mixmaster remailers.  In the To field, enter one
@@ -95,8 +95,8 @@ Useful Links
         http://members.tripod.com/~l4795
         http://members.xoom.com/potatoware
         
-    Home of Mixmaster 2.0.4:
-        http://mixmaster.sf.net/
+    Home of Mixmaster 2.0.5:
+        http://web.mixmaster.anonymizer.com/
 
     Lance Cottrell's Site (Mixmaster FAQ):
         http://obscura.com/~loki/

@@ -18,8 +18,8 @@ USERFROM=`echo $FROMADDR | sed -e "s/$USERADDR/Use-Author-Address-Header@[127.1]
 	"-IAuthor-Address: $AUTHORADDR"
 
 # If binary posts are disabled, pass them to replay.
-# Designed for Mixmaster 2.0.4. Change "replay" to the appropriate
-# number if still using 2.0.3.
+# Designed for Mixmaster 2.0.4 (and 2.0.5). Change "replay" to the 
+# appropriate number if still using 2.0.3.
 
 :0 B
 * DISABLEBINARYPOSTS ?? (yes|on)

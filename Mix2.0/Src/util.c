@@ -5,7 +5,7 @@
  * replaced an mktemp() to make OpenBSD happy.
  *
  * Revision 1.1.1.1  2002/08/28 20:06:50  rabbi
- * Mixmaster 2.0.4 source.
+ * Mixmaster 2.0.5 source.
  *
  * Revision 2.8  1999/01/19  02:28:13  um
  * *** empty log message ***
