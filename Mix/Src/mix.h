@@ -1,4 +1,4 @@
-/* Mixmaster version 2.9  --  (C) 1999 - 2002 Anonymizer Inc. and others.
+/* Mixmaster version 2.9  --  (C) 1999 - 2003 Anonymizer Inc. and others.
 
    $Id$
 
