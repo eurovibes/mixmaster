@@ -1,0 +1,12 @@
+mix.list finger:mlist@anon.efga.org
+mix.list finger:@core.zedz.net
+mix.list finger:mlist@anon.lcs.mit.edu
+mix.list http://www.publius.net/mixmaster-list.html
+type2.list finger:type2-list@anon.efga.org
+type2.list http://privacy.nb.ca/remailer/type2.list
+type2.list finger:type2-list@anon.lcs.mit.edu
+type2.list http://www.publius.net/type2.list
+pubring.mix finger:pubring-mix@anon.efga.org
+pubring.mix http://privacy.nb.ca/remailer/pubring.mix
+pubring.mix finger:pubring-mix@anon.lcs.mit.edu
+pubring.mix http://www.publius.net/pubring.mix

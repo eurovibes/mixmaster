@@ -1,0 +1,11 @@
+$Id: TODO,v 1.1 2002/08/28 20:06:49 rabbi Exp $
+
+* communication via sockets, forward secrecy
+* local queue for outgoing messages to foil traffic analysis
+* Why does SunOS `read' read 4 characters at a time?
+* re-write key management: Support multiple keys with expiry dates.
+* support elliptic curve encryption (unpatented, much shorter session
+  keys in the mix headers)
+* hashcash support
+* free() allocated memory at various places
+* collect entropy from system ressources
