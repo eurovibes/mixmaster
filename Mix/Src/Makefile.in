@@ -5,7 +5,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Makefile.in,v 1.8 2003/02/15 00:29:36 weaselp Exp $
+# $Id: Makefile.in,v 1.9 2003/03/31 17:16:15 weaselp Exp $
 
 # Edit according to the libraries you want to use:
 INC = @CPPFLAGS@
@@ -69,9 +69,9 @@ ci: clean
 
 parsedate.tab.c: parsedate.y
 	@echo Expect 6 shift/reduce conflicts
-	bison $<
+	bison parsedate.y
 
 parsedate: parsedate.tab.c
-	gcc -DTEST $< -o $@
+	gcc -DTEST parsedate.tab.c -o $@
 
 include Makefile.deps
