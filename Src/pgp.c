@@ -6,7 +6,7 @@
    details.
 
    OpenPGP messages
-   $Id: pgp.c,v 1.9 2002/09/18 23:26:16 rabbi Exp $ */
+   $Id: pgp.c,v 1.10 2002/09/25 16:14:31 disastry Exp $ */
 
 
 #include "mix3.h"
@@ -274,63 +274,10 @@ end:
   return (err);
 }
 
-/* ASCII armor */
-
-int pgp_dearmor(BUFFER *in, BUFFER *out)
-{
-  BUFFER *line, *temp;
-  int err = 0;
-  int tempbuf = 0;
-
-  line = buf_new();
-  temp = buf_new();
-
-  if (in == out) {
-    out = buf_new();
-    tempbuf = 1;
-  }
-  do
-    if (buf_getline(in, line) == -1) {
-      err = -1;
-      goto end;
-    }
-  while (!bufleft(line, begin_pgp)) ;
-
-  while (buf_getheader(in, temp, line) == 0) ;	/* scan for empty line */
-
-  err = decode(in, out);
-  err = buf_getline(in, line);
-  if (line->length == 5 && line->data[0] == '=')	/* skip CRC */
-    err = buf_getline(in, line);
-  if (err == 0 && bufleft(line, end_pgp))
-    err = 0;
-  else
-    err = -1;
-
-end:
-  buf_free(temp);
-  buf_free(line);
-
-  if (tempbuf) {
-    buf_move(in, out);
-    buf_free(out);
-  }
-  return (err);
-}
-
 #define POLY 0X1864CFB
 
-int pgp_armor(BUFFER *in, int mode)
-
-/* mode = 1: remailer message 
- *        0: normal message, 
- *        2: key 
- *        3: nym key
- *        4: nym signature 
- */
-
+unsigned long crc24(BUFFER * in)
 {
-  BUFFER *out;
   unsigned long crc = 0xB704CE;
   long p;
   int i;
@@ -345,7 +292,7 @@ int pgp_armor(BUFFER *in, int mode)
 	crc ^= POLY;
     }
   }
-#else /* end of 0 */
+#else
   /* pre-computed CRC table -- much faster */
   unsigned long table[256];
   unsigned long t;
@@ -364,7 +311,78 @@ int pgp_armor(BUFFER *in, int mode)
   }
   for (p = 0; p < in->length; p++)
     crc = crc << 8 ^ table[(in->data[p] ^ crc >> 16) & 255];
-#endif /* end of not 0 */
+#endif
+  return crc;
+}
+
+/* ASCII armor */
+
+int pgp_dearmor(BUFFER *in, BUFFER *out)
+{
+  BUFFER *line, *temp;
+  int err = 0;
+  int tempbuf = 0;
+  unsigned long crc1, crc2;
+
+  line = buf_new();
+  temp = buf_new();
+
+  if (in == out) {
+    out = buf_new();
+    tempbuf = 1;
+  }
+  do
+    if (buf_getline(in, line) == -1) {
+      err = -1;
+      goto end;
+    }
+  while (!bufleft(line, begin_pgp)) ;
+
+  while (buf_getheader(in, temp, line) == 0) ;	/* scan for empty line */
+
+  err = decode(in, out);
+  crc1 = crc24(out);
+  err = buf_getline(in, line);
+  if (line->length == 5 && line->data[0] == '=') {	/* CRC */
+    line->ptr = 1;    
+    err = decode(line, temp);
+    crc2 = (((unsigned long)temp->data[0])<<16) | (((unsigned long)temp->data[1])<<8) | temp->data[2];
+    if (crc1 == crc2)
+      err = buf_getline(in, line);
+    else
+      err = -1;
+  } else
+    err = -1;
+  if (err == 0 && bufleft(line, end_pgp))
+    err = 0;
+  else
+    err = -1;
+
+end:
+  buf_free(temp);
+  buf_free(line);
+
+  if (tempbuf) {
+    buf_move(in, out);
+    buf_free(out);
+  }
+  return (err);
+}
+
+int pgp_armor(BUFFER *in, int mode)
+
+/* mode = 1: remailer message 
+ *        0: normal message, 
+ *        2: key 
+ *        3: nym key
+ *        4: nym signature 
+ */
+
+{
+  BUFFER *out;
+  unsigned long crc;
+
+  crc = crc24(in);
   encode(in, 64);
 
   out = buf_new();
