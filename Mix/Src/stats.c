@@ -6,7 +6,7 @@
    details.
 
    Remailer statistics
-   $Id: stats.c,v 1.8 2002/08/20 18:46:33 rabbi Exp $ */
+   $Id: stats.c,v 1.8.2.1 2002/09/11 21:03:05 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -58,7 +58,8 @@ int stats(BUFFER *b)
   long updated = 0, havestats = 0;
   int msgd[3][24], msg[3][80];
   int poold[2][24], pool[2][80];
-  int i, num, type;
+  int i, num, type, assigned, daysum;
+  char c;
   idlog_t idbuf;
 
   now = (time(NULL) / (60 * 60) + 1) * 60 * 60;
@@ -78,11 +79,14 @@ int stats(BUFFER *b)
       case '0':
       case '1':
       case '2':
-	sscanf(line, "%d %d %ld", &type, &num, &then);
-	if (now - then < 0)
+	c = '\0';
+	assigned = sscanf(line, "%d %d %ld %c", &type, &num, &then, &c);
+	daysum = (assigned == 4 && c == 'd');
+
+	if (now - then < 0 || (daysum && today - then < 0))
 	  break;		/* keep memory consistent even if the time
 				   suddenly goes backwards :) */
-	if (now - then < SECONDSPERDAY)
+	if (now - then < SECONDSPERDAY && !daysum)
 	  msgd[type][(now - then) / (60 * 60)] += num;
 	else if (today - then < 80 * SECONDSPERDAY)
 	  msg[type][(today - then) / SECONDSPERDAY] += num;
@@ -90,10 +94,13 @@ int stats(BUFFER *b)
 	  havestats = then;
 	break;
       case 'p':
-	sscanf(line, "p %d %d %ld", &num, &i, &then);
-	if (now - then < 0)
+	c = '\0';
+	assigned = sscanf(line, "p %d %d %ld %c", &num, &i, &then, &c);
+	daysum = (assigned == 4 && c == 'd');
+
+	if (now - then < 0 || (daysum && today - then < 0))
 	  break;
-	if (now - then < SECONDSPERDAY) {
+	if (now - then < SECONDSPERDAY && !daysum) {
 	  poold[0][(now - then) / (60 * 60)] += num;
 	  poold[1][(now - then) / (60 * 60)] += i;
 	} else if (today - then < 80 * SECONDSPERDAY) {
@@ -145,10 +152,10 @@ int stats(BUFFER *b)
   for (i = 0; i < 80; i++) {
     for (type = 0; type < 3; type++)
       if (msg[type][i] > 0)
-	fprintf(s, "%d %d %ld\n", type, msg[type][i],
+	fprintf(s, "%d %d %ld d\n", type, msg[type][i],
 		today - i * 24 * 60 * 60);
     if (pool[0][i] > 0)
-      fprintf(s, "p %d %d %ld\n", pool[0][i], pool[1][i],
+      fprintf(s, "p %d %d %ld d\n", pool[0][i], pool[1][i],
 	      today - i * 24 * 60 * 60);
   }
   unlock(s);
