@@ -114,8 +114,8 @@
 2001-09-19      2.9beta31  Fixed a bug in mime.c that sometimes resulted in
                              malformed text attachments (by Michael Young).
                            Better error handling (by Scott Renfro).
-                           Added support for multiple dest.blk files. This 
-                             is needed for the Remailer Abuse Blocklist (by 
+                           Added support for multiple dest.blk files. This
+                             is needed for the Remailer Abuse Blocklist (by
                              Markus Stöger).
                            Added support for remailer-adminkey replies to
                              provide a better way for remops to distribute
@@ -130,15 +130,15 @@
                            POP sockets now properly close.
                            Memory may be freed without allocating.
                            Correct time is written to mbox.
-                           Key flags correctly set in key.txt. (all by 
+                           Key flags correctly set in key.txt. (all by
                              Disastry).
-                           OpenSSL and OpenBSD Install script issues 
+                           OpenSSL and OpenBSD Install script issues
                              addressed.
 
 2001-12-16      2.9b33     Support for Mixmaster as a service on Windows
                              platforms added (by Disastry).
-                           Problem transparently remixing to Type I remailers 
-                             debugged and corrected (by Andy Dustman, 
+                           Problem transparently remixing to Type I remailers
+                             debugged and corrected (by Andy Dustman,
                              Disastry, Senshi-Admin).
                            Fixed an error in chain.c that was causing
                              segfaults with chains greater than 20 remailers.
@@ -202,13 +202,13 @@
                            Detach correctly in daemon mode.
                            Minor Install script fixes.
 
-2002-08-20	2.9b37     OpenPGP enhancement release (fixes by Disastry).
+2002-08-20      2.9b37     OpenPGP enhancement release (fixes by Disastry).
                            Fix a small bug in pgpdata.c that stopped Mixmaster
                              from reading cipher preferences.
                            Fixed Passphrase reading in mpgp (the test program)
                              on Windows platform.
                            Add Hash: header when clearsigning.
-                           Properly handle RSA keys whose key size is not a 
+                           Properly handle RSA keys whose key size is not a
                              multiple of 64.
                            Remove leading zeros from MPI.
                            Use MDC packets whenever possible.
@@ -220,18 +220,18 @@
                              algorithm in a sane way (closes: #479020).
                            Compiled-in passphrase is now deprecated.
                            When expiring packet ids from id.log also expire
-                             packets that are dated more than half a year in 
-                             the future.  That way we get rid of invalid 
+                             packets that are dated more than half a year in
+                             the future.  That way we get rid of invalid
                              packets introduced by the switch to a binary file.
-                           The stats in remailer-stats replies always had a 
-                             peak at 00:00 GMT which was wrong. Fixed. 
+                           The stats in remailer-stats replies always had a
+                             peak at 00:00 GMT which was wrong. Fixed.
                              (closes: #597688).
                            Fixed a bug with reading armored keyrings consisting
                              of more than one armored block or having comments
                               in front of the one armored block.
                            In RSA PGP keys, we now set e=0x11.
                            Mixmaster now deletes error and temporary files
-                             older than PACKETEXP time along with expired 
+                             older than PACKETEXP time along with expired
                              partial packets.
                            Linux PPC fixes (and all other archs where char is
                              unsigned).
@@ -240,17 +240,17 @@
                              deliver an encrypted mix packet to the message pool
                              without attempting being decrypted.
                            Made minor updates for WIN32 DLL.
-                           When sending type II messages interactivly you may 
+                           When sending type II messages interactivly you may
                              now choose a middleman remailer as the last hop
                              in your chain (closes: #481244).
-                           If a footer.txt file exists its content will be 
+                           If a footer.txt file exists its content will be
                              appended to outgoing messages leaving the remailer
                              network at this hop (closes: #490117).
                            List known remailers in remailer-conf reply (closes:
                              #480330).
                            The files created with "SENDMAIL outfile" have
                              different names now to scale beyond 10k files
-                             (closes: #587593).  
+                             (closes: #587593).
                            Fixed the "is a mailfolder" checking for -f.
                            Various fixes for Mixmaster when not using ncurses.
                            Added new option --config to allow loading of
@@ -263,7 +263,7 @@
                            Added password-based authenticated SMTP for mix.
                              Currently, only AUTH LOGIN is supported.
                            Mixmaster now handles <CR><LF> in pubring.mix.
-                           Removed incorrect NT service checks in mix.c.  
+                           Removed incorrect NT service checks in mix.c.
                            Mixmaster now keeps no stats in client mode.
                            The pool is autmatically checked for waiting
                              messages in the client configuration.
@@ -279,16 +279,16 @@
                              and the folder cleared every time Mixmaster
                              processes its pool, or at MAILINTIME intervals
                              (closes: #597043).
-                           Mixmaster in daemon mode reloads configuration on 
-                             SIGHUP. Upon receiving SIGTERM or SIGINT it will 
+                           Mixmaster in daemon mode reloads configuration on
+                             SIGHUP. Upon receiving SIGTERM or SIGINT it will
                              finish its current queue run and then exit
                              successfully.
-                           The secret pgp keyring is now stored ASCII armored 
+                           The secret pgp keyring is now stored ASCII armored
                              with one key per ascii armor.
                            NB: Due to the bug with reading armored keyrings and
-                             secring being stored armored now, it is not 
-                             advisable to downgrade Mixmaster unless special 
-                             action is taken to preserve the secret pgp 
+                             secring being stored armored now, it is not
+                             advisable to downgrade Mixmaster unless special
+                             action is taken to preserve the secret pgp
                              keyring.
                            Mixmaster now prompts for secret key passphrase when
                              started in daemon mode.
@@ -297,7 +297,7 @@
                              pgp keys, userids, and subkeys.
                            Mixmaster will not encrypt or sign with a revoked
                              or expired key.
-                           When encrypting, Mixmaster uses preferences from 
+                           When encrypting, Mixmaster uses preferences from
                             the primary userid (or the latest userid, if zero
                             or more than one primary userid is present.)
                            Mixmaster keys now have creation and expiration date.
