@@ -354,6 +354,18 @@ check_packetID (byte * ID, unsigned char *timestamp)
   now = time (NULL);
   
   then = (timestamp[0] + 256 * timestamp[1]) * SECONDSPERDAY;
+  if (then == 0)
+    {
+      if (VERBOSE)
+      fprintf(errlog, "Ignoring message without timestamp.\n");
+      return(0);
+    }
+  if (then > now)
+    {
+      if (VERBOSE)
+        fprintf(errlog, "Ignoring message with future timestamp.\n");
+      return (0);
+    }
   if (then > 0 && now - then > IDEXP * 3600)
     {
       if (VERBOSE)
