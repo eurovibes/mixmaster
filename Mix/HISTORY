@@ -288,3 +288,5 @@
                              string.
                            Minor configuration default changes and Install 
                              script fixes.
+                           Install script now always uses "make" and not  
+                             "gmake". IDEA detection is fixed.
