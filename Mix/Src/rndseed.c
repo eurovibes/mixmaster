@@ -116,11 +116,7 @@ int rnd_seed(void)
 	}
     }
     fprintf(stderr, "Thanks.\n");
-#ifdef WIN32
-    Sleep(1000);
-#else /* end of WIN32 */
     sleep(1);
-#endif /* else if not WIN32 */
     kbd_echo();
   }
 #ifdef DEV_RANDOM
@@ -149,11 +145,7 @@ int rnd_seed(void)
       }
       if (isatty(fileno(stdin))) {
 	fprintf(stderr, "Thanks.\n");
-#ifdef WIN32
-	Sleep(1000);
-#else /* end of WIN32 */
 	sleep(1);
-#endif /* else if not WIN32 */
 	kbd_echo();
       }
       close(fd);

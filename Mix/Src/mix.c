@@ -1123,7 +1123,7 @@ int mix_daemon(void)
     if (!terminatedaemon && !rereadconfig) {
       setsignalhandler(0); /* set signal handlers;  don't restart system calls */
 #ifdef WIN32
-      Sleep(t * 1000); /* how to get the real number of seconds slept? */
+      sleep(t); /* how to get the real number of seconds slept? */
       slept = t;
 #else /* end of WIN32 */
       slept += (t - slept) - sleep(t - slept);

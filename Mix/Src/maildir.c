@@ -28,7 +28,6 @@
 #include <io.h>
 #include <direct.h>
 #include <process.h>
-#define sleep(s) Sleep(s*1000)
 #define S_IWUSR _S_IWRITE
 #define S_IRUSR _S_IREAD
 #else /* end of WIN32 */

@@ -269,7 +269,7 @@ static int remove_service()
     if (ControlService(schService, SERVICE_CONTROL_STOP, &ssStatus)) {
 	printf("Stopping Mixmaster Service");
 	do {
-	    Sleep(1000);
+	    sleep(1);
 	    printf(".");
 	    QueryServiceStatus(schService, &ssStatus);
 	} while (ssStatus.dwCurrentState != SERVICE_STOP_PENDING);
