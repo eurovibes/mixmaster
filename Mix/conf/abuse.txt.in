@@ -57,7 +57,7 @@ If you are the legitimate root administrator or postmaster of a domain,
 you may request that all email addresses served by you domain are
 blocked from receiving email from this remailer . To place this block,
 please send the following line as "root" or "postmaster" to
-<%CA> in the body text of your email:
+<%RMA> in the body text of your email:
 
 DESTINATION-BLOCK @domain_to_be_blocked.com
 
