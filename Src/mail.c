@@ -6,7 +6,7 @@
    details.
 
    Socket-based mail transport services
-   $Id: mail.c,v 1.8 2002/08/22 22:23:16 weaselp Exp $ */
+   $Id: mail.c,v 1.9 2002/08/29 08:06:31 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -21,8 +21,12 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
-#include <fcntl.h>
 #endif
+#include <fcntl.h>
+#include <time.h>
+#include <sys/stat.h>
+#include <errno.h>
+
 
 int sendinfofile(char *name, char *logname, BUFFER *address, BUFFER *header)
 {
@@ -124,8 +128,8 @@ int sendmail(BUFFER *message, char *from, BUFFER *address)
   else if (strieq(SENDMAIL, "outfile")) {
     char path[PATHMAX];
     FILE *f = NULL;
+#ifdef SHORTNAMES
     int i;
-
     for (i = 0; i < 10000; i++) {
       sprintf(path, "%s%cout%i.txt", POOLDIR, DIRSEP, i);
       f = fopen(path, "r");
@@ -135,6 +139,38 @@ int sendmail(BUFFER *message, char *from, BUFFER *address)
 	break;
     }
     f = fopen(path, "w");
+#else /* SHORTNAMES */
+    static unsigned long namecounter = 0;
+    struct stat statbuf;
+    int count;
+    char hostname[64];
+
+    hostname[0] = '\0';
+    gethostname(hostname, 63);
+    hostname[63] = '\0';
+
+    /* Step 2:  Stat the file.  Wait for ENOENT as a response. */
+    for (count = 0;; count++) {
+      snprintf(path, PATHMAX, "%s%cout.%lu.%u_%lu.%s,S=%lu.txt",
+	POOLDIR, DIRSEP, time(NULL), getpid(), namecounter++, hostname, head->length + message->length);
+      path[PATHMAX-1] = '\0';
+
+      if (stat(path, &statbuf) == 0)
+	errno = EEXIST;
+      else if (errno == ENOENT) { /* create the file (at least try) */
+	f = fopen(path, "w");
+	if (f != NULL)
+	  break; /* we managed to open the file */
+      }
+      if (count > 5)
+	break; /* Too many retries - give up */
+#ifdef WIN32
+      Sleep(2000); /* sleep and retry */
+#else
+      sleep(2); /* sleep and retry */
+#endif
+    }
+#endif /* SHORTNAMES */
     if (f != NULL) {
       err = buf_write(head, f);
       err = buf_write(message, f);
