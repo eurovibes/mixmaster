@@ -6,7 +6,7 @@
    details.
 
    OpenPGP messages
-   $Id: pgp.c,v 1.11 2002/09/26 07:44:40 weaselp Exp $ */
+   $Id: pgp.c,v 1.12 2002/09/26 07:54:18 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -347,7 +347,7 @@ int pgp_dearmor(BUFFER *in, BUFFER *out)
     line->ptr = 1;    
     err = decode(line, temp);
     crc2 = (((unsigned long)temp->data[0])<<16) | (((unsigned long)temp->data[1])<<8) | temp->data[2];
-    if (crc1 == crc2)
+    if ((crc1 & ((1<<24)-1)) == crc2)
       err = buf_getline(in, line);
     else
       err = -1;
