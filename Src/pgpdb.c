@@ -6,7 +6,7 @@
    details.
 
    OpenPGP key database
-   $Id: pgpdb.c,v 1.21 2002/10/09 20:53:31 weaselp Exp $ */
+   $Id: pgpdb.c,v 1.22 2003/08/24 20:39:26 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -333,11 +333,9 @@ int pgp_keymgt(int force)
   BUFFER *key, *keybak, *userid, *out, *outkey, *outtxt, *pass, *secout;
   KEYRING *keys;
   int err = 0, res, recreate_pubring = 0, dsa_ok = 0;
-#ifdef USE_RSA
 #ifdef USE_IDEA
   int rsa_ok = 0;
 #endif /* USE_IDEA */
-#endif /* USE_RSA */
   long expires;
   LOCK *seclock;
 
@@ -353,7 +351,6 @@ int pgp_keymgt(int force)
   outtxt = buf_new();
   outkey = buf_new();
 
-#ifdef USE_RSA
   /* We only want to build RSA keys if we also can do IDEA
    * This is to not lose any mail should users try our RSA key
    * with IDEA.
@@ -375,7 +372,6 @@ int pgp_keymgt(int force)
 				  NULL, NULL, PGPKEY, NULL) < 0) && rsa_ok == 0)
     rsa_ok = 1;
 #endif /* USE_IDEA */
-#endif /* USE_RSA */
   /* FIXME: pgpdb_getky returns the expiration date from the last key in the keyring
    *        which probably works most of the time if the keys are in the correct order
    *        it doesn't return the latest expiration date (or 0) if the key in question
@@ -394,11 +390,9 @@ int pgp_keymgt(int force)
 
   /* No need to rewrite the files - we didn't change a thing */
   if (
-#ifdef USE_RSA
 #ifdef USE_IDEA
       rsa_ok == 1 &&
 #endif /* USE_IDEA */
-#endif /* USE_RSA */
       dsa_ok == 1)
     goto end;
 

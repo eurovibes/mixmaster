@@ -6,7 +6,7 @@
    details.
 
    Encrypt message for Mixmaster chain
-   $Id: chain2.c,v 1.12 2003/05/08 18:07:08 weaselp Exp $ */
+   $Id: chain2.c,v 1.13 2003/08/24 20:39:26 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -15,8 +15,6 @@
 #include <time.h>
 #include <ctype.h>
 #include <assert.h>
-
-#ifdef USE_RSA
 
 #define N(X) (isdigit(X) ? (X)-'0' : 0)
 
@@ -676,17 +674,3 @@ end:
   buf_free(mid);
   return (err);
 }
-
-#else /* end of USE_RSA */
-
-int mix2_rlist(REMAILER remailer[])
-{
-  return (0);
-}
-
-int mix2_encrypt(int type, BUFFER *message, char *chainstr, int numcopies,
-		 BUFFER *feedback)
-{
-  return (-1);
-}
-#endif /* else not USE_RSA */

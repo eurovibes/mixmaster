@@ -6,7 +6,7 @@
    details.
 
    Process Mixmaster remailer messages
-   $Id: rem2.c,v 1.4 2002/10/05 19:09:12 ulfm Exp $ */
+   $Id: rem2.c,v 1.5 2003/08/24 20:39:26 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -77,8 +77,6 @@ end:
   buf_free(md);
   return (err);
 }
-
-#ifdef USE_RSA
 
 static int isnewid(BUFFER *id, long timestamp)
 {
@@ -466,11 +464,3 @@ int v2partial(BUFFER *m, BUFFER *mid, int packet, int numpackets)
 end:
   return (err);
 }
-
-#else /* end of USE_RSA */
-
-int mix2_decrypt(BUFFER *m)
-{
-  return (-1);
-}
-#endif /* else if not USE_RSA */

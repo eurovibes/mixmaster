@@ -6,7 +6,7 @@
    details.
 
    Interface to cryptographic library
-   $Id: crypto.h,v 1.4 2002/10/16 20:35:04 rabbi Exp $ */
+   $Id: crypto.h,v 1.5 2003/08/24 20:39:26 weaselp Exp $ */
 
 
 #ifndef _CRYPTO_H
@@ -26,9 +26,7 @@
 #include <openssl/bn.h>
 #include <openssl/dh.h>
 #include <openssl/dsa.h>
-#ifdef USE_RSA
 #include <openssl/rsa.h>
-#endif /* USE_RSA */
 #ifdef USE_IDEA
 #include <openssl/idea.h>
 #endif /* USE_IDEA */
@@ -38,10 +36,8 @@
 #include <openssl/cast.h>
 #include <openssl/rand.h>
 
-#ifdef USE_RSA
 typedef RSA PUBKEY;
 typedef RSA SECKEY;
-#endif /* USE_RSA */
 
 #else /* end of USE_OPENSSL */
 /* #error "No crypto library." */

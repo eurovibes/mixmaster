@@ -6,7 +6,7 @@
    details.
 
    OpenPGP messages
-   $Id: pgp.c,v 1.16 2002/10/09 20:53:30 weaselp Exp $ */
+   $Id: pgp.c,v 1.17 2003/08/24 20:39:26 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -441,13 +441,11 @@ int pgp_keygen(int algo, int bits, BUFFER *userid, BUFFER *pass, char *pubring,
 	       char *secring, int remail)
 {
   switch (algo) {
-#ifdef USE_RSA
   case PGP_ES_RSA:
 #ifndef USE_IDEA
     errlog(WARNING, "IDEA disabled: OpenPGP RSA key cannot be used for decryption!\n");
 #endif
     return (pgp_rsakeygen(bits, userid, pass, pubring, secring, remail));
-#endif /* USE_RSA */
   case PGP_E_ELG:
     return (pgp_dhkeygen(bits, userid, pass, pubring, secring, remail));
   default:

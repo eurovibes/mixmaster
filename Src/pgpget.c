@@ -6,7 +6,7 @@
    details.
 
    Read OpenPGP packets
-   $Id: pgpget.c,v 1.12 2002/10/09 20:53:31 weaselp Exp $ */
+   $Id: pgpget.c,v 1.13 2003/08/24 20:39:26 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -272,7 +272,6 @@ int pgp_getsig(BUFFER *p, pgpsig *sig, char *pubring)
     goto end;
   }
   switch (algo) {
-#ifdef USE_RSA
   case PGP_ES_RSA:
     mpi_get(p, i);
     if (pgp_rsa(i, sigkey, PK_VERIFY) == -1 ||
@@ -283,7 +282,6 @@ int pgp_getsig(BUFFER *p, pgpsig *sig, char *pubring)
       goto end;
     sig->ok = PGP_SIGVRFY;
     break;
-#endif /* USE_RSA */
   default:
     break;
   }
@@ -763,12 +761,10 @@ int pgp_getsessionkey(BUFFER *in, BUFFER *pass, char *secring)
     goto end;
   }
   switch (algo) {
-#ifdef USE_RSA
   case PGP_ES_RSA:
     mpi_get(in, out);
     err = pgp_rsa(out, key, PK_DECRYPT);
     break;
-#endif /* USE_RSA */
    case PGP_E_ELG:
     buf_rest(out, in);
     err = pgp_elgdecrypt(out, key);

@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.35 2003/08/08 15:17:52 dybbuk Exp $ */
+   $Id: config.h,v 1.36 2003/08/24 20:39:26 weaselp Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -122,8 +122,6 @@
 
 /* Use the OpenSSL crypto library (required) */
 #define USE_OPENSSL
-/* Use the RSA cryptosystem? */
-#define USE_RSA
 /* Use IDEA algorithm? (See file idea.txt) */
 /* #define USE_IDEA */
 /* Use AES algorithm? - should be handled by Install script setting compiler option -DUSE_AES */
