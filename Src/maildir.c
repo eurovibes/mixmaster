@@ -60,7 +60,6 @@ int checkDirectory(char *dir, char *append, int create) {
 #define MAX_SUBNAME 123 /* actual length should be smaller than 115 bytes */
 int maildirWrite(char *maildir, BUFFER *message, int create) {
   int fd;
-  int currDir;
   int count;
   int returnValue;
   char hostname[64];
