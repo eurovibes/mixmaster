@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.8 2001/12/17 00:29:37 rabbi Exp $ */
+   $Id: rem.c,v 1.9 2001/12/17 00:32:42 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -402,8 +402,10 @@ int blockrequest(BUFFER *message)
 	    c = buf_getc(line);
 	  } while (c > ' ');
       }
-      if (addr->length == 0)
+      if (addr->length == 0) {
 	rfc822_addr (from, addr);
+	buf_chop(addr);
+      }
       if (addr->length == 0) {
 	return (2);
       };
