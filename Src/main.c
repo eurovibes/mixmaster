@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 {
   int error = 0, deflt = 1, help = 0, readmail = 0, send = -1, sendpool = 0,
   header = 1, maint = 0, keygen = 0, verbose = 2, sign = 0, encrypt = 0,
-  redirect_mail = 0;
+  redirect_mail = 0, version=0;
   int daemon = 0, type_list = 0, nodetach = 0;
 
 #ifdef USE_SOCK
@@ -93,6 +93,8 @@ int main(int argc, char *argv[])
 	p += 2;
 	if (strieq(p, "help"))
 	  help = 1, deflt = 0;
+        else if (streq(p, "version"))
+          version = 1, deflt = 0;
 	else if (streq(p, "verbose"))
 	  verbose = 1;
 	else if (streq(p, "type-list"))
@@ -215,6 +217,9 @@ int main(int argc, char *argv[])
 	  case 'T':
 	    type_list = 1;
 	    break;
+          case 'V':
+            version = 1, deflt = 0;
+            break;
 	  case 't':
 	    if (*(p + 1) == 'o')
 	      p++;
@@ -330,14 +335,29 @@ int main(int argc, char *argv[])
     buf_free(type2list);
     goto end;
   }
-  if (help || (isatty(fileno(stdin)) && isatty(fileno(stdout))))
-    fprintf(stderr, "Mixmaster %s - %s\n", VERSION, COPYRIGHT);
-
+  if (help ||version ||(isatty(fileno(stdin)) && isatty(fileno(stdout))))
+    fprintf(stderr, "Mixmaster %s\n", VERSION);
+  if (help ||version)
+    printf("\n\n");
+  if (version) {
+    printf("Many people have contributed to the source code for Mixmaster.\n");
+    printf("These contributors include:\n\n");
+    printf("Anonymizer, Inc.\n");
+    printf("Janis Jagars\n");
+    printf("Ulf Moeller\n");
+    printf("Peter Palfrader\n");
+    printf("Len Sassaman\n");
+    printf("\nand others. For full information on copyright and license issues,\n");
+    printf("read the bundled file COPYRIGHT.\n\n");
+    ret = 0;
+    goto end;  
+  }
   if (help) {
     printf("Usage: %s [options] [user@host] [filename]\n\n", argv[0]);
     printf("Options:\n\
 \n\
 -h, --help                        summary of command line options\n\
+-V, --version                     print version information\n\
 -T, --type-list                   list available remailers\n\
 -t, --to=user@host                the recipient's address(es)\n\
 -g, --post-to=newsgroup           newsgroup(s) to post to\n\

@@ -489,7 +489,9 @@ menu_redraw:
   for (;;) {
     standout();
     mvprintw(0, 0, "Mixmaster %s", VERSION);
+#if 0
     mvprintw(0, COLS - sizeof(COPYRIGHT), COPYRIGHT);
+#endif
     standend();
     mix_status(NULL);
 
