@@ -6,7 +6,7 @@
    details.
 
    Function prototypes
-   $Id: mix3.h,v 1.16 2002/09/18 23:26:16 rabbi Exp $ */
+   $Id: mix3.h,v 1.17 2002/09/20 19:01:34 disastry Exp $ */
 
 
 #ifndef _MIX3_H
@@ -237,6 +237,7 @@ int seckeytopub(BUFFER *pub, BUFFER *sec, byte keyid[]);
 
 /* configuration, general remailer functions */
 int mix_configline(char *line);
+int mix_config(void);
 int mix_initialized(void);
 int mix_daily(void);
 

@@ -111,3 +111,4 @@ EXPORTS
     pgpdb_getkey                    @106
     ENTEREDPASSPHRASE               @107
     PASSPHRASE                      @108
+    mix_config                      @109

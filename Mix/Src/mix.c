@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.28 2002/09/18 23:26:16 rabbi Exp $ */
+   $Id: mix.c,v 1.29 2002/09/20 19:01:33 disastry Exp $ */
 
 
 #include "mix3.h"
@@ -36,7 +36,7 @@
 int buf_vappendf(BUFFER *b, char *fmt, va_list args);
 
 /** filenames ************************************************************/
-char MIXCONF[PATHMAX];
+char MIXCONF[PATHMAX] = DEFAULT_MIXCONF;
 char DISCLAIMFILE[PATHMAX];
 char FROMDSCLFILE[PATHMAX];
 char MSGFOOTERFILE[PATHMAX];
@@ -350,11 +350,10 @@ static int readtconfline(char *line, char *name, int namelen, long *var)
     return (0);
 }
 
-void mix_setdefaults()
+static void mix_setdefaults()
 {
 #define strnncpy(a,b) strncpy(a, b, sizeof(a)); a[sizeof(a)-1] = '\0'
 
-	strnncpy(MIXCONF      , DEFAULT_MIXCONF);
 	strnncpy(DISCLAIMFILE , DEFAULT_DISCLAIMFILE);
 	strnncpy(FROMDSCLFILE , DEFAULT_FROMDSCLFILE);
 	strnncpy(MSGFOOTERFILE, DEFAULT_MSGFOOTERFILE);
@@ -562,7 +561,7 @@ int mix_configline(char *line)
 	  read_conf(NYMDB) || read_conf(PIDFILE) );
 }
 
-static int mix_config(void)
+int mix_config(void)
 {
   char *d;
   FILE *f;
@@ -622,18 +621,6 @@ static int mix_config(void)
     mixdir(MIXDIR, 0);
   }
 
-  mixfile(POOLDIR, POOL);
-  if (POOLDIR[strlen(POOLDIR) - 1] == DIRSEP)
-    POOLDIR[strlen(POOLDIR) - 1] = '\0';
-  if (stat(POOLDIR, &buf) != 0)
-    if
-#ifndef POSIX
-      (mkdir(POOLDIR) != 0)
-#else /* end of not POSIX */
-      (mkdir(POOLDIR, S_IRWXU) == -1)
-#endif /* else if POSIX */
-      strncpy(POOLDIR, MIXDIR, PATHMAX);
-
 #ifdef GLOBALMIXCONF
   f = mix_openfile(GLOBALMIXCONF, "r");
   if (f != NULL) {
@@ -650,6 +637,19 @@ static int mix_config(void)
 	mix_configline(line);
     fclose(f);
   }
+
+  mixfile(POOLDIR, POOL); /* set POOLDIR after reading POOL from cfg file */
+  if (POOLDIR[strlen(POOLDIR) - 1] == DIRSEP)
+    POOLDIR[strlen(POOLDIR) - 1] = '\0';
+  if (stat(POOLDIR, &buf) != 0)
+    if
+#ifndef POSIX
+      (mkdir(POOLDIR) != 0)
+#else /* end of not POSIX */
+      (mkdir(POOLDIR, S_IRWXU) == -1)
+#endif /* else if POSIX */
+      strncpy(POOLDIR, MIXDIR, PATHMAX);
+
   if (IDEXP > 0 && IDEXP < 5 * SECONDSPERDAY)
     IDEXP = 5 * SECONDSPERDAY;
   if (MAXRANDHOPS > 20)

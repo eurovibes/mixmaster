@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.21 2002/09/18 23:26:16 rabbi Exp $ */
+   $Id: main.c,v 1.22 2002/09/20 19:01:33 disastry Exp $ */
 
 
 #include "mix3.h"
@@ -155,6 +155,10 @@ int main(int argc, char *argv[])
 #endif /* USE_PGP */
 	else if ((q = largopt(p, "copies", argv[0], &error)) != NULL) {
 	  sscanf(q, "%d", &numcopies);
+	} else if ((q = largopt(p, "config", argv[0], &error)) != NULL) {
+	  strncpy(MIXCONF, q, PATHMAX);
+	  MIXCONF[PATHMAX-1] = 0;
+	  mix_config(); /* configuration file changed - reread it */
 	} else if (error == 0 && mix_configline(p) == 0) {
 	  fprintf(stderr, "%s: Invalid option %s\n", argv[0], argv[i]);
 	  error = 1;
@@ -367,7 +371,8 @@ Remailer:\n\
 #endif /* USE_SOCK */
 	   "-P, --pop-mail                    force getting messages from POP3 servers\n\
 -G, --generate-key                generate a new remailer key\n\
--K, --update-keys                 generate remailer keys if necessary\n"
+-K, --update-keys                 generate remailer keys if necessary\n\
+    --config=file                 use alternate configuration file\n"
 #ifdef WIN32SERVICE
 	   "\n\
 WinNT service:\n\
