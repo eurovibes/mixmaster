@@ -365,3 +365,10 @@
                            Check that feedback buffer is not null before
                              operating on it in chain_select().
                              Closes #631353, thanks Sami Farin.
+                           In order to serve help files in different languages
+                             we need a way to reply to requests like
+                             remailer-help-it.  In order to not have to modify
+                             the code for each and every new ressource, Mixmaster
+                             now sends the file requests/remailer-<something> to
+                             remailer-<something> requests.  remailer-{help,key,
+                             stats,conf,adminkey} still are special cases tho.

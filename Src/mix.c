@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.41 2003/02/15 00:29:36 weaselp Exp $ */
+   $Id: mix.c,v 1.42 2003/04/09 10:36:34 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -42,6 +42,7 @@ char FROMDSCLFILE[PATHMAX];
 char MSGFOOTERFILE[PATHMAX];
 char POP3CONF[PATHMAX];
 char HELPFILE[PATHMAX];
+char REQUESTDIR[PATHMAX];
 char ABUSEFILE[PATHMAX];
 char REPLYFILE[PATHMAX];
 char USAGEFILE[PATHMAX];
@@ -363,6 +364,7 @@ static void mix_setdefaults()
 	strnncpy(MSGFOOTERFILE, DEFAULT_MSGFOOTERFILE);
 	strnncpy(POP3CONF     , DEFAULT_POP3CONF);
 	strnncpy(HELPFILE     , DEFAULT_HELPFILE);
+	strnncpy(REQUESTDIR   , DEFAULT_REQUESTDIR);
 	strnncpy(ABUSEFILE    , DEFAULT_ABUSEFILE);
 	strnncpy(REPLYFILE    , DEFAULT_REPLYFILE);
 	strnncpy(USAGEFILE    , DEFAULT_USAGEFILE);
@@ -553,6 +555,7 @@ int mix_configline(char *line)
 	  read_conf(DISCLAIMFILE) || read_conf(FROMDSCLFILE) ||
 	  read_conf(MSGFOOTERFILE) ||
 	  read_conf(POP3CONF) || read_conf(HELPFILE) ||
+	  read_conf(REQUESTDIR)  ||
 	  read_conf(ABUSEFILE) || read_conf(REPLYFILE) ||
 	  read_conf(USAGEFILE) || read_conf(USAGELOG) ||
 	  read_conf(BLOCKFILE) || read_conf(ADMKEYFILE) ||

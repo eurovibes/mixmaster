@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id: config.h,v 1.29 2003/02/15 00:29:36 weaselp Exp $ */
+   $Id: config.h,v 1.30 2003/04/09 10:36:34 weaselp Exp $ */
 
 
 #ifndef _CONFIG_H
@@ -162,6 +162,7 @@
 #define DEFAULT_MSGFOOTERFILE "footer.txt"
 #define DEFAULT_POP3CONF "pop3.cfg"
 #define DEFAULT_HELPFILE "help.txt"
+#define DEFAULT_REQUESTDIR "requests"
 #define DEFAULT_ABUSEFILE "abuse.txt"
 #define DEFAULT_REPLYFILE "reply.txt"
 #define DEFAULT_USAGEFILE "usage.txt"
@@ -208,6 +209,7 @@ extern char FROMDSCLFILE[];
 extern char MSGFOOTERFILE[];
 extern char POP3CONF[];
 extern char HELPFILE[];
+extern char REQUESTDIR[];
 extern char ABUSEFILE[];
 extern char REPLYFILE[];
 extern char USAGEFILE[];

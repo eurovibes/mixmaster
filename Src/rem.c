@@ -6,7 +6,7 @@
    details.
 
    Process remailer messages
-   $Id: rem.c,v 1.34 2003/03/31 17:40:53 weaselp Exp $ */
+   $Id: rem.c,v 1.35 2003/04/09 10:36:34 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -34,17 +34,95 @@ int create_dummy_mailin();
 #define REQUESTKEY   200
 #define REQUESTCONF  201
 #define REQUESTOPKEY 202
+#define REQUESTOTHER 203
 #define BLOCKREQUEST 666
 #define DISABLED      99
 
 #define CPUNKMSG 1
 #define MIXMSG 2
 
+
+/** \brief get replies for additional information requests
+ *
+ * \param reply The buffer to store the reply in
+ * \param file	The file or name of information a user requested
+ * \returns 0 on success; -1 if a ressource has a valid name
+ *     but doesn't exist; 1 if the ressource name isn't valid.
+ * 
+ * This function returns additional information that a
+ * user may have requested.  One obvious example is help files
+ * in different languages.  We don't want to hack the source every
+ * time we or somebody else adds a new language.
+ *
+ * Therefore we add a new directory where the operator may
+ * just create new files (say "remailer-help-de"). If a user
+ * requests that using this (file|ressource) name in the
+ * subject line we respond by sending it.
+ *
+ * Perhaps we should build something that returns an index of
+ * available files (FIXME if done).
+ *
+ * A ressource name needs to start with the string "remailer-"
+ * and must only consist of alphanumerical characters and dashes.
+ * Checking is done by this function and an error returned
+ * if this is violated.
+ */
+int get_otherrequests_reply(BUFFER *reply, BUFFER *filename)
+{
+  FILE *f = NULL;
+  char c;
+  int err;
+  BUFFER *path;
+
+  path = buf_new();
+
+  assert(filename);
+  assert(reply);
+
+  buf_rewind(filename);
+  err = bufileft(filename, "remailer-");
+  if (! err) {
+    err = 1;
+    goto end;
+  };
+
+  while ((c = buf_getc(filename)) != -1) {
+    int ok = (c >= 'A' && c <= 'Z') ||
+	     (c >= 'a' && c <= 'z') ||
+	     (c >= '0' && c <= '9') ||
+	     c == '-';
+    if (!ok) {
+      err = 1;
+      goto end;
+    };
+  };
+  buf_rewind(filename);
+
+  buf_appends(path, REQUESTDIR);
+  buf_appends(path, "/");
+  buf_cat(path, filename);
+
+  f = mix_openfile(path->data, "r");
+  if (f == NULL) {
+    err = -1;
+    goto end;
+  };
+
+  buf_read(reply, f);
+  err = 0;
+end:
+  if (f)
+    fclose(f);
+  buf_free(path);
+  return (err);
+}
+
 int mix_decrypt(BUFFER *message)
 {
   int type = 0;
   BUFFER *field, *content;
   BUFFER *to, *subject, *replyto, *reply;
+  BUFFER *otherrequest;
   FILE *f;
   BUFFER *block;
   int err = 0;
@@ -58,6 +136,7 @@ int mix_decrypt(BUFFER *message)
   reply = buf_new();
   block = buf_new();
   subject = buf_new();
+  otherrequest = buf_new();
   buf_sets(subject, "Subject: Re: your mail");
 
   buf_rewind(message);
@@ -106,7 +185,10 @@ int mix_decrypt(BUFFER *message)
 	type = REQUESTOPKEY;
       else if (bufieq(content, "remailer-conf"))
 	type = REQUESTCONF;
-      else if (bufileft(content, "destination-block"))
+      else if (bufileft(content, "remailer-")) {
+	type = REQUESTOTHER;
+	buf_set(otherrequest, content);
+      } else if (bufileft(content, "destination-block"))
 	type = BLOCKREQUEST;
       else {
 	buf_sets(subject, "Subject: ");
@@ -156,6 +238,11 @@ hdrend:
     break;
   case REQUESTCONF:
     err = conf(reply);
+    if (err == 0)
+      err = sendmail(reply, REMAILERNAME, replyto);
+    break;
+  case REQUESTOTHER:
+    err = get_otherrequests_reply(reply, otherrequest);
     if (err == 0)
       err = sendmail(reply, REMAILERNAME, replyto);
     break;
@@ -222,6 +309,7 @@ end:
   buf_free(reply);
   buf_free(block);
   buf_free(subject);
+  buf_free(otherrequest);
   return (err);
 }
 
