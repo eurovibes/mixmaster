@@ -6,7 +6,7 @@
    details.
 
    OpenPGP messages
-   $Id: pgp.h,v 1.5 2002/08/16 19:03:37 rabbi Exp $ */
+   $Id: pgp.h,v 1.6 2002/08/20 06:50:38 rabbi Exp $ */
 
 
 #ifdef USE_PGP
@@ -15,6 +15,10 @@
 #ifdef USE_OPENSSL
 #include <openssl/opensslv.h>
 #endif
+
+/* in the PGP Version header, list the same information as all other 
+   versions of Mixmaster to prevent anonymity set division. */
+#define CLOAK
 
 /* try to make the messages look similar to PGP 2.6.3i output
    (compression is not always the same though). */

@@ -6,7 +6,7 @@
    details.
 
    OpenPGP messages
-   $Id: pgp.c,v 1.5 2002/08/16 19:03:37 rabbi Exp $ */
+   $Id: pgp.c,v 1.6 2002/08/20 06:50:38 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -321,8 +321,14 @@ end:
 #define POLY 0X1864CFB
 
 int pgp_armor(BUFFER *in, int mode)
-     /* mode = 1: remailer message, 0: normal message, mode = 2: key 3=nym key
-        4=nym signature */
+
+/* mode = 1: remailer message 
+ *        0: normal message, 
+ *        2: key 
+ *        3: nym key
+ *        4: nym signature 
+ */
+
 {
   BUFFER *out;
   unsigned long crc = 0xB704CE;
@@ -369,10 +375,11 @@ int pgp_armor(BUFFER *in, int mode)
   else
     buf_sets(out, begin_pgpmsg);
   buf_nl(out);
-#if 1
-  buf_appends(out, "Version: N/A\n");
-#else
-#ifdef MIMIC
+#ifdef CLOAK
+  if (mode == 1 || mode == 3 || mode == 4)
+    buf_appends(out, "Version: N/A\n");
+  else
+#elif MIMIC
   if (mode == 1 || mode == 3 || mode == 4)
     buf_appends(out, "Version: 2.6.3i\n");
   else
@@ -382,7 +389,6 @@ int pgp_armor(BUFFER *in, int mode)
     buf_appends(out, VERSION);
     buf_appends(out, " (OpenPGP module)\n");
   }
-#endif
   buf_nl(out);
   buf_cat(out, in);
   buf_reset(in);
