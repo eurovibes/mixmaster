@@ -1,5 +1,10 @@
 #!/bin/sh
-# $Id: getlist,v 1.1 2002/08/28 20:06:49 rabbi Exp $
+# $Id: getlist,v 1.2 2002/09/10 05:25:50 rabbi Exp $
+#
+# this script has to be started in the directory containing
+# your remailer file mix.list, type2.list and pubring.mix
+#
+
 
 echo "Getting mixmaster list. Please wait ..."
 

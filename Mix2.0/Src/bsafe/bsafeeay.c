@@ -1,5 +1,5 @@
 /* Modified for Mixmaster.
- * $Id: bsafeeay.c,v 1.1 2002/08/28 20:06:50 rabbi Exp $
+ * $Id: bsafeeay.c,v 1.2 2002/09/10 05:25:50 rabbi Exp $
  */
 
 /* Copyright (c) 1997
@@ -37,7 +37,7 @@
  * -----BEGIN PGP PUBLIC KEY BLOCK-----
  * Version: PGP 5.0i
  *
-* mQCNAzRmehMAAAEEAKgPlIibft+x0Vm7uF0IJ3YPl2XZLOHJJ3nN+XivjCV7rvCX
+ * mQCNAzRmehMAAAEEAKgPlIibft+x0Vm7uF0IJ3YPl2XZLOHJJ3nN+XivjCV7rvCX
  * 8mZcOEznBSYj7LCr3kTZ645ZSjCyc8k8DFMYScClQKqeA3aRuXJBeFW7JTJ+rQpj
  * CsxREXWnl41Pkd9uNiVHw/qBm6c0+werrnMf3c4R+PVRMpY7V5M0Bmsl+tm9AAUR
  * tC1CU0FGRSBJbnRlcm5hdGlvbmFsIDxic2FmZWVheUBjeXBoZXJwdW5rcy50bz6J
@@ -1674,8 +1674,8 @@ B_EncryptUpdate( B_ALGORITHM_OBJ obj, POINTER out, unsigned int *outlen,
 
       des_set_key( (des_cblock *)kobj->data, sched );
 
-      des_ncbc_encrypt( (des_cblock *)in, 
-			(des_cblock *)out, 
+      des_ncbc_encrypt( in, 
+			out, 
 			inlen, 
 			sched, 
 			(des_cblock *)obj->info, 
@@ -1698,8 +1698,8 @@ B_EncryptUpdate( B_ALGORITHM_OBJ obj, POINTER out, unsigned int *outlen,
       des_set_key( (des_cblock *)(kobj->data + 2 * sizeof(des_cblock)),
 		  sched3 );
 
-      des_ede3_cbc_encrypt( (des_cblock *)in, 
-			   (des_cblock *)out, 
+      des_ede3_cbc_encrypt( in, 
+			   out, 
 			   inlen, 
 			   sched1, sched2, sched3,
 			   (des_cblock *)obj->info, 
@@ -1735,8 +1735,8 @@ B_EncryptUpdate( B_ALGORITHM_OBJ obj, POINTER out, unsigned int *outlen,
       kobj = (B_KEY_OBJ)obj->key;
       des_set_key( (des_cblock *)kobj->data, sched );
 
-      des_ncbc_encrypt( (des_cblock *)in_pad, 
-			(des_cblock *)out, 
+      des_ncbc_encrypt( in_pad, 
+			out, 
 			newlen, 
 			sched, 
 			(des_cblock *)obj->info, 
@@ -1772,8 +1772,8 @@ B_EncryptUpdate( B_ALGORITHM_OBJ obj, POINTER out, unsigned int *outlen,
 
       des_set_key( (des_cblock *)obj->state, sched );
 
-      des_ncbc_encrypt( (des_cblock *)in_pad, 
-			(des_cblock *)out, 
+      des_ncbc_encrypt( in_pad, 
+			out, 
 			newlen, 
 			sched, 
 			(des_cblock *)&(obj->state[8]), 
@@ -1809,8 +1809,8 @@ B_EncryptUpdate( B_ALGORITHM_OBJ obj, POINTER out, unsigned int *outlen,
 
       des_set_key( (des_cblock *)obj->state, sched );
 
-      des_ncbc_encrypt( (des_cblock *)in_pad, 
-			(des_cblock *)out, 
+      des_ncbc_encrypt( in_pad, 
+			out, 
 			newlen, 
 			sched, 
 			(des_cblock *)&(obj->state[8]), 
@@ -2039,8 +2039,8 @@ B_DecryptUpdate( B_ALGORITHM_OBJ obj, POINTER out, unsigned int *outlen,
 
       des_set_key( (des_cblock *)kobj->data, sched );
       
-      des_ncbc_encrypt( (des_cblock *)in, 
-			(des_cblock *)out, 
+      des_ncbc_encrypt( in, 
+			out, 
 			inlen, 
 			sched, 
 			(des_cblock *)obj->info, 
@@ -2063,8 +2063,8 @@ B_DecryptUpdate( B_ALGORITHM_OBJ obj, POINTER out, unsigned int *outlen,
       des_set_key( (des_cblock *)(kobj->data + 2 * sizeof(des_cblock)),
 		  sched3 );
       
-      des_ede3_cbc_encrypt( (des_cblock *)in, 
-			   (des_cblock *)out, 
+      des_ede3_cbc_encrypt( in, 
+			   out, 
 			   inlen, 
 			   sched1, sched2, sched3,
 			   (des_cblock *)obj->info, 
@@ -2082,8 +2082,8 @@ B_DecryptUpdate( B_ALGORITHM_OBJ obj, POINTER out, unsigned int *outlen,
       kobj = (B_KEY_OBJ)obj->key;
       des_set_key( (des_cblock *)kobj->data, sched );
 
-      des_ncbc_encrypt( (des_cblock *)in, 
-			(des_cblock *)out, 
+      des_ncbc_encrypt( in, 
+			out, 
 			inlen, 
 			sched, 
 			(des_cblock *)obj->info, 
@@ -2104,8 +2104,8 @@ B_DecryptUpdate( B_ALGORITHM_OBJ obj, POINTER out, unsigned int *outlen,
       kobj = (B_KEY_OBJ)obj->key;
       des_set_key( (des_cblock *)obj->state, sched );
 
-      des_ncbc_encrypt( (des_cblock *)in, 
-			(des_cblock *)out, 
+      des_ncbc_encrypt( in, 
+			out, 
 			inlen, 
 			sched, 
 			(des_cblock *)&(obj->state[8]), 
@@ -2126,8 +2126,8 @@ B_DecryptUpdate( B_ALGORITHM_OBJ obj, POINTER out, unsigned int *outlen,
       kobj = (B_KEY_OBJ)obj->key;
       des_set_key( (des_cblock *)obj->state, sched );
 
-      des_ncbc_encrypt( (des_cblock *)in, 
-			(des_cblock *)out, 
+      des_ncbc_encrypt( in, 
+			out, 
 			inlen, 
 			sched, 
 			(des_cblock *)&(obj->state[8]), 
