@@ -347,8 +347,8 @@
                            Mixmaster will not encrypt or sign with a revoked
                              or expired key.
                            When encrypting, Mixmaster uses preferences from
-                            the primary userid (or the latest userid, if zero
-                            or more than one primary userid is present.)
+                             the primary userid (or the latest userid, if zero
+                             or more than one primary userid is present.)
                            Mixmaster keys now have creation and expiration date.
                              It is not secured by any crypto voodoo, it's only
                              informational for clients to decide which keys to
@@ -390,8 +390,8 @@
                              remailer-{help,key, stats,conf,adminkey} still are
                              special cases tho.
                            Drop messages without timestamps and messages with
-                            future timestamps.  This abandons backwards
-                            compatibility with Mixmaster 2.0.3 and earlier.
+                             future timestamps.  This abandons backwards
+                             compatibility with Mixmaster 2.0.3 and earlier.
 
                            BUG FIXES:
 
@@ -411,26 +411,26 @@
                              doubled)
                            Found that weird bug that sometimes led to "Unknown
                              remailer version!" errors: In chain_randfinal() we
-                             selected a random value between 0 and maxrem instead
-                             of 0 and maxrem - 1.  Mixmaster now uses
+                             selected a random value between 0 and maxrem
+                             instead of 0 and maxrem - 1.  Mixmaster now uses
                              broken-chain info from stats. I hope this doesn't
                              break any Nym functionality.
                            Warn if remailer stats are older than a day.
                            Don't send messages to ourselves via the mailsystem
-                            but instead place them in the pool as incoming
-                            messages so that they will get processed with the
-                            next pool run.
-                          No longer try to send a message if there are no
-                            recipients left.
-                          Set default max-randhops from 20 to 4.
-                          Remix-To chain is limited by max-randhops limit as
-                            well.
-                          Messages to more than one remailer are dropped.
-                          Nym support is not compiled in by default anymore.
-                          Ignore 'No reliable remailers' problems when
-                            randhopping messages in middleman mode.
-                            That is better than dropping them.
-                          Experimental feature:  --redirect -l <chain>.
+                             but instead place them in the pool as incoming
+                             messages so that they will get processed with the
+                             next pool run.
+                           No longer try to send a message if there are no
+                             recipients left.
+                           Set default max-randhops from 20 to 4.
+                           Remix-To chain is limited by max-randhops limit as
+                             well.
+                           Messages to more than one remailer are dropped.
+                           Nym support is not compiled in by default anymore.
+                           Ignore 'No reliable remailers' problems when
+                             randhopping messages in middleman mode.
+                             That is better than dropping them.
+                           Experimental feature:  --redirect -l <chain>.
                              If you have a mixmaster message with a
                              chain starting with hop1 (you cannot know any
                              more because it already is encrypted) then
