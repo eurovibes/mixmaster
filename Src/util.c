@@ -6,7 +6,7 @@
    details.
 
    Utility functions
-   $Id: util.c,v 1.11 2002/10/09 20:53:32 weaselp Exp $ */
+   $Id: util.c,v 1.12 2002/10/09 21:39:14 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -29,7 +29,6 @@
 #include <pc.h>
 #endif /* HAVE_GETKEY */
 #include <assert.h>
-
 
 /** string comparison functions. return 1 on match, 0 otherwise ********/
 
