@@ -134,7 +134,7 @@ packet. The final remailer must be identical for all packets.
 
 The packet header consists of 20 sections. For a sequence of n
 remailers, header sections n+1, ... , 20 are filled with random
-data. For all sections i := n down to 1, the sender generates a
+data. For each section i := n down to 1, the sender generates a
 symmetric encryption key, which is used to encrypt the body and
 all following header sections. This key, together with other control
 information for the remailer, is included in the i-th header section,
