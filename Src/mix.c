@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c,v 1.16 2002/08/25 07:47:23 weaselp Exp $ */
+   $Id: mix.c,v 1.17 2002/08/26 18:08:05 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -127,6 +127,7 @@ int LISTSUPPORTED;		/* list supported remailers in remailer-conf reply? */
 long PACKETEXP;	/* Expiration time for old packets */
 long IDEXP;	/* 0 = no ID log !! */
 long SENDPOOLTIME;	/* frequency for sending pool messages */
+long MAILINTIME;	/* frequency for processing MAILIN mail */
 
 char ERRLOG[LINELEN];
 char ADDRESS[LINELEN];
@@ -423,6 +424,7 @@ void mix_setdefaults()
 	PACKETEXP     = 7 * SECONDSPERDAY;	/* Expiration time for old packets */
 	IDEXP         = 7 * SECONDSPERDAY;	/* 0 = no ID log !! */
 	SENDPOOLTIME  = 60 * 60;	/* frequency for sending pool messages */
+	MAILINTIME    = 5 * 60;		/* frequency for processing MAILIN mail */
 
 	strnncpy(ERRLOG      , "");
 	strnncpy(ADDRESS     , "");
@@ -487,6 +489,7 @@ int mix_configline(char *line)
 	  read_conf_i(LISTSUPPORTED) ||
 	  read_conf_t(PACKETEXP) || read_conf_t(IDEXP) ||
 	  read_conf_t(SENDPOOLTIME) || read_conf_i(NUMCOPIES) ||
+	  read_conf_t(MAILINTIME) ||
 	  read_conf(CHAIN) || read_conf_i(VERBOSE) ||
 	  read_conf_i(DISTANCE) || read_conf_i(MINREL) ||
 	  read_conf_i(RELFINAL) || read_conf_t(MAXLAT) ||
@@ -770,7 +773,7 @@ void mix_exit(void)
 int mix_regular(int force)
 {
   FILE *f;
-  long now, tpool = 0, tpop3 = 0, tdaily = 0;
+  long now, tpool = 0, tpop3 = 0, tdaily = 0, tmailin = 0;
   int ret = 0;
 
   mix_init(NULL);
@@ -779,31 +782,35 @@ int mix_regular(int force)
   f = mix_openfile(REGULAR, "r+");
   if (f != NULL) {
     lock(f);
-    fscanf(f, "%ld %ld %ld", &tpool, &tpop3, &tdaily);
+    fscanf(f, "%ld %ld %ld %ld", &tpool, &tpop3, &tdaily, &tmailin);
     if (now - tpool >= SENDPOOLTIME)
-      force |= FORCE_POOL;
+      force |= FORCE_POOL | FORCE_MAILIN;
 #ifdef USE_SOCK
     if (now - tpop3 >= POP3TIME)
-      force |= FORCE_POP3;
+      force |= FORCE_POP3 | FORCE_MAILIN;
 #endif
     if (now - tdaily >= SECONDSPERDAY)
       force |= FORCE_DAILY;
+    if (now - tmailin >= MAILINTIME)
+      force |= FORCE_MAILIN;
     if (force & FORCE_POOL)
       tpool = now;
     if (force & FORCE_POP3)
       tpop3 = now;
     if (force & FORCE_DAILY)
       tdaily = now;
+    if (force & FORCE_MAILIN)
+      tmailin = now;
     rewind(f);
-    fprintf(f, "%ld %ld %ld\n", tpool, tpop3, tdaily);
+    fprintf(f, "%ld %ld %ld %ld\n", tpool, tpop3, tdaily, tmailin);
     unlock(f);
     fclose(f);
   } else {
-    force = FORCE_POOL | FORCE_POP3 | FORCE_DAILY;
+    force = FORCE_POOL | FORCE_POP3 | FORCE_DAILY | FORCE_MAILIN;
     f = mix_openfile(REGULAR, "w+");
     if (f != NULL) {
       lock(f);
-      fprintf(f, "%ld %ld %ld\n", now, now, now);
+      fprintf(f, "%ld %ld %ld %ld\n", now, now, now, now);
       unlock(f);
       fclose(f);
     } else
@@ -816,6 +823,8 @@ int mix_regular(int force)
   if (force & FORCE_POP3)
     pop3get();
 #endif
+  if (force & FORCE_MAILIN)
+    ret = process_mailin();
   if (force & FORCE_POOL)
     ret = pool_send();
 
@@ -930,7 +939,7 @@ void set_nt_exit_event(HANDLE h_svc_exit_event)
 int mix_daemon(void)
 {
   long t, slept;
-  t = SENDPOOLTIME;
+  t = (MAILINTIME < SENDPOOLTIME && (MAILIN != NULL && (strcmp(MAILIN, "") != 0))) ? MAILINTIME : SENDPOOLTIME;
 #ifdef USE_SOCK
   if (POP3TIME < t)
     t = POP3TIME;
@@ -944,7 +953,7 @@ int mix_daemon(void)
     if (rereadconfig) {
       rereadconfig = 0;
       mix_config();
-      t = SENDPOOLTIME;
+      t = (MAILINTIME < SENDPOOLTIME && (MAILIN != NULL && (strcmp(MAILIN, "") != 0))) ? MAILINTIME : SENDPOOLTIME;
 #ifdef USE_SOCK
       if (POP3TIME < t)
 	t = POP3TIME;
