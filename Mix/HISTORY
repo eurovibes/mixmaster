@@ -258,3 +258,6 @@
                            Mixmaster now prompts for secret key passphrase when
                              started in daemon mode.
                            The Mixmaster damon now writes a pid file.
+                           The files created with "SENDMAIL outfile" have
+                             different names now to scale beyond 10k files
+                             (closes: #587593).
