@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.10.2.7 2002/10/09 21:02:34 weaselp Exp $ */
+   $Id: main.c,v 1.10.2.8 2002/10/10 10:02:05 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -300,8 +300,6 @@ int main(int argc, char *argv[])
       }
     }
   }
-  if (REMAIL == 0)
-    mix_regular(0); /* check client pool */
 
   if (error) {
     ret = 1;
@@ -565,6 +563,8 @@ WinNT service:\n\
 #endif /* USE_SOCK */
   if (maint)
     mix_regular(0);
+  if (REMAIL == 0)
+    mix_regular(0); /* check client pool */
 
 end:
   buf_free(field);
