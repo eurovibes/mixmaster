@@ -6,7 +6,7 @@
    details.
 
    Prepare messages for remailer chain
-   $Id: chain.c,v 1.12 2003/05/05 11:03:40 weaselp Exp $ */
+   $Id: chain.c,v 1.13 2003/05/11 13:48:42 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -207,11 +207,12 @@ int chain_randfinal(int type, REMAILER *remailer, int badchains[MAXREM][MAXREM],
   }
 
   for (i = 1; i <= DISTANCE; i++)
-    if (i < chainlen && select[chain[i]]) {
+    if (i < chainlen && select[chain[i]] && chain[i]) {
       select[chain[i]] = 0;
       randavail--;
     }
 
+  assert(randavail >= 0);
   if (randavail == 0)
     i = -1;
   else {
@@ -256,12 +257,13 @@ int chain_rand(REMAILER *remailer, int badchains[MAXREM][MAXREM], int maxrem,
       }
 
       for (i = hop - DISTANCE; i <= hop + DISTANCE; i++)
-	if (i >= 0 && i < chainlen && select[thischain[i]]) {
+	if (i >= 0 && i < chainlen && select[thischain[i]] && thischain[i]) {
 	  select[thischain[i]] = 0;
 	  randavail--;
 	}
 
 
+      assert(randavail >= 0);
       if (randavail < 1) {
 	err = -1;
 	goto end;
