@@ -44,11 +44,11 @@ pub  1024D/9260849A 2003-01-01 Mixmaster Code Release Signing Key 2003
 </pre>
 
 This key is signed by Len Sassaman's key <a href="keys/5DE480FC.asc"><code>5DE480FC</code></a>
-(<code>B115 73A8 91A8 05DC B26D  CBEB 4A0A 8149 5DE4 80FC</code>)<!--, Lance Cottrell's key
+(<code>B115 73A8 91A8 05DC B26D  CBEB 4A0A 8149 5DE4 80FC</code>), Lance Cottrell's key
 <a href="keys/4F68DD91.asc"><code>4F68DD91</code></a>
-(<code>5327 8E77 666A 91F3 7007  B357 844B 9659 4F68 DD91</code>)--> and several other people:
+(<code>5327 8E77 666A 91F3 7007  B357 844B 9659 4F68 DD91</code>)-- and several other people:
 
-<pre>
+<!--<pre>
 pub  1024D/9260849A 2003-01-01 Mixmaster Code Release Signing Key 2003
 sig!3       9260849A 2003-01-11   Mixmaster Code Release Signing Key 2003
 sig!3       5DE480FC 2003-01-11   Len Sassaman &lt;rabbi@abditum.com&gt;
@@ -60,7 +60,7 @@ sig!        4838D515 2003-01-12   Rodney Thayer &lt;rodney@tillerman.to&gt;
 sig!1       94C09C7F 2003-01-13   Peter Palfrader
 sig!        4F68DD91 2003-01-13   Lance Cottrell &lt;lcottrell@anonymizer.com&gt;
 sig!1       2B48F6F5 2003-01-13   Ian Goldberg &lt;ian@zeroknowledge.com&gt;
-</pre>
+</pre>-->
 
 <h3>Releases in 2002</h3>
 Releases of Mixmaster in 2002 were signed by Len Sassaman using the <em>Mixmaster Code
