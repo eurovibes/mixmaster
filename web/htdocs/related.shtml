@@ -7,12 +7,12 @@
   <body>
     <!--#include virtual="header.htinc"-->
       
-<h1>Related Software</h1>
+<h1>Related Software/Resources</h1>
 
 <h2>Remailer Clients</h2>
 
 <p>
-<a href="http://www.mutt.org">The Mutt E-Mail Client</a> has an interface to
+<a href="http://www.mutt.org/">The Mutt E-Mail Client</a> has an interface to
 call the Mixmaster binary.  For <a href="http://www.gnu.org/software/emacs/emacs.html">Emacs</a>
 Erik wrote an <a href="http://erik.arneson.org/elisp.html">interface</a>:
 <a href="http://erik.arneson.org/mixmaster.el">mixmaster.el</a>.
@@ -44,6 +44,7 @@ perhaps has a list of more remailer clients.
 
 <h2>Other Remailers</h2>
 
+<p>
 <a href="http://www.bigfoot.com/~potatoware/reli">Reliable</a> is
 a popular piece of remailer software for Microsoft Windows. It is type I
 (cypherpunk) only but has type II callbacks. So if you additionally install
@@ -54,9 +55,15 @@ Deacon also created the <a href="http://sourceforge.net/projects/reliable2">Reli
 project here on SourceForge in order to bring it up to current standards.
 
 <p>
-<a href="http://www.mixminion.net">Mixminion</a> will become the next
+<a href="http://www.mixminion.net/">Mixminion</a> will become the next
 generation remailing network (Type III).  It's not yet ready to provide you
 with anonymity but it's well on its way.
+
+<p>
+Free Haven's <a href="http://freehaven.net/anonbib/">Anonymity Bibliography</a>
+has pointers to all the important papers in the anonymity field. It includes
+recommended reading lists to get new developers up to speed on remailer designs
+and related systems.
 
 <h2>Nymservers</h2>
 
