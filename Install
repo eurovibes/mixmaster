@@ -6,7 +6,7 @@
 # ANY KIND, either express or implied. See the file COPYRIGHT for
 # details.
 
-# $Id: Install,v 1.5 2002/07/24 06:50:53 rabbi Exp $
+# $Id: Install,v 1.6 2002/07/24 07:58:55 weaselp Exp $
 
 #whereis program default-path
 whereis()
@@ -353,6 +353,7 @@ then
    echo "Please build libidea.a or install OpenSSL with IDEA now."
    exit 1
   else
+   DEF="$DEF -DUSE_IDEA"
    IDEALIB="$MAKELIB"
    LIBS="$LIBS $LIB"
    LDFLAGS="$LDFLAGS $LDFLAG"
@@ -361,6 +362,8 @@ then
     INC="$INC -I$INCDIR"
    fi
   fi
+ else
+  DEF="$DEF -DUSE_IDEA"
  fi
 
  LIBDIR=

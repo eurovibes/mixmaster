@@ -178,5 +178,7 @@
                              dest.blk. The dest block engine does not under-
                              stand shell globs. Either substring matches or
                              regexen.
-			   Fixed -T switch: if type2.list is not available fall
-			     back to pubring.mix.
+                           Fixed -T switch: if type2.list is not available fall
+                             back to pubring.mix.
+                           USE_IDEA is no longer default in config.h. It always
+                             gets defined by the Install script instead.
