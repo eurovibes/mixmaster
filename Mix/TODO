@@ -19,8 +19,6 @@ Items for 3.0 or 3.0.1
 * documentation issues resolved
   + mpgp man page
 * check and enforce OpenPGP key expiration date
-* Have supported cpunks/mixes in -conf reply
-  similar to Reliable (480330)
 * further debugging
 
 Further wishlist:

@@ -6,7 +6,7 @@
    details.
 
    OpenPGP key database
-   $Id: pgpdb.c,v 1.6 2002/08/16 19:03:37 rabbi Exp $ */
+   $Id: pgpdb.c,v 1.7 2002/08/22 08:13:36 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -407,6 +407,38 @@ int pgp_rlist(REMAILER remailer[], int n)
     remailer[i].flags.pgp = pgpkey[i];
   buf_free(p);
   buf_free(keyring);
+  return (0);
+}
+
+int pgp_rkeylist(REMAILER remailer[], int keyid[], int n)
+     /* Step through all remailers and get keyid */
+{
+  BUFFER *userid;
+  BUFFER *id;
+  int i, err;
+  int mdc, sym;
+
+  userid = buf_new();
+  id = buf_new();
+  
+  for (i = 1; i < n; i++) {
+    buf_clear(userid);
+    buf_setf(userid, "<%s>", remailer[i].addr);
+
+    keyid[i]=0;
+    if (remailer[i].flags.pgp) {
+      mdc = sym = 0;
+      buf_clear(id);
+      err = pgpdb_getkey(PK_VERIFY, PGP_ANY, &sym, &mdc, NULL, userid, NULL, id, NULL, NULL);
+      if (id->length == 8) {
+        /* printf("%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x %s\n",
+	   id->data[0], id->data[1], id->data[2], id->data[3], id->data[4], id->data[5], id->data[6], id->data[7], id->data[8], remailer[i].addr); */
+        keyid[i] = (((((id->data[4] << 8) + id->data[5]) << 8) + id->data[6]) << 8) + id->data[7];
+      }
+    }
+  }
+
+  buf_free(userid);
   return (0);
 }
 
