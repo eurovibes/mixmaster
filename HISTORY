@@ -140,4 +140,7 @@
                            Problem transparently remixing to Type I remailers 
                              debugged and corrected (by Andy Dustman, 
                              Disastry, Senshi-Admin).
+                           Fixed an error in chain.c that was causing
+                             segfaults with chains greater than 20 remailers.
+                           Fixed an error in rfc822.c (by Scott Renfro).
                            Help files re-written (by Lucky Green).
