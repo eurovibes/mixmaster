@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.10.2.6 2002/10/09 20:58:46 weaselp Exp $ */
+   $Id: main.c,v 1.10.2.7 2002/10/09 21:02:34 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -102,8 +102,8 @@ int main(int argc, char *argv[])
 	  sendpool = 1, deflt = 0;
 	else if (streq(p, "read-mail"))
 	  readmail = 1, deflt = 0;
-      else if (streq(p, "store-mail"))
-	readmail = 2, deflt = 0;
+	else if (streq(p, "store-mail"))
+	  readmail = 2, deflt = 0;
 #ifdef USE_SOCK
 	else if (streq(p, "pop-mail"))
 	  pop3 = 1, deflt = 0;
