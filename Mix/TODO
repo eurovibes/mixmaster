@@ -10,7 +10,6 @@ Todo items before 3.0 release:
 * allow for verification of clearsigned OpenPGP messages
 * set an expiration date on OpenPGP keys
 * check and enforce expiration date
-* Apply --store|queue|get-mail patch
 * Implement mbox/Maildir mail input (597043)
 * further debugging
 
