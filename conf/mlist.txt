@@ -1,55 +1,42 @@
-
-                        Computer Cryptology's Statistics
-
-                              Mixmaster Remailers
-
-
-This is an automatically generated list of remailer reliability statistics.
-
-These stats provide information only; users and their software are
-responsible for the choice of remailers.  If there is a remailer
-announcement, the address responds to conf and key requests, and the
-address processes pings like a remailer, the address appears on this
-list.
-
-Last update: Mon 17 Dec 2001 03:05:00 GMT
+                                Mixmaster Remailers
+Stats-Version: 1.0
+Last update: Mon, 01 Jul 2002 22:49:43 GMT
 mixmaster           history  latency  uptime
 --------------------------------------------
-aarg           #####*######     2:53 100.00%
-austria        #####*##*###     2:01 100.00%
-cracker        --+*++*+**-+  2:28:24 100.00%
-dingo          ##*#**######     2:53 100.00%
-dismix         ##*##***#*#*     6:21 100.00%
-dizum          #**#**##*###     6:06 100.00%
-noisebox       ******-#*#**    27:36 100.00%
-paranoia       -+*#**-*****  1:21:18 100.00%
-randseed       *#*#**-*****    24:46 100.00%
-talley         ******--*+#*    56:38 100.00%
-tonga          ******--*+**    58:05 100.00%
-w8n            **+***--++**  1:27:05 100.00%
-winter         ******--*+**    57:47 100.00%
-xganon2        ++++++--++++  2:03:40 100.00%
-xganon2  remailer@remailer.xganon.com     ++++++--++++  2:03:24 100.00%
-anon           #*###*##*##*     6:16  97.87%
-citrus         ++++++++*+*+  1:39:49  97.87%
-cmeclax        ---++++-++++  3:45:08  97.87%
-harmless       #**+**-*+***    55:23  97.87%
-havenco        ***-+*-#****  1:41:38  97.87%
-nullify        ******-*+*#*    40:42  97.87%
-rot26          +++*++-**-**  1:51:43  97.87%
-farout         ------------  7:15:12  95.74%
-shinn          ******--*###    48:57  95.74%
-xganon         ++++++--++++  2:12:14  95.74%
-hedonist       ???????++++-  2:55:33  93.75%
-matrix         ******-**++*    52:38  93.61%
-passthru2      ++++++-++*+*  1:44:29  93.61%
-riot           +-----------  5:28:26  93.61%
-squirrel       --++----++**  4:43:42  93.61%
-lcs            +-+-+--+++++  3:48:16  91.48%
-znar           -+++++----++  4:03:43  91.48%
-italy2         ++++++----++  3:31:05  89.36%
-narnia         _.-----++-+- 18:20:20  89.36%
-segfault       ******-         34:48  65.95%
-lemuria                     99:59:58   0.00%
-
+havenco        **#* **+-.-*  8:47:41 100.00%
+austria        **** **+-.-*  8:50:47 100.00%
+randseed       **** **+-.-*  8:54:40 100.00%
+tonga          **** **+-.-*  8:59:55 100.00%
+cthulu         +++* +++-.-+ 11:00:13 100.00%
+frog3          +*** **+_.-- 18:22:56 100.00%
+farout         ---- ---_.-  22:42:49 100.00%
+notatla        ---- ---__.- 26:40:47 100.00%
+dizum          #*#* **+-.-*  9:08:50  99.80%
+cripto         **** **+-.-*  9:06:27  99.77%
+axolotl        **** **--.-*  7:50:28  99.76%
+orange         ***+ +*+-.-+  7:29:26  99.71%
+aarg           **** **+-.-*  9:01:21  99.26%
+xganon2        #### ##+-.-#  9:24:31  99.21%
+dismix         **** **+-.-*  9:05:53  99.19%
+harmless       **** **+-.-+ 10:44:57  99.08%
+paranoia       **** **+..-* 14:37:21  99.07%
+lemuria        **** *++-.-*  7:27:37  98.94%
+dingo          **+* +*+-.-*  8:56:12  98.85%
+xganon         **** ***-.-*  9:24:25  98.54%
+loopback       +-+- -++-.-+ 14:47:45  98.31%
+lcs            ++++ --+-.-+ 11:44:08  97.81%
+znar           ++++ ++++.-- 11:05:44  97.74%
+freedom        **** ***-.-*  9:13:54  97.02%
+cmeclax        +-++ ----.-+ 12:27:46  96.40%
+rot26          ++++ +++-.-- 10:38:23  96.36%
+holodeck       ---. -.-...+ 20:18:47  95.89%
+passthru2      ++++ ++--.-+  8:53:05  95.70%
+citrus         ++++ +---.-+ 15:03:43  93.80%
+riot           ---+ ----_-- 15:16:54  92.95%
+italy2         ++-+ ++--.-+ 11:25:12  91.14%
+narnia         __.- --.- .+ 22:22:30  89.76%
+xmailer        #### ##+-.-*  6:18:44  89.33%
+noisebox       +++- +--.  +  9:35:25  62.44%
+cf             *       *.-* 13:33:16  56.78%
+bikikii                   +  3:44:43   0.00%
 

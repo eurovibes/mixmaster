@@ -150,3 +150,6 @@
                            Help files re-written (by Lucky Green).
                            Fixed inconsistencies between software name and
                              package name.
+
+2002-07-01                 Encrypt-to directive is now supported.
+                           Various bug fixes.
