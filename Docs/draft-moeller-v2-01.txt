@@ -67,17 +67,18 @@ Table of Contents
    2.1 Message Creation
    2.2 Remailing
    2.3 Message Reassembly
-   3. Message Format
-   3.1 Payload Format
-   3.2 Cryptographic Algorithms
-   3.3 Packet Format
-   3.3.1 Header Section Format
-   3.3.2 Body Format
-   3.4 Mail Transport Encoding
-   4. Key Format
-   5. Pool Mix Behavior
-   5.1 Pool Mix Algorithm
-   5.2 Dummy Traffic
+   3. Pool Behavior
+   3.1 Pool Mix Algorithm
+   3.2 Dummy Traffic
+   4. Message Format
+   4.1 Payload Format
+   4.2 Cryptographic Algorithms
+   4.3 Packet Format
+   4.3.1 Header Section Format
+   4.3.2 Body Format
+   4.4 Mail Transport Encoding
+   5. Key Format
+   5.1 Key Rotation
    6. Delivery of Anonymous Messages
    7. Security Considerations
    8. Acknowledgements
@@ -184,17 +185,17 @@ part of a certain message. To all the others, they are completely
 independent.
 
 
-3. Pool Functionality
+3. Pool Behavior
 
-3.1 Cottrell pool mix algorithm
+3.1 Cottrell Pool Mix algorithm
 
-In order to obfuscate the link between incoming and outgoing messages
+In order to obfuscate the link between incoming and outgoing messages,
 Mixmaster uses a pooling scheme.  Messages that are to be forwarded
-anonymously are stored in a pool.  In regular intervals the Mix fires
-and sends some random messages from the pool to either the next hop or their
-final recipient.
+anonymously are stored in a pool.  In regular intervals the remailer fires
+and sends some random messages from the pool to either the next hop or
+their final recipients.
 
-The pooling scheme used in Mixmaster is Cottrell mixing which has
+The pooling scheme used in Mixmaster is the "Cottrell Pool Mix", which has
 the following three parameters:
   t       mixing interval
   min     minimum number of messages in the pool
@@ -208,20 +209,25 @@ Every t seconds:
 
 3.2. Dummy Traffic
 
+"Dummy messages" are multi-hop messages of type NULL with five randomly
+selected nodes as their chain.
+
 Older versions of Mixmaster (2.0.4 - 2.9.0) allowed for the creation of
-"dummy message" cover traffic, but provided no automated means for introducing
+dummy message cover traffic, but provided no automated means for introducing
 this dummy traffic into the system. Beginning in version 3.0, Mixmaster employs
 an internal dummy policy.
 
-Every time a message is placed in the pool Mixmaster chooses a random number
-from a geometric distribution and create that many dummy messages which are
-placed in the pool.  Dummy messages are multi hop messages using several random
-nodes as their chain.  Similarly each time just before we run the mixing
-algorithm described above we also choose a random number from a different
-geometric distribution and add that many dummy messages to the pool as well.
+Every time a message is placed in the pool, the remailer chooses a random
+number from a geometric distribution and creates that many dummy messages
+which are also placed in the pool.
 
-The distributions' parameters are chosen so that on average we create one
-dummy for every 32 messages coming in and one every 9 mixing rounds.
+Similarly, prior to each execution of the mixing algorithm described in
+section 3.1, the remailer selects a random number from a different geometric
+distribution and adds that many dummy messages to the pool as well.
+
+The distributions' parameters are chosen so that on average the remailer
+creates one dummy for every 32 messages coming in and one every 9 mixing
+rounds.
 
 4. Message Format
 
@@ -339,7 +345,7 @@ as follows:
      Triple-DES key                       [ 24 bytes]
      Packet type identifier               [  1 byte ]
      Packet information      [depends on packet type]
-     Timestamp                            [  7 bytes] (optional)
+     Timestamp                            [  7 bytes]
      Message digest                       [ 16 bytes]
      Random padding               [fill to 328 bytes]
 
@@ -371,10 +377,9 @@ Triple-DES key: used to encrypt the following header sections and the
 packet body.
 
 Initialization vectors: For packet type 1 and 2, the IV is used to
-symmetrically encrypt the packet body. For packet type 0, there is one
-IV for each of the 19 following header sections (Note: This is solved
-more efficiently in later versions of the protocol). The IV for the
-last header section is also used for the packet body.
+symmetrically encrypt the packet body. For packet type 0, there is one IV
+for each of the 19 following header sections. The IV for the last header
+section is also used for the packet body.
 
 Remailer address: e-mail address of next hop.
 
@@ -386,22 +391,23 @@ with 1.
 
 Number of chunks: Total number of chunks.
 
-Timestamp: A timestamp is introduced with the byte sequence (48, 48,
-48, 48, 0). The following two bytes specify the number of days since
-Jan 1, 1970, given in little-endian byte order. A random number of up
-to 3 may be subtracted from the number of days in order to obscure
-the origin of the message. To avoid partitioning attacks [CITE?],
-implementations SHOULD make use of the timestamp packet.
+Timestamp: A timestamp is introduced with the byte sequence (48, 48, 48,
+48, 0). The following two bytes specify the number of days since Jan 1,
+1970, given in little-endian byte order. A random number of up to 3 may be
+subtracted from the number of days in order to obscure the origin of the
+message. 
+
+Early implementations of Mixmaster did not generate a timestamp packet.
+Implementors should be aware of the partitioning attack implications if
+they chose to permit processing of packets without timestamps.
 
 Message digest: MD5 digest computed over the preceding elements of the
 encrypted header part.
 
-In the case of packet type 0, header sections 2 .. 20 and the packet
-body each are decrypted separately using the respective initialization
-vectors.
-In the case of packet types 1 and 2, header sections 2 .. 20 are
-ignored, and the packet body is decrypted using the given
-initialization vector.
+In the case of packet type 0, header sections 2 .. 20 and the packet body
+each are decrypted separately using the respective initialization vectors.
+In the case of packet types 1 and 2, header sections 2 .. 20 are ignored,
+and the packet body is decrypted using the given initialization vector.
 
 
 4.3.2 Body Format
@@ -450,16 +456,16 @@ public RSA key:
 
 The attributes are listed in one line separated by spaces:
 
- identifier:      a human readable string identifying the remailer
- address:         the remailer's Internet mail address
- key ID:          public key ID
- version:         the Mixmaster software version number
- capabilities:    flags indicating additional remailer capabilities
- creation date:   date stamp in the format YYYY-MM-DD (optional)
- expiration date: date stamp in the format YYYY-MM-DD (optional)
+ identifier:       a human readable string identifying the remailer
+ address:          the remailer's Internet mail address
+ key ID:           public key ID
+ version:          the Mixmaster software version number
+ capabilities:     flags indicating additional remailer capabilities
+ creation date:    date of the key's creation
+ expiration date:  date of the key's expiration
 
-The identifier consists of lowercase alphanumeric characters, beginning with an
-alphabetic character. It must not contain whitespace.
+The identifier consists of lowercase alphanumeric characters, beginning
+with an alphabetic character. It must not contain whitespace.
 
 The encoded key packet consists of two bytes specifying the key length
 (1024 bits) in little-endian byte order, and of the RSA modulus and
@@ -474,16 +480,25 @@ hexadecimal string.
 
 The capabilities field is optional. It is a list of flags represented
 by a string of ASCII characters. Clients should ignore unknown
-flags. The following flags are used in version 2.0.4:
+flags. The following flags are used in version 2.0.4 through 3.0:
 
  C     accepts compressed messages.
  M     will forward messages to another mix when used as final hop.
  Nm    supports posting to Usenet through a mail-to-news gateway.
  Np    supports direct posting to Usenet.
 
+The date fields introduced in version 3.0 are optional. They are ASCII
+date stamps in the format YYYY-MM-DD. The first date indicates the key
+creation date; the second date indicates its expiration. If only one date
+is present, it is treated as the key creation date.
+
 Digital signatures [RFC 2440] should be used to ensure the
 authenticity of the key files.
 
+5.1 Key Rotation
+
+[Describe key rotation here. We need a good policy for this -- is what we
+do in CVS the right thing wrt to partitioning implications? -LS]
 
 6. Delivery of Anonymous Messages
 
