@@ -6,7 +6,7 @@
    details.
 
    Parse RFC 822 headers
-   $Id: rfc822.c,v 1.1 2001/10/31 08:19:53 rabbi Exp $ */
+   $Id: rfc822.c,v 1.2 2001/12/11 18:01:32 rabbi Exp $ */
 
 
 #include "mix3.h"
@@ -142,6 +142,8 @@ static int quoted_string(BUFFER *in, BUFFER *string, BUFFER *x)
 #endif
     for (;;) {
       c = buf_getc(in);
+      if (c == -1)              /* catch unterminated quoted string */
+        break;
       if (is_qtext(c))
 	buf_appendc(string, c);
       else if (c == '\n') {
