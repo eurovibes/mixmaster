@@ -900,8 +900,9 @@ Remailer-Type: Mixmaster [version number]
             Security</organization>
           <address/>
         </author>
-        <date year="1998"/>
+        <date month="November" year="1998"/>
       </front>
+      <seriesInfo name="In the Proceedings of the 5th ACM Conference on Computer and Communications Security (CCS 1998)" value=""/>
     </reference>
 
     <reference anchor="Danezis03"
@@ -918,6 +919,7 @@ Remailer-Type: Mixmaster [version number]
         </author>
         <date month="October" year="2003"/>
       </front>
+      <seriesInfo name="In the Proceedings of the Workshop on Privacy in the Electronic Society (WPES 2003), Washington, DC, USA" value=""/>
     </reference>
 
     <reference anchor="Moeller98"
@@ -948,6 +950,7 @@ Remailer-Type: Mixmaster [version number]
         </author>
         <date month="October" year="2002"/>
       </front>
+      <seriesInfo name="In the Proceedings of Information Hiding Workshop (IH 2002)" value=""/>
     </reference>
 
 
