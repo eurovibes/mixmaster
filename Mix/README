@@ -70,7 +70,7 @@ and add additional block files to the existing line, such as:
 #define DESTBLOCK "dest.blk rab.blk rab2.blk rab3.blk"
 
 Note that only the first file should the the local block list, as it is the
-only file mix will open for writing. Most users will not need to edit
+only file mixmaster will open for writing. Most users will not need to edit
 config.h.
 
 [1] Update: As of the release of Mixmaster 3.0, the Paracrypt RAB site is 
