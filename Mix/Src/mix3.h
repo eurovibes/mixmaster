@@ -361,13 +361,11 @@ int t1_decrypt(BUFFER *in);
 int t2_decrypt(BUFFER *in);
 
 int mix2_decrypt(BUFFER *m);
-int mix3_decrypt(BUFFER *m);
 
 /* type 2 */
 #define MAGIC0 0
 #define MAGIC1 3
 
-int v3_magic(byte *b);
 int v2body(BUFFER *body);
 int v2body_setlen(BUFFER *body);
 int v2partial(BUFFER *body, BUFFER *mid, int packet, int numpackets);
