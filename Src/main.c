@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id: main.c,v 1.26 2002/10/10 13:05:10 weaselp Exp $ */
+   $Id: main.c,v 1.27 2002/10/10 23:54:39 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -604,11 +604,11 @@ end:
       pid = fork();
       if (pid > 0)
 	exit(0);
-      if (chdir(MIXDIR) < 0) {
-	if (chdir("/") < 0) {
-	  fprintf(stderr, "Cannot chdir to mixdir or /.\n");
-	  exit(1);
-	};
+    };
+    if (chdir(MIXDIR) < 0) {
+      if (chdir("/") < 0) {
+	fprintf(stderr, "Cannot chdir to mixdir or /.\n");
+	exit(1);
       };
     };
     if (write_pidfile(PIDFILE)) {
