@@ -6,7 +6,7 @@
    details.
 
    Remailer statistics
-   $Id: stats.c,v 1.8.2.5 2002/10/09 20:51:09 weaselp Exp $ */
+   $Id: stats.c,v 1.8.2.6 2002/10/09 21:09:12 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -338,11 +338,11 @@ int conf(BUFFER *out)
       num = t1_rlist(remailer);
       pgp_rkeylist(remailer, pgpkeyid, num);
       for (i=1; i<=num; i++) {
-      if (remailer[i].flags.pgp) {
-	snprintf(tmpline, LINELEN, "0x%08X    \"%s <%s>\"\n", pgpkeyid[i], remailer[i].name, remailer[i].addr);
-	tmpline[LINELEN-1] = '\0';
-	buf_appends(out, tmpline);
-      }
+	if (remailer[i].flags.pgp) {
+	  snprintf(tmpline, LINELEN, "0x%08X    \"%s <%s>\"\n", pgpkeyid[i], remailer[i].name, remailer[i].addr);
+	  tmpline[LINELEN-1] = '\0';
+	  buf_appends(out, tmpline);
+	}
       }
       buf_nl(out);
     }

@@ -6,7 +6,7 @@
    details.
 
    OpenPGP key database
-   $Id: pgpdb.c,v 1.6.2.4 2002/10/09 20:51:08 weaselp Exp $ */
+   $Id: pgpdb.c,v 1.6.2.5 2002/10/09 21:09:12 weaselp Exp $ */
 
 
 #include "mix3.h"
@@ -378,10 +378,10 @@ int pgp_keymgt(int force)
   }
 
   if (err == 0 && (f = mix_openfile(PGPKEY, "w")) != NULL) {
-      buf_write(out, f);
-      fclose(f);
-    } else
-      err = -1;
+    buf_write(out, f);
+    fclose(f);
+  } else
+    err = -1;
 end:
   buf_free(key);
   buf_free(out);
