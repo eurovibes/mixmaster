@@ -56,7 +56,7 @@ Mixmaster is based on D. Chaum's mix-net protocol.
 A mix (remailer) is a service that forwards messages, using public key
 cryptography to hide the correlation between its inputs and outputs.
 Sending messages through sequences of remailers achieves anonymity and
-unobserveability of communications against a powerful adversary.
+unobservability of communications against a powerful adversary.
 
 
 
@@ -83,7 +83,7 @@ Table of Contents
    6. Administrative Commands
    7. Delivery of Anonymous Messages
    8. Security Considerations
-   9. Acknowledgements
+   9. Acknowledgments
    10. References
    11. Authors' Addresses
 
@@ -101,7 +101,7 @@ mix-net protocol. A mix (remailer) is a service that forwards
 messages, using public key cryptography to hide the correlation
 between its inputs and outputs. If a message is sent through a
 sequence of mixes, one trusted mix is sufficient to provide anonymity
-and unobserveability of communications against a powerful
+and unobservability of communications against a powerful
 adversary. Mixmaster is a mix-net implementation for electronic mail.
 
 This memo describes version 2 of the Mixmaster message format, as used
@@ -113,9 +113,9 @@ separate document.
 
 The mix-net protocol [Chaum 1981] allows one to send messages while hiding
 the relation of sender and recipient from observers
-(unobserveability). It also provides the sender of a message with the
+(unobservability). It also provides the sender of a message with the
 ability to remain anonymous to the recipient (sender anonymity). If
-anonymity is not desired, authenticity and unobserveability can be
+anonymity is not desired, authenticity and unobservability can be
 achieved at the same time by transmitting digitally signed messages.
 
 This section gives an overview over the protocol used in Mixmaster. The
@@ -262,7 +262,7 @@ message or a dummy message.
 The messages use the formats specified in [RFC 822] and [RFC 1036]
 respectively, prepended with data specifying the payload type. An
 additional, more restricted method of specifying message header lines
-is defined for reasons of backward compability.
+is defined for reasons of backward compatibility.
 
 The payload format is as follows:
 
@@ -506,9 +506,9 @@ hexadecimal string.
 
 The version field consists of the protocol version number followed by a
 colon and the software version information, limited to the ASCII
-alphanumeric characters, plus dot (.) and dash (-). All implimentations of
+alphanumeric characters, plus dot (.) and dash (-). All implementations of
 this protocol should prepend the software version with "2:" to indicate
-Mixmaster protocol version 2. Existing implimentations lacking a protocol
+Mixmaster protocol version 2. Existing implementations lacking a protocol
 version number imply protocol version 2.
 
 The capabilities field is optional. It is a list of flags represented
@@ -609,7 +609,7 @@ information about the origin of the message can be inserted in the
 "Comments:" header field of the anonymous messages.
 
 If the recipient does not wish to receive anonymous messages,
-unobserveability of communications and authenticity can be achieved at
+unobservability of communications and authenticity can be achieved at
 the same time by the remailer verifying that the message is
 cryptographically signed [RFC 2440] by a known sender.
 
@@ -692,7 +692,7 @@ cryptographic authentication. Possible countermeasures are discussed
 in section 7.
 
 
-9. Acknowledgements
+9. Acknowledgments
 
 Several people contributed ideas and source code to the Mixmaster v2
 software. "Antonomasia" <ant@notatla.demon.co.uk>, Adam Back
