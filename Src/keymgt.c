@@ -6,7 +6,7 @@
    details.
 
    Key management
-   $Id: keymgt.c,v 1.12 2002/09/05 01:21:54 weaselp Exp $ */
+   $Id: keymgt.c,v 1.13 2002/09/09 20:47:33 uid23509 Exp $ */
 
 
 #include "mix3.h"
@@ -365,7 +365,7 @@ int v2keymgt(int force)
 	    found = 1;
 	    if (expires == 0 || (expires - KEYOVERLAPPERIOD >= time(NULL)))
 	      foundnonexpiring = 1;
-	    if (expires == 0 || (expires_found < expires)) {
+	    if (expires == 0 || (expires_found <= expires)) {
 	      buf_clear(pk_found);
 	      buf_cat(pk_found, pk);
 	      memcpy(&k1_found, &k1, sizeof(k1));
