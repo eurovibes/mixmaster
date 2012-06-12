@@ -7,8 +7,8 @@
       <a href="./">Mixmaster Home</a> |
       <a href="related.shtml">Related Software/Resources</a><br>
       <a href="http://sourceforge.net/project/showfiles.php?group_id=37891">Download</a> |
-      <a href="http://svn.debian.org/wsvn/pkg-mixmaster/trunk/Mix/HISTORY?op=file">Changelog</a> |
-      <a href="http://svn.debian.org/wsvn/pkg-mixmaster/trunk/Mix/COPYRIGHT?op=file">License</a><br>
+      <a href="http://svn.debian.org/wsvn/pkg-mixmaster/trunk/Mix/HISTORY?view=markup">Changelog</a> |
+      <a href="http://svn.debian.org/wsvn/pkg-mixmaster/trunk/Mix/COPYRIGHT?view=markup">License</a><br>
       <a href="http://sourceforge.net/mail/?group_id=37891">Lists</a> |
       <a href="http://mixmaster.sourceforge.net/faq.shtml">FAQ</a> |
       <a href="http://svn.debian.org/viewsvn/pkg-mixmaster/trunk/Mix/">Source (via http/svn)</a> |

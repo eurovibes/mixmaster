@@ -46,9 +46,9 @@ To check out a copy of the Mixmaster development tree you need
 
 <p>
 
-<!-- Mix 3.0 -->
-
-Releases of Mixmaster 3.0 will be signed by Len Sassaman using the <em>Mixmaster 3.x Code
+<!-- 2008 -->
+<h3>Releases in 2008</h3>
+Releases of Mixmaster 3.0 were signed by Len Sassaman using the <em>Mixmaster 3.x Code
 Release Signing Key</em> (<a href="keys/2993D5F9.asc"><code>2993D5F9</code></a>).
 
 <pre>
@@ -59,11 +59,10 @@ pub   2048R/2993D5F9 2007-07-03 Mixmaster 3.x Code Release Signing Key
 This key is signed by Len Sassaman's key <a href="keys/5DE480FC.asc"><code>5DE480FC</code></a>
 (<code>B115 73A8 91A8 05DC B26D  CBEB 4A0A 8149 5DE4 80FC</code>) and several other people.<br>
 
-For a full list of signatures see
-<a href="http://keyserver.noreply.org/pks/lookup?search=0x2993D5F9&fingerprint=on&op=vindex">
-0x2993D5F9 on keyserver.noreply.org</a> or any other keyserver.
+For a full list of signatures see 0x2993D5F9 on any keyserver.
 
 <p>
+<em>Note: This key expired on July 2nd 2010</em>
 
 <!-- 2006 -->
 <h3>Releases in 2006</h3>
@@ -137,16 +136,15 @@ which is signed by Len Sassaman's key <a href="keys/5DE480FC.asc"><code>5DE480FC
 
 <h2>Current developers</h2>
 <ul>
-<li>Len Sassaman (Project Manager) &lt;<a href="mailto:rabbi@users.sourceforge.net">rabbi@users.sourceforge.net</a>&gt;</li>
-<li>Ulf Möller (Advisor) &lt;<a href="mailto:ulfm@users.sourceforge.net">ulfm@users.sourceforge.net</a>&gt;</li>
-<li>Colin Tuckley (Porter/Cross Platform Developer) &lt;<a href="mailto:colintu@users.sourceforge.net">colintu@users.sourceforge.net</a>&gt;</li>
-<!--<li>Disastry (Developer) &lt;<a href="mailto:disastry@users.sourceforge.net">disastry@users.sourceforge.net</a>&gt;</li>-->
+<li>Colin Tuckley (Admin and Developer) &lt;<a href="mailto:colintu@users.sourceforge.net">colintu@users.sourceforge.net</a>&gt;</li>
 <li>Erik Arneson (Developer) &lt;<a href="mailto:dybbuk@users.sourceforge.net">dybbuk@users.sourceforge.net</a>&gt;</li>
 <li>Alex Kirk (Doc Writer) &lt;<a href="mailto:schnarff@users.sourceforge.net">schnarff@users.sourceforge.net</a>&gt;</li>
-<!--<li>Scott Renfro (Developer) &lt;<a href="mailto:sgr@users.sourceforge.net">sgr@users.sourceforge.net</a>&gt;</li>-->
+<li>Steve Crook (Developer) &lt;<a href="mailto:zaxuk@users.sourceforge.net">zaxuk@users.sourceforge.net</a>&gt;</li>
 <li>Peter Palfrader (Developer) &lt;<a href="mailto:weaselp@users.sourceforge.net">weaselp@users.sourceforge.net</a>&gt;</li>
 </ul>
 
+In January 2012 we lost Ulf Möller, our friend and main advisor.<br>
+In July 2011 we lost a dear friend, developer and project leader Len Sassaman aka rabbi.<br>
 On October 31st 2002 we lost a dear friend and developer: Janis Jagars aka Disastry.  Read <a href="disastry.txt">Len's Obituary for Disastry</a>.
 
 <p>

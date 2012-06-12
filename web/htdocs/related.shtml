@@ -13,14 +13,7 @@
 
 <p>
 <a href="http://www.mutt.org/">The Mutt E-Mail Client</a> has an interface to
-call the Mixmaster binary.  For <a href="http://www.gnu.org/software/emacs/emacs.html">Emacs</a>
-Erik wrote an <a href="http://erik.arneson.org/elisp.html">interface</a>:
-<a href="http://erik.arneson.org/mixmaster.el">mixmaster.el</a>.
-
-<p>
-The <a href="http://sourceforge.net/projects/jbn">JBN</a> project on
-sourceforge was just started in order to maintain JBN again and bring it up to
-date. (<a href="http://www.theinternet.cc/potatoware/jbn2">old versions</a>)
+call the Mixmaster binary.
 
 <p>
 <a href="http://sourceforge.net/projects/mixlet">Mixlet</a> is a Mix Client in
@@ -33,7 +26,7 @@ which lets you use your usual Mail and News clients while still using a Nym.
 This is for Unixes.
 
 <p>
-<a href="http://quicksilver.skuz.net/">QuickSilver</a> is an actively
+<a href="http://quicksilvermail.net/">QuickSilver</a> is an actively
 maintained and developed client for Win32.  It doesn't call the Mixmaster
 binary but instead links against the mix.dll build from Mixmaster's sources.
 
@@ -41,25 +34,17 @@ binary but instead links against the mix.dll build from Mixmaster's sources.
 and maintained client for Win32.  It functions as a news/email proxy enabling
 users to send anonymous messages using their preferred client applications.
 
-<p>
-<a href="http://www.eskimo.com/~turing/remailer/FAQ/faq.6.html">Section 6 of the alt.privacy.anon-server FAQ</a>
-perhaps has a list of more remailer clients.
-
 
 <h2>Other Remailers</h2>
 
 <p>
-<a href="http://www.bigfoot.com/~potatoware/reli">Reliable</a> is
+<a href="http://sourceforge.net/projects/reliableremailr/">Reliable</a> is
 a popular piece of remailer software for Microsoft Windows. It is type I
 (cypherpunk) only but has type II callbacks. So if you additionally install
 Mix2 or Mix3 on your system it can also do type II. 
 
 <p>
-Deacon also created the <a href="http://sourceforge.net/projects/reliable2">Reliable2</a>
-project here on SourceForge in order to bring it up to current standards.
-
-<p>
-<a href="http://www.mixminion.net/">Mixminion</a> will become the next
+<a href="http://www.mixminion.net/">Mixminion</a> may become the next
 generation remailing network (Type III).  It's not yet ready to provide you
 with anonymity but it's well on its way.
 
@@ -93,9 +78,7 @@ of the many existing pingers.
 <small>Sorted alphabetically:</small>
 <ul>
 <li><a href="http://www.palfrader.org/echolot/">echolot</a> by Peter Palfrader</li>
-<li><a href="http://lexx.shinn.net/cmeclax/pingstats.html">pingstats</a> by cmeclax</li>
 <li><a href="http://www.tahina.priv.at/~cm/hacks/">remlist</a> by Christian Mock</li>
-<li><a href="ftp://ftp.zedz.net/pub/crypto/remailer/">rlist</a> by Raph Levien</li>
 </ul>
 
     <hr>
