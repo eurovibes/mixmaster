@@ -52,7 +52,6 @@ int t1_decrypt(BUFFER *in)
   return (ret);
 }
 
-#ifdef USE_IDEA
 void t1_esub(BUFFER *esub, BUFFER *subject)
 {
   BUFFER *iv, *out;
@@ -67,14 +66,17 @@ void t1_esub(BUFFER *esub, BUFFER *subject)
 
   digest_md5(esub, esub);
   digest_md5(subject, subject);
+#ifdef USE_IDEA
   buf_ideacrypt(subject, esub, iv, ENCRYPT);
+#else
+  buf_bfcrypt(subject, esub, iv, ENCRYPT);
+#endif /* USE_IDEA */
   id_encode(subject->data, hex);
   buf_appends(out, hex);
   buf_move(subject, out);
   buf_free(iv);
   buf_free(out);
 }
-#endif /* USE_IDEA */
 
 void t1_hsub(BUFFER *subject)
 {
@@ -442,10 +444,8 @@ header:
   if (newsgroups->length > 0)
     buf_appendf(out, "Newsgroups: %b\n", newsgroups);
   if (subject->length > 0) {
-#ifdef USE_IDEA
     if (esub->length > 0)
       t1_esub(esub, subject);
-#endif /* USE_IDEA */
     if (hsub == 1)
       t1_hsub(subject);
     buf_appendf(out, "Subject: %b\n", subject);
