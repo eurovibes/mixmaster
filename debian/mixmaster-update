@@ -130,7 +130,7 @@ with whitespace only are ignored as are lines that have the hash our pound
 
 Lines are always truncated at the first hash our pound (C<#>) sign.
 
-Lines are pairs of keys and values seperated by a convenient amount of
+Lines are pairs of keys and values separated by a convenient amount of
 whitespace. The key is case insensitive.
 
 Allowed keys:
@@ -148,7 +148,7 @@ Write the downloaded data to this directory rather than ~/.Mix
 =item B<proxy>
 
 Set proxies for different protocols. The value is split into two parts:
-protocol and proxy URL. They are seperated by whitespace.
+protocol and proxy URL. They are separated by whitespace.
 
   Example:
     PROXY  http  http://proxy.example.com:8080/

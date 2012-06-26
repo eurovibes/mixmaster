@@ -15,7 +15,7 @@
 #
 # Equipo de traducción al español, por favor lean antes de traducir
 # los siguientes documentos:
-# 
+#
 # - El proyecto de traducción de Debian al español
 #   http://www.debian.org/intl/spanish/
 #   especialmente las notas de traducción en
@@ -33,6 +33,7 @@ msgstr ""
 "PO-Revision-Date: 2007-03-11 01:15-0500\n"
 "Last-Translator: Rudy Godoy <rudy@stone-head.org>\n"
 "Language-Team: Debian l10n Spanish <debian-l10n-spanish@lists.debian.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -51,4 +52,8 @@ msgid ""
 "will be downloaded from the Internet once Mixmaster has been set up.  Once "
 "this has happened this option will be disabled to prevent further updates "
 "when the package will be updated."
-msgstr "Si elige esta opción, se descargarán de Internet las estadísticas de confiabilidad y el anillo de claves actualizados una vez que se haya configurado Mixmaster. Cuando finalice, se deshabilitará esta opción para prevenir actualizaciones posteriores cuando el paquete se actualice."
+msgstr ""
+"Si elige esta opción, se descargarán de Internet las estadísticas de "
+"confiabilidad y el anillo de claves actualizados una vez que se haya "
+"configurado Mixmaster. Cuando finalice, se deshabilitará esta opción para "
+"prevenir actualizaciones posteriores cuando el paquete se actualice."
