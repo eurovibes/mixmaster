@@ -17,7 +17,6 @@ case "$1" in
 
 		dpkg-statoverride --remove /var/lib/mixmaster >/dev/null 2>&1 || true
 		dpkg-statoverride --remove /var/log/mixmaster >/dev/null 2>&1 || true
-		dpkg-statoverride --remove /var/run/mixmaster >/dev/null 2>&1 || true
 		dpkg-statoverride --remove $REMAILCONFIGFILE >/dev/null 2>&1 || true
 
 		# we mimic dpkg as closely as possible, so we remove configuration

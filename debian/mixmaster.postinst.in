@@ -33,10 +33,6 @@ fi
 if ( ! dpkg-statoverride --list /var/log/mixmaster > /dev/null ); then
 	dpkg-statoverride --update --add root mixmaster 02770 /var/log/mixmaster
 fi
-# Give the mixmaster user write permissions to /var/run/mixmaster
-if ( ! dpkg-statoverride --list /var/run/mixmaster > /dev/null ); then
-	dpkg-statoverride --update --add root mixmaster 02775 /var/run/mixmaster
-fi
 # Fix permissions on /etc/mixmaster/remailer.conf
 if ( ! dpkg-statoverride --list $REMAILCONFIGFILE > /dev/null ); then
 	dpkg-statoverride --update --add root mixmaster 00640 $REMAILCONFIGFILE
@@ -47,7 +43,7 @@ fi
 # setup all needed directories and files
 ########################################
 if [ ! -e /var/lib/mixmaster/Mix ]; then
-	mkdir /var/lib/mixmaster/Mix
+	mkdir -p /var/lib/mixmaster/Mix
 	chown mixmaster: /var/lib/mixmaster/Mix
 	chmod 2700 /var/lib/mixmaster/Mix
 	ln -s $REMAILCONFIGFILE /var/lib/mixmaster/Mix/mix.cfg

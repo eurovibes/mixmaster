@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Colin Tuckley <colint@debian.org>
 Homepage: http://mixmaster.sourceforge.net/
 Build-Depends: debhelper (>> 5.0), libncurses5-dev, libpcre3-dev, libssl-dev, zlib1g-dev, bison, po-debconf
-Standards-Version: 3.9.2
+Standards-Version: 3.9.3
 
 Package: mixmaster
 Architecture: any

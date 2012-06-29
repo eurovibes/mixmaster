@@ -1,3 +1,13 @@
+mixmaster (3.0.0-5) unstable; urgency=low
+
+  * Ack NMU
+  * Fix create of /var/lib/mixmaster (Closes: #678489)
+  * Fix create of /var/run/mixmaster when on tmpfs
+  * bump standards version to 3.9.3 (no changes required).
+  * Add debian/watch file.
+
+ -- Colin Tuckley <colint@debian.org>  Fri, 29 Jun 2012 19:23:47 +0100
+
 mixmaster (3.0.0-4.1) unstable; urgency=low
 
   * Non-maintainer upload.
