@@ -1,3 +1,18 @@
+mixmaster (3.0.0-7) UNRELEASED; urgency=low
+
+  * Add it.po Italian translation file
+      from Beatrice Torracca <beatricet@libero.it> (Closes: #714011)
+  * Bump standards version to 3.9.4 (no changes required)
+
+ -- Colin Tuckley <colint@debian.org>  Mon, 24 Jun 2013 23:03:18 +0100
+
+mixmaster (3.0.0-6) unstable; urgency=low
+
+  * fix segfault on architectures where the default for "char"
+    is not "signed" (Closes: #690206)
+
+ -- Colin Tuckley <colint@debian.org>  Fri, 08 Feb 2013 13:59:24 +0000
+
 mixmaster (3.0.0-5) unstable; urgency=low
 
   * Ack NMU
