@@ -1,10 +1,13 @@
-mixmaster (3.0.0-7) UNRELEASED; urgency=low
+mixmaster (3.0.0-7) unstable; urgency=low
 
   * Add it.po Italian translation file
       from Beatrice Torracca <beatricet@libero.it> (Closes: #714011)
   * Bump standards version to 3.9.4 (no changes required)
+  * Incorporate patch from Peter Palfrader to fix mixmaster-update
+    (Closes: #703959)
+  * Add dpkg buildflags to debian/rules
 
- -- Colin Tuckley <colint@debian.org>  Mon, 24 Jun 2013 23:03:18 +0100
+ -- Colin Tuckley <colint@debian.org>  Thu, 27 Jun 2013 10:56:53 +0100
 
 mixmaster (3.0.0-6) unstable; urgency=low
 

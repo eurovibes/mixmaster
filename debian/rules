@@ -5,9 +5,12 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
+DPKG_EXPORT_BUILDFLAGS = 1
+include /usr/share/dpkg/buildflags.mk
+
 MIXDIR=
 LIBS=
-LDFLAGS=-lz -lcrypto -lncurses -lpcre
+LDFLAGS+=-lz -lcrypto -lncurses -lpcre
 DEF=-DUSE_ZLIB -DUSE_PCRE -DUSE_NCURSES -DHAVE_NCURSES_H -DGLOBALMIXCONF='\"/etc/mixmaster/client.conf\"' -DHOMEMIXDIR='\".Mix\"'
 INC=
 
@@ -26,7 +29,7 @@ configure-stamp:
 
 	sed -e "s,%MIXDIR,$(MIXDIR)," \
 	  -e "s,%LIBS,$(LIBS)," \
-	  -e "s,%LDFLAGS,$(LDFLAGS)," \
+	  -e "s!%LDFLAGS!$(LDFLAGS)!" \
 	  -e "s,%INC,$(INC)," \
 	  -e "s,%DEF,$(DEF)," < Src/Makefile.in > Src/Makefile
 

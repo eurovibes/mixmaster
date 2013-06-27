@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-#   mixmaster-update: (c) 2002 Peter Palfrader <peter@palfrader.org>
+#   mixmaster-update: (c) 2002, 2013 Peter Palfrader <peter@palfrader.org>
 #   $Id: mixmaster-update 459 2007-11-21 10:12:30Z weasel $
 #
 #   This program is free software. you can redistribute it and/or modify
@@ -378,15 +378,14 @@ for my $key (keys %$source) {
 			local $SIG{ALRM} = sub { die "alarm\n" };
 			alarm 35;
 			my $response = $user_agent->get($value);
-			unless ($response->is_success) {
-				warn ("$PROGRAM_NAME: Get failed for $value (".$response->code()." ".$response->message().")\n");
-				alarm 0;
-				next;
-			};
-			my $content = $response->content;
-			$content =~ s/\r\n/\n/g;
-			$result{$key} = $content;
 			alarm 0;
+			if ($response->is_success) {
+				my $content = $response->content;
+				$content =~ s/\r\n/\n/g;
+				$result{$key} = $content;
+			} else{
+				warn ("$PROGRAM_NAME: Get failed for $value (".$response->code()." ".$response->message().")\n");
+			}
 		};
 		if ($EVAL_ERROR) {
 			die unless ($EVAL_ERROR eq "alarm\n");
