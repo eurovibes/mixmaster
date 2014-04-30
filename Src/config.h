@@ -128,8 +128,8 @@
 #define USE_OPENSSL
 /* Use IDEA algorithm? (See file idea.txt) */
 /* #define USE_IDEA */
-/* Use AES algorithm? - should be handled by Install script setting compiler option -DUSE_AES */
-/* #define USE_AES */
+/* Use AES algorithm? */
+#define USE_AES
 /* Support the OpenPGP message format? */
 #define USE_PGP
 

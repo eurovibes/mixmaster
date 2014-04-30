@@ -802,6 +802,10 @@ int buf_unzip(BUFFER *buf, int type);
 #ifndef _MIXLIB_H
 #define _MIXLIB_H
 
+#define RSASTATSFILE "rsastats.daily"
+#define RSATEXTFILE  "rsastats.txt"
+int mix_global_verbose;
+
 #include <stdio.h>
 #include <time.h>
 #ifdef WIN32
@@ -905,7 +909,15 @@ int pgp_keygen(int algo, int bits, BUFFER *userid, BUFFER *pass,
 /* parsedate */
 time_t parsedate(char *p);
 
+/* crypto */
+int derive_aes_keys(BUFFER *aes_pre_key, BUFFER *hkey, BUFFER *aes_header_key,
+		    BUFFER *aes_body_key, BUFFER *aes_tte_key, BUFFER *aes_iv);
 
+int digest_sha256(BUFFER *b, BUFFER *md);
+int hmac_sha256(BUFFER *b, BUFFER *hk, BUFFER *md);
+
+/* utils */
+char *showdata(BUFFER *buf, int max);
 
 #ifdef WIN32
 
@@ -915,3 +927,4 @@ time_t parsedate(char *p);
 #endif /* WIN32 */
 
 #endif /* not _MIXLIB_H */
+
