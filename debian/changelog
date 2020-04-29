@@ -1,3 +1,13 @@
+mixmaster (3.0.0-10) unstable; urgency=medium
+
+  * Fix segmentation fault in DES key handling
+    patch from Benedikt Spranger <b.spranger@linutronix.de>
+    (Closes: #871557)
+  * Bump standards version to 4.0.0 (no changes required)
+  * Add status option to /etc/init.d script.
+
+ -- Colin Tuckley <colint@debian.org>  Thu, 10 Aug 2017 17:27:47 +0100
+
 mixmaster (3.0.0-9) unstable; urgency=medium
 
   * Ack the NMU.

@@ -87,8 +87,12 @@ case $1 in
 	$0 start
 	;;
 
+  status)
+	status_of_proc /usr/bin/$NAME $NAME
+	;;
+
   *)
-	echo "Usage: $0 (start|stop|reload|force-reload|restart)" >&2
+	echo "Usage: $0 (start|stop|status|reload|force-reload|restart)" >&2
 	exit 1
 	;;
 esac
