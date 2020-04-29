@@ -471,8 +471,6 @@ case 'm':
 #endif /* USE_PGP */
 
 				if (strleft(thisnym, NONANON)) {
-					FILE *f = NULL;
-
 					if (type == 'p' || type == 'f') {
 						if (strchr(NEWS, '@')) {
 							/*  NOT_IMPLEMENTED; */

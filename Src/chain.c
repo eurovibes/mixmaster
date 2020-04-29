@@ -26,6 +26,7 @@ void clienterr(BUFFER *msgbuf, char *err)
 void parse_badchains(int badchains[MAXREM][MAXREM], char *file,
 		     char *startindicator, REMAILER *remailer, int maxrem)
 {
+	(void) file;
 	int i, j;
 	FILE *list;
 	char line[LINELEN];

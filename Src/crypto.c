@@ -321,6 +321,7 @@ static int write_seckey(BUFFER *sk, SECKEY *key, byte keyid[])
 
 static int write_pubkey(BUFFER *pk, PUBKEY *key, byte keyid[])
 {
+	(void) keyid;
 	byte l[512];
 	int n;
 	const BIGNUM *key_n, *key_e, *key_d;

@@ -60,11 +60,15 @@ BUFFER *buf_new(void)
 
 static void sanity_check(BUFFER *b)
 {
+#ifndef NDEBUG
 	assert(b != NULL);
 	assert(b->size > 0);
 	assert(b->data != NULL);
 	assert(b->length >= 0 && b->length < b->size);
 	assert(b->ptr >= 0 && b->ptr <= b->length);
+#else
+	(void) b;
+#endif
 }
 
 int buf_reset(BUFFER *buffer)

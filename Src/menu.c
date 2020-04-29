@@ -475,10 +475,7 @@ end:
 #ifdef USE_NCURSES
 static int sortrel(const void *a, const void *b)
 {
-	int na, ra, nb, rb;
-
-	na = *(int *)a;
-	nb = *(int *)b;
+	int ra, rb;
 
 	ra = *((int *)a + 1);
 	rb = *((int *)b + 1);

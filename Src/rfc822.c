@@ -415,6 +415,9 @@ static int group(BUFFER *in, BUFFER *group, BUFFER *name, BUFFER *x)
  */
 static int domain_literal(BUFFER *in, BUFFER *dom, BUFFER *x)
 {
+	(void) in;
+	(void) dom;
+	(void) x;
 	return 0; /* XXX */
 }
 
