@@ -253,7 +253,7 @@ void read_folder(char command, char *foldername, char *nym)
 					p = buf_getl(index);
 					buf_clear(name);
 					folder->ptr = buf_getl(index);
-					if (folder->ptr < 0)
+					if ((long) folder->ptr < 0)
 						folder->ptr = 0;
 					else {
 						buf_getheader(folder, field,
@@ -267,11 +267,11 @@ void read_folder(char command, char *foldername, char *nym)
 						standout();
 
 					mvaddnstr(i - display + 2, 0,
-						  name->data, 18);
+						  name->string, 18);
 
 					sub[0] = '\0';
 					folder->ptr = buf_getl(index);
-					if (folder->ptr < 0)
+					if ((long) folder->ptr < 0)
 						folder->ptr = 0;
 					else {
 						buf_getheader(folder, field,
@@ -279,7 +279,7 @@ void read_folder(char command, char *foldername, char *nym)
 						if (content->length) {
 							decode_header(content);
 							strncpy(sub,
-								content->data,
+								content->string,
 								sizeof(sub));
 						}
 					}
@@ -319,7 +319,7 @@ void read_folder(char command, char *foldername, char *nym)
 			     i++) {
 				index->ptr = 12 * i + 4;
 				folder->ptr = buf_getl(index);
-				if (folder->ptr < 0)
+				if ((long) folder->ptr < 0)
 					folder->ptr = 0;
 				else {
 					buf_getheader(folder, field, line);
@@ -330,7 +330,7 @@ void read_folder(char command, char *foldername, char *nym)
 					}
 				}
 				folder->ptr = buf_getl(index);
-				if (folder->ptr < 0)
+				if ((long) folder->ptr < 0)
 					folder->ptr = 0;
 				else {
 					buf_getheader(folder, field, line);
@@ -487,7 +487,7 @@ void menu_main(void)
 	int y, x;
 	int pool, n;
 	int c;
-	int space;
+	size_t space;
 	BUFFER *chainlist, *line;
 	char nym[LINELEN] = ANON;
 
@@ -647,14 +647,14 @@ void read_message(BUFFER *message, char *nym)
 		buf_getline(message, line);
 		buf_getheader(message, field, content);
 		if (bufieq(field, "Nym"))
-			strncpy(thisnym, content->data, sizeof(thisnym));
+			strncpy(thisnym, content->string, sizeof(thisnym));
 		buf_rewind(message);
 	}
 	while (buf_getheader(message, field, content) == 0) {
 		if (bufieq(field, "received") || bufleft(field, "From "))
 			continue;
 		if (bufieq(field, "subject"))
-			strncpy(sub, content->data, sizeof(sub));
+			strncpy(sub, content->string, sizeof(sub));
 		buf_appendheader(hdr, field, content);
 	}
 	if (strlen(sub) > COLS - strlen(VERSION) - strlen(thisnym) - 23)

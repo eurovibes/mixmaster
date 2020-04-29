@@ -465,7 +465,7 @@ int buf_prepare(BUFFER *buf, int size);
   sets buf to contain size bytes of arbitrary data.
 
 
-int buf_get(BUFFER *buf, BUFFER *t, int n);
+int buf_get(BUFFER *buf, BUFFER *t, size_t n);
 
   This function sets buffer t to contain n bytes read from buf.
 
@@ -736,7 +736,7 @@ int sendmail_loop(BUFFER *message, BUFFER *address, const char *from);
 Printable Encoding
 ==================
 
-int encode(BUFFER *buf, int linelen);
+int encode(BUFFER *buf, size_t linelen);
 
   buf is encoded in base 64 encoding [RFC 1421]. If linelen > 0, the
   resulting text is broken into lines of linelen characters.
@@ -754,7 +754,7 @@ int decode(BUFFER *in, BUFFER *out);
   -1 otherwise.
 
 
-int hdr_encode(BUFFER *in, int n);
+int hdr_encode(BUFFER *in, size_t n);
 
   Encodes a header line according to the MIME standard. The header is
   broken into lines of at most n characters.
@@ -806,6 +806,7 @@ int buf_unzip(BUFFER *buf, int type);
 #define RSATEXTFILE "rsastats.txt"
 int mix_global_verbose;
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <time.h>
 #ifdef WIN32
@@ -815,11 +816,14 @@ int mix_global_verbose;
 typedef unsigned char byte;
 
 typedef struct {
-	byte *data;
-	long length;
-	long ptr;
-	long size;
-	byte sensitive;
+	union {
+		byte *data;
+		char *string;
+	};
+	size_t length;
+	size_t ptr;
+	size_t size;
+	bool sensitive;
 } BUFFER;
 
 int mix_init(char *);
@@ -915,7 +919,7 @@ int digest_sha256(BUFFER *b, BUFFER *md);
 int hmac_sha256(BUFFER *b, BUFFER *hk, BUFFER *md);
 
 /* utils */
-char *showdata(BUFFER *buf, int max);
+char *showdata(BUFFER *buf, size_t max);
 
 #ifdef WIN32
 

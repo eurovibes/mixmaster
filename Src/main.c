@@ -472,7 +472,7 @@ int main(int argc, char *argv[])
 	}
 
 	if (update_stats) {
-		ret = download_stats(statssrc->data);
+		ret = download_stats(statssrc->string);
 		if (ret == -3) {
 			fprintf(stderr,
 				"Stats source does not include all required files.\n");
@@ -632,23 +632,22 @@ WinNT service:\n\
 				while (buf_getheader(msg, field, content) ==
 				       0) {
 					if (bufieq(field, "nym")) {
-						strncpy(nym, content->data,
+						strncpy(nym, content->string,
 							sizeof(nym));
 					} else if (bufieq(field, "chain"))
-						if (strchr(content->data,
+						if (strchr(content->string,
 							   ';')) {
-							i = strchr(content->data,
+							i = strchr(content->string,
 								   ';') -
-							    (char *)content
-								    ->data;
+								content->string;
 							strncpy(chain,
-								content->data,
+								content->string,
 								i);
-							if (strstr(content->data +
+							if (strstr(content->string +
 									   i,
 								   "copies=") !=
 							    NULL) {
-								sscanf(strstr(content->data +
+								sscanf(strstr(content->string +
 										      i,
 									      "copies=") +
 									       sizeof("copies=") -
@@ -658,7 +657,7 @@ WinNT service:\n\
 							}
 						} else
 							strncpy(chain,
-								content->data,
+								content->string,
 								sizeof(chain));
 					else { /* line goes into message */
 						if (((redirect_mail ||
@@ -767,7 +766,7 @@ WinNT service:\n\
 		if (msg->length) {
 			while (buf_getheader(msg, field, content) == 0) {
 				if (bufieq(field, "chain"))
-					strncpy(chain, content->data,
+					strncpy(chain, content->string,
 						sizeof(chain));
 			}
 		}
@@ -939,7 +938,7 @@ static int check_get_pass(int force, int never_ask_for_passphrase)
 			if (n)
 				fprintf(stderr, "re-");
 			user_pass(pass);
-			strncpy(PASSPHRASE, pass->data, LINELEN);
+			strncpy(PASSPHRASE, pass->string, LINELEN);
 			PASSPHRASE[LINELEN - 1] = 0;
 			if (!force) {
 				if (n && buf_eq(pass, pass2))

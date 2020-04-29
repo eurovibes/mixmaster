@@ -169,7 +169,7 @@ int t1_encrypt(int type, BUFFER *message, char *chainstr, int latency,
 	chainlen = chain_select(chain, chainstr, maxrem, remailer, 1, line);
 	if (chainlen < 1) {
 		if (line->length)
-			clienterr(feedback, line->data);
+			clienterr(feedback, line->string);
 		else
 			clienterr(feedback, "Invalid remailer chain!");
 		err = -1;
@@ -247,7 +247,7 @@ int t1_encrypt(int type, BUFFER *message, char *chainstr, int latency,
 			if (err < 0) {
 				buf_setf(line, "No PGP key for remailer %s!\n",
 					 remailer[chain[hop]].name);
-				clienterr(feedback, line->data);
+				clienterr(feedback, line->string);
 				goto end;
 			}
 			buf_appends(message, "::\nEncrypted: PGP\n\n");
@@ -260,7 +260,7 @@ int t1_encrypt(int type, BUFFER *message, char *chainstr, int latency,
 					line,
 					"PGP encryption needed for remailer %s!\n",
 					remailer[chain[hop]].name);
-				clienterr(feedback, line->data);
+				clienterr(feedback, line->string);
 				goto end;
 			}
 			buf_move(message, b);

@@ -88,7 +88,7 @@ void send_message(int type, char *nym, BUFFER *in)
 			strcpy(subject, "Forwarded message");
 			while (buf_getheader(txt, field, content) == 0) {
 				if (bufieq(field, "subject")) {
-					strncpy(subject, content->data,
+					strncpy(subject, content->string,
 						sizeof(subject));
 					strcatn(subject, " (fwd)",
 						sizeof(subject));
@@ -112,7 +112,7 @@ void send_message(int type, char *nym, BUFFER *in)
 					subject[0] = '\0';
 				else
 					strcpy(subject, "Re: ");
-				strcatn(subject, content->data,
+				strcatn(subject, content->string,
 					sizeof(subject));
 			}
 			if (bufieq(field, "from"))
@@ -120,21 +120,21 @@ void send_message(int type, char *nym, BUFFER *in)
 			if (type == 'p' || type == 'f') {
 				if (dest[0] == '\0' &&
 				    bufieq(field, "newsgroups"))
-					strncpy(dest, content->data,
+					strncpy(dest, content->string,
 						sizeof(dest));
 				if (bufieq(field, "followup-to") &&
 				    !bufieq(content, "poster"))
-					strncpy(dest, content->data,
+					strncpy(dest, content->string,
 						sizeof(dest));
 				if (bufieq(field, "message-id"))
 					buf_appendf(tmp, "References: %b\n",
 						    content);
 			} else {
 				if (dest[0] == '\0' && bufieq(field, "from"))
-					strncpy(dest, content->data,
+					strncpy(dest, content->string,
 						sizeof(dest));
 				if (bufieq(field, "reply-to"))
-					strncpy(dest, content->data,
+					strncpy(dest, content->string,
 						sizeof(dest));
 				if (type == 'g' && (bufieq(field, "to") ||
 						    bufieq(field, "cc"))) {
@@ -363,14 +363,14 @@ redraw:
 				while (buf_getheader(tmp, field, content) ==
 				       0) {
 					if (bufieq(field, "subject"))
-						strncpy(subject, content->data,
+						strncpy(subject, content->string,
 							sizeof(subject));
 					else if ((type == 'p' || type == 'f') &&
 						 bufieq(field, "newsgroups"))
-						strncpy(dest, content->data,
+						strncpy(dest, content->string,
 							sizeof(dest));
 					else if (bufieq(field, "to"))
-						strncpy(dest, content->data,
+						strncpy(dest, content->string,
 							sizeof(dest));
 					else {
 						buf_appendheader(txt, field,
@@ -486,7 +486,7 @@ case 'm':
 						} else
 							buf_sets(tmp, ADDRESS);
 						mail_encode(msg, 0);
-						if (sendmail(msg, tmp->data,
+						if (sendmail(msg, tmp->string,
 							     NULL) != 0) {
 #ifdef USE_NCURSES
 							clear();

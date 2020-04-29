@@ -111,7 +111,7 @@ int buf_append(BUFFER *buffer, byte *msg, int len)
 
 	if (buffer->length + len >= buffer->size) {
 		register byte *new;
-		register long newsize;
+		register size_t newsize;
 
 		newsize = 2 * buffer->length; /* double buffer size */
 		if (newsize < buffer->length + len + space)
@@ -180,7 +180,7 @@ int buf_rest(BUFFER *to, BUFFER *from)
 
 int buf_appends(BUFFER *buffer, char *s)
 {
-	return (buf_append(buffer, s, strlen(s)));
+	return (buf_append(buffer, (byte *) s, strlen(s)));
 }
 
 int buf_sets(BUFFER *buffer, char *s)
@@ -197,7 +197,7 @@ int buf_setc(BUFFER *buffer, byte c)
 
 int buf_nl(BUFFER *b)
 {
-	return (buf_append(b, "\n", 1));
+	return (buf_appends(b, "\n"));
 }
 
 int buf_vappendf(BUFFER *b, char *fmt, va_list args)
@@ -206,7 +206,7 @@ int buf_vappendf(BUFFER *b, char *fmt, va_list args)
 		if (*fmt == '%') {
 			int lzero = 0;
 			int longvar = 0;
-			int len = 0;
+			size_t len = 0;
 
 			for (;;) {
 				if (*++fmt == '\0')
@@ -262,9 +262,7 @@ int buf_vappendf(BUFFER *b, char *fmt, va_list args)
 							    lzero ? '0' : ' ');
 					if (sign)
 						buf_appendc(b, '-');
-					for (len = out->length - 1; len >= 0;
-					     len--)
-						buf_appendc(b, out->data[len]);
+					buf_append(b, out->data, out->length);
 					buf_free(out);
 					break;
 				} else if (*fmt == 'l')
@@ -320,7 +318,7 @@ int buf_prepare(BUFFER *buffer, int size)
 
 int buf_read(BUFFER *outmsg, FILE *infile)
 {
-	char buf[BUFSIZE];
+	byte buf[BUFSIZE];
 	int n;
 	int err = -1;
 
@@ -393,7 +391,7 @@ int buf_rewind(BUFFER *buffer)
 	return (0);
 }
 
-int buf_get(BUFFER *buffer, BUFFER *to, int n)
+int buf_get(BUFFER *buffer, BUFFER *to, size_t n)
 {
 	sanity_check(buffer);
 	sanity_check(to);
@@ -426,7 +424,7 @@ void buf_ungetc(BUFFER *buffer)
 
 int buf_getline(BUFFER *buffer, BUFFER *line)
 {
-	register int i;
+	register size_t i;
 	int ret = 0;
 	int nl = 0;
 
@@ -462,7 +460,7 @@ int buf_getline(BUFFER *buffer, BUFFER *line)
 
 int buf_chop(BUFFER *b)
 {
-	int i;
+	size_t i;
 
 	sanity_check(b);
 
@@ -479,7 +477,7 @@ int buf_isheader(BUFFER *buffer)
 {
 	BUFFER *line;
 	long p;
-	int i;
+	size_t i;
 	int err;
 	int ret;
 
@@ -509,7 +507,7 @@ int buf_getheader(BUFFER *buffer, BUFFER *field, BUFFER *content)
 {
 	BUFFER *line;
 	long p;
-	int i;
+	size_t i;
 	int err;
 
 	line = buf_new();
@@ -600,7 +598,7 @@ int buf_eq(BUFFER *b1, BUFFER *b2)
 
 int buf_ieq(BUFFER *b1, BUFFER *b2)
 {
-	int i;
+	size_t i;
 	sanity_check(b1);
 	sanity_check(b2);
 
@@ -725,40 +723,40 @@ int buf_appendb(BUFFER *b, BUFFER *p)
 
 int bufleft(BUFFER *b, char *k)
 {
-	return (strleft(b->data, k));
+	return (strleft(b->string, k));
 }
 
 int bufileft(BUFFER *b, char *k)
 {
-	return (strileft(b->data, k));
+	return (strileft(b->string, k));
 }
 
 int buffind(BUFFER *b, char *k)
 {
-	return (strfind(b->data, k));
+	return (strfind(b->string, k));
 }
 
 int bufifind(BUFFER *b, char *k)
 {
-	return (strifind(b->data, k));
+	return (strifind(b->string, k));
 }
 
 int bufiright(BUFFER *b, char *k)
 {
-	int l = strlen(k);
+	size_t l = strlen(k);
 	if (l <= b->length)
-		return (strieq(b->data + b->length - l, k));
+		return (strieq(b->string + b->length - l, k));
 	return (0);
 }
 
 int bufeq(BUFFER *b, char *k)
 {
-	return (streq(b->data, k));
+	return (streq(b->string, k));
 }
 
 int bufieq(BUFFER *b, char *k)
 {
-	return (strieq(b->data, k));
+	return (strieq(b->string, k));
 }
 
 /* void buf_cut_out(BUFFER *buffer, BUFFER *cut_out, BUFFER *rest,

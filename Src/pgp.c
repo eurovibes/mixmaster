@@ -286,7 +286,7 @@ end:
 unsigned long crc24(BUFFER *in)
 {
 	unsigned long crc = 0xB704CE;
-	long p;
+	size_t p;
 	int i;
 
 #if 0

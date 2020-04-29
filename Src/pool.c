@@ -464,8 +464,8 @@ int pool_send(void)
 	for (i = 0; i < size - POOLSIZE && i < max; i++) {
 		do
 			r = rnd_number(size); /* chose a new random message */
-		while (is(pool->data + ptr[r], "snd"));
-		mv(pool->data + ptr[r], "snd");
+		while (is(pool->string + ptr[r], "snd"));
+		mv(pool->string + ptr[r], "snd");
 	}
 	stats_out(size - --i);
 	pool_dosend();
@@ -801,7 +801,7 @@ int filtermsg(BUFFER *in)
 				buf_nl(out);
 			}
 		}
-		if (BINFILTER && l > 20 && line->length == l &&
+		if (BINFILTER && l > 20 && (long) line->length == l &&
 		    (bufleft(line, "M") || !buffind(line, " ")))
 			inbinary++;
 		else
@@ -909,10 +909,10 @@ int doblock(BUFFER *line, BUFFER *filter, int logandreset)
 	while (buf_getline(filter, pattern) != -1)
 		if (pattern->length > 0 && !bufleft(pattern, "#")) {
 			if (bufleft(pattern, "/") &&
-			    (t = strchr(pattern->data + 1, '/')) != NULL) {
+			    (t = strchr(pattern->string + 1, '/')) != NULL) {
 #ifdef USE_PCRE
 				*t = '\0';
-				compiled = pcre_compile(pattern->data + 1,
+				compiled = pcre_compile(pattern->string + 1,
 							PCRE_CASELESS, &error,
 							&errptr
 #ifndef USE_PCRE_OLD
@@ -922,7 +922,7 @@ int doblock(BUFFER *line, BUFFER *filter, int logandreset)
 				);
 				if (compiled) {
 					match = pcre_exec(
-						compiled, NULL, line->data,
+						compiled, NULL, line->string,
 						line->length,
 #if (PCRE_MAJOR == 2 && PCRE_MINOR >= 06)
 						0,
@@ -942,7 +942,7 @@ int doblock(BUFFER *line, BUFFER *filter, int logandreset)
 					} else if (match >= 0) {
 						/* "/pattern/q" kills the entire message */
 						if (logandreset &&
-						    strlen(pattern->data + 1) +
+						    strlen(pattern->string + 1) +
 								    1 <
 							    pattern->length &&
 						    pattern->data[pattern->length -
@@ -954,7 +954,7 @@ int doblock(BUFFER *line, BUFFER *filter, int logandreset)
 							block = -1;
 							break;
 						}
-						if (strlen(pattern->data + 1) +
+						if (strlen(pattern->string + 1) +
 								    1 <
 							    pattern->length &&
 						    pattern->data[pattern->length -
@@ -963,8 +963,8 @@ int doblock(BUFFER *line, BUFFER *filter, int logandreset)
 								[pattern->length -
 								 1] = '\0';
 							newstr =
-								pattern->data +
-								strlen(pattern->data) +
+								pattern->string +
+								strlen(pattern->string) +
 								1;
 							buf_reset(result);
 							buf_append(result,
@@ -1003,12 +1003,12 @@ int doblock(BUFFER *line, BUFFER *filter, int logandreset)
 								    newstr);
 							buf_appends(
 								result,
-								line->data +
+								line->string +
 									ovector[1]);
 							buf_clear(line);
 							buf_appends(
 								line,
-								result->data);
+								result->string);
 						} else {
 							block = 1;
 							*t = '/';
@@ -1029,7 +1029,7 @@ int doblock(BUFFER *line, BUFFER *filter, int logandreset)
 				       "No regexp support! Ignoring %b\n",
 				       pattern);
 #endif /* else if not USE_PCRE */
-			} else if (bufifind(line, pattern->data)) {
+			} else if (bufifind(line, pattern->string)) {
 				if (logandreset)
 					errlog(NOTICE,
 					       "Blocked header line: %b matches %b.\n",

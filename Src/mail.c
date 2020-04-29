@@ -49,7 +49,7 @@ int sendinfofile(char *name, char *logname, BUFFER *address, BUFFER *header)
 		if ((log = mix_openfile(logname, "r+")) != NULL) {
 			/* log recipients to prevent mail loop */
 			while (fgets(line, sizeof(line), log) != NULL)
-				if (strieq(line, addr->data))
+				if (strieq(line, addr->string))
 					goto end;
 		} else if ((log = mix_openfile(logname, "w")) == NULL) {
 			errlog(ERRORMSG, "Can't create %s.\n", logname);
@@ -121,13 +121,13 @@ int has_more_than_one_remailer(BUFFER *rcpts)
 		printf("%s\n", line->data);
 
 		for (i = 0; i < num2; i++)
-			if (strcmp(type2[i].addr, line->data) == 0) {
+			if (strcmp(type2[i].addr, line->string) == 0) {
 				found = 1;
 				break;
 			}
 		if (!found)
 			for (i = 0; i < num1; i++)
-				if (strcmp(type1[i].addr, line->data) == 0) {
+				if (strcmp(type1[i].addr, line->string) == 0) {
 					found = 1;
 					break;
 				}
@@ -186,7 +186,7 @@ int sendmail(BUFFER *message, char *from, BUFFER *address)
 			if (bufieq(field, "to") || bufieq(field, "cc") ||
 			    bufieq(field, "bcc")) {
 				int thislinercpts = 1;
-				char *tmp = content->data;
+				char *tmp = content->string;
 				while ((tmp = strchr(tmp + 1, ',')))
 					thislinercpts++;
 				rcpt_cnt += thislinercpts;
@@ -199,7 +199,7 @@ int sendmail(BUFFER *message, char *from, BUFFER *address)
 		buf_free(field);
 		buf_free(content);
 	} else if (address->data[0]) {
-		char *tmp = address->data;
+		char *tmp = address->string;
 		rcpt_cnt = 1;
 		while ((tmp = strchr(tmp + 1, ',')))
 			rcpt_cnt++;
@@ -220,7 +220,7 @@ int sendmail(BUFFER *message, char *from, BUFFER *address)
 		errlog(NOTICE,
 		       "Message is destined to more than one remailer.  Dropping.\n");
 		err = 0;
-	} else if (REMAIL && strcmp(REMAILERADDR, rcpt->data) == 0) {
+	} else if (REMAIL && strcmp(REMAILERADDR, rcpt->string) == 0) {
 		buf_cat(head, message);
 		errlog(LOG,
 		       "Message loops back to us; storing in pool rather than sending it.\n");
@@ -375,7 +375,8 @@ int sock_getline(SOCKET s, BUFFER *line)
 
 int sock_cat(SOCKET s, BUFFER *b)
 {
-	int p = 0, n;
+	size_t p = 0;
+	ssize_t n;
 
 	do {
 		n = send(s, b->data, b->length, 0);
@@ -454,7 +455,7 @@ SOCKET smtp_open(void)
 				buf_appends(line, strchr(ENVFROM, '@') + 1);
 			else {
 				struct sockaddr_in sa;
-				int len = sizeof(sa);
+				unsigned int len = sizeof(sa);
 				struct hostent *hp;
 
 				if (getsockname(s, (struct sockaddr *)&sa,
@@ -800,7 +801,7 @@ int pop3_stat(SOCKET s)
 	sock_cat(s, line);
 	sock_getline(s, line);
 	if (bufleft(line, "+"))
-		sscanf(line->data, "+%*s %d", &val);
+		sscanf(line->string, "+%*s %d", &val);
 	buf_free(line);
 	return (val);
 }
@@ -815,7 +816,7 @@ int pop3_list(SOCKET s, int n)
 	sock_cat(s, line);
 	sock_getline(s, line);
 	if (bufleft(line, "+"))
-		sscanf(line->data, "+%*s %d", &val);
+		sscanf(line->string, "+%*s %d", &val);
 	buf_free(line);
 	return (val);
 }

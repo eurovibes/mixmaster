@@ -584,7 +584,7 @@ void get_parameter(BUFFER *content, char *attribute, BUFFER *value)
 		if (buf_getc(content) != ';')
 			break;
 		if (parameter(content, tok, value, NULL) &&
-		    strieq(attribute, tok->data))
+		    strieq(attribute, tok->string))
 			break; /* found */
 		buf_clear(value);
 	}

@@ -62,7 +62,7 @@ int buf_prepare(BUFFER *buffer, int size);
 int buf_rewind(BUFFER *buffer);
 int buf_getc(BUFFER *buffer);
 void buf_ungetc(BUFFER *buffer);
-int buf_get(BUFFER *buffer, BUFFER *to, int n);
+int buf_get(BUFFER *buffer, BUFFER *to, size_t n);
 int buf_getline(BUFFER *buffer, BUFFER *line);
 int buf_chop(BUFFER *b);
 void buf_move(BUFFER *dest, BUFFER *src);
@@ -162,16 +162,16 @@ void mix_genericerror(void);
 #define DEBUGINFO 5
 
 int decode(BUFFER *in, BUFFER *out);
-int encode(BUFFER *b, int linelen);
-void id_encode(byte id[], byte *s);
-void id_decode(byte *s, byte id[]);
+int encode(BUFFER *b, size_t linelen);
+void id_encode(byte id[], char *s);
+void id_decode(char *s, byte id[]);
 
 int decode_header(BUFFER *content);
 int boundary(BUFFER *line, BUFFER *mboundary);
 void get_parameter(BUFFER *content, char *attribute, BUFFER *value);
 int get_type(BUFFER *content, BUFFER *type, BUFFER *subtype);
 int mail_encode(BUFFER *in, int encoding);
-int hdr_encode(BUFFER *in, int n);
+int hdr_encode(BUFFER *in, size_t n);
 int attachfile(BUFFER *message, BUFFER *filename);
 int pgpmime_sign(BUFFER *message, BUFFER *uid, BUFFER *pass, char *secring);
 int mime_attach(BUFFER *message, BUFFER *attachment, BUFFER *type);

@@ -19,7 +19,7 @@
 static void encode_word(BUFFER *in)
 {
 	BUFFER *out;
-	int i;
+	size_t i;
 
 	out = buf_new();
 	for (i = 0; i < in->length; i++)
@@ -148,9 +148,9 @@ int mail_encode(BUFFER *in, int encoding)
 	return (0);
 }
 
-int hdr_encode(BUFFER *in, int n)
+int hdr_encode(BUFFER *in, size_t n)
 {
-	int i;
+	size_t i;
 	int encodeword = 0, encode = 0;
 	BUFFER *out, *word, *space;
 
@@ -267,7 +267,7 @@ int decode_header(BUFFER *in)
 	int encoded = 0;
 	int c;
 	int err = 0;
-	int last = 0;
+	size_t last = 0;
 	BUFFER *out;
 
 	out = buf_new();
@@ -339,7 +339,7 @@ int boundary(BUFFER *line, BUFFER *boundary)
 	int c;
 
 	if (boundary->length == 0 || !bufleft(line, "--") ||
-	    !strleft(line->data + 2, boundary->data))
+	    !strleft(line->string + 2, boundary->string))
 		return (0);
 	line->ptr = boundary->length + 2;
 	for (;;) {
@@ -607,7 +607,7 @@ int attachfile(BUFFER *message, BUFFER *filename)
 	else
 		buf_sets(type, "application/octet-stream");
 
-	f = fopen(filename->data, "r");
+	f = fopen(filename->string, "r");
 	if (f) {
 		buf_read(attachment, f);
 		fclose(f);

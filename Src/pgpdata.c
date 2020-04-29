@@ -118,9 +118,11 @@ int skcrypt(BUFFER *data, int skalgo, BUFFER *key, BUFFER *iv, int enc)
 
 int pgp_csum(BUFFER *key, int start)
 {
-	int i, csum = 0;
+	uint16_t csum = 0;
+	size_t i;
+
 	for (i = start; i < key->length; i++)
-		csum = (csum + key->data[i]) % 65536;
+		csum = csum + key->data[i];
 	return (csum);
 }
 
@@ -128,6 +130,7 @@ int pgp_rsa(BUFFER *in, BUFFER *k, int mode)
 {
 	BUFFER *mpi, *out;
 	int err = -1;
+	long len;
 	RSA *key;
 	BIGNUM *key_n, *key_e, *key_d, *key_q, *key_p, *key_iqmp, *key_dmp1,
 		*key_dmq1;
@@ -190,30 +193,30 @@ int pgp_rsa(BUFFER *in, BUFFER *k, int mode)
 
 	switch (mode) {
 	case PK_ENCRYPT:
-		out->length = RSA_public_encrypt(in->length, in->data,
-						 out->data, key,
-						 RSA_PKCS1_PADDING);
+		len = RSA_public_encrypt(in->length, in->data, out->data, key,
+					 RSA_PKCS1_PADDING);
 		break;
 	case PK_VERIFY:
-		out->length = RSA_public_decrypt(in->length, in->data,
-						 out->data, key,
-						 RSA_PKCS1_PADDING);
+		len = RSA_public_decrypt(in->length, in->data, out->data, key,
+					 RSA_PKCS1_PADDING);
 		break;
 	case PK_SIGN:
-		out->length = RSA_private_encrypt(in->length, in->data,
+		len = RSA_private_encrypt(in->length, in->data,
 						  out->data, key,
 						  RSA_PKCS1_PADDING);
 		break;
 	case PK_DECRYPT:
-		out->length = RSA_private_decrypt(in->length, in->data,
-						  out->data, key,
-						  RSA_PKCS1_PADDING);
+		len = RSA_private_decrypt(in->length, in->data, out->data, key,
+					  RSA_PKCS1_PADDING);
 		break;
+	default:
+		/* catch invalid modes */
+		len = -1;
 	}
-	if (out->length == -1)
+	if (len == -1)
 		err = -1, out->length = 0;
 	else
-		err = 0;
+		err = 0, out->length = len;
 
 	buf_move(in, out);
 end:
@@ -499,6 +502,7 @@ int pgp_getkey(int mode, int algo, int *psym, int *pmdc, long *pexpires,
 	long created = 0, expires = 0, subexpires = 0;
 	int uidno = 0, primary = 0, subkeyno = 0, subkeyok = 0;
 	UIDD *uidd_1 = NULL, *uidd_c = NULL;
+	size_t len;
 
 	p1 = buf_new();
 	i = buf_new();
@@ -537,10 +541,9 @@ int pgp_getkey(int mode, int algo, int *psym, int *pmdc, long *pexpires,
 					    sym = PGP_K_3DES, mdc = 0;
 					buf_getc(p1); /* pk algo */
 					buf_getc(p1); /* hash algo */
-					j = buf_geti(
-						p1); /* length of hashed signature subpackets */
-					j += p1->ptr;
-					while (p1->ptr < j) {
+					len = buf_geti(p1); /* length of hashed signature subpackets */
+					len += p1->ptr;
+					while (p1->ptr < len) {
 						suptype = pgp_get_sig_subpacket(
 							p1, i);
 						switch (suptype & 0x7F) {
@@ -606,12 +609,11 @@ int pgp_getkey(int mode, int algo, int *psym, int *pmdc, long *pexpires,
 								; /* "critical" bit set! now what? */
 							}
 						} /* switch (suptype) */
-					} /* while (p1->ptr < j) */
-					if (p1->ptr == j) {
-						j = buf_geti(
-							p1); /* length of unhashed signature subpackets */
-						j += p1->ptr;
-						while (p1->ptr < j) {
+					} /* while (p1->ptr < len) */
+					if (p1->ptr == len) {
+						len = buf_geti(p1); /* length of unhashed signature subpackets */
+						len += p1->ptr;
+						while (p1->ptr < len) {
 							suptype =
 								pgp_get_sig_subpacket(
 									p1, i);
@@ -623,9 +625,9 @@ int pgp_getkey(int mode, int algo, int *psym, int *pmdc, long *pexpires,
 										i,
 										mainkeyid);
 							} /* if (suptype == PGP_SUB_ISSUER) */
-						} /* while (p1->ptr < j) #2 */
-					} /* if (p1->ptr == j) */
-					if (p1->ptr != j) /* sig damaged ? */
+						} /* while (p1->ptr < len) #2 */
+					} /* if (p1->ptr == len) */
+					if (p1->ptr != len) /* sig damaged ? */
 						break; /* switch (type) */
 					if (self) {
 						if (certexpires)

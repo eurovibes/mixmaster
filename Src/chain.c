@@ -139,12 +139,12 @@ int chain_select(int hop[], char *chainstr, int maxrem, REMAILER *remailer,
 	k = atoi(chain->data + j);
 #endif /* 0 */
 			else {
-				buf_sets(selected, chain->data + j);
+				buf_sets(selected, chain->string + j);
 				rfc822_addr(selected, addr);
 				buf_clear(selected);
 				buf_getline(addr, selected);
 				if (!selected->length)
-					buf_sets(selected, chain->data + j);
+					buf_sets(selected, chain->string + j);
 
 				for (k = 0; k < maxrem; k++)
 					if (((remailer[k].flags.mix &&
@@ -154,12 +154,12 @@ int chain_select(int hop[], char *chainstr, int maxrem, REMAILER *remailer,
 					     (remailer[k].flags.newnym &&
 					      type == 2)) &&
 					    (streq(remailer[k].name,
-						   selected->data) ||
+						   selected->string) ||
 					     strieq(remailer[k].addr,
-						    selected->data) ||
+						    selected->string) ||
 					     (selected->data[0] == '@' &&
 					      strifind(remailer[k].addr,
-						       selected->data))))
+						       selected->string))))
 						break;
 			}
 			if (k < 0 || k >= maxrem) {

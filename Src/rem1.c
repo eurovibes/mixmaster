@@ -19,7 +19,7 @@ static int t1msg(BUFFER *in, int hdr);
 
 int isline(BUFFER *line, char *text)
 {
-	int i;
+	size_t i;
 
 	if (!bufileft(line, text))
 		return (0);
@@ -61,7 +61,7 @@ void t1_esub(BUFFER *esub, BUFFER *subject)
 
 	buf_appendrnd(iv, 8);
 	id_encode(iv->data, hex);
-	buf_append(out, hex, 16);
+	buf_appends(out, hex);
 
 	digest_md5(esub, esub);
 	digest_md5(subject, subject);
@@ -87,12 +87,12 @@ void t1_hsub(BUFFER *subject)
 
 	buf_appendrnd(iv, 8);
 	id_encode(iv->data, hex);
-	buf_append(out, hex, 16);
+	buf_appends(out, hex);
 
 	buf_cat(iv, subject);
 	digest_sha256(iv, iv);
 	id_encode(iv->data, hex);
-	buf_append(out, hex, 32);
+	buf_appends(out, hex);
 
 	buf_move(subject, out);
 	buf_free(iv);
@@ -106,9 +106,9 @@ static int readnum(BUFFER *b, int f)
 	int num = 0;
 
 	if (b->length > 0)
-		sscanf(b->data, "%d", &num);
+		sscanf(b->string, "%d", &num);
 	num *= f;
-	if (strchr(b->data, 'r'))
+	if (strchr(b->string, 'r'))
 		num = rnd_number(num) + 1;
 	return (num);
 }
@@ -118,7 +118,7 @@ static int readdate(BUFFER *b)
 	int num = -1;
 
 	if (b->length > 0)
-		num = parsedate(b->data);
+		num = parsedate(b->string);
 	return (num);
 }
 
@@ -145,7 +145,7 @@ static int reached_maxcount(BUFFER *md, int maxcount)
 	lock(f);
 	while (fgets(temp, sizeof(temp), f) != NULL)
 		if (sscanf(temp, "%ld", &then) &&
-		    (then >= now - SECONDSPERDAY) && strstr(temp, md->data))
+		    (then >= now - SECONDSPERDAY) && strstr(temp, md->string))
 			count++;
 
 	if (count > maxcount)
@@ -173,7 +173,7 @@ static int t1msg(BUFFER *in, int hdr)
 	int latent = 0;
 	int remix = 0, repgp = 0;
 	int inflate = 0;
-	int maxsize = -1;
+	size_t maxsize = ~0;
 	int maxcount = -1;
 	int maxdate = -2; /* -2 not used, -1 parse error */
 	int hsub = 0;
@@ -242,10 +242,10 @@ header:
 		} else if (bufieq(field, "cutmarks"))
 			buf_set(cutmarks, content);
 		else if (bufieq(field, "latent-time")) {
-			byte *q;
+			char *q;
 			int l;
 
-			q = content->data;
+			q = content->string;
 			l = strlen(q);
 			latent = 0;
 			if (q[0] == '+')
@@ -424,7 +424,7 @@ header:
 		err = -2;
 		goto end;
 	}
-	if (maxsize >= 0 && in->length >= maxsize) {
+	if (in->length >= maxsize) {
 		if (testto->length == 0)
 			errlog(LOG, "Message Size exceeds Max-Size.\n");
 		buf_appends(test, "Message Size exceeds Max-Size.\n");
@@ -615,7 +615,7 @@ end:
 		if (remixto->length > 0) {
 			/* check that the remix-to path isn't too long */
 			int remixcount = 1;
-			char *tmp = remixto->data;
+			char *tmp = remixto->string;
 			while ((tmp = strchr(tmp + 1, ','))) {
 				remixcount++;
 				if (remixcount > MAXRANDHOPS) {
@@ -625,14 +625,14 @@ end:
 			};
 		}
 		if (remix && !repgp && remixto->length != 0)
-			err = mix_encrypt(type, out, remixto->data, 1, line);
+			err = mix_encrypt(type, out, remixto->string, 1, line);
 		if (err != 0) {
 			if (remix == 1 && !repgp)
 				errlog(NOTICE, "Can't remix -- %b\n", line);
 			else {
 				if (remixto->length)
 					err = t1_encrypt(type, out,
-							 remixto->data, 0, 0,
+							 remixto->string, 0, 0,
 							 line);
 				if (err != 0 && repgp)
 					errlog(NOTICE, "Can't repgp -- %b\n",

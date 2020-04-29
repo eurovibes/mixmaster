@@ -107,7 +107,7 @@ void get_sections(BUFFER *inifile, BUFFER *sections)
 	while ((err = buf_getline(inifile, line)) != -1) {
 		if (bufileft(line, "[") && bufiright(line, "]")) {
 			line->data[line->length - 1] = '\0';
-			buf_appends(sections, line->data + 1);
+			buf_appends(sections, line->string + 1);
 			buf_nl(sections);
 		};
 	}
@@ -136,13 +136,13 @@ int get_attribute(BUFFER *inifile, char *section, char *attribute,
 				break;
 
 			line->data[line->length - 1] = '\0';
-			if (strcasecmp(section, line->data + 1) == 0) {
+			if (strcasecmp(section, line->string + 1) == 0) {
 				insection = 1;
 			}
 		} else if (insection && bufileft(line, attribute)) {
 			/* we are in the right section and this attribute name
        * at least starts with what we want */
-			char *ptr = line->data + strlen(attribute);
+			char *ptr = line->string + strlen(attribute);
 			/* eat up whitespace */
 			while ((*ptr == ' ') || (*ptr == '\t'))
 				ptr++;
@@ -173,7 +173,7 @@ int stats_download(BUFFER *allpingers, char *sourcename, int curses)
 	BUFFER *value;
 	int ret = 0;
 	int err;
-	int i;
+	size_t i;
 
 	value = buf_new();
 
@@ -208,7 +208,7 @@ int stats_download(BUFFER *allpingers, char *sourcename, int curses)
 		} else
 			printf("downloading %s from %s...", localfiles[i],
 			       value->data);
-		err = url_download(value->data, strcat(path, ".t"));
+		err = url_download(value->string, strcat(path, ".t"));
 		if (err < 0) {
 			if (curses)
 				printw("failed to download.\n\rTry using another stats source.");
@@ -248,7 +248,7 @@ int stats_download(BUFFER *allpingers, char *sourcename, int curses)
 int good_stats_source(BUFFER *allpingers, char *sourcename)
 {
 	BUFFER *value;
-	int i;
+	unsigned int i;
 	int res = 1;
 	int err;
 
@@ -375,7 +375,7 @@ void update_stats()
 		buf_rewind(pingernames);
 		while ((buf_getline(pingernames, line) != -1) &&
 		       num < MAXPING) {
-			if (good_stats_source(inifile, line->data)) {
+			if (good_stats_source(inifile, line->string)) {
 				buf_cat(goodpingers, line);
 				buf_nl(goodpingers);
 				num++;
@@ -415,7 +415,7 @@ void update_stats()
 					assert(err != -1);
 					c--;
 				}
-				if (stats_download(inifile, line->data, 1) ==
+				if (stats_download(inifile, line->string, 1) ==
 				    0) {
 					f = mix_openfile(STATSSRC, "w+");
 					if (f != NULL) {
@@ -434,7 +434,7 @@ void update_stats()
 			mixfile(path, ALLPINGERSFILE);
 			menu_spawn_editor(path, 0);
 		} else if ((c == '\r') && statssrc->length) {
-			stats_download(inifile, statssrc->data, 1);
+			stats_download(inifile, statssrc->string, 1);
 			break;
 		} else if (c == ' ') {
 			break;

@@ -161,7 +161,7 @@ int maildirWrite(char *maildir, BUFFER *message, int create)
 	}
 
 	/* Step 5:  write file */
-	if (write(fd, message->data, message->length) != message->length) {
+	if ((size_t) write(fd, message->data, message->length) != message->length) {
 		returnValue = -1;
 		goto functionExit;
 	}

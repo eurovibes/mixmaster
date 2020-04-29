@@ -123,7 +123,7 @@ int getv2seckey(byte keyid[], BUFFER *key)
 							       "Corrupt secret key. Bad passphrase?\n");
 						break;
 					}
-					buf_append(key, line, strlen(line) - 1);
+					buf_appends(key, line);
 				}
 				break;
 			}
@@ -174,7 +174,7 @@ static int getv2pubkey(byte keyid[], BUFFER *key)
 					goto done;
 				if (strleft(line, end_key))
 					goto done;
-				buf_append(key, line, strlen(line));
+				buf_appends(key, line);
 			}
 			break;
 		}
@@ -394,8 +394,7 @@ int v2keymgt(int force, long int lifeindays, long int keysize)
 							break;
 						if (strleft(line, end_key))
 							break;
-						buf_append(b, line,
-							   strlen(line) - 1);
+						buf_appends(b, line);
 					}
 					if (decode(b, b) == -1)
 						break;
@@ -520,13 +519,13 @@ int deleteoldkeys(void)
 			header = buf_new();
 			buf_clear(header);
 			show = 0; /* read text to buffer but do not write to new file (yet) */
-			buf_append(header, line, strlen(line));
+			buf_appends(header, line);
 			do {
 				linecount++;
 				res = fgets(line, sizeof(line), keyring);
 				switch (show) {
 				case 0:
-					buf_append(header, line, strlen(line));
+					buf_appends(header, line);
 					break;
 				case 1:
 					fprintf(newsecring, "%s", line);

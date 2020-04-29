@@ -202,7 +202,7 @@ static int pgp_3desencrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
 			       &ks2, &ks3, &iv, &n, ENCRYPT);
 	if (mdc) {
 		SHA1_Update(&c, "\xD3\x14", 2); /* 0xD3 = 0xC0 | PGP_MDC */
-		DES_ede3_cfb64_encrypt("\xD3\x14", out->data + 11 + in->length,
+		DES_ede3_cfb64_encrypt((unsigned char *) "\xD3\x14", out->data + 11 + in->length,
 				       2, &ks1, &ks2, &ks3, &iv, &n, ENCRYPT);
 		SHA1_Final(out->data + 13 + in->length, &c);
 		DES_ede3_cfb64_encrypt(out->data + 13 + in->length,
@@ -250,7 +250,7 @@ static int pgp_castencrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
 			   &n, CAST_ENCRYPT);
 	if (mdc) {
 		SHA1_Update(&c, "\xD3\x14", 2); /* 0xD3 = 0xC0 | PGP_MDC */
-		CAST_cfb64_encrypt("\xD3\x14", out->data + 11 + in->length, 2,
+		CAST_cfb64_encrypt((unsigned char *) "\xD3\x14", out->data + 11 + in->length, 2,
 				   &ks, iv, &n, CAST_ENCRYPT);
 		SHA1_Final(out->data + 13 + in->length, &c);
 		CAST_cfb64_encrypt(out->data + 13 + in->length,
@@ -298,7 +298,7 @@ static int pgp_bfencrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
 			 &n, BF_ENCRYPT);
 	if (mdc) {
 		SHA1_Update(&c, "\xD3\x14", 2); /* 0xD3 = 0xC0 | PGP_MDC */
-		BF_cfb64_encrypt("\xD3\x14", out->data + 11 + in->length, 2,
+		BF_cfb64_encrypt((unsigned char *) "\xD3\x14", out->data + 11 + in->length, 2,
 				 &ks, iv, &n, BF_ENCRYPT);
 		SHA1_Final(out->data + 13 + in->length, &c);
 		BF_cfb64_encrypt(out->data + 13 + in->length,
@@ -347,7 +347,7 @@ static int pgp_aesencrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
 			   &n, AES_ENCRYPT);
 	if (mdc) {
 		SHA1_Update(&c, "\xD3\x14", 2); /* 0xD3 = 0xC0 | PGP_MDC */
-		AES_cfb128_encrypt("\xD3\x14", out->data + 19 + in->length, 2,
+		AES_cfb128_encrypt((unsigned char *) "\xD3\x14", out->data + 19 + in->length, 2,
 				   &ks, iv, &n, AES_ENCRYPT);
 		SHA1_Final(out->data + 21 + in->length, &c);
 		AES_cfb128_encrypt(out->data + 21 + in->length,
@@ -460,8 +460,9 @@ int pgp_sessionkey(BUFFER *out, BUFFER *user, BUFFER *keyid, BUFFER *seskey,
 {
 	BUFFER *encrypt, *key, *id;
 	int algo, sym, err = -1;
-	int i, csum = 0;
+	uint16_t csum = 0;
 	int tempbuf = 0;
+	size_t pos;
 
 	encrypt = buf_new();
 	key = buf_new();
@@ -481,8 +482,8 @@ int pgp_sessionkey(BUFFER *out, BUFFER *user, BUFFER *keyid, BUFFER *seskey,
 
 	buf_set(encrypt, seskey);
 
-	for (i = 1; i < encrypt->length; i++)
-		csum = (csum + encrypt->data[i]) % 65536;
+	for (pos = 1; pos < encrypt->length; pos++)
+		csum += encrypt->data[pos];
 	buf_appendi(encrypt, csum);
 
 	switch (algo) {
@@ -516,7 +517,7 @@ end:
 void pgp_marker(BUFFER *out)
 {
 	buf_clear(out);
-	buf_append(out, "PGP", 3);
+	buf_appends(out, "PGP");
 	pgp_packet(out, PGP_MARKER);
 }
 
@@ -565,10 +566,10 @@ int asnprefix(BUFFER *b, int hashalgo)
 {
 	switch (hashalgo) {
 	case PGP_H_MD5:
-		buf_append(b, MD5PREFIX, sizeof(MD5PREFIX) - 1);
+		buf_append(b, (byte *) MD5PREFIX, sizeof(MD5PREFIX) - 1);
 		return (0);
 	case PGP_H_SHA1:
-		buf_append(b, SHA1PREFIX, sizeof(SHA1PREFIX) - 1);
+		buf_append(b, (byte *) SHA1PREFIX, sizeof(SHA1PREFIX) - 1);
 		return (0);
 	default:
 		return (-1);
@@ -578,7 +579,7 @@ int asnprefix(BUFFER *b, int hashalgo)
 int pgp_expandsk(BUFFER *key, int skalgo, int hashalgo, BUFFER *data)
 {
 	BUFFER *temp;
-	int keylen;
+	size_t keylen;
 	int err = 0;
 	temp = buf_new();
 

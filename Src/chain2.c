@@ -468,7 +468,7 @@ static int send_packet(int numcopies, BUFFER *packet, int chain[], int chainlen,
 									  1]]
 							       .addr);
 					};
-					buf_append(encrypted, addr, 80);
+					buf_appends(encrypted, addr);
 				} else {
 					if (numpackets == 1)
 						buf_appendc(encrypted, 1);
@@ -754,7 +754,7 @@ int redirect_message(BUFFER *sendmsg, char *chainstr, int numcopies,
 	/* Find the recipient */
 	while (buf_getheader(sendmsg, field, content) == 0)
 		if (bufieq(field, "to")) {
-			strncpy(recipient, content->data, sizeof(recipient));
+			strncpy(recipient, content->string, sizeof(recipient));
 			num++;
 		};
 	if (num != 1) {
@@ -779,7 +779,7 @@ int redirect_message(BUFFER *sendmsg, char *chainstr, int numcopies,
 	chainlen = chain_select(chain, chainstr, maxrem, remailer, 0, line);
 	if (chainlen < 1) {
 		if (line->length)
-			clienterr(feedback, line->data);
+			clienterr(feedback, line->string);
 		else
 			clienterr(feedback, "Invalid remailer chain!");
 		err = -1;
@@ -865,7 +865,7 @@ int mix2_encrypt(int type, BUFFER *message, char *chainstr, int numcopies,
 	BUFFER *packet;
 	int chain[20];
 	int chainlen;
-	int i;
+	size_t i;
 	int err = 0;
 
 	mix_init(NULL);
@@ -896,7 +896,7 @@ int mix2_encrypt(int type, BUFFER *message, char *chainstr, int numcopies,
 	chainlen = chain_select(chain, chainstr, maxrem, remailer, 0, line);
 	if (chainlen < 1) {
 		if (line->length)
-			clienterr(feedback, line->data);
+			clienterr(feedback, line->string);
 		else
 			clienterr(feedback, "Invalid remailer chain!");
 		err = -1;
@@ -917,21 +917,21 @@ int mix2_encrypt(int type, BUFFER *message, char *chainstr, int numcopies,
 		if (type == MSG_NULL) {
 			memset(hdrline, 0, 80);
 			strcpy(hdrline, "null:");
-			buf_append(msgdest, hdrline, 80);
+			buf_appends(msgdest, hdrline);
 			numdest++;
 		} else
 			while (buf_getheader(message, field, content) == 0) {
 				if (bufieq(field, "to")) {
 					memset(hdrline, 0, 80);
-					strncpy(hdrline, content->data, 80);
-					buf_append(msgdest, hdrline, 80);
+					strncpy(hdrline, content->string, 80);
+					buf_appends(msgdest, hdrline);
 					numdest++;
 				} else if (type == MSG_POST &&
 					   bufieq(field, "newsgroups")) {
 					memset(hdrline, 0, 80);
 					strcpy(hdrline, "post: ");
-					strcatn(hdrline, content->data, 80);
-					buf_append(msgdest, hdrline, 80);
+					strcatn(hdrline, content->string, 80);
+					buf_appends(msgdest, hdrline);
 					numdest++;
 				} else {
 					buf_clear(header);
@@ -941,10 +941,9 @@ int mix2_encrypt(int type, BUFFER *message, char *chainstr, int numcopies,
 					while (buf_getline(header, line) == 0) {
 						/* paste in encoded header entry */
 						memset(hdrline, 0, 80);
-						strncpy(hdrline, line->data,
+						strncpy(hdrline, line->string,
 							80);
-						buf_append(msgheader, hdrline,
-							   80);
+						buf_appends(msgheader, hdrline);
 						numhdr++;
 					}
 				}

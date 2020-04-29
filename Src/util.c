@@ -214,7 +214,7 @@ static byte asctobin[] = {
 	0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80
 };
 
-void id_encode(byte id[], byte *s)
+void id_encode(byte id[], char *s)
 {
 	sprintf(s,
 		"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
@@ -222,7 +222,7 @@ void id_encode(byte id[], byte *s)
 		id[9], id[10], id[11], id[12], id[13], id[14], id[15]);
 }
 
-void id_decode(byte *s, byte id[])
+void id_decode(char *s, byte id[])
 {
 	int i, x[16];
 
@@ -234,10 +234,10 @@ void id_decode(byte *s, byte id[])
 		id[i] = x[i];
 }
 
-int encode(BUFFER *in, int linelen)
+int encode(BUFFER *in, size_t linelen)
 {
 	byte *b, *e;
-	int i, l, m;
+	size_t i, l, m;
 	unsigned long u;
 	BUFFER *out;
 
@@ -701,10 +701,10 @@ int closedir(DIR *dir)
 
 #endif /* _MSC */
 
-char *showdata(BUFFER *buf, int max)
+char *showdata(BUFFER *buf, size_t max)
 {
 	static char slurp[60];
-	int i;
+	size_t i;
 	memset(slurp, 0, sizeof(slurp));
 	for (i = 0; (i < 25) && (i < buf->length) && (!max || i < max); i++)
 		sprintf(slurp + i * 2, "%02x", buf->data[i]);

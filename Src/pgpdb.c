@@ -208,7 +208,7 @@ int pgpdb_getnext(KEYRING *keydb, BUFFER *key, BUFFER *keyid, BUFFER *userid)
 				printf("%s\n", p->data);
 #endif /* DEBUG */
 				if (userid && userid->length > 0 &&
-				    bufifind(p, userid->data))
+				    bufifind(p, userid->string))
 					found = 1;
 				break;
 			}

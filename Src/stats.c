@@ -265,7 +265,7 @@ int stats(BUFFER *b)
 			"Mix key sizes used (1024, 2048, 3072 and 4096 bit RSA)\n");
 		while (fgets(line, sizeof(line), rs)) {
 			line[sizeof(line) - 1] = '\0';
-			buf_append(b, line, strlen(line));
+			buf_appends(b, line);
 			if (line[strlen(line) - 1] != '\n')
 				buf_nl(b);
 		}
@@ -346,7 +346,7 @@ int conf(BUFFER *out)
 				}
 				buf_appends(out, "   ");
 				if (line->length > 3 &&
-				    streq(line->data + line->length - 2,
+				    streq(line->string + line->length - 2,
 					  "/q")) {
 					buf_append(out, line->data,
 						   line->length - 1);

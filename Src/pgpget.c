@@ -419,7 +419,7 @@ static int pgp_3desdecrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
 	DES_key_schedule ks2;
 	DES_key_schedule ks3;
 	SHA_CTX c;
-	char md[20]; /* we could make hdr 20 bytes long and reuse it for md */
+	unsigned char md[20]; /* we could make hdr 20 bytes long and reuse it for md */
 
 	if (key->length != 24 || in->length <= (mdc ? (1 + 10 + 22) : 10))
 		return (-1);
@@ -482,7 +482,7 @@ static int pgp_castdecrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
 	byte hdr[10];
 	int i, n;
 	SHA_CTX c;
-	char md[20]; /* we could make hdr 20 bytes long and reuse it for md */
+	unsigned char md[20]; /* we could make hdr 20 bytes long and reuse it for md */
 
 	CAST_KEY ks;
 
@@ -543,7 +543,7 @@ static int pgp_bfdecrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
 	byte hdr[10];
 	int i, n;
 	SHA_CTX c;
-	char md[20]; /* we could make hdr 20 bytes long and reuse it for md */
+	unsigned char md[20]; /* we could make hdr 20 bytes long and reuse it for md */
 
 	BF_KEY ks;
 
@@ -605,7 +605,7 @@ static int pgp_aesdecrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
 	byte hdr[18];
 	int i, n;
 	SHA_CTX c;
-	char md[20]; /* we could make hdr 20 bytes long and reuse it for md */
+	unsigned char md[20]; /* we could make hdr 20 bytes long and reuse it for md */
 
 	AES_KEY ks;
 
@@ -758,10 +758,11 @@ int pgp_getsessionkey(BUFFER *in, BUFFER *pass, char *secring)
 	BUFFER *key;
 	BUFFER *keyid;
 	int type;
-	int i, csum = 0;
+	uint16_t csum = 0;
 	int algo = 0;
 	int err = -1;
 	long expires;
+	size_t pos;
 
 	out = buf_new();
 	key = buf_new();
@@ -796,8 +797,8 @@ int pgp_getsessionkey(BUFFER *in, BUFFER *pass, char *secring)
 		algo = buf_getc(out);
 		buf_get(out, in, out->length - 3); /* return recovered key */
 		csum = buf_geti(out);
-		for (i = 0; i < in->length; i++)
-			csum = (csum - in->data[i]) % 65536;
+		for (pos = 0; pos < in->length; pos++)
+			csum -= in->data[pos];
 		if (csum != 0)
 			err = -1;
 	} else
@@ -811,7 +812,7 @@ end:
 
 void pgp_iteratedsk(BUFFER *out, BUFFER *salt, BUFFER *pass, byte c)
 {
-	int count;
+	size_t count;
 	BUFFER *temp;
 	temp = buf_new();
 

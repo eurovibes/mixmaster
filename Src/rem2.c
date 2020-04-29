@@ -47,7 +47,7 @@ int mix_dearmor(BUFFER *in, BUFFER *out)
 		/* skip lines before message digest */
 		if (buf_getline(in, md) == -1)
 			break;
-	} while (strlen(md->data) != 24);
+	} while (strlen(md->string) != 24);
 
 	decode(in, out);
 
@@ -76,7 +76,7 @@ end:
 	return (err);
 }
 
-static int isnewid(BUFFER *id, char rsa1234, long timestamp)
+static int isnewid(BUFFER *id, unsigned int rsa1234, long timestamp)
 /* return values:
  *   0: ignore message, no error
  *   1: ok, process message
@@ -251,7 +251,7 @@ int mix2_decrypt(BUFFER *m)
       * -2: old message */
 {
 	int err = 0;
-	int i, rsalen, rsalen_as_byte;
+	unsigned int i, rsalen, rsalen_as_byte;
 	BUFFER *privkey;
 	BUFFER *keyid;
 	BUFFER *dec, *deskey;
@@ -554,7 +554,7 @@ int v2body_setlen(BUFFER *body)
 	long length;
 
 	length = buf_getl_lo(body);
-	if (length < 0 || length > body->length)
+	if (length < 0 || length > (long) body->length)
 		return (-1);
 	body->length = length + 4;
 	return (0);
@@ -584,7 +584,7 @@ int v2body(BUFFER *body)
 		if (bufileft(line, "post:")) {
 			type = MSG_POST;
 			if (line->length > 5) {
-				int j = 5;
+				size_t j = 5;
 
 				while (j < line->length &&
 				       isspace(line->data[j]))

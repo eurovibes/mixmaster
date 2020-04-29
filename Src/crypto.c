@@ -90,7 +90,7 @@ int hmac_sha256(BUFFER *b, BUFFER *hk, BUFFER *md)
 	int ret;
 	int ipadbyte = 0x36;
 	int opadbyte = 0x5C;
-	char *i;
+	byte *i;
 
 	if (64 != hk->length)
 		return -1;
@@ -134,7 +134,7 @@ static int read_seckey(BUFFER *buf, SECKEY *key, const byte id[])
 {
 	BUFFER *md;
 	int bits;
-	int len, plen;
+	size_t len, plen;
 	byte *ptr;
 	int err = 0;
 	BIGNUM *key_n, *key_e, *key_d, *key_p, *key_q, *key_dmp1, *key_dmq1,
@@ -195,7 +195,7 @@ static int read_pubkey(BUFFER *buf, PUBKEY *key, const byte id[])
 {
 	BUFFER *md;
 	int bits;
-	int len;
+	size_t len;
 	byte *ptr;
 	int err = 0;
 	BIGNUM *key_n, *key_e;
@@ -459,16 +459,19 @@ int pk_decrypt(BUFFER *in, BUFFER *keybuf)
 	int err = 0;
 	BUFFER *out;
 	RSA *key;
+	int len;
 
 	out = buf_new();
 	key = RSA_new();
 	read_seckey(keybuf, key, NULL);
 
 	buf_prepare(out, in->length);
-	out->length = RSA_private_decrypt(in->length, in->data, out->data, key,
-					  RSA_PKCS1_PADDING);
-	if (out->length == -1)
+	len = RSA_private_decrypt(in->length, in->data, out->data, key,
+				  RSA_PKCS1_PADDING);
+	if (len == -1)
 		err = -1, out->length = 0;
+	else
+		out->length = len;
 
 	RSA_free(key);
 	buf_move(in, out);
@@ -481,16 +484,19 @@ int pk_encrypt(BUFFER *in, BUFFER *keybuf)
 	BUFFER *out;
 	RSA *key;
 	int err = 0;
+	int len;
 
 	out = buf_new();
 	key = RSA_new();
 	read_pubkey(keybuf, key, NULL);
 
 	buf_prepare(out, RSA_size(key));
-	out->length = RSA_public_encrypt(in->length, in->data, out->data, key,
-					 RSA_PKCS1_PADDING);
-	if (out->length == -1)
+	len = RSA_public_encrypt(in->length, in->data, out->data, key,
+				 RSA_PKCS1_PADDING);
+	if (len == -1)
 		out->length = 0, err = -1;
+	else
+		out->length = len;
 	buf_move(in, out);
 	buf_free(out);
 	RSA_free(key);

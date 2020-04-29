@@ -982,7 +982,7 @@ void mix_upd_stats(void)
 		fclose(f);
 	}
 	if (statssrc->length > 0)
-		download_stats(statssrc->data);
+		download_stats(statssrc->string);
 	buf_free(statssrc);
 }
 

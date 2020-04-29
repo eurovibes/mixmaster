@@ -98,7 +98,7 @@ int get_otherrequests_reply(BUFFER *reply, BUFFER *filename)
 	buf_appends(path, "/");
 	buf_cat(path, filename);
 
-	f = mix_openfile(path->data, "r");
+	f = mix_openfile(path->string, "r");
 	if (f == NULL) {
 		err = -1;
 		goto end;
@@ -281,7 +281,7 @@ hdrend:
 		logmail(MAILERROR, message);
 		break;
 	default:
-		if (strifind(replyto->data, "mailer-daemon")) {
+		if (strifind(replyto->string, "mailer-daemon")) {
 			errlog(LOG, "Bounce mail from %b\n", replyto);
 			logmail(MAILBOUNCE, message);
 		} else if (bufifind(to, REMAILERADDR) &&
@@ -547,7 +547,7 @@ int blockrequest(BUFFER *message)
 			{
 				int c = 0;
 
-				while (!strileft(line->data + line->ptr,
+				while (!strileft(line->string + line->ptr,
 						 "block"))
 					line->ptr++;
 				while (c != ' ' && c != -1)
@@ -617,8 +617,8 @@ int blockrequest(BUFFER *message)
 					       "Ignoring blocking request: %b is a regex.\n",
 					       addr);
 				} else {
-					if (strchr(line->data, '@') &&
-					    strchr(strchr(line->data, '@'),
+					if (strchr(line->string, '@') &&
+					    strchr(strchr(line->string, '@'),
 						   '.')) {
 						strcpy(destblklst, DESTBLOCK);
 						destblk =
