@@ -1,3 +1,0 @@
-version=3
-opts=dversionmangle=s/\.0$// \
-http://sf.net/mixmaster/ mixmaster-([0-9.]*)\.tar\.gz
