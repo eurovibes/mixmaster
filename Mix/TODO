@@ -1,7 +1,6 @@
 Items that need to be completed before the next MAIN release:
 
 - revert renaming of conf files for WIN32.
-- Fix Solaris 10 Install bug (whoami is located in /usr/ucb/ )
 
 Items to watch:
 
@@ -16,10 +15,6 @@ Items for 3.0.x:
 - destblk request confirmation (patch # 873498)
     + perhaps we should phase this out in favor of a distributed RAB?
 - general bug fixes that do not break backward compatibility
-- Fix the randomness/entropy gathering
-- Make mixmaster do nothing but report version when run with -V
-- SMTPRELAY is hardcoded to port 25 in mail.c.  Stunnel users will be happy
-  is we make this configurable.
 
 Items for 3.1.x
 - Full WIN32 support.
@@ -28,8 +23,6 @@ Items for 3.1.x
   - Resolve crash when config contains "SENDMAIL outfile"
   - Confirm operation as a WIN32 service
   - Test on Vista.
-  - Make Win32 Mixmaster portable.  i.e. Don't require a CSIDL_APPDATA dir,
-    just use the current one.
 - Include a formal win32 binary release, complete with docs.
 - Integrate RAB support -- automatic downloading similar to stats.
 - Introduce hashed RAB handling where mail recipients are hashed and

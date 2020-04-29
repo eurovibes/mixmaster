@@ -45,7 +45,7 @@ BINFILTER           n
 ## remailer a message containing the line "destination-block"
 ## Note: as no challenge-response mechanisms are used (yet),
 ##       attackers could dest-block arbitrary addresses
-AUTOBLOCK           n
+AUTOBLOCK           y
 
 ## Automatically respond to non-remailer mail and mail to COMPLAINTS address
 AUTOREPLY           n

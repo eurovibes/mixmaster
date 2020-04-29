@@ -251,6 +251,10 @@ int maildirWrite(char *maildir, BUFFER *message, int create) {
 
 #ifdef UNITTEST
 
+#ifdef NDEBUG
+#undef NDEBUG
+#endif /* NDEBUG */
+
 #include <dirent.h>
 
 /* mock-up of errlog for unittest */
@@ -266,7 +270,7 @@ void errlog(int type, char *fmt,...)
 /* main for unittest */
 int main()
 {
-  int i, j, maildirWriteRes, count = 23;
+  int i, count = 23;
   int fd;
   DIR *d;
   struct dirent *de;
@@ -279,14 +283,11 @@ int main()
   message.length = strlen(text);
 
   /* write <count> messages to maildir */
-  for(i = 0; i < count; i++) {
-    maildirWriteRes = maildirWrite("Maildir.test_maildir", message, 1);
-    assert(maildirWriteRes == 0);
-  }
+  for(i = 0; i < count; i++)
+    assert(maildirWrite("Maildir.test_maildir", message, 1) == 0);
 
   /* read them back */
-  d = opendir("Maildir.test_maildir/new");
-  assert(d != NULL);
+  assert((d = opendir("Maildir.test_maildir/new")) != NULL);
   for (i = 0; i < count + 2; i++)
     {
       de = readdir(d);
@@ -296,10 +297,8 @@ int main()
 	  strcat(buf, "Maildir.test_maildir/new/");
 	  strcat(buf, de->d_name);
 	  fd = open(buf, O_RDONLY);
-	  j = unlink(buf);
-	  assert(j == 0);
-	  j = read(fd, buf, strlen(text));
-	  assert(j == strlen(text));
+	  assert(unlink(buf) == 0);
+	  assert(read(fd, buf, strlen(text)) == strlen(text));
 	  buf[strlen(text)] = '\0';
 	  /* check if they match the original message */
 	  assert(strcmp(text, buf) == 0);
@@ -311,16 +310,12 @@ int main()
   assert(readdir(d) == NULL);
 
   /* delete maildir */
-  j = rmdir("Maildir.test_maildir/tmp");
-  assert(j == 0);
-  j = rmdir("Maildir.test_maildir/new");
-  assert(j == 0);
-  j = rmdir("Maildir.test_maildir/cur");
-  assert(j == 0);
-  j = rmdir("Maildir.test_maildir");
-  assert(j == 0);
+  assert(rmdir("Maildir.test_maildir/tmp") == 0);
+  assert(rmdir("Maildir.test_maildir/new") == 0);
+  assert(rmdir("Maildir.test_maildir/cur") == 0);
+  assert(rmdir("Maildir.test_maildir") == 0);
 
-  /* check if writing to a non existant maildir yields an error */
+  /* check if writing to a non existant maildir yilds an error */
   assert(maildirWrite("Maildir.test_maildir", &message, 0) == -1);
 
   puts("OK");

@@ -6,7 +6,7 @@
    details.
 
    Command-line based frontend
-   $Id$ */
+   $Id: main.c 937 2006-06-24 15:52:20Z colin $ */
 
 
 #include "mix3.h"
@@ -432,7 +432,6 @@ int main(int argc, char *argv[])
 -h, --help                        summary of command line options\n\
 -V, --version                     print version information\n\
     --about                       print authorship information\n\
-    --config=file                 use alternate configuration file\n\
 -T, --type-list                   list available remailers\n\
 -t, --to=user@host                the recipient's address(es)\n\
 -g, --post-to=newsgroup           newsgroup(s) to post to\n\
@@ -482,7 +481,8 @@ Remailer:\n\
 #endif /* USE_SOCK */
 	   "-P, --pop-mail                    force getting messages from POP3 servers\n\
 -G, --generate-key                generate a new remailer key\n\
--K, --update-keys                 generate remailer keys if necessary\n"
+-K, --update-keys                 generate remailer keys if necessary\n\
+    --config=file                 use alternate configuration file\n"
 #ifdef WIN32SERVICE
 	   "\n\
 WinNT service:\n\

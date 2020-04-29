@@ -6,7 +6,7 @@
    details.
 
    Configuration
-   $Id$ */
+   $Id: config.h 973 2008-03-03 16:55:38Z rabbi $ */
 
 
 #ifndef _CONFIG_H

@@ -6,7 +6,7 @@
    details.
 
    Interface to cryptographic library
-   $Id$ */
+   $Id: crypto.h 934 2006-06-24 13:40:39Z rabbi $ */
 
 
 #ifndef _CRYPTO_H

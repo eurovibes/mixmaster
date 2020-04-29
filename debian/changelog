@@ -1,3 +1,11 @@
+mixmaster (3.0.0-8) unstable; urgency=medium
+
+  * Add pt_BR.po Brazilian Portuguese translation file
+      from Adriano Rafael Gomes <adrianorg@arg.eti.br> (Closes: #811535)
+  * Bump standards version to 3.9.7 (no changes required)
+
+ -- Colin Tuckley <colint@debian.org>  Mon, 28 Mar 2016 14:20:50 +0100
+
 mixmaster (3.0.0-7) unstable; urgency=low
 
   * Add it.po Italian translation file

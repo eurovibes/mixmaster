@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id$ */
+   $Id: mix.c 962 2007-11-19 13:42:41Z zax $ */
 
 
 #include "mix3.h"
@@ -475,7 +475,7 @@ static void mix_setdefaults()
 	INDUMMYMAXP   = 84;	/* for both of the above:  while (rnd < p) { senddummy(); }  */
 	OUTDUMMYMAXP  = 96;     /* set max INDUMMYP and OUTDUMMYP such that 24 and 5.25 dummy messages will */
 	MIDDLEMAN     = 0;      /* be generated on average. More than this is insane. */
-	AUTOBLOCK     = 0;
+	AUTOBLOCK     = 1;
 	STATSDETAILS  = 1;
 	strnncpy(FORWARDTO, "*");
 	SIZELIMIT     = 0;		/* maximal size of remailed messages */
@@ -512,7 +512,7 @@ static void mix_setdefaults()
 	RELFINAL = 99;
 	MAXLAT = 36 * 60 * 60;
 	MINLAT = 5 * 60;
-	strnncpy(PGPPUBRING, "");
+	strnncpy(PGPPUBRING, "~/.gnupg/pubring.gpg");
 	strnncpy(PGPSECRING, "");
 #ifdef COMPILEDPASS
 	strnncpy(PASSPHRASE, COMPILEDPASS);

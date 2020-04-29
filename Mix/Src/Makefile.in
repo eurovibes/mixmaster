@@ -13,12 +13,9 @@ DEF = %DEF -DUSE_SOCK %MIXDIR
 LIBS = %LIBS
 LDFLAGS = %LDFLAGS
 
-# Set compiler options
-# Note: Define NDEBUG to disable "assert" when not using DEBUG
-
-OPT = -g -Wall -DNDEBUG
+OPT = -g -Wall
 # OPT = -g -pg -Wall -DDEBUG
-# OPT = -O2 -Wall -DNDEBUG
+# OPT = -O2 -Wall
 
 CFLAGS = $(INC) $(DEF) $(OPT)
 CC = gcc

@@ -1,5 +1,5 @@
-.TH MIXMASTER 1 "Mixmaster Version 3.1 alpha"
-.\" $Id$
+.TH MIXMASTER 1 "Mixmaster Version 3.0"
+.\" $Id: mixmaster.1 974 2008-03-03 17:40:11Z rabbi $
 .SH NAME
 mixmaster \- anonymous remailer software
 .SH SYNOPSIS
@@ -121,6 +121,9 @@ Download an updated all pingers list file.
 .B "\-\-update-stats\fI[=source\fR]"
 Download updated stats.
 .SS Remailer options:
+.TP
+.B "\-\-config=\fIfilename"
+Read configuration from an alternate file.
 .TP
 .B \-R, \-\-read\-mail
 Read a remailer message from standard input and store it in the pool.
@@ -1118,7 +1121,7 @@ entire rewrite of
 .BR mixmaster
 in 1999. This rewrite was released in 2002 as version 2.9.0, with major 
 contributions from Janis Jagars, Peter Palfrader, and Len Sassaman.
-Mixmaster 3.1 is based on the 2.9 codebase. Peter Palfrader and Len 
+Mixmaster 3.0 is based on the 2.9 codebase. Peter Palfrader and Len 
 Sassaman were the principal maintainers until 2006. Since then, Steve 
 Crook, Len Sassaman, and Colin Tuckley have filled the role of 
 principal maintaners. For more information on contributing authors, 

@@ -39,7 +39,7 @@ mixmaster = "/usr/bin/mixmaster-filter -m -S".  The script mixmaster-filter
 makes sure your From: header line (and other lines, consult the manual page)
 are not passed on to Mixmaster.  Mutt does set it!  "-m" instructs Mixmaster
 to read a mail message from stdin while "-S" tells it to send out the entire
-pool immediatly - if you don't use it you will collect your mail in ~/.Mix/
+pool immediately - if you don't use it you will collect your mail in ~/.Mix/
 without ever sending them (of course you may choose to run mixmaster -S at a
 later time too).
 

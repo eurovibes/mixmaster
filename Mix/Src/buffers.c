@@ -6,7 +6,7 @@
    details.
 
    Dynamically allocated buffers
-   $Id$ */
+   $Id: buffers.c 934 2006-06-24 13:40:39Z rabbi $ */
 
 
 #include "mix3.h"
@@ -40,10 +40,7 @@ static void alloc(BUFFER *b)
   b->size = space;
 }
 
-#ifdef DEBUG
-#undef buf_new
-#endif /* DEBUG */
-
+#undef buf_new /* DEBUG */
 BUFFER *buf_new(void)
 {
   BUFFER *b;
@@ -59,6 +56,7 @@ BUFFER *buf_new(void)
   return (b);
 }
 
+#ifdef DEBUG
 static void sanity_check(BUFFER *b)
 {
   assert(b != NULL);
@@ -67,6 +65,9 @@ static void sanity_check(BUFFER *b)
   assert(b->length >= 0 && b->length < b->size);
   assert(b->ptr >= 0 && b->ptr <= b->length);
 }
+#else /* not DEBUG */
+#define sanity_check(arg)
+#endif /* else not DEBUG */
 
 int buf_reset(BUFFER *buffer)
 {
