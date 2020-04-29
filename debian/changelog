@@ -1,3 +1,10 @@
+mixmaster (3.0.0-8.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Build with OpenSSL 1.0 (Closes: #828436).
+
+ -- Andrey Rahmatullin <wrar@debian.org>  Wed, 21 Dec 2016 21:50:12 +0500
+
 mixmaster (3.0.0-8) unstable; urgency=medium
 
   * Add pt_BR.po Brazilian Portuguese translation file
