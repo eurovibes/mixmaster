@@ -1,5 +1,5 @@
 %{
-/*  $Id: parsedate.y 411 2004-05-13 06:07:59Z weasel $
+/*  $Id: parsedate.y 647 2003-10-25 23:34:13Z weasel $
 **
 **  Originally written by Steven M. Bellovin <smb@research.att.com> while
 **  at the University of North Carolina at Chapel Hill.  Later tweaked by

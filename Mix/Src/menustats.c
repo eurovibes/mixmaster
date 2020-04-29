@@ -307,7 +307,7 @@ static int download_list() {
 /* Displays the choice of stats sources */
 #define MAXPING (26 * 2)
 void update_stats() {
-  signed char c;
+  char c;
   BUFFER *inifile;
   BUFFER *pingernames;
   BUFFER *goodpingers;

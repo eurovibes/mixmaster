@@ -512,7 +512,7 @@ static void mix_setdefaults()
 	RELFINAL = 99;
 	MAXLAT = 36 * 60 * 60;
 	MINLAT = 5 * 60;
-	strnncpy(PGPPUBRING, "~/.gnupg/pubring.gpg");
+	strnncpy(PGPPUBRING, "");
 	strnncpy(PGPSECRING, "");
 #ifdef COMPILEDPASS
 	strnncpy(PASSPHRASE, COMPILEDPASS);

@@ -1,0 +1,6 @@
+menustats.patch
+gpg-path.patch
+new-parsedate.patch
+cond-compile.patch
+spelling.patch
+mixmaster-libssl-1.1.patch
