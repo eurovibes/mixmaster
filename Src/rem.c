@@ -499,7 +499,7 @@ void logmail(char *mailbox, BUFFER *message)
 			tc = localtime(&t);
 			strftime(line, LINELEN,
 				 "From Mixmaster %a %b %d %H:%M:%S %Y\n", tc);
-			fprintf(mbox, line);
+			fprintf(mbox, "%s", line);
 		}
 		buf_write(message, mbox);
 		fprintf(mbox, "\n\n");
