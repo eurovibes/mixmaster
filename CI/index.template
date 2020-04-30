@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mixmaster anonymous remailer - Documentation</title>
+  </head>
+  <body>
+    <header>
+      <h1>Mixmaster anonymous remailer - Documentation</h1>
+      <nav>
+	<ul>
+	  <li><a href="#static">Static code analyze results</a></li>
+	</ul>
+      </nav>
+    </header>
+    <main>
+      <article id="static">
+	<h2>Static code analyze results</h2>
+	<section>
+	  <h3>clang</h3>
+	  <iframe
+	    src="@STATIC_CLANG@"
+	    width="90%" 
+	    name="clang results">
+	    <p>Your browser is not capable to view embedded frames. You can
+	      visit the embedded frame here:
+	      <a href="@STATIC_CLANG@">clang results</a>
+	    </p>
+	</section>
+	<section>
+	  <h3>gcc</h3>
+	  <iframe
+	    src="@STATIC_GCC@"
+	    width="90%" 
+	    name="gcc results">
+	    <p>Your browser is not capable to view embedded frames. You can
+	      visit the embedded frame here:
+	      <a href="@STATIC_GCC@">clang results</a>
+	    </p>
+
+	</section>
+      </article>
+    </main>
+    <footer>
+      <a href="#">Home</a>
+    </footer>
+  </body>
+</html>
