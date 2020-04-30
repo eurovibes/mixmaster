@@ -308,7 +308,7 @@ void user_delpass(void);
 typedef struct {
 	char name[20];
 	int version;
-	char addr[128];
+	char addr[92];
 	byte keyid[16];
 	time_t expires;
 	int rsalen;
