@@ -869,6 +869,7 @@ redraw:
 				noecho();
 				goto redraw;
 			}
+			/* fall-through */
 		default:
 			beep();
 		}

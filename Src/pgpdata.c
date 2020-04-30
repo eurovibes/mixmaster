@@ -738,10 +738,12 @@ int pgp_getkey(int mode, int algo, int *psym, int *pmdc, long *pexpires,
 			if (keytype != -1 &&
 			    (mode == PK_SIGN || mode == PK_VERIFY))
 				continue;
+			break;
 		case PGP_PUBKEY:
 			if ((type == PGP_PUBKEY || type == PGP_PUBSUBKEY) &&
 			    (mode == PK_DECRYPT || mode == PK_SIGN))
 				continue;
+			break;
 		case PGP_SECKEY:
 			if (type == PGP_PUBKEY || type == PGP_SECKEY)
 				pgp_keyid(p1, mainkeyid);
