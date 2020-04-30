@@ -16,7 +16,7 @@ LDFLAGS = %LDFLAGS
 # Set compiler options
 # Note: Define NDEBUG to disable "assert" when not using DEBUG
 
-OPT = -g -Wall -DNDEBUG
+OPT = -O3 -g -Wall -Wextra -DNDEBUG
 # OPT = -g -pg -Wall -DDEBUG
 # OPT = -O2 -Wall -DNDEBUG
 
