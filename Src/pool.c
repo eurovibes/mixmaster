@@ -201,13 +201,16 @@ int mailin_maildir(char *maildir)
 {
 	char normalized[PATHMAX];
 	char path[PATHMAX];
+	char *tmp;
 
 	mixfile(normalized, maildir);
-	sprintf(path, "%s%c%s", normalized, DIRSEP, "new");
+	tmp = strndup(normalized, PATHMAX - 5);
+	sprintf(path, "%s%c%s", tmp, DIRSEP, "new");
 	path[PATHMAX - 1] = '\0';
 	mailin_maildir_one(path);
-	sprintf(path, "%s%c%s", normalized, DIRSEP, "cur");
+	sprintf(path, "%s%c%s", tmp, DIRSEP, "cur");
 	path[PATHMAX - 1] = '\0';
+	free(tmp);
 	mailin_maildir_one(path);
 	return (0);
 }
