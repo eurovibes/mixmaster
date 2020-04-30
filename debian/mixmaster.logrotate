@@ -1,8 +1,0 @@
-/var/log/mixmaster/err.log {
-	weekly
-	rotate 5
-	compress
-	missingok
-	notifempty
-	su root mixmaster
-}
