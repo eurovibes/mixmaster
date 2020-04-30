@@ -138,7 +138,7 @@ int MIDDLEMAN;
 int AUTOBLOCK;
 int STATSDETAILS;
 char FORWARDTO[LINELEN];
-int SIZELIMIT; /* maximal size of remailed messages */
+size_t SIZELIMIT; /* maximal size of remailed messages */
 int INFLATEMAX; /* maximal size of Inflate: padding */
 int MAXRANDHOPS;
 int BINFILTER; /* filter binary attachments? */
@@ -314,6 +314,38 @@ static int readiconfline(char *line, char *name, int namelen, int *var)
 			break;
 		default:
 			sscanf(line, "%d", var);
+		}
+		return (1);
+	} else
+		return (0);
+}
+
+#define read_conf_ul(t) readulconfline(line, #t, sizeof(#t) - 1, &t)
+
+static int readulconfline(char *line, char *name, int namelen,
+			  unsigned long int *var)
+{
+	if (strncmp(line, name, namelen) == 0 &&
+	    (isspace(line[namelen]) || line[namelen] == '=')) {
+		line += namelen;
+		if (*line == '=')
+			line++;
+		while (isspace(*line))
+			line++;
+		if (line[0] == '\n' || line[0] == '\0') /* leave default */
+			return (1);
+		switch (tolower(line[0])) {
+		case 'n':
+			*var = 0;
+			break;
+		case 'y':
+			*var = 1;
+			break;
+		case 'x':
+			*var = 2;
+			break;
+		default:
+			sscanf(line, "%lu", var);
 		}
 		return (1);
 	} else
@@ -574,7 +606,7 @@ int mix_configline(char *line)
 		read_conf_i(MIDDLEMAN) || read_conf_i(INDUMMYP) ||
 		read_conf_i(OUTDUMMYP) || read_conf_i(AUTOBLOCK) ||
 		read_conf(FORWARDTO) || read_conf_i(STATSDETAILS) ||
-		read_conf_i(SIZELIMIT) || read_conf_i(INFLATEMAX) ||
+		read_conf_ul(SIZELIMIT) || read_conf_i(INFLATEMAX) ||
 		read_conf_i(MAXRANDHOPS) || read_conf_i(BINFILTER) ||
 		read_conf_i(LISTSUPPORTED) || read_conf_t(PACKETEXP) ||
 		read_conf_t(IDEXP) || read_conf_t(SENDPOOLTIME) ||

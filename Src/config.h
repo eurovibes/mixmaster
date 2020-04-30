@@ -347,7 +347,7 @@ extern int MIDDLEMAN;
 extern int AUTOBLOCK;
 extern int STATSDETAILS;
 extern char FORWARDTO[];
-extern int SIZELIMIT;
+extern size_t SIZELIMIT;
 extern int INFLATEMAX;
 extern int MAXRANDHOPS;
 extern int BINFILTER;
