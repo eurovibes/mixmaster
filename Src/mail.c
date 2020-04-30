@@ -590,7 +590,7 @@ int smtp_send(SOCKET relay, BUFFER *head, BUFFER *message, char *from)
 	buf_setf(line, "MAIL FROM:<%b>\r\n", content);
 	sock_cat(relay, line);
 	sock_getsmtp(relay, line);
-	if (!line->data[0] == '2') {
+	if (line->data[0] != '2') {
 		errlog(ERRORMSG, "SMTP relay does not accept mail: %b\n", line);
 		goto end;
 	}

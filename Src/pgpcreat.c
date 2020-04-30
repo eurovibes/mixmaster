@@ -729,14 +729,16 @@ int pgp_sign(BUFFER *msg, BUFFER *msg2, BUFFER *sig, BUFFER *userid,
 		break;
 	case PGP_SIG_BINDSUBKEY:
 		type1 = pgp_getpacket(msg, d) == PGP_PUBKEY;
-		assert(type1);
+		if (type1)
+			goto end;
 		buf_clear(msg);
 		buf_appendc(msg, 0x99);
 		buf_appendi(msg, d->length);
 		buf_cat(msg, d);
 
 		type1 = pgp_getpacket(msg2, d) == PGP_PUBSUBKEY;
-		assert(type1);
+		if (type1)
+			goto end;
 		buf_appendc(msg, 0x99);
 		buf_appendi(msg, d->length);
 		buf_cat(msg, d);

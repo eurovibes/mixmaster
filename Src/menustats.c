@@ -387,6 +387,8 @@ void update_stats()
 		for (i = 0; i < num; i++) {
 			err = buf_getline(goodpingers, line);
 			assert(err != -1);
+			if (err == -1)
+				continue;
 			y = i;
 			if (y >= LINES - 6)
 				y -= LINES - 6, x = 40;
