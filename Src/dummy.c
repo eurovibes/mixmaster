@@ -4,13 +4,14 @@
 
 int menu_getuserpass(BUFFER *b, int i)
 {
-  return -1;
+	return -1;
 }
 
 void cl(int y, int x)
-{}
+{
+}
 
 int download_stats(char *sourcename)
 {
-    return -1;
+	return -1;
 }

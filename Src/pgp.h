@@ -8,7 +8,6 @@
    OpenPGP messages
    $Id$ */
 
-
 #ifdef USE_PGP
 #ifndef _PGP_H
 #include "mix3.h"
@@ -88,19 +87,21 @@
 #define PK_SIGN 3
 #define PK_VERIFY 4
 
-#define MD5PREFIX "\x30\x20\x30\x0C\x06\x08\x2A\x86\x48\x86\xF7\x0D\x02\x05\x05\x00\x04\x10"
-#define SHA1PREFIX "\x30\x21\x30\x09\x06\x05\x2b\x0E\x03\x02\x1A\x05\x00\x04\x14"
+#define MD5PREFIX \
+	"\x30\x20\x30\x0C\x06\x08\x2A\x86\x48\x86\xF7\x0D\x02\x05\x05\x00\x04\x10"
+#define SHA1PREFIX \
+	"\x30\x21\x30\x09\x06\x05\x2b\x0E\x03\x02\x1A\x05\x00\x04\x14"
 
 typedef struct {
-  int ok;
-  BUFFER *userid;
-  byte sigtype;
-  long sigtime;
-  byte hash[16];
+	int ok;
+	BUFFER *userid;
+	byte sigtype;
+	long sigtime;
+	byte hash[16];
 } pgpsig;
 
 /* internal error codes */
-#define PGP_SIGVRFY 99		/* valid signature packet to be verified */
+#define PGP_SIGVRFY 99 /* valid signature packet to be verified */
 
 /* pgpdata.c */
 int pgp_getsk(BUFFER *p, BUFFER *pass, BUFFER *key);
@@ -113,12 +114,13 @@ int mpi_get(BUFFER *buf, BUFFER *mpi);
 int mpi_put(BUFFER *buf, BUFFER *mpi);
 int pgp_rsa(BUFFER *buf, BUFFER *key, int mode);
 void pgp_sigcanonic(BUFFER *msg);
-int pgp_makepubkey(BUFFER *seckey, BUFFER *outtxt, BUFFER *pubkey,
-		   BUFFER *pass, int keyalgo);
-int pgp_makekeyheader(int type, BUFFER *keypacket, BUFFER *outtxt,
-                   BUFFER *pass, int keyalgo);
-int pgp_getkey(int mode, int algo, int *sym, int *mdc, long *expires, BUFFER *keypacket, BUFFER *key,
-	       BUFFER *keyid, BUFFER *userid, BUFFER *pass);
+int pgp_makepubkey(BUFFER *seckey, BUFFER *outtxt, BUFFER *pubkey, BUFFER *pass,
+		   int keyalgo);
+int pgp_makekeyheader(int type, BUFFER *keypacket, BUFFER *outtxt, BUFFER *pass,
+		      int keyalgo);
+int pgp_getkey(int mode, int algo, int *sym, int *mdc, long *expires,
+	       BUFFER *keypacket, BUFFER *key, BUFFER *keyid, BUFFER *userid,
+	       BUFFER *pass);
 int pgp_rsakeygen(int bits, BUFFER *userid, BUFFER *pass, char *pubring,
 		  char *secring, int remail);
 int pgp_dhkeygen(int bits, BUFFER *userid, BUFFER *pass, char *pubring,
@@ -163,19 +165,20 @@ int pgp_digest(int hashalgo, BUFFER *in, BUFFER *d);
 
 /* pgpdb.c */
 
-int pgpdb_getkey(int mode, int algo, int *sym, int *mdc, long *expires, BUFFER *key, BUFFER *user,
-		 BUFFER *founduid, BUFFER *keyid, char *keyring, BUFFER *pass);
+int pgpdb_getkey(int mode, int algo, int *sym, int *mdc, long *expires,
+		 BUFFER *key, BUFFER *user, BUFFER *founduid, BUFFER *keyid,
+		 char *keyring, BUFFER *pass);
 
 typedef struct {
-  int filetype;
-  BUFFER *db;
-  LOCK *lock;
-  int modified;
-  int type; /* undefined, public, private */
-  char filename[LINELEN];
-  BUFFER *encryptkey;
+	int filetype;
+	BUFFER *db;
+	LOCK *lock;
+	int modified;
+	int type; /* undefined, public, private */
+	char filename[LINELEN];
+	BUFFER *encryptkey;
 #ifdef DEBUG
-  int writer;
+	int writer;
 #endif
 } KEYRING;
 

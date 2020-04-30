@@ -8,7 +8,6 @@
    Simple remailer frontend: Read mix packets from standard input.
    $Id$ */
 
-
 #include "mix.h"
 #include <stdio.h>
 
@@ -20,17 +19,17 @@
 
 int main(int argc, char *argv[])
 {
-  BUFFER *msg;
-  int ret;
+	BUFFER *msg;
+	int ret;
 
-  mix_init(NULL);
-  msg = buf_new();
-  ret = buf_read(msg, stdin);
-  if (ret != -1)
-    ret = mix_decrypt(msg);
+	mix_init(NULL);
+	msg = buf_new();
+	ret = buf_read(msg, stdin);
+	if (ret != -1)
+		ret = mix_decrypt(msg);
 
-  mix_regular(0);
-  mix_exit();
-  buf_free(msg);
-  return (ret == 0 ? 0 : 1);
+	mix_regular(0);
+	mix_exit();
+	buf_free(msg);
+	return (ret == 0 ? 0 : 1);
 }

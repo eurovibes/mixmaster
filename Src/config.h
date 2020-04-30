@@ -8,7 +8,6 @@
    Configuration
    $Id$ */
 
-
 #ifndef _CONFIG_H
 #define _CONFIG_H
 #include "version.h"
@@ -17,11 +16,11 @@
 #endif /* WIN32 */
 
 /* Disclaimer to be inserted in all anonymous messages: */
-#define DISCLAIMER \
- "Comments: This message did not originate from the Sender address above.\n" \
- "\tIt was remailed automatically by anonymizing remailer software.\n" \
- "\tPlease report problems or inappropriate use to the\n" \
- "\tremailer administrator at <%s>.\n"	/* (%s is the complaints address) */
+#define DISCLAIMER                                                                  \
+	"Comments: This message did not originate from the Sender address above.\n" \
+	"\tIt was remailed automatically by anonymizing remailer software.\n"       \
+	"\tPlease report problems or inappropriate use to the\n"                    \
+	"\tremailer administrator at <%s>.\n" /* (%s is the complaints address) */
 
 /* Additional disclaimer to be inserted in the body of messages with
  * user-supplied From lines, e.g.
@@ -33,8 +32,7 @@
 #define MSGFOOTER ""
 
 /* Comment to be inserted when a binary attachment is filtered out: */
-#define BINDISCLAIMER \
- "[...]"
+#define BINDISCLAIMER "[...]"
 
 /* Character set for MIME-encoded mail header lines */
 #define MIMECHARSET "iso-8859-1"
@@ -91,7 +89,7 @@
 #endif
 
 #ifdef POSIX
-# define HAVE_TERMIOS
+#define HAVE_TERMIOS
 #endif /* POSIX */
 
 #ifdef MSDOS
@@ -116,7 +114,7 @@
  * Eventually this old config.h stuff should be merged with the autoconf
  * stuff perhaps. */
 #ifdef HAVE_CONFIG_H
-# include "../config.h"
+#include "../config.h"
 #else /* End of HAVE_CONFIG_H */
 
 /* Setup for stuff that happens when autoconf isn't run.  This should be 
@@ -134,30 +132,29 @@
 #define USE_PGP
 
 #ifdef UNIX
-# define HAVE_UNAME
-# define HAVE_GECOS
+#define HAVE_UNAME
+#define HAVE_GECOS
 #endif
 
 #if defined(POSIX) || defined(USE_SOCK)
-# define HAVE_GETHOSTNAME
+#define HAVE_GETHOSTNAME
 #endif
 
 #ifdef POSIX
 /* not a POSIX function, but avaiable on virtually all Unix systems */
-# define HAVE_GETTIMEOFDAY
+#define HAVE_GETTIMEOFDAY
 #endif
 
 #ifdef linux
-# define HAVE_GETDOMAINNAME
+#define HAVE_GETDOMAINNAME
 #endif
 
 #ifdef WIN32
-# ifdef _MSC_VER
-#pragma warning(disable: 4018) /* signed/unsigned mismatch */
-#pragma warning(disable: 4761) /* integral size mismatch */
-# endif
+#ifdef _MSC_VER
+#pragma warning(disable : 4018) /* signed/unsigned mismatch */
+#pragma warning(disable : 4761) /* integral size mismatch */
 #endif
-
+#endif
 
 #endif /* End of not HAVE_CONFIG_H */
 
@@ -189,15 +186,15 @@
 /** file names ********************************************************/
 
 #ifdef WIN32
-#define DEFAULT_MIXCONF "mix.cfg"  /* change to mix.ini eventually  */
+#define DEFAULT_MIXCONF "mix.cfg" /* change to mix.ini eventually  */
 #else
-#define DEFAULT_MIXCONF "mix.cfg"      /* mixmaster configuration file */
+#define DEFAULT_MIXCONF "mix.cfg" /* mixmaster configuration file */
 #endif
 #define DEFAULT_DISCLAIMFILE "disclaim.txt"
 #define DEFAULT_FROMDSCLFILE "fromdscl.txt"
 #define DEFAULT_MSGFOOTERFILE "footer.txt"
 #ifdef WIN32
-#define DEFAULT_POP3CONF "pop3.cfg"  /* change to pop3.ini eventually */
+#define DEFAULT_POP3CONF "pop3.cfg" /* change to pop3.ini eventually */
 #else
 #define DEFAULT_POP3CONF "pop3.cfg"
 #endif
@@ -227,7 +224,7 @@
 #define DEFAULT_SOURCEBLOCK "source.blk"
 #define DEFAULT_HDRFILTER "header.blk"
 #define DEFAULT_REGULAR "time.log"
-#define DEFAULT_POOL "pool"            /* remailer pool subdirectory */
+#define DEFAULT_POOL "pool" /* remailer pool subdirectory */
 #define DEFAULT_TYPE1LIST "rlist.txt"
 #define DEFAULT_TYPE2REL "mlist.txt"
 #define DEFAULT_PIDFILE "mixmaster.pid"
@@ -305,7 +302,6 @@ extern char NYMDB[];
 #define info_beginpgp "=====BEGIN PGP MESSAGE====="
 #define info_endpgp "=====END PGP MESSAGE====="
 #define info_pgpsig "=====Sig: "
-
 
 /***********************************************************************
  * The following variables are read from mix.cfg, with default values

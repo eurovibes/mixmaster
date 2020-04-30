@@ -8,7 +8,6 @@
    Menu-based user interface
    $Id$ */
 
-
 #ifndef _MENU_H
 #define _MENU_H
 #include "mix3.h"

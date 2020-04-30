@@ -8,7 +8,6 @@
    Interface to cryptographic library
    $Id$ */
 
-
 #ifndef _CRYPTO_H
 #define _CRYPTO_H
 #include "mix3.h"

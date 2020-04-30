@@ -8,7 +8,6 @@
    Function prototypes
    $Id$ */
 
-
 #ifndef _MIX3_H
 #define _MIX3_H
 #define COPYRIGHT "Copyright Anonymizer Inc. et al."
@@ -18,7 +17,7 @@
 
 #ifdef WIN32
 #ifndef USE_SOCK
-#define _WINSOCKAPI_		/* don't include winsock */
+#define _WINSOCKAPI_ /* don't include winsock */
 #endif /* not USE_SOCK */
 #include <windows.h>
 #ifdef _MSC
@@ -31,7 +30,11 @@
 #define DIRSEPSTR "/"
 #endif /* else if not WIN32 */
 
-#define NOT_IMPLEMENTED {printf("Function not implemented.\n");return -1;}
+#define NOT_IMPLEMENTED                                \
+	{                                              \
+		printf("Function not implemented.\n"); \
+		return -1;                             \
+	}
 #define SECONDSPERDAY 86400
 
 #include <time.h>
@@ -70,8 +73,8 @@ int buf_appendheader(BUFFER *buffer, BUFFER *field, BUFFER *contents);
 int buf_lookahead(BUFFER *buffer, BUFFER *line);
 int buf_eq(BUFFER *b1, BUFFER *b2);
 int buf_ieq(BUFFER *b1, BUFFER *b2);
-void buf_cut_out(BUFFER *buffer, BUFFER *cut_out, BUFFER *rest,
-		 int from, int len);
+void buf_cut_out(BUFFER *buffer, BUFFER *cut_out, BUFFER *rest, int from,
+		 int len);
 
 int buf_appendl(BUFFER *b, long l);
 int buf_appendl_lo(BUFFER *b, long l);
@@ -112,8 +115,8 @@ void conf_premail(BUFFER *out);
 
 void rfc822_addr(BUFFER *line, BUFFER *list);
 void rfc822_name(BUFFER *line, BUFFER *name);
-void sendmail_begin(void);	/* begin mail sending session */
-void sendmail_end(void);	/* end mail sending session */
+void sendmail_begin(void); /* begin mail sending session */
+void sendmail_end(void); /* end mail sending session */
 int sendmail_loop(BUFFER *message, char *from, BUFFER *address);
 int sendmail(BUFFER *message, char *from, BUFFER *address);
 int mixfile(char *path, const char *name);
@@ -124,14 +127,14 @@ int closepipe(FILE *fp);
 int maildirWrite(char *maildir, BUFFER *message, int create);
 int write_pidfile(char *pidfile);
 int clear_pidfile(char *pidfile);
-time_t parse_yearmonthday(char* str);
+time_t parse_yearmonthday(char *str);
 
-int url_download(char* url, char* dest);
+int url_download(char *url, char *dest);
 int download_stats(char *sourcename);
 
 typedef struct {
-  char *name;
-  FILE *f;
+	char *name;
+	FILE *f;
 } LOCK;
 
 int lock(FILE *f);
@@ -140,16 +143,16 @@ LOCK *lockfile(char *filename);
 int unlockfile(LOCK *lock);
 
 int filtermsg(BUFFER *msg);
-BUFFER *readdestblk( );
+BUFFER *readdestblk();
 int doblock(BUFFER *line, BUFFER *filter, int logandreset);
 int doallow(BUFFER *line, BUFFER *filter);
 int allowmessage(BUFFER *in);
 
-void errlog(int type, char *format,...);
+void errlog(int type, char *format, ...);
 void clienterr(BUFFER *msgbuf, char *err);
 void logmail(char *mailbox, BUFFER *message);
 
-void mix_status(char *fmt,...);
+void mix_status(char *fmt, ...);
 void mix_genericerror(void);
 
 #define ERRORMSG 1
@@ -175,8 +178,8 @@ int mime_attach(BUFFER *message, BUFFER *attachment, BUFFER *type);
 void mimedecode(BUFFER *msg);
 int qp_decode_message(BUFFER *msg);
 
-#define MIME_8BIT 1   /* transport is 8bit */
-#define MIME_7BIT 2   /* transport is 7bit */
+#define MIME_8BIT 1 /* transport is 8bit */
+#define MIME_7BIT 2 /* transport is 7bit */
 
 /* randomness */
 int rnd_bytes(byte *b, int n);
@@ -210,7 +213,7 @@ int digest_sha1(BUFFER *b, BUFFER *md);
 int digest_rmd160(BUFFER *b, BUFFER *md);
 
 #define KEY_ID_LEN 32
-int keymgt(int force,long int lifeindays,long int keysize);
+int keymgt(int force, long int lifeindays, long int keysize);
 int key(BUFFER *b);
 int adminkey(BUFFER *b);
 
@@ -234,7 +237,7 @@ int pk_decrypt(BUFFER *encrypted, BUFFER *privkey);
 int pk_encrypt(BUFFER *plaintext, BUFFER *privkey);
 int check_seckey(BUFFER *buf, const byte id[]);
 int check_pubkey(BUFFER *buf, const byte id[]);
-int v2createkey(long int lifeindays,long int keysize);
+int v2createkey(long int lifeindays, long int keysize);
 int getv2seckey(byte keyid[], BUFFER *key);
 int seckeytopub(BUFFER *pub, BUFFER *sec, byte keyid[]);
 
@@ -257,9 +260,9 @@ int idexp(void);
 int pgpmaxexp(void);
 void pop3get(void);
 
-typedef struct {  /* added for binary id.log change */
-  char id[16];
-  long time;
+typedef struct { /* added for binary id.log change */
+	char id[16];
+	long time;
 } idlog_t;
 
 /* statistics */
@@ -267,30 +270,29 @@ int stats_log(int);
 int stats_out(int);
 
 /* OpenPGP */
-#define PGP_ARMOR_NORMAL        0
-#define PGP_ARMOR_REM           1
-#define PGP_ARMOR_KEY           2
-#define PGP_ARMOR_NYMKEY        3
-#define PGP_ARMOR_NYMSIG        4
-#define PGP_ARMOR_SECKEY        5
+#define PGP_ARMOR_NORMAL 0
+#define PGP_ARMOR_REM 1
+#define PGP_ARMOR_KEY 2
+#define PGP_ARMOR_NYMKEY 3
+#define PGP_ARMOR_NYMSIG 4
+#define PGP_ARMOR_SECKEY 5
 
-#define PGP_TYPE_UNDEFINED	0
-#define PGP_TYPE_PRIVATE	1
-#define PGP_TYPE_PUBLIC		2
+#define PGP_TYPE_UNDEFINED 0
+#define PGP_TYPE_PRIVATE 1
+#define PGP_TYPE_PUBLIC 2
 
 int pgp_keymgt(int force);
-int pgp_latestkeys(BUFFER* outtxt, int algo);
+int pgp_latestkeys(BUFFER *outtxt, int algo);
 int pgp_armor(BUFFER *buf, int mode);
 int pgp_dearmor(BUFFER *buf, BUFFER *out);
-int pgp_pubkeycert(BUFFER *userid, char *keyring, BUFFER *pass,
-		   BUFFER *out, int remail);
-int pgp_signtxt(BUFFER *msg, BUFFER *uid, BUFFER *pass,
-		char *secring, int remail);
+int pgp_pubkeycert(BUFFER *userid, char *keyring, BUFFER *pass, BUFFER *out,
+		   int remail);
+int pgp_signtxt(BUFFER *msg, BUFFER *uid, BUFFER *pass, char *secring,
+		int remail);
 int pgp_isconventional(BUFFER *buf);
-int pgp_mailenc(int mode, BUFFER *msg, char *sigid,
-		BUFFER *pass, char *pubring, char *secring);
-int pgp_signhashalgo(BUFFER *algo, BUFFER *userid, char *secring,
-		     BUFFER *pass);
+int pgp_mailenc(int mode, BUFFER *msg, char *sigid, BUFFER *pass, char *pubring,
+		char *secring);
+int pgp_signhashalgo(BUFFER *algo, BUFFER *userid, char *secring, BUFFER *pass);
 
 /* menu */
 int menu_initialized;
@@ -304,38 +306,38 @@ void user_delpass(void);
 
 /* remailer */
 typedef struct {
-  char name[20];
-  int version;
-  char addr[128];
-  byte keyid[16];
-  time_t expires;
-  int rsalen;
-  struct {
-    unsigned int mix:1;
-    unsigned int compress:1;
+	char name[20];
+	int version;
+	char addr[128];
+	byte keyid[16];
+	time_t expires;
+	int rsalen;
+	struct {
+		unsigned int mix : 1;
+		unsigned int compress : 1;
 
-    unsigned int cpunk:1;
-    unsigned int pgp:1;
-    unsigned int pgponly:1;
-    unsigned int latent:1;
-    unsigned int hash:1;
-    unsigned int ek:1;
-    unsigned int esub:1;
-    unsigned int hsub:1;
+		unsigned int cpunk : 1;
+		unsigned int pgp : 1;
+		unsigned int pgponly : 1;
+		unsigned int latent : 1;
+		unsigned int hash : 1;
+		unsigned int ek : 1;
+		unsigned int esub : 1;
+		unsigned int hsub : 1;
 
-    unsigned int nym:1;
-    unsigned int newnym:1;
+		unsigned int nym : 1;
+		unsigned int newnym : 1;
 
-    unsigned int post:1;
-    unsigned int middle:1;
+		unsigned int post : 1;
+		unsigned int middle : 1;
 
-    unsigned int star_ex:1;
-  } flags;
-  struct rinfo {
-    int reliability;
-    int latency;
-    char history[13];
-  } info[2];
+		unsigned int star_ex : 1;
+	} flags;
+	struct rinfo {
+		int reliability;
+		int latency;
+		char history[13];
+	} info[2];
 } REMAILER;
 
 #define CHAINMAX 421
@@ -345,19 +347,22 @@ int mix2_rlist(REMAILER remailer[], int badchains[MAXREM][MAXREM]);
 int t1_rlist(REMAILER remailer[], int badchains[MAXREM][MAXREM]);
 int pgp_rlist(REMAILER remailer[], int n);
 int pgp_rkeylist(REMAILER remailer[], int keyid[], int n);
-void parse_badchains(int badchains[MAXREM][MAXREM], char *file, char *startindicator, REMAILER *remailer, int maxrem);
+void parse_badchains(int badchains[MAXREM][MAXREM], char *file,
+		     char *startindicator, REMAILER *remailer, int maxrem);
 int chain_select(int hop[], char *chainstr, int maxrem, REMAILER *remailer,
 		 int type, BUFFER *feedback);
 int chain_rand(REMAILER *remailer, int badchains[MAXREM][MAXREM], int maxrem,
-	       int thischain[], int chainlen, int t, int ignore_constraints_if_necessary);
+	       int thischain[], int chainlen, int t,
+	       int ignore_constraints_if_necessary);
 int chain_randfinal(int type, REMAILER *remailer, int badchains[MAXREM][MAXREM],
-	       int maxrem, int rtype, int chain[], int chainlen, int ignore_constraints_if_necessary);
+		    int maxrem, int rtype, int chain[], int chainlen,
+		    int ignore_constraints_if_necessary);
 
-float chain_reliability(char *chain, int chaintype,
-			char *reliability_string);
-int redirect_message(BUFFER *sendmsg, char *chain, int numcopies, BUFFER *chainlist);
+float chain_reliability(char *chain, int chaintype, char *reliability_string);
+int redirect_message(BUFFER *sendmsg, char *chain, int numcopies,
+		     BUFFER *chainlist);
 int mix2_encrypt(int type, BUFFER *message, char *chainstr, int numcopies,
-		int ignore_constraints_if_necessary, BUFFER *feedback);
+		 int ignore_constraints_if_necessary, BUFFER *feedback);
 int t1_encrypt(int type, BUFFER *message, char *chainstr, int latency,
 	       BUFFER *ek, BUFFER *feedback);
 
@@ -404,7 +409,7 @@ int nymlist_getstatus(char *nym);
 typedef HANDLE DIR;
 
 struct dirent {
-  char d_name[PATHMAX];
+	char d_name[PATHMAX];
 };
 
 DIR *opendir(const char *name);
@@ -436,11 +441,11 @@ void set_nt_exit_event();
 #ifdef DEBUG
 #define malloc mix3_malloc
 #define free mix3_free
-BUFFER *mix3_bufnew(char *, int, char*);
+BUFFER *mix3_bufnew(char *, int, char *);
 #if __GNUC__ >= 2
-# define buf_new() mix3_bufnew(__FILE__, __LINE__, __PRETTY_FUNCTION__)
+#define buf_new() mix3_bufnew(__FILE__, __LINE__, __PRETTY_FUNCTION__)
 #else /* end of __GNUC__ >= 2 */
-# define buf_new() mix3_bufnew(__FILE__, __LINE__, "file")
+#define buf_new() mix3_bufnew(__FILE__, __LINE__, "file")
 #endif /* else if not __GNUC__ >= 2 */
 #endif /* DEBUG */
 

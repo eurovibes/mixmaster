@@ -803,7 +803,7 @@ int buf_unzip(BUFFER *buf, int type);
 #define _MIXLIB_H
 
 #define RSASTATSFILE "rsastats.daily"
-#define RSATEXTFILE  "rsastats.txt"
+#define RSATEXTFILE "rsastats.txt"
 int mix_global_verbose;
 
 #include <stdio.h>
@@ -815,11 +815,11 @@ int mix_global_verbose;
 typedef unsigned char byte;
 
 typedef struct {
-  byte *data;
-  long length;
-  long ptr;
-  long size;
-  byte sensitive;
+	byte *data;
+	long length;
+	long ptr;
+	long size;
+	byte sensitive;
 } BUFFER;
 
 int mix_init(char *);
@@ -881,15 +881,14 @@ int nym_decrypt(BUFFER *msg, char *nym, BUFFER *log);
 #define PGP_CONVCAST 512
 
 /* error codes */
-#define PGP_OK 0		/* valid message, not signed */
-#define PGP_SIGOK 1		/* valid signature */
-#define PGP_NOMSG 2		/* is not an OpenPGP message */
-#define PGP_NODATA 3		/* OpenPGP packet does not contain user data */
-#define PGP_SIGNKEY 4		/* can't verify signature */
-#define PGP_ERR -1		/* can't read message, no matching key found */
-#define PGP_PASS -2		/* bad passphrase */
-#define PGP_SIGBAD -3		/* bad signature */
-
+#define PGP_OK 0 /* valid message, not signed */
+#define PGP_SIGOK 1 /* valid signature */
+#define PGP_NOMSG 2 /* is not an OpenPGP message */
+#define PGP_NODATA 3 /* OpenPGP packet does not contain user data */
+#define PGP_SIGNKEY 4 /* can't verify signature */
+#define PGP_ERR -1 /* can't read message, no matching key found */
+#define PGP_PASS -2 /* bad passphrase */
+#define PGP_SIGBAD -3 /* bad signature */
 
 /* algorithms */
 #define PGP_ANY 0
@@ -901,10 +900,9 @@ int pgp_encrypt(int mode, BUFFER *message, BUFFER *encr, BUFFER *sigid,
 		BUFFER *pass, char *pubring, char *secring);
 int pgp_decrypt(BUFFER *message, BUFFER *pass, BUFFER *sig, char *pubring,
 		char *secring);
-int pgp_keygen(int algo, int bits, BUFFER *userid, BUFFER *pass,
-		  char *pubring, char *secring, int remail);
+int pgp_keygen(int algo, int bits, BUFFER *userid, BUFFER *pass, char *pubring,
+	       char *secring, int remail);
 #endif /* USE_PGP */
-
 
 /* parsedate */
 time_t parsedate(char *p);
@@ -927,4 +925,3 @@ char *showdata(BUFFER *buf, int max);
 #endif /* WIN32 */
 
 #endif /* not _MIXLIB_H */
-
