@@ -412,7 +412,7 @@ int pgp_armor(BUFFER *in, int mode)
 	    mode == PGP_ARMOR_NYMSIG)
 		buf_appends(out, "Version: N/A\n");
 	else
-#elif defined(MIMIC) /* end of CLOAK */
+#elif MIMIC /* end of CLOAK */
 	if (mode == PGP_ARMOR_REM || mode == PGP_ARMOR_NYMKEY ||
 	    mode == PGP_ARMOR_NYMSIG)
 		buf_appends(out, "Version: 2.6.3i\n");

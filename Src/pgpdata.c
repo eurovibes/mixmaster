@@ -129,6 +129,8 @@ int pgp_rsa(BUFFER *in, BUFFER *k, int mode)
 	BUFFER *mpi, *out;
 	int err = -1;
 	RSA *key;
+	BIGNUM *key_n, *key_e, *key_d, *key_q, *key_p, *key_iqmp, *key_dmp1,
+		*key_dmq1;
 
 	assert(mode == PK_ENCRYPT || mode == PK_VERIFY || mode == PK_DECRYPT ||
 	       mode == PK_SIGN);
@@ -137,28 +139,31 @@ int pgp_rsa(BUFFER *in, BUFFER *k, int mode)
 	mpi = buf_new();
 
 	mpi_get(k, mpi);
-	key->n = BN_bin2bn(mpi->data, mpi->length, NULL);
+	key_n = BN_bin2bn(mpi->data, mpi->length, NULL);
 
 	if (mpi_get(k, mpi) < 0)
 		goto end;
-	key->e = BN_bin2bn(mpi->data, mpi->length, NULL);
+	key_e = BN_bin2bn(mpi->data, mpi->length, NULL);
 
+	RSA_set0_key(key, key_n, key_e, NULL);
 	if (mode == PK_DECRYPT || mode == PK_SIGN) {
 		if (mpi_get(k, mpi) < 0)
 			goto end;
-		key->d = BN_bin2bn(mpi->data, mpi->length, NULL);
-
+		key_d = BN_bin2bn(mpi->data, mpi->length, NULL);
+		RSA_set0_key(key, key_n, key_e, key_d);
 #if 1
 		/* compute auxiluary parameters */
 		mpi_get(k, mpi); /* PGP'p is SSLeay's q */
-		key->q = BN_bin2bn(mpi->data, mpi->length, NULL);
+		key_q = BN_bin2bn(mpi->data, mpi->length, NULL);
 
 		mpi_get(k, mpi);
-		key->p = BN_bin2bn(mpi->data, mpi->length, NULL);
+		key_p = BN_bin2bn(mpi->data, mpi->length, NULL);
+
+		RSA_set0_factors(key, key_p, key_q);
 
 		if (mpi_get(k, mpi) < 0)
 			goto end;
-		key->iqmp = BN_bin2bn(mpi->data, mpi->length, NULL);
+		key_iqmp = BN_bin2bn(mpi->data, mpi->length, NULL);
 
 		{
 			BIGNUM *i;
@@ -166,14 +171,16 @@ int pgp_rsa(BUFFER *in, BUFFER *k, int mode)
 
 			ctx = BN_CTX_new();
 			i = BN_new();
-			key->dmp1 = BN_new();
-			key->dmq1 = BN_new();
+			key_dmp1 = BN_new();
+			key_dmq1 = BN_new();
 
-			BN_sub(i, key->p, BN_value_one());
-			BN_mod(key->dmp1, key->d, i, ctx);
+			BN_sub(i, key_p, BN_value_one());
+			BN_mod(key_dmp1, key_d, i, ctx);
 
-			BN_sub(i, key->q, BN_value_one());
-			BN_mod(key->dmq1, key->d, i, ctx);
+			BN_sub(i, key_q, BN_value_one());
+			BN_mod(key_dmq1, key_d, i, ctx);
+
+			RSA_set0_crt_params(key, key_dmp1, key_dmq1, key_iqmp);
 
 			BN_free(i);
 		}
@@ -247,7 +254,7 @@ void pgp_sigcanonic(BUFFER *msg)
 	buf_free(line);
 }
 
-static void mpi_bnput(BUFFER *o, BIGNUM *i)
+static void mpi_bnput(BUFFER *o, const BIGNUM *i)
 {
 	BUFFER *b;
 
@@ -258,7 +265,8 @@ static void mpi_bnput(BUFFER *o, BIGNUM *i)
 	buf_free(b);
 }
 
-static void mpi_bnputenc(BUFFER *o, BIGNUM *i, int ska, BUFFER *key, BUFFER *iv)
+static void mpi_bnputenc(BUFFER *o, const BIGNUM *i, int ska,
+			 BUFFER *key, BUFFER *iv)
 {
 	BUFFER *b;
 	int ivlen = iv->length;
@@ -925,6 +933,7 @@ end:
 int pgp_makepkpacket(int type, BUFFER *p, BUFFER *outtxt, BUFFER *out,
 		     BUFFER *key, BUFFER *pass, time_t *created)
 {
+	(void) pass;
 	BUFFER *i, *id;
 	char txt[LINELEN], algoid;
 	int version, algo, valid = 0, err = 0;
@@ -1138,6 +1147,9 @@ int pgp_rsakeygen(int bits, BUFFER *userid, BUFFER *pass, char *pubring,
 	long now;
 	int skalgo = 0;
 	int err = 0;
+	const BIGNUM *key_n, *key_e, *key_d, *key_p, *key_q, *key_dmp1,
+		*key_dmq1, *key_iqmp;
+	BIGNUM *bn;
 
 	pkey = buf_new();
 	skey = buf_new();
@@ -1147,11 +1159,13 @@ int pgp_rsakeygen(int bits, BUFFER *userid, BUFFER *pass, char *pubring,
 	sig = buf_new();
 
 	errlog(NOTICE, "Generating OpenPGP RSA key.\n");
-	k = RSA_generate_key(bits == 0 ? 1024 : bits, 17, NULL, NULL);
-	if (k == NULL) {
-		err = -1;
+	k = RSA_new();
+	bn = BN_new();
+	BN_set_word(bn, RSA_F4);
+	err = RSA_generate_key_ex(k, bits == 0 ? 1024 : bits, bn, NULL);
+	if (!err)
 		goto end;
-	}
+
 	now = time(NULL);
 	if (remail) /* fake time in nym keys */
 		now -= rnd_number(4 * 24 * 60 * 60);
@@ -1162,8 +1176,10 @@ int pgp_rsakeygen(int bits, BUFFER *userid, BUFFER *pass, char *pubring,
 	buf_appendi(skey, 0);
 	/* buf_appendi(skey, KEYLIFETIME/(24*60*60)); */
 	buf_appendc(skey, PGP_ES_RSA);
-	mpi_bnput(skey, k->n);
-	mpi_bnput(skey, k->e);
+
+	RSA_get0_key(k, &key_n, &key_e, &key_d);
+	mpi_bnput(skey, key_n);
+	mpi_bnput(skey, key_e);
 
 #ifdef USE_IDEA
 	if (pass != NULL && pass->length > 0 && remail != 2) {
@@ -1176,16 +1192,18 @@ int pgp_rsakeygen(int bits, BUFFER *userid, BUFFER *pass, char *pubring,
 #endif /* USE_IDEA */
 		buf_appendc(skey, 0);
 
-	mpi_bnputenc(skey, k->d, skalgo, dk, iv);
-	mpi_bnputenc(skey, k->q, skalgo, dk, iv);
-	mpi_bnputenc(skey, k->p, skalgo, dk, iv);
-	mpi_bnputenc(skey, k->iqmp, skalgo, dk, iv);
+	RSA_get0_factors(k, &key_p, &key_q);
+	RSA_get0_crt_params(k, &key_dmp1, &key_dmq1, &key_iqmp);
+	mpi_bnputenc(skey, key_d, skalgo, dk, iv);
+	mpi_bnputenc(skey, key_q, skalgo, dk, iv);
+	mpi_bnputenc(skey, key_p, skalgo, dk, iv);
+	mpi_bnputenc(skey, key_iqmp, skalgo, dk, iv);
 
 	buf_clear(p);
-	mpi_bnput(p, k->d);
-	mpi_bnput(p, k->q);
-	mpi_bnput(p, k->p);
-	mpi_bnput(p, k->iqmp);
+	mpi_bnput(p, key_d);
+	mpi_bnput(p, key_q);
+	mpi_bnput(p, key_p);
+	mpi_bnput(p, key_iqmp);
 	buf_appendi(skey, pgp_csum(p, 0));
 
 	pgp_packet(skey, PGP_SECKEY);
@@ -1231,14 +1249,88 @@ end:
 #define begin_param "-----BEGIN PUBLIC PARAMETER BLOCK-----"
 #define end_param "-----END PUBLIC PARAMETER BLOCK-----"
 
+static DSA *gen_dsa_params(int bits)
+{
+	DSA *k = NULL;
+	const BIGNUM *key_p, *key_q, *key_g;
+	FILE *f;
+	BUFFER *p;
+	byte b[1024];
+	int l;
+
+	errlog(NOTICE, "Generating DSA parameters.\n");
+	k = DSA_new();
+	DSA_generate_parameters_ex(k, bits, NULL, 0,
+				   NULL, NULL, NULL);
+	p = buf_new();
+	DSA_get0_pqg(k, &key_p, &key_q, &key_g);
+	l = BN_bn2bin(key_p, b);
+	buf_appendi(p, l);
+	buf_append(p, b, l);
+	l = BN_bn2bin(key_q, b);
+	buf_appendi(p, l);
+	buf_append(p, b, l);
+	l = BN_bn2bin(key_g, b);
+	buf_appendi(p, l);
+	buf_append(p, b, l);
+	encode(p, 64);
+	f = mix_openfile(DSAPARAMS, "a");
+	if (f != NULL) {
+		fprintf(f, "%s\n%d\n", begin_param, bits);
+		buf_write(p, f);
+		fprintf(f, "%s\n", end_param);
+		fclose(f);
+	} else
+		errlog(ERRORMSG, "Cannot open %s!\n",
+		       DSAPARAMS);
+	buf_free(p);
+
+	return k;
+}
+
+static DH *gen_dh_params(int bits)
+{
+	const BIGNUM *key_p, *key_q, *key_g;
+	DH *d = NULL;
+	FILE *f;
+	BUFFER *p;
+	byte b[1024];
+	int l;
+
+	errlog(NOTICE,
+	       "Generating DH parameters. (This may take a long time!)\n");
+	d = DH_new();
+	DH_generate_parameters_ex(d, bits, DH_GENERATOR_5, NULL);
+	DH_get0_pqg(d, &key_p, &key_q, &key_g);
+	p = buf_new();
+	l = BN_bn2bin(key_p, b);
+	buf_appendi(p, l);
+	buf_append(p, b, l);
+	l = BN_bn2bin(key_g, b);
+	buf_appendi(p, l);
+	buf_append(p, b, l);
+	encode(p, 64);
+	f = mix_openfile(DHPARAMS, "a");
+	if (f != NULL) {
+		fprintf(f, "%s\n%d\n", begin_param, bits);
+		buf_write(p, f);
+		fprintf(f, "%s\n", end_param);
+		fclose(f);
+	} else
+		errlog(ERRORMSG, "Cannot open %s!\n", DHPARAMS);
+	buf_free(p);
+
+	return d;
+}
+
 static void *params(int dsa, int bits)
 {
 	DSA *k = NULL;
+	BIGNUM *key_p, *key_q, *key_g;
 	DH *d = NULL;
 	FILE *f;
 	BUFFER *p, *n;
 	char line[LINELEN];
-	byte b[1024];
 	int m, l;
 
 	if (bits == 0)
@@ -1269,21 +1361,21 @@ static void *params(int dsa, int bits)
 								l = buf_geti(p);
 								buf_get(p, n,
 									l);
-								k->p = BN_bin2bn(
+								key_p = BN_bin2bn(
 									n->data,
 									n->length,
 									NULL);
 								l = buf_geti(p);
 								buf_get(p, n,
 									l);
-								k->q = BN_bin2bn(
+								key_q = BN_bin2bn(
 									n->data,
 									n->length,
 									NULL);
 								l = buf_geti(p);
 								buf_get(p, n,
 									l);
-								k->g = BN_bin2bn(
+								key_g = BN_bin2bn(
 									n->data,
 									n->length,
 									NULL);
@@ -1292,18 +1384,22 @@ static void *params(int dsa, int bits)
 								l = buf_geti(p);
 								buf_get(p, n,
 									l);
-								d->p = BN_bin2bn(
+								key_p = BN_bin2bn(
 									n->data,
 									n->length,
 									NULL);
 								l = buf_geti(p);
 								buf_get(p, n,
 									l);
-								d->g = BN_bin2bn(
+								key_g = BN_bin2bn(
 									n->data,
 									n->length,
 									NULL);
+								key_q = NULL;
 							}
+							DSA_set0_pqg(k, key_p,
+								     key_q,
+								     key_g);
 							break;
 						}
 						buf_appends(p, line);
@@ -1319,55 +1415,12 @@ static void *params(int dsa, int bits)
 
 	if (dsa) {
 		if (k == NULL) {
-			errlog(NOTICE, "Generating DSA parameters.\n");
-			k = DSA_generate_parameters(bits, NULL, 0, NULL, NULL,
-						    NULL, NULL);
-			p = buf_new();
-			l = BN_bn2bin(k->p, b);
-			buf_appendi(p, l);
-			buf_append(p, b, l);
-			l = BN_bn2bin(k->q, b);
-			buf_appendi(p, l);
-			buf_append(p, b, l);
-			l = BN_bn2bin(k->g, b);
-			buf_appendi(p, l);
-			buf_append(p, b, l);
-			encode(p, 64);
-			f = mix_openfile(DSAPARAMS, "a");
-			if (f != NULL) {
-				fprintf(f, "%s\n%d\n", begin_param, bits);
-				buf_write(p, f);
-				fprintf(f, "%s\n", end_param);
-				fclose(f);
-			} else
-				errlog(ERRORMSG, "Cannot open %s!\n",
-				       DSAPARAMS);
-			buf_free(p);
+			k = gen_dsa_params(bits);
 		}
 		return (k);
 	} else {
 		if (d == NULL) {
-			errlog(NOTICE,
-			       "Generating DH parameters. (This may take a long time!)\n");
-			d = DH_generate_parameters(bits, DH_GENERATOR_5, NULL,
-						   NULL);
-			p = buf_new();
-			l = BN_bn2bin(d->p, b);
-			buf_appendi(p, l);
-			buf_append(p, b, l);
-			l = BN_bn2bin(d->g, b);
-			buf_appendi(p, l);
-			buf_append(p, b, l);
-			encode(p, 64);
-			f = mix_openfile(DHPARAMS, "a");
-			if (f != NULL) {
-				fprintf(f, "%s\n%d\n", begin_param, bits);
-				buf_write(p, f);
-				fprintf(f, "%s\n", end_param);
-				fclose(f);
-			} else
-				errlog(ERRORMSG, "Cannot open %s!\n", DHPARAMS);
-			buf_free(p);
+			d = gen_dh_params(bits);
 		}
 		return (d);
 	}
@@ -1384,6 +1437,7 @@ int pgp_dhkeygen(int bits, BUFFER *userid, BUFFER *pass, char *pubring,
 	BUFFER *dk, *sig, *iv, *p;
 	long now;
 	int err = 0;
+	const BIGNUM *key_p, *key_q, *key_g, *pub_key, *priv_key;
 
 	pkey = buf_new();
 	skey = buf_new();
@@ -1415,12 +1469,13 @@ int pgp_dhkeygen(int bits, BUFFER *userid, BUFFER *pass, char *pubring,
 	buf_setc(skey, 4);
 	buf_appendl(skey, now);
 	buf_appendc(skey, PGP_S_DSA);
-	mpi_bnput(skey, s->p);
-	mpi_bnput(skey, s->q);
-	mpi_bnput(skey, s->g);
-	mpi_bnput(skey, s->pub_key);
-
-	mpi_bnput(secret, s->priv_key);
+	DSA_get0_pqg(s, &key_p, &key_q, &key_g);
+	mpi_bnput(skey, key_p);
+	mpi_bnput(skey, key_q);
+	mpi_bnput(skey, key_g);
+	DSA_get0_key(s, &pub_key, &priv_key);
+	mpi_bnput(skey, pub_key);
+	mpi_bnput(secret, priv_key);
 	buf_appendi(secret, pgp_csum(secret, 0));
 	makeski(secret, pass, remail);
 	buf_cat(skey, secret);
@@ -1430,12 +1485,16 @@ int pgp_dhkeygen(int bits, BUFFER *userid, BUFFER *pass, char *pubring,
 	buf_setc(subkey, 4);
 	buf_appendl(subkey, now);
 	buf_appendc(subkey, PGP_E_ELG);
-	mpi_bnput(subkey, e->p);
-	mpi_bnput(subkey, e->g);
-	mpi_bnput(subkey, e->pub_key);
+
+	DH_get0_pqg(e, &key_p, &key_q, &key_g);
+	mpi_bnput(skey, key_p);
+	mpi_bnput(subkey, key_p);
+	mpi_bnput(subkey, key_g);
+	DH_get0_key(e, &pub_key, &priv_key);
+	mpi_bnput(subkey, pub_key);
 
 	buf_clear(secret);
-	mpi_bnput(secret, e->priv_key);
+	mpi_bnput(secret, priv_key);
 	buf_appendi(secret, pgp_csum(secret, 0));
 	makeski(secret, pass, remail);
 	buf_cat(subkey, secret);
@@ -1487,29 +1546,34 @@ int pgp_dsasign(BUFFER *data, BUFFER *key, BUFFER *out)
 	BUFFER *mpi, *b;
 	DSA *d;
 	DSA_SIG *sig = NULL;
+	BIGNUM *key_p, *key_q, *key_g, *pub_key, *priv_key;
+	const BIGNUM *sig_s, *sig_r;
 
 	d = DSA_new();
 	b = buf_new();
 	mpi = buf_new();
 	mpi_get(key, mpi);
-	d->p = BN_bin2bn(mpi->data, mpi->length, NULL);
+	key_p = BN_bin2bn(mpi->data, mpi->length, NULL);
 	mpi_get(key, mpi);
-	d->q = BN_bin2bn(mpi->data, mpi->length, NULL);
+	key_q = BN_bin2bn(mpi->data, mpi->length, NULL);
 	mpi_get(key, mpi);
-	d->g = BN_bin2bn(mpi->data, mpi->length, NULL);
+	key_g = BN_bin2bn(mpi->data, mpi->length, NULL);
+	DSA_set0_pqg(d, key_p, key_q, key_g);
 	mpi_get(key, mpi);
-	d->pub_key = BN_bin2bn(mpi->data, mpi->length, NULL);
+	pub_key = BN_bin2bn(mpi->data, mpi->length, NULL);
 	if (mpi_get(key, mpi) == -1) {
 		goto end;
 	}
-	d->priv_key = BN_bin2bn(mpi->data, mpi->length, NULL);
+	priv_key = BN_bin2bn(mpi->data, mpi->length, NULL);
+	DSA_set0_key(d, pub_key, priv_key);
 
 	sig = DSA_do_sign(data->data, data->length, d);
 	if (sig) {
-		buf_prepare(b, BN_num_bytes(sig->r));
-		b->length = BN_bn2bin(sig->r, b->data);
+		DSA_SIG_get0(sig, &sig_r, &sig_s);
+		buf_prepare(b, BN_num_bytes(sig_r));
+		b->length = BN_bn2bin(sig_r, b->data);
 		mpi_put(out, b);
-		b->length = BN_bn2bin(sig->s, b->data);
+		b->length = BN_bn2bin(sig_s, b->data);
 		mpi_put(out, b);
 	}
 end:

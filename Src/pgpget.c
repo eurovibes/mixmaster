@@ -412,12 +412,12 @@ end:
 static int pgp_3desdecrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
 {
 	int err = 0;
-	des_cblock iv;
+	DES_cblock iv;
 	byte hdr[10];
 	int i, n;
-	des_key_schedule ks1;
-	des_key_schedule ks2;
-	des_key_schedule ks3;
+	DES_key_schedule ks1;
+	DES_key_schedule ks2;
+	DES_key_schedule ks3;
 	SHA_CTX c;
 	char md[20]; /* we could make hdr 20 bytes long and reuse it for md */
 
@@ -435,13 +435,13 @@ static int pgp_3desdecrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
 	for (i = 0; i < 8; i++)
 		iv[i] = 0;
 
-	des_set_key((const_des_cblock *)key->data, ks1);
-	des_set_key((const_des_cblock *)(key->data + 8), ks2);
-	des_set_key((const_des_cblock *)(key->data + 16), ks3);
+	DES_set_key((const_DES_cblock *)key->data, &ks1);
+	DES_set_key((const_DES_cblock *)(key->data + 8), &ks2);
+	DES_set_key((const_DES_cblock *)(key->data + 16), &ks3);
 
 	n = 0;
-	des_ede3_cfb64_encrypt(in->data + mdc, hdr, 10, ks1, ks2, ks3, &iv, &n,
-			       DECRYPT);
+	DES_ede3_cfb64_encrypt(in->data + mdc, hdr, 10, &ks1, &ks2, &ks3, &iv,
+			       &n, DECRYPT);
 	if (n != 2 || hdr[8] != hdr[6] || hdr[9] != hdr[7]) {
 		err = -1;
 		goto end;
@@ -454,8 +454,8 @@ static int pgp_3desdecrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
 		memcpy(iv, in->data + 2, 6);
 		n = 0;
 	}
-	des_ede3_cfb64_encrypt(in->data + 10 + mdc, out->data,
-			       in->length - 10 + mdc, ks1, ks2, ks3, &iv, &n,
+	DES_ede3_cfb64_encrypt(in->data + 10 + mdc, out->data,
+			       in->length - 10 + mdc, &ks1, &ks2, &ks3, &iv, &n,
 			       DECRYPT);
 	if (mdc) {
 		if (out->length > 22) {

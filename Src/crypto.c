@@ -137,6 +137,8 @@ static int read_seckey(BUFFER *buf, SECKEY *key, const byte id[])
 	int len, plen;
 	byte *ptr;
 	int err = 0;
+	BIGNUM *key_n, *key_e, *key_d, *key_p, *key_q, *key_dmp1, *key_dmq1,
+		*key_iqmp;
 
 	md = buf_new();
 	bits = buf->data[0] + 256 * buf->data[1];
@@ -152,31 +154,35 @@ static int read_seckey(BUFFER *buf, SECKEY *key, const byte id[])
 
 	ptr = buf->data + 2;
 
-	key->n = BN_bin2bn(ptr, len, NULL);
+	key_n = BN_bin2bn(ptr, len, NULL);
 	buf_append(md, ptr, len);
 	ptr += len;
 
-	key->e = BN_bin2bn(ptr, len, NULL);
+	key_e = BN_bin2bn(ptr, len, NULL);
 	buf_append(md, ptr, len);
 	ptr += len;
 
-	key->d = BN_bin2bn(ptr, len, NULL);
+	key_d = BN_bin2bn(ptr, len, NULL);
 	ptr += len;
 
-	key->p = BN_bin2bn(ptr, plen, NULL);
+	key_p = BN_bin2bn(ptr, plen, NULL);
 	ptr += plen;
 
-	key->q = BN_bin2bn(ptr, plen, NULL);
+	key_q = BN_bin2bn(ptr, plen, NULL);
 	ptr += plen;
 
-	key->dmp1 = BN_bin2bn(ptr, plen, NULL);
+	key_dmp1 = BN_bin2bn(ptr, plen, NULL);
 	ptr += plen;
 
-	key->dmq1 = BN_bin2bn(ptr, plen, NULL);
+	key_dmq1 = BN_bin2bn(ptr, plen, NULL);
 	ptr += plen;
 
-	key->iqmp = BN_bin2bn(ptr, plen, NULL);
+	key_iqmp = BN_bin2bn(ptr, plen, NULL);
 	ptr += plen;
+
+	RSA_set0_key(key, key_n, key_e, key_d);
+	RSA_set0_factors(key, key_p, key_q);
+	RSA_set0_crt_params(key, key_dmp1, key_dmq1, key_iqmp);
 
 	digest_md5(md, md);
 	if (id)
@@ -192,6 +198,7 @@ static int read_pubkey(BUFFER *buf, PUBKEY *key, const byte id[])
 	int len;
 	byte *ptr;
 	int err = 0;
+	BIGNUM *key_n, *key_e;
 
 	md = buf_new();
 	bits = buf->data[0] + 256 * buf->data[1];
@@ -202,13 +209,14 @@ static int read_pubkey(BUFFER *buf, PUBKEY *key, const byte id[])
 
 	ptr = buf->data + 2;
 
-	key->n = BN_bin2bn(ptr, len, NULL);
+	key_n = BN_bin2bn(ptr, len, NULL);
 	buf_append(md, ptr, len);
 	ptr += len;
 
-	key->e = BN_bin2bn(ptr, len, NULL);
+	key_e = BN_bin2bn(ptr, len, NULL);
 	buf_append(md, ptr, len);
 	ptr += len;
+	RSA_set0_key(key, key_n, key_e, NULL);
 
 	digest_md5(md, md);
 	if (id)
@@ -222,9 +230,15 @@ static int write_seckey(BUFFER *sk, SECKEY *key, byte keyid[])
 	byte l[512];
 	int n;
 	BUFFER *b, *temp;
+	const BIGNUM *key_n, *key_e, *key_d, *key_p, *key_q, *key_dmp1,
+		*key_dmq1, *key_iqmp;
 	int nn; /* modulus length in bytes */
 
-	n = BN_bn2bin(key->n, l); /* writing modulus */
+	RSA_get0_key(key, &key_n, &key_e, &key_d);
+	RSA_get0_factors(key, &key_p, &key_q);
+	RSA_get0_crt_params(key, &key_dmp1, &key_dmq1, &key_iqmp);
+
+	n = BN_bn2bin(key_n, l);
 	assert((n == 128) || (n == 256) || (n == 384) || (n == 512));
 	switch (n) {
 	case 128:
@@ -245,7 +259,7 @@ static int write_seckey(BUFFER *sk, SECKEY *key, byte keyid[])
 		buf_appendzero(b, nn - n);
 	buf_append(b, l, n);
 
-	n = BN_bn2bin(key->e, l); /* writing e */
+	n = BN_bn2bin(key_e, l); /* writing e */
 	assert(n <= nn);
 	if (n < nn)
 		buf_appendzero(b, nn - n);
@@ -255,12 +269,11 @@ static int write_seckey(BUFFER *sk, SECKEY *key, byte keyid[])
 	memcpy(keyid, temp->data, 16);
 
 	buf_appendc(sk, 0);
-	buf_appendc(
-		sk,
-		nn / 32); /* nn of 128 bytes = 1024-bits = (4*256)+0 so store 4 */
+	/* nn of 128 bytes = 1024-bits = (4*256)+0 so store 4 */
+	buf_appendc(sk, nn/32);
 	buf_cat(sk, b);
 
-	n = BN_bn2bin(key->d, l); /* writing d */
+	n = BN_bn2bin(key_d, l); /* writing d */
 	assert(n <= nn);
 	if (n < nn)
 		buf_appendzero(sk, nn - n);
@@ -268,38 +281,38 @@ static int write_seckey(BUFFER *sk, SECKEY *key, byte keyid[])
 
 	nn /= 2; /* now store the smaller pieces */
 
-	n = BN_bn2bin(key->p, l);
+	n = BN_bn2bin(key_p, l);
 	assert(n <= nn);
 	if (n < nn)
 		buf_appendzero(sk, nn - n);
 	buf_append(sk, l, n);
 
-	n = BN_bn2bin(key->q, l);
+	n = BN_bn2bin(key_q, l);
 	assert(n <= nn);
 	if (n < nn)
 		buf_appendzero(sk, nn - n);
 	buf_append(sk, l, n);
 
-	n = BN_bn2bin(key->dmp1, l);
+	n = BN_bn2bin(key_dmp1, l);
 	assert(n <= nn);
 	if (n < nn)
 		buf_appendzero(sk, nn - n);
 	buf_append(sk, l, n);
 
-	n = BN_bn2bin(key->dmq1, l);
+	n = BN_bn2bin(key_dmq1, l);
 	assert(n <= nn);
 	if (n < nn)
 		buf_appendzero(sk, nn - n);
 	buf_append(sk, l, n);
 
-	n = BN_bn2bin(key->iqmp, l);
+	n = BN_bn2bin(key_iqmp, l);
 	assert(n <= nn);
 	if (n < nn)
 		buf_appendzero(sk, nn - n);
 	buf_append(sk, l, n);
 
-	buf_pad(sk, 8 * ((sk->length + 7) /
-			 8)); /* encrypt needs a block size multiple of 8 */
+	/* encrypt needs a block size multiple of 8 */
+	buf_pad(sk, 8*((sk->length + 7)/8));
 
 	buf_free(temp);
 	buf_free(b);
@@ -310,9 +323,12 @@ static int write_pubkey(BUFFER *pk, PUBKEY *key, byte keyid[])
 {
 	byte l[512];
 	int n;
-	int nn;
+	const BIGNUM *key_n, *key_e, *key_d;
+	int nn; /* modulus length in bytes */
 
-	n = BN_bn2bin(key->n, l);
+	RSA_get0_key(key, &key_n, &key_e, &key_d);
+
+	n = BN_bn2bin(key_n, l);
 	switch (n) {
 	case 128:
 	case 256:
@@ -330,7 +346,7 @@ static int write_pubkey(BUFFER *pk, PUBKEY *key, byte keyid[])
 	if (n < nn)
 		buf_appendzero(pk, nn - n);
 	buf_append(pk, l, n);
-	n = BN_bn2bin(key->e, l);
+	n = BN_bn2bin(key_e, l);
 	assert(n <= nn);
 	if (n < nn)
 		buf_appendzero(pk, nn - n);
@@ -381,13 +397,17 @@ int v2createkey(long int lifeindays, long int keysize)
 	FILE *f;
 	byte keyid[16];
 	char line[33];
+	BIGNUM *bn;
 
 	b = buf_new();
 	ek = buf_new();
 	iv = buf_new();
 
 	errlog(NOTICE, "Generating RSA key of size %ld.\n", keysize);
-	k = RSA_generate_key(keysize, 65537, NULL, NULL);
+	k = RSA_new();
+	bn = BN_new();
+	BN_set_word(bn, RSA_F4);
+	RSA_generate_key_ex(k, keysize, bn, NULL);
 	err = write_seckey(b, k, keyid);
 	RSA_free(k);
 	if (err == 0) {
@@ -477,42 +497,42 @@ int pk_encrypt(BUFFER *in, BUFFER *keybuf)
 }
 int buf_crypt(BUFFER *buf, BUFFER *key, BUFFER *iv, int enc)
 {
-	des_key_schedule ks1;
-	des_key_schedule ks2;
-	des_key_schedule ks3;
-	des_cblock i;
+	DES_key_schedule ks1;
+	DES_key_schedule ks2;
+	DES_key_schedule ks3;
+	DES_cblock i;
 
 	assert(enc == ENCRYPT || enc == DECRYPT);
 	assert((key->length == 16 || key->length == 24) && iv->length == 8);
 	assert(buf->length % 8 == 0);
 
 	memcpy(i, iv->data, 8); /* leave iv buffer unchanged */
-	des_set_key((const_des_cblock *)key->data, ks1);
-	des_set_key((const_des_cblock *)(key->data + 8), ks2);
+	DES_set_key((const_DES_cblock *)key->data, &ks1);
+	DES_set_key((const_DES_cblock *)(key->data + 8), &ks2);
 	if (key->length == 16)
-		des_set_key((const_des_cblock *)key->data, ks3);
+		DES_set_key((const_DES_cblock *)key->data, &ks3);
 	else
-		des_set_key((const_des_cblock *)(key->data + 16), ks3);
-	des_ede3_cbc_encrypt(buf->data, buf->data, buf->length, ks1, ks2, ks3,
-			     &i, enc);
+		DES_set_key((const_DES_cblock *)(key->data + 16), &ks3);
+	DES_ede3_cbc_encrypt(buf->data, buf->data, buf->length, &ks1, &ks2,
+			     &ks3, &i, enc);
 	return (0);
 }
 
 int buf_3descrypt(BUFFER *buf, BUFFER *key, BUFFER *iv, int enc)
 {
 	int n = 0;
-	des_key_schedule ks1;
-	des_key_schedule ks2;
-	des_key_schedule ks3;
+	DES_key_schedule ks1;
+	DES_key_schedule ks2;
+	DES_key_schedule ks3;
 
 	assert(enc == ENCRYPT || enc == DECRYPT);
 	assert(key->length == 24 && iv->length == 8);
 
-	des_set_key((const_des_cblock *)key->data, ks1);
-	des_set_key((const_des_cblock *)(key->data + 8), ks2);
-	des_set_key((const_des_cblock *)(key->data + 16), ks3);
-	des_ede3_cfb64_encrypt(buf->data, buf->data, buf->length, ks1, ks2, ks3,
-			       (des_cblock *)iv->data, &n, enc);
+	DES_set_key((const_DES_cblock *)key->data, &ks1);
+	DES_set_key((const_DES_cblock *)(key->data + 8), &ks2);
+	DES_set_key((const_DES_cblock *)(key->data + 16), &ks3);
+	DES_ede3_cfb64_encrypt(buf->data, buf->data, buf->length, &ks1, &ks2,
+			       &ks3, (DES_cblock *)iv->data, &n, enc);
 	return (0);
 }
 

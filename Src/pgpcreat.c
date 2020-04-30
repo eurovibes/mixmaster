@@ -162,11 +162,11 @@ static int pgp_ideaencrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
 
 static int pgp_3desencrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
 {
-	des_cblock iv;
+	DES_cblock iv;
 	int i, n = 0;
-	des_key_schedule ks1;
-	des_key_schedule ks2;
-	des_key_schedule ks3;
+	DES_key_schedule ks1;
+	DES_key_schedule ks2;
+	DES_key_schedule ks3;
 	SHA_CTX c;
 
 	assert(key->length == 25);
@@ -174,9 +174,9 @@ static int pgp_3desencrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
 	for (i = 0; i < 8; i++)
 		iv[i] = 0;
 
-	des_set_key((const_des_cblock *)(key->data + 1), ks1);
-	des_set_key((const_des_cblock *)(key->data + 9), ks2);
-	des_set_key((const_des_cblock *)(key->data + 17), ks3);
+	DES_set_key((const_DES_cblock *)(key->data + 1), &ks1);
+	DES_set_key((const_DES_cblock *)(key->data + 9), &ks2);
+	DES_set_key((const_DES_cblock *)(key->data + 17), &ks3);
 
 	if (mdc) {
 		mdc = 1;
@@ -191,23 +191,23 @@ static int pgp_3desencrypt(BUFFER *in, BUFFER *out, BUFFER *key, int mdc)
 		SHA1_Update(&c, in->data, in->length);
 	}
 	n = 0;
-	des_ede3_cfb64_encrypt(out->data + mdc, out->data + mdc, 10, ks1, ks2,
-			       ks3, &iv, &n, ENCRYPT);
+	DES_ede3_cfb64_encrypt(out->data + mdc, out->data + mdc, 10, &ks1, &ks2,
+			       &ks3, &iv, &n, ENCRYPT);
 	if (!mdc) {
 		iv[6] = iv[0], iv[7] = iv[1];
 		memcpy(iv, out->data + 2, 6);
 		n = 0;
 	}
-	des_ede3_cfb64_encrypt(in->data, out->data + 10 + mdc, in->length, ks1,
-			       ks2, ks3, &iv, &n, ENCRYPT);
+	DES_ede3_cfb64_encrypt(in->data, out->data + 10 + mdc, in->length, &ks1,
+			       &ks2, &ks3, &iv, &n, ENCRYPT);
 	if (mdc) {
 		SHA1_Update(&c, "\xD3\x14", 2); /* 0xD3 = 0xC0 | PGP_MDC */
-		des_ede3_cfb64_encrypt("\xD3\x14", out->data + 11 + in->length,
-				       2, ks1, ks2, ks3, &iv, &n, ENCRYPT);
+		DES_ede3_cfb64_encrypt("\xD3\x14", out->data + 11 + in->length,
+				       2, &ks1, &ks2, &ks3, &iv, &n, ENCRYPT);
 		SHA1_Final(out->data + 13 + in->length, &c);
-		des_ede3_cfb64_encrypt(out->data + 13 + in->length,
-				       out->data + 13 + in->length, 20, ks1,
-				       ks2, ks3, &iv, &n, ENCRYPT);
+		DES_ede3_cfb64_encrypt(out->data + 13 + in->length,
+				       out->data + 13 + in->length, 20, &ks1,
+				       &ks2, &ks3, &iv, &n, ENCRYPT);
 	}
 	return (0);
 }
