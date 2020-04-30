@@ -6,7 +6,7 @@
    details.
 
    Mixmaster initialization, configuration
-   $Id: mix.c 962 2007-11-19 13:42:41Z zax $ */
+   $Id$ */
 
 
 #include "mix3.h"
@@ -475,7 +475,7 @@ static void mix_setdefaults()
 	INDUMMYMAXP   = 84;	/* for both of the above:  while (rnd < p) { senddummy(); }  */
 	OUTDUMMYMAXP  = 96;     /* set max INDUMMYP and OUTDUMMYP such that 24 and 5.25 dummy messages will */
 	MIDDLEMAN     = 0;      /* be generated on average. More than this is insane. */
-	AUTOBLOCK     = 1;
+	AUTOBLOCK     = 0;
 	STATSDETAILS  = 1;
 	strnncpy(FORWARDTO, "*");
 	SIZELIMIT     = 0;		/* maximal size of remailed messages */

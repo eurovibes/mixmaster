@@ -6,7 +6,7 @@
    details.
 
    Test application for OpenPGP features
-   $Id: mpgp.c 934 2006-06-24 13:40:39Z rabbi $ */
+   $Id$ */
 
 #define MPGPVERSION "0.3.0"
 

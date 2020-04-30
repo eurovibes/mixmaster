@@ -6,7 +6,7 @@
    details.
 
    OpenPGP messages
-   $Id: pgp.h 934 2006-06-24 13:40:39Z rabbi $ */
+   $Id$ */
 
 
 #ifdef USE_PGP
@@ -174,7 +174,7 @@ typedef struct {
   int type; /* undefined, public, private */
   char filename[LINELEN];
   BUFFER *encryptkey;
-#ifndef NDEBUG
+#ifdef DEBUG
   int writer;
 #endif
 } KEYRING;

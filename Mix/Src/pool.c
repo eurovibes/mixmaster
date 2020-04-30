@@ -6,7 +6,7 @@
    details.
 
    Send messages from pool
-   $Id: pool.c 934 2006-06-24 13:40:39Z rabbi $ */
+   $Id$ */
 
 #include "mix3.h"
 #include <stdlib.h>
@@ -617,22 +617,42 @@ int allowmessage(BUFFER *in)
 
 int doallow(BUFFER *line, BUFFER *filter)
 /* line is a To, CC or BCC line.
- * problem is: there may be multiple addresses in one header
- * line but we only want to allow if _all_ are allowed
  *
- * So to not send direct if we do not want, we _never_ send
- * direct if there is more than one address: This is
- * assumed to be the case when there is a
- * comma in the header line.
- *
- * this should probably be rewritten somehwhen. therefore: FIXME
+ * there may be multiple addresses in one header
+ * line but we only allow if _all_ are allowed
  *
  * returns: 1 if allowed
  *          0 if message should be send indirectly
  */
 {
-  if (strchr( line->data, ',')) return 0;
-  return doblock(line, filter, 0);
+  BUFFER *newlinelist;
+  BUFFER *addrs;
+  int res = 1;
+
+  newlinelist = buf_new();
+  addrs = buf_new();
+
+  while (buf_getc(line) != ':');	/* find the : */
+  buf_getc(line);			/* skip the space */
+  buf_rest(addrs, line);		/* and copy the addresses */
+  buf_rewind(line);
+
+  rfc822_addr(addrs, newlinelist);	/* split into one address per line */
+
+  buf_clear(addrs);
+
+  while (buf_getline(newlinelist, addrs) != -1) {
+    if (doblock(addrs, filter, 0) == 0) {
+      res = 0;
+      errlog(DEBUGINFO, "Destination %b not allowed.\n", addrs);
+    }
+    buf_clear(addrs);
+  }
+
+  buf_free(newlinelist);
+  buf_free(addrs);
+
+  return (res);
 }
 
 int filtermsg(BUFFER *in)
@@ -834,10 +854,10 @@ BUFFER *readdestblk( )
 }
 
 int doblock(BUFFER *line, BUFFER *filter, int logandreset)
-/* logandreset is usually 0
- * it is only set to 1 when called from doallow
- *  which only checks whether messages are allowed to
- *  be sent directly
+/* logandreset is usually 1
+ * it is only set to 0 when called from doallow
+ * which only checks whether messages are allowed to
+ * be sent directly
  */
 {
   int block = 0;

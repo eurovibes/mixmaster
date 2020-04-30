@@ -6,7 +6,7 @@
    details.
 
    Win32 Service support
-   $Id: service.c 934 2006-06-24 13:40:39Z rabbi $ */
+   $Id$ */
 
 
 #include <windows.h>

@@ -6,7 +6,7 @@
    details.
 
    Function prototypes
-   $Id: mix3.h 934 2006-06-24 13:40:39Z rabbi $ */
+   $Id$ */
 
 
 #ifndef _MIX3_H
@@ -319,6 +319,7 @@ typedef struct {
     unsigned int hash:1;
     unsigned int ek:1;
     unsigned int esub:1;
+    unsigned int hsub:1;
 
     unsigned int nym:1;
     unsigned int newnym:1;

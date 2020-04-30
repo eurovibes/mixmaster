@@ -6,7 +6,7 @@
    details.
 
    Process Cypherpunk remailer messages
-   $Id: rem1.c 934 2006-06-24 13:40:39Z rabbi $ */
+   $Id$ */
 
 
 #include "mix3.h"
@@ -52,7 +52,6 @@ int t1_decrypt(BUFFER *in)
   return (ret);
 }
 
-#ifdef USE_IDEA
 void t1_esub(BUFFER *esub, BUFFER *subject)
 {
   BUFFER *iv, *out;
@@ -67,14 +66,39 @@ void t1_esub(BUFFER *esub, BUFFER *subject)
 
   digest_md5(esub, esub);
   digest_md5(subject, subject);
+#ifdef USE_IDEA
   buf_ideacrypt(subject, esub, iv, ENCRYPT);
+#else
+  buf_bfcrypt(subject, esub, iv, ENCRYPT);
+#endif /* USE_IDEA */
   id_encode(subject->data, hex);
   buf_appends(out, hex);
   buf_move(subject, out);
   buf_free(iv);
   buf_free(out);
 }
-#endif /* USE_IDEA */
+
+void t1_hsub(BUFFER *subject)
+{
+  BUFFER *iv, *out;
+  char hex[33];
+
+  iv = buf_new();
+  out = buf_new();
+
+  buf_appendrnd(iv, 8);
+  id_encode(iv->data, hex);
+  buf_append(out, hex, 16);
+
+  buf_cat(iv, subject);
+  digest_sha256(iv, iv);
+  id_encode(iv->data, hex);
+  buf_append(out, hex, 32);
+
+  buf_move(subject, out);
+  buf_free(iv);
+  buf_free(out);
+}
 
 #define N(X) (isdigit(X) ? (X)-'0' : 0)
 
@@ -152,6 +176,7 @@ static int t1msg(BUFFER *in, int hdr)
   int maxsize = -1;
   int maxcount = -1;
   int maxdate = -2; /* -2 not used, -1 parse error */
+  int hsub = 0;
 
   field = buf_new();
   content = buf_new();
@@ -254,6 +279,8 @@ header:
       buf_set(ekcast, content);
     else if (bufieq(field, "encrypt-subject"))
       buf_set(esub, content);
+    else if (bufieq(field, "hash-subject") && bufieq(content, "yes"))
+      hsub = 1;
     else if (bufieq(field, "inflate")) {
       inflate = readnum(content, 1024);
       if (inflate > INFLATEMAX * 1024)
@@ -417,10 +444,10 @@ header:
   if (newsgroups->length > 0)
     buf_appendf(out, "Newsgroups: %b\n", newsgroups);
   if (subject->length > 0) {
-#ifdef USE_IDEA
     if (esub->length > 0)
       t1_esub(esub, subject);
-#endif /* USE_IDEA */
+    if (hsub == 1)
+      t1_hsub(subject);
     buf_appendf(out, "Subject: %b\n", subject);
   }
   buf_cat(out, header);

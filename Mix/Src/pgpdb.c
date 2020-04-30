@@ -6,7 +6,7 @@
    details.
 
    OpenPGP key database
-   $Id: pgpdb.c 934 2006-06-24 13:40:39Z rabbi $ */
+   $Id$ */
 
 
 #include "mix3.h"
@@ -73,7 +73,7 @@ KEYRING *pgpdb_open(char *keyring, BUFFER *encryptkey, int writer, int type)
 
   assert(! ((writer) && (type == PGP_TYPE_UNDEFINED)));
   keydb = pgpdb_new(keyring, -1, encryptkey, type);
-#ifndef NDEBUG
+#ifdef DEBUG
   keydb->writer = writer;
 #endif
   if (writer)
@@ -122,7 +122,7 @@ int pgpdb_close(KEYRING *keydb)
 
   if (keydb->modified) {
     FILE *f;
-#ifndef ndebug
+#ifdef DEBUG
     assert(keydb->writer);
 #endif
     if (keydb->encryptkey && keydb->encryptkey->length)
@@ -226,7 +226,7 @@ int pgpdb_getnext(KEYRING *keydb, BUFFER *key, BUFFER *keyid, BUFFER *userid)
 int pgpdb_append(KEYRING *keydb, BUFFER *p)
 {
   assert(keydb->lock);
-#ifndef ndebug
+#ifdef DEBUG
   assert(keydb->writer);
 #endif
   buf_cat(keydb->db, p);
