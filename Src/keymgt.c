@@ -16,6 +16,8 @@
 
 int getv2seckey(byte keyid[], BUFFER *key);
 static int getv2pubkey(byte keyid[], BUFFER *key);
+int write_pubkey_file(FILE *out, BUFFER *pk_found, byte *k1_found,
+		      time_t created_found, time_t expires_found);
 
 int db_getseckey(byte keyid[], BUFFER *key)
 {
@@ -428,7 +430,6 @@ int v2keymgt(int force, long int lifeindays, long int keysize)
 							buf_cat(pk_temp, pk);
 							pos = ftell(keyring);
 							write_pubkey_file(
-								keyring,
 								all_pub,
 								pk_temp, k1,
 								created,
@@ -455,7 +456,7 @@ int v2keymgt(int force, long int lifeindays, long int keysize)
 
 	if (found) {
 		if ((f = mix_openfile(KEYFILE, "w")) != NULL) {
-			write_pubkey_file(keyring, f, pk_found, k1_found,
+			write_pubkey_file(f, pk_found, k1_found,
 					  created_found, expires_found);
 			fclose(f);
 		}
@@ -586,7 +587,7 @@ int deleteoldkeys(void)
 	return 0;
 }
 
-int write_pubkey_file(FILE *in, FILE *out, BUFFER *pk_found, byte *k1_found,
+int write_pubkey_file(FILE *out, BUFFER *pk_found, byte *k1_found,
 		      time_t created_found, time_t expires_found)
 {
 	char line[LINELEN];
