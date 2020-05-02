@@ -920,6 +920,7 @@ int hmac_sha256(BUFFER *b, BUFFER *hk, BUFFER *md);
 
 /* utils */
 char *showdata(BUFFER *buf, size_t max);
+char *strncpy0(char *dest, const char *src, size_t n);
 
 #ifdef WIN32
 
