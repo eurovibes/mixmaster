@@ -30,6 +30,9 @@ WINOBJ = winmain.o winutil.o
 
 all:	mixmaster
 
+scan:
+	scan-build -o report $(MAKE)
+
 mixmaster: $(OBJ) $(MIXOBJ) main.o $(LIBS)
 	$(CC) $(OBJ) $(MIXOBJ) main.o $(LIBS) $(LDFLAGS) -o mixmaster
 
