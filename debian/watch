@@ -1,0 +1,4 @@
+version=4
+opts=pgpsigurlmangle=s/\.tar\.gz/\.tar\.gz\.asc/ \
+https://github.com/eurovibes/mixmaster/releases \
+  .*/mixmaster-(\d[\d\.]+)\.tar\.gz
