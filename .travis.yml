@@ -1,11 +1,46 @@
-sudo: required
-language: generic
+os: linux
 
-services:
-  - docker
+dist: bionic
 
-script:
-  - wget -O- http://travis.debian.net/script.sh | sh -
+before_install:
+  - sudo apt-get install -y debhelper libncurses-dev libpcre3-dev libssl-dev zlib1g-dev bison dpkg-dev
+addons:
+  apt:
+    update: true
 
-if:
-  tag IS blank
+language: c
+compiler: clang
+
+jobs:
+  include:
+    - language: c
+      compiler: clang
+      script:
+        - CI/mk_makefile.sh
+        - cd Src && make
+
+    - language: c
+      compiler: clang
+      script:
+        - CI/mk_makefile.sh
+        - cd Src
+        - make
+        - make clean
+        - cp Makefile.debug Makefile
+        - scan-build -o "report/gcc" make CC=gcc
+        - make clean
+        - scan-build -o "report/clang" make CC=clang
+        - cd ..
+      after_success:
+        - CI/mk_index.sh
+      deploy:
+        provider: pages
+        cleanup: false
+        local_dir: Src/report/
+        token: $GITHUB_TOKEN
+        keep_history: false
+        strategy: git
+        verbose: true
+        on:
+          branch: master
+        edge: true
