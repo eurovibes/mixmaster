@@ -1,0 +1,8 @@
+# generated files
+
+Makefile
+mixmaster
+parsedate.tab.c
+
+# scan-build reports
+report/

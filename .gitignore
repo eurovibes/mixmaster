@@ -1,0 +1,10 @@
+# usual suspect
+
+.*
+!.gitignore
+!.travis.yml
+
+*~
+\#*#
+
+*.o
