@@ -47,11 +47,11 @@ void send_message(int type, char *nym, BUFFER *in)
 	chainlist = buf_new();
 	cc = buf_new();
 	cite = buf_new();
-	strncpy(chain, CHAIN, CHAINMAX);
+	strncpy0(chain, CHAIN, CHAINMAX);
 	numcopies = NUMCOPIES;
 
 	mix_status("");
-	strncpy(thisnym, nym, sizeof(thisnym));
+	strncpy0(thisnym, nym, sizeof(thisnym));
 
 	if (in != NULL)
 		buf_set(txt, in);
@@ -88,7 +88,7 @@ void send_message(int type, char *nym, BUFFER *in)
 			strcpy(subject, "Forwarded message");
 			while (buf_getheader(txt, field, content) == 0) {
 				if (bufieq(field, "subject")) {
-					strncpy(subject, content->string,
+					strncpy0(subject, content->string,
 						sizeof(subject));
 					strcatn(subject, " (fwd)",
 						sizeof(subject));
@@ -120,21 +120,21 @@ void send_message(int type, char *nym, BUFFER *in)
 			if (type == 'p' || type == 'f') {
 				if (dest[0] == '\0' &&
 				    bufieq(field, "newsgroups"))
-					strncpy(dest, content->string,
+					strncpy0(dest, content->string,
 						sizeof(dest));
 				if (bufieq(field, "followup-to") &&
 				    !bufieq(content, "poster"))
-					strncpy(dest, content->string,
+					strncpy0(dest, content->string,
 						sizeof(dest));
 				if (bufieq(field, "message-id"))
 					buf_appendf(tmp, "References: %b\n",
 						    content);
 			} else {
 				if (dest[0] == '\0' && bufieq(field, "from"))
-					strncpy(dest, content->string,
+					strncpy0(dest, content->string,
 						sizeof(dest));
 				if (bufieq(field, "reply-to"))
-					strncpy(dest, content->string,
+					strncpy0(dest, content->string,
 						sizeof(dest));
 				if (type == 'g' && (bufieq(field, "to") ||
 						    bufieq(field, "cc"))) {
@@ -363,14 +363,14 @@ redraw:
 				while (buf_getheader(tmp, field, content) ==
 				       0) {
 					if (bufieq(field, "subject"))
-						strncpy(subject, content->string,
+						strncpy0(subject, content->string,
 							sizeof(subject));
 					else if ((type == 'p' || type == 'f') &&
 						 bufieq(field, "newsgroups"))
-						strncpy(dest, content->string,
+						strncpy0(dest, content->string,
 							sizeof(dest));
 					else if (bufieq(field, "to"))
-						strncpy(dest, content->string,
+						strncpy0(dest, content->string,
 							sizeof(dest));
 					else {
 						buf_appendheader(txt, field,

@@ -230,7 +230,7 @@ int main(int argc, char *argv[])
 							argv[0], &error)) !=
 					   NULL) {
 					deflt = 0;
-					strncpy(nym, q, sizeof(nym));
+					strncpy0(nym, q, sizeof(nym));
 					if (i > argc &&
 					    strileft(argv[i + 1], "name="))
 						buf_sets(pseudonym,
@@ -250,7 +250,7 @@ int main(int argc, char *argv[])
 					sscanf(q, "%d", &numcopies);
 				} else if ((q = largopt(p, "config", argv[0],
 							&error)) != NULL) {
-					strncpy(MIXCONF, q, PATHMAX);
+					strncpy0(MIXCONF, q, PATHMAX);
 					MIXCONF[PATHMAX - 1] = 0;
 					mix_config(); /* configuration file changed - reread it */
 				} else if (error == 0 &&
@@ -632,7 +632,7 @@ WinNT service:\n\
 				while (buf_getheader(msg, field, content) ==
 				       0) {
 					if (bufieq(field, "nym")) {
-						strncpy(nym, content->string,
+						strncpy0(nym, content->string,
 							sizeof(nym));
 					} else if (bufieq(field, "chain"))
 						if (strchr(content->string,
@@ -640,7 +640,7 @@ WinNT service:\n\
 							i = strchr(content->string,
 								   ';') -
 								content->string;
-							strncpy(chain,
+							strncpy0(chain,
 								content->string,
 								i);
 							if (strstr(content->string +
@@ -656,7 +656,7 @@ WinNT service:\n\
 								       &numcopies);
 							}
 						} else
-							strncpy(chain,
+							strncpy0(chain,
 								content->string,
 								sizeof(chain));
 					else { /* line goes into message */
@@ -766,7 +766,7 @@ WinNT service:\n\
 		if (msg->length) {
 			while (buf_getheader(msg, field, content) == 0) {
 				if (bufieq(field, "chain"))
-					strncpy(chain, content->string,
+					strncpy0(chain, content->string,
 						sizeof(chain));
 			}
 		}
@@ -793,7 +793,7 @@ WinNT service:\n\
 			numcopies = 1;
 		while (buf_getheader(msg, field, content) != -1) {
 			if (bufieq(field, "chain"))
-				strncpy(chain, content->data, sizeof(chain));
+				strncpy0(chain, content->data, sizeof(chain));
 			else if (bufieq(field, "reply-chain"))
 				buf_appendf(chains, "Chain: %b\n", content);
 			else if (field->length)
@@ -802,7 +802,7 @@ WinNT service:\n\
 				buf_nl(chains);
 		}
 		if (strrchr(nym, '@')) {
-			strncpy(nymserver, strrchr(nym, '@'),
+			strncpy0(nymserver, strrchr(nym, '@'),
 				sizeof(nymserver));
 			*strrchr(nym, '@') = '\0';
 		}
@@ -938,7 +938,7 @@ static int check_get_pass(int force, int never_ask_for_passphrase)
 			if (n)
 				fprintf(stderr, "re-");
 			user_pass(pass);
-			strncpy(PASSPHRASE, pass->string, LINELEN);
+			strncpy0(PASSPHRASE, pass->string, LINELEN);
 			PASSPHRASE[LINELEN - 1] = 0;
 			if (!force) {
 				if (n && buf_eq(pass, pass2))
@@ -952,7 +952,7 @@ static int check_get_pass(int force, int never_ask_for_passphrase)
 		buf_free(pass2);
 		buf_free(key);
 
-		strncpy(ENTEREDPASSPHRASE, PASSPHRASE, LINELEN);
+		strncpy0(ENTEREDPASSPHRASE, PASSPHRASE, LINELEN);
 		ENTEREDPASSPHRASE[LINELEN - 1] = 0;
 	}
 	return 1;

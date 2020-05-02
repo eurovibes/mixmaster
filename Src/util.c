@@ -103,7 +103,7 @@ void strcatn(char *dest, const char *src, int n)
 	int l;
 	l = strlen(dest);
 	if (l < n)
-		strncpy(dest + l, src, n - l - 1);
+		strncpy0(dest + l, src, n - l - 1);
 	dest[n - 1] = '\0';
 }
 
@@ -117,17 +117,17 @@ int mixfile(char *path, const char *name)
 #ifdef POSIX
 	if (name[0] == '~' && name[1] == DIRSEP &&
 	    (h = getenv("HOME")) != NULL) {
-		strncpy(path, h, PATHMAX);
+		strncpy0(path, h, PATHMAX);
 		path[PATHMAX - 1] = '\0';
 		strcatn(path, name + 1, PATHMAX);
 	} else
 #endif /* POSIX */
 		if (name[0] == DIRSEP || (isalpha(name[0]) && name[1] == ':') ||
 		    MIXDIR == NULL) {
-		strncpy(path, name, PATHMAX);
+		strncpy0(path, name, PATHMAX);
 		path[PATHMAX - 1] = '\0';
 	} else {
-		strncpy(path, MIXDIR, PATHMAX);
+		strncpy0(path, MIXDIR, PATHMAX);
 		path[PATHMAX - 1] = '\0';
 		strcatn(path, name, PATHMAX);
 	}
@@ -683,7 +683,7 @@ struct dirent *readdir(DIR *dir)
 
 	ok = FindNextFile(*dir, &d);
 	if (ok) {
-		strncpy(e.d_name, d.cFileName, PATHMAX);
+		strncpy0(e.d_name, d.cFileName, PATHMAX);
 		return (&e);
 	} else
 		return (NULL);

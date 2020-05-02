@@ -172,7 +172,7 @@ int nym_config(int mode, char *nym, char *nymserver, BUFFER *pseudonym,
 					continue;
 				}
 				if (bufieq(k, "Chain"))
-					strncpy(rchain, line->data,
+					strncpy0(rchain, line->data,
 						sizeof(rchain));
 				else if (bufieq(k, "Latency"))
 					sscanf(line->data, "%d", &latency);
@@ -407,7 +407,7 @@ int nym_decrypt(BUFFER *msg, char *thisnym, BUFFER *log)
 								if (thisnym &&
 								    status ==
 									    NYM_OK)
-									strncpy(thisnym,
+									strncpy0(thisnym,
 										nym,
 										LINELEN);
 							} else
@@ -600,7 +600,7 @@ int nymlist_get(BUFFER *list, char *nym, BUFFER *config, BUFFER *ek,
 		if (bufleft(line, "nym="))
 			break;
 	}
-	strncpy(nym, line->data + 4, LINELEN);
+	strncpy0(nym, line->data + 4, LINELEN);
 
 	for (;;) {
 		if (buf_getline(list, line) == -1)
@@ -719,7 +719,7 @@ int nymlist_getnym(char *nym, BUFFER *config, BUFFER *ek, BUFFER *opt,
 			if (streq(nym, n) ||
 			    (nym[strlen(nym) - 1] == '@' && strleft(n, nym))) {
 				err = status;
-				strncpy(nym, n, LINELEN);
+				strncpy0(nym, n, LINELEN);
 				break;
 			}
 	}

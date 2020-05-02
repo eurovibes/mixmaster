@@ -103,7 +103,7 @@ KEYRING *pgpdb_new(char *keyring, int filetype, BUFFER *encryptkey, int type)
 	keydb->modified = 0;
 	keydb->lock = NULL;
 	keydb->type = type;
-	strncpy(keydb->filename, keyring, sizeof(keydb->filename));
+	strncpy0(keydb->filename, keyring, sizeof(keydb->filename));
 	keydb->filetype = filetype;
 	if (encryptkey == NULL)
 		keydb->encryptkey = NULL;

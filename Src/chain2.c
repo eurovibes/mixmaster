@@ -211,17 +211,17 @@ int mix2_rlist(REMAILER remailer[], int badchains[MAXREM][MAXREM])
 			}
 			if (nw < 0)
 				continue;
-			strncpy(remailer[nw].name, name,
+			strncpy0(remailer[nw].name, name,
 				sizeof(remailer[nw].name));
 			remailer[nw].name[sizeof(remailer[nw].name) - 1] = '\0';
-			strncpy(remailer[nw].addr, addr,
+			strncpy0(remailer[nw].addr, addr,
 				sizeof(remailer[nw].addr));
 			remailer[nw].addr[sizeof(remailer[nw].addr) - 1] = '\0';
 			remailer[nw].flags.mix = 1;
 			remailer[nw].flags.cpunk = 0;
 			remailer[nw].flags.nym = 0;
 			remailer[nw].flags.newnym = 0;
-			strncpy(textkeyid[nw], keyid,
+			strncpy0(textkeyid[nw], keyid,
 				sizeof(textkeyid[nw])); /* saves converting back to text to show in stderr */
 			textkeyid[nw][sizeof(textkeyid[nw]) - 1] = '\0';
 			id_decode(keyid, remailer[nw].keyid);
@@ -292,7 +292,7 @@ int mix2_rlist(REMAILER remailer[], int badchains[MAXREM][MAXREM])
 					if (strleft(line, remailer[i].name) &&
 					    line[strlen(remailer[i].name)] ==
 						    ' ') {
-						strncpy(remailer[i]
+						strncpy0(remailer[i]
 								.info[0]
 								.history,
 							line + 15, 12);
@@ -460,7 +460,7 @@ static int send_packet(int numcopies, BUFFER *packet, int chain[], int chainlen,
 					memset(addr, 0, 80);
 					if (hop == 0) {
 						assert(redirect_to != NULL);
-						strncpy(addr, redirect_to, 80);
+						strncpy0(addr, redirect_to, 80);
 					} else {
 						assert(hop > 0);
 						strcpy(addr,
@@ -754,7 +754,7 @@ int redirect_message(BUFFER *sendmsg, char *chainstr, int numcopies,
 	/* Find the recipient */
 	while (buf_getheader(sendmsg, field, content) == 0)
 		if (bufieq(field, "to")) {
-			strncpy(recipient, content->string, sizeof(recipient));
+			strncpy0(recipient, content->string, sizeof(recipient));
 			num++;
 		};
 	if (num != 1) {
@@ -923,7 +923,7 @@ int mix2_encrypt(int type, BUFFER *message, char *chainstr, int numcopies,
 			while (buf_getheader(message, field, content) == 0) {
 				if (bufieq(field, "to")) {
 					memset(hdrline, 0, 80);
-					strncpy(hdrline, content->string, 80);
+					strncpy0(hdrline, content->string, 80);
 					buf_appends(msgdest, hdrline);
 					numdest++;
 				} else if (type == MSG_POST &&
@@ -941,7 +941,7 @@ int mix2_encrypt(int type, BUFFER *message, char *chainstr, int numcopies,
 					while (buf_getline(header, line) == 0) {
 						/* paste in encoded header entry */
 						memset(hdrline, 0, 80);
-						strncpy(hdrline, line->string,
+						strncpy0(hdrline, line->string,
 							80);
 						buf_appends(msgheader, hdrline);
 						numhdr++;

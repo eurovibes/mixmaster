@@ -395,7 +395,7 @@ float chain_reliability(char *chain, int chaintype, char *reliability_string)
 		do /* Get next remailer */
 			name_end += sizeof(char);
 		while ((*name_end != ',') && (*name_end != '\0'));
-		strncpy(remailer_name, name_start,
+		strncpy0(remailer_name, name_start,
 			(name_end - name_start) / sizeof(char) +
 				1 * sizeof(char));
 		remailer_name[name_end - name_start] = '\0';

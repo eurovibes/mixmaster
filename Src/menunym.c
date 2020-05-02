@@ -52,7 +52,7 @@ void menu_nym(char *nnym)
 				num++;
 		} else if (s == NYM_WAITING) {
 			if (numpending < maxnym)
-				strncpy(pending[numpending++], nym[num],
+				strncpy0(pending[numpending++], nym[num],
 					LINELEN);
 		}
 	}
@@ -168,7 +168,7 @@ select:
 				goto nymselect;
 			}
 			if (!edit) {
-				strncpy(nnym, nym[select], LINELEN);
+				strncpy0(nnym, nym[select], LINELEN);
 				return;
 			}
 			/* fallthru */
@@ -193,10 +193,10 @@ select:
 
 				name = buf_new();
 				opt = buf_new();
-				strncpy(sendchain, CHAIN, CHAINMAX);
-				strncpy(mdest, ADDRESS, LINELEN);
+				strncpy0(sendchain, CHAIN, CHAINMAX);
+				strncpy0(mdest, ADDRESS, LINELEN);
 				if (edit)
-					strncpy(alias,
+					strncpy0(alias,
 						select + 1 < num ?
 							nym[select + 1] :
 							pending[select + 1 -
@@ -255,7 +255,7 @@ select:
 								replyblock[0]);
 						desttype[0] = defdesttype;
 						latent[0] = deflatent;
-						strncpy(dest[0],
+						strncpy0(dest[0],
 							desttype[0] == MSG_POST ?
 								pdest :
 								mdest,
@@ -350,7 +350,7 @@ select:
 							replyblock[c - '1']);
 					desttype[c - '1'] = defdesttype;
 					latent[c - '1'] = deflatent;
-					strncpy(dest[c - '1'],
+					strncpy0(dest[c - '1'],
 						desttype[c - '1'] == MSG_POST ?
 							pdest :
 							mdest,
@@ -433,7 +433,7 @@ select:
 							desttype[i] =
 								defdesttype;
 							latent[i] = deflatent;
-							strncpy(dest[i],
+							strncpy0(dest[i],
 								defdesttype == MSG_POST ?
 									pdest :
 									mdest,

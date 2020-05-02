@@ -74,10 +74,10 @@ void read_folder(char command, char *foldername, char *nym)
 		f = stdin;
 	else {
 		if (foldername[0] == '~' && (h = getenv("HOME")) != NULL) {
-			strncpy(path, h, PATHMAX);
+			strncpy0(path, h, PATHMAX);
 			strcatn(path, foldername + 1, PATHMAX);
 		} else
-			strncpy(path, foldername, PATHMAX);
+			strncpy0(path, foldername, PATHMAX);
 		f = fopen(path, "r");
 	}
 	if (f == NULL) {
@@ -278,7 +278,7 @@ void read_folder(char command, char *foldername, char *nym)
 							      content);
 						if (content->length) {
 							decode_header(content);
-							strncpy(sub,
+							strncpy0(sub,
 								content->string,
 								sizeof(sub));
 						}
@@ -313,7 +313,7 @@ void read_folder(char command, char *foldername, char *nym)
 			refresh();
 			wgetnstr(stdscr, str, LINELEN);
 			if (str[0] != '\0')
-				strncpy(search, str, LINELEN);
+				strncpy0(search, str, LINELEN);
 			noecho();
 			for (i = (selected < num ? selected + 1 : 0); i < num;
 			     i++) {
@@ -445,7 +445,7 @@ end:
 		c = getch();
 		cl(LINES - 2, 0);
 		if ((c == 'y') || (c == 'Y')) {
-			strncpy(path_with_tilde, path, PATHMAX - 1);
+			strncpy0(path_with_tilde, path, PATHMAX - 1);
 			strcat(path_with_tilde, "~");
 			rename(path,
 			       path_with_tilde); /* Rename folder to folder~ */
@@ -640,21 +640,21 @@ void read_message(BUFFER *message, char *nym)
 	hdr = buf_new();
 
 	if (thisnym[0] == '\0')
-		strncpy(thisnym, nym, LINELEN);
+		strncpy0(thisnym, nym, LINELEN);
 
 	if (bufleft(message, "From nymserver ")) {
 		/* select nym if Nym: pseudo header is in the first line */
 		buf_getline(message, line);
 		buf_getheader(message, field, content);
 		if (bufieq(field, "Nym"))
-			strncpy(thisnym, content->string, sizeof(thisnym));
+			strncpy0(thisnym, content->string, sizeof(thisnym));
 		buf_rewind(message);
 	}
 	while (buf_getheader(message, field, content) == 0) {
 		if (bufieq(field, "received") || bufleft(field, "From "))
 			continue;
 		if (bufieq(field, "subject"))
-			strncpy(sub, content->string, sizeof(sub));
+			strncpy0(sub, content->string, sizeof(sub));
 		buf_appendheader(hdr, field, content);
 	}
 	if (strlen(sub) > COLS - strlen(VERSION) - strlen(thisnym) - 23)
@@ -1030,7 +1030,7 @@ void menu_chain(char *chainstr, int chaintype, int post)
 			beep();
 	}
 	if (chainlen)
-		strncpy(chainstr, newchain, CHAINMAX);
+		strncpy0(chainstr, newchain, CHAINMAX);
 }
 
 #endif /* USE_NCURSES */

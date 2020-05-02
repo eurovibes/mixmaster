@@ -50,7 +50,7 @@ int t1_rlist(REMAILER remailer[], int badchains[MAXREM][MAXREM])
 			    fgets(l2, sizeof(l2), list) != NULL)
 				strcatn(line, l2, LINELEN);
 			flags = strchr(line, '>');
-			strncpy(name, strchr(line, '{') + 2,
+			strncpy0(name, strchr(line, '{') + 2,
 				strchr(line, '}') - strchr(line, '{') - 3);
 			name[strchr(line, '}') - strchr(line, '{') - 3] = '\0';
 			name[20] = '\0';
@@ -62,7 +62,7 @@ int t1_rlist(REMAILER remailer[], int badchains[MAXREM][MAXREM])
 				/* not in mix list */
 				n++;
 				strcpy(remailer[i].name, name);
-				strncpy(remailer[i].addr, strchr(line, '<') + 1,
+				strncpy0(remailer[i].addr, strchr(line, '<') + 1,
 					strchr(line, '>') - strchr(line, '<'));
 				remailer[i].addr[strchr(line, '>') -
 						 strchr(line, '<') - 1] = '\0';
@@ -95,7 +95,7 @@ int t1_rlist(REMAILER remailer[], int badchains[MAXREM][MAXREM])
 			for (i = 1; i < n; i++)
 				if (strleft(line, remailer[i].name) &&
 				    line[strlen(remailer[i].name)] == ' ') {
-					strncpy(remailer[i].info[1].history,
+					strncpy0(remailer[i].info[1].history,
 						line + 42, 12);
 					remailer[i].info[1].history[12] = '\0';
 					remailer[i].info[1].reliability =

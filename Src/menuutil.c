@@ -59,10 +59,10 @@ void askfilename(char *path)
 		char *h;
 
 		if ((h = getenv("HOME")) != NULL) {
-			strncpy(line, h, PATHMAX);
+			strncpy0(line, h, PATHMAX);
 			strcatn(line, "/", PATHMAX);
 			strcatn(line, path + 1, PATHMAX);
-			strncpy(path, line, PATHMAX);
+			strncpy0(path, line, PATHMAX);
 		}
 	}
 }

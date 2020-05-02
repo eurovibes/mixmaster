@@ -202,7 +202,7 @@ static int mixdir(char *d, int create)
 	struct stat buf;
 
 	if (d != MIXDIR)
-		strncpy(MIXDIR, d, PATHMAX);
+		strncpy0(MIXDIR, d, PATHMAX);
 	if (MIXDIR[strlen(MIXDIR) - 1] == DIRSEP)
 		MIXDIR[strlen(MIXDIR) - 1] = '\0';
 	err = stat(MIXDIR, &buf);
@@ -244,7 +244,7 @@ void whoami(char *addr, char *defaultname)
 	if (p == NULL)
 		strcpy(addr, defaultname);
 	else
-		strncpy(addr, p, LINELEN);
+		strncpy0(addr, p, LINELEN);
 
 	strcatn(addr, "@", LINELEN);
 #ifdef HAVE_UNAME
@@ -281,7 +281,7 @@ static int readconfline(char *line, char *name, int namelen, char *var)
 			line++;
 		if (line[0] == '\n' || line[0] == '\0') /* leave default */
 			return (1);
-		strncpy(var, line, LINELEN);
+		strncpy0(var, line, LINELEN);
 		if (var[strlen(var) - 1] == '\n')
 			var[strlen(var) - 1] = '\0';
 		return (1);
@@ -410,7 +410,7 @@ static int readtconfline(char *line, char *name, int namelen, long *var)
 static void mix_setdefaults()
 {
 #define strnncpy(a, b)            \
-	strncpy(a, b, sizeof(a)); \
+	strncpy0(a, b, sizeof(a)); \
 	a[sizeof(a) - 1] = '\0'
 
 	strnncpy(DISCLAIMFILE, DEFAULT_DISCLAIMFILE);
@@ -730,7 +730,7 @@ int mix_config(void)
 
 #ifdef POSIX
 	if (err == -1 && pw != NULL) {
-		strncpy(line, pw->pw_dir, PATHMAX);
+		strncpy0(line, pw->pw_dir, PATHMAX);
 		line[PATHMAX - 1] = '\0';
 		if (line[strlen(line) - 1] != DIRSEP)
 			strcatn(line, DIRSEPSTR, PATHMAX);
@@ -772,7 +772,7 @@ int mix_config(void)
 #else /* end of not POSIX */
 			(mkdir(POOLDIR, S_IRWXU) == -1)
 #endif /* else if POSIX */
-			strncpy(POOLDIR, MIXDIR, PATHMAX);
+			strncpy0(POOLDIR, MIXDIR, PATHMAX);
 
 	if (IDEXP > 0 && IDEXP < 5 * SECONDSPERDAY)
 		IDEXP = 5 * SECONDSPERDAY;
@@ -789,7 +789,7 @@ int mix_config(void)
 		*strchr(SHORTNAME, ' ') = '\0';
 #ifdef HAVE_UNAME
 	if (SHORTNAME[0] == '\0' && uname(&uts) != -1)
-		strncpy(SHORTNAME, uts.nodename, LINELEN);
+		strncpy0(SHORTNAME, uts.nodename, LINELEN);
 #elif defined(HAVE_GETHOSTNAME) /* end of HAVE_UNAME */
 	if (SHORTNAME[0] == '\0')
 		gethostname(SHORTNAME, LINELEN);
@@ -806,10 +806,10 @@ int mix_config(void)
 #endif /* HAVE_GECOS */
 
 	if (REMAILERADDR[0] == '\0')
-		strncpy(REMAILERADDR, ADDRESS, LINELEN);
+		strncpy0(REMAILERADDR, ADDRESS, LINELEN);
 
 	if (COMPLAINTS[0] == '\0')
-		strncpy(COMPLAINTS, REMAILERADDR, LINELEN);
+		strncpy0(COMPLAINTS, REMAILERADDR, LINELEN);
 
 	if (strchr(REMAILERNAME, '@') == NULL) {
 		strcatn(REMAILERNAME, " <", LINELEN);
@@ -875,7 +875,7 @@ int mix_config(void)
 			strcpy(strrchr(PGPSECRING, '.'), ".pgp");
 	}
 	if (streq(NEWS, "mail-to-news"))
-		strncpy(NEWS, MAILtoNEWS, sizeof(NEWS));
+		strncpy0(NEWS, MAILtoNEWS, sizeof(NEWS));
 
 	if (f == NULL) {
 #ifndef GLOBALMIXCONF
@@ -900,7 +900,7 @@ int mix_config(void)
 	}
 
 	if (ENTEREDPASSPHRASE[0] != '\0') {
-		strncpy(PASSPHRASE, ENTEREDPASSPHRASE, LINELEN);
+		strncpy0(PASSPHRASE, ENTEREDPASSPHRASE, LINELEN);
 		PASSPHRASE[LINELEN - 1] = 0;
 	};
 
@@ -945,7 +945,7 @@ int mix_init(char *mixdir)
 {
 	if (!initialized) {
 		if (mixdir)
-			strncpy(MIXDIR, mixdir, LINELEN);
+			strncpy0(MIXDIR, mixdir, LINELEN);
 		mix_config();
 #if defined(USE_SOCK) && defined(WIN32)
 		sock_init();
