@@ -7,4 +7,31 @@
 *~
 \#*#
 
+# autotools related
+autom4te.cache/
+m4/
+
+*.la
+*.lo
 *.o
+
+ChangeLog
+INSTALL
+Makefile
+Makefile.in
+aclocal.m4
+compile
+config.guess
+config.h
+config.h.in
+config.log
+config.status
+config.sub
+configure
+depcomp
+install-sh
+libtool
+ltmain.sh
+missing
+stamp-h1
+ylwrap

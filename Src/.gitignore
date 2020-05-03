@@ -2,7 +2,7 @@
 
 Makefile
 mixmaster
-parsedate.tab.c
+parsedate.c
 
 # scan-build reports
 report/
