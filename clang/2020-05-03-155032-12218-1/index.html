@@ -1,0 +1,266 @@
+<html>
+<head>
+<title>mixmaster - scan-build results</title>
+<link type="text/css" rel="stylesheet" href="scanview.css"/>
+<script src="sorttable.js"></script>
+<script language='javascript' type="text/javascript">
+function SetDisplay(RowClass, DisplayVal)
+{
+  var Rows = document.getElementsByTagName("tr");
+  for ( var i = 0 ; i < Rows.length; ++i ) {
+    if (Rows[i].className == RowClass) {
+      Rows[i].style.display = DisplayVal;
+    }
+  }
+}
+
+function CopyCheckedStateToCheckButtons(SummaryCheckButton) {
+  var Inputs = document.getElementsByTagName("input");
+  for ( var i = 0 ; i < Inputs.length; ++i ) {
+    if (Inputs[i].type == "checkbox") {
+      if(Inputs[i] != SummaryCheckButton) {
+        Inputs[i].checked = SummaryCheckButton.checked;
+        Inputs[i].onclick();
+      }
+    }
+  }
+}
+
+function returnObjById( id ) {
+    if (document.getElementById)
+        var returnVar = document.getElementById(id);
+    else if (document.all)
+        var returnVar = document.all[id];
+    else if (document.layers)
+        var returnVar = document.layers[id];
+    return returnVar;
+}
+
+var NumUnchecked = 0;
+
+function ToggleDisplay(CheckButton, ClassName) {
+  if (CheckButton.checked) {
+    SetDisplay(ClassName, "");
+    if (--NumUnchecked == 0) {
+      returnObjById("AllBugsCheck").checked = true;
+    }
+  }
+  else {
+    SetDisplay(ClassName, "none");
+    NumUnchecked++;
+    returnObjById("AllBugsCheck").checked = false;
+  }
+}
+</script>
+<!-- SUMMARYENDHEAD -->
+</head>
+<body>
+<h1>mixmaster - scan-build results</h1>
+
+<table>
+<tr><th>User:</th><td>travis@travis-job-3b081fbc-11fd-4343-9c77-ed768928a808</td></tr>
+<tr><th>Working Directory:</th><td>/home/travis/build/eurovibes/mixmaster</td></tr>
+<tr><th>Command Line:</th><td>make CC=clang</td></tr>
+<tr><th>Clang Version:</th><td>clang version 7.0.0 (tags/RELEASE_700/final)
+</td></tr>
+<tr><th>Date:</th><td>Sun May  3 15:50:32 2020</td></tr>
+</table>
+<h2>Bug Summary</h2><table>
+<thead><tr><td>Bug Type</td><td>Quantity</td><td class="sorttable_nosort">Display?</td></tr></thead>
+<tr style="font-weight:bold"><td class="SUMM_DESC">All Bugs</td><td class="Q">56</td><td><center><input type="checkbox" id="AllBugsCheck" onClick="CopyCheckedStateToCheckButtons(this);" checked/></center></td></tr>
+<tr><th>API</th><th colspan=2></th></tr>
+<tr><td class="SUMM_DESC">Argument with 'nonnull' attribute passed null</td><td class="Q">8</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_api_argument_with_nonnull_attribute_passed_null');" checked/></center></td></tr>
+<tr><th>Dead store</th><th colspan=2></th></tr>
+<tr><td class="SUMM_DESC">Dead assignment</td><td class="Q">18</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_dead_store_dead_assignment');" checked/></center></td></tr>
+<tr><td class="SUMM_DESC">Dead increment</td><td class="Q">4</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_dead_store_dead_increment');" checked/></center></td></tr>
+<tr><td class="SUMM_DESC">Dead initialization</td><td class="Q">2</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_dead_store_dead_initialization');" checked/></center></td></tr>
+<tr><th>Logic error</th><th colspan=2></th></tr>
+<tr><td class="SUMM_DESC">Branch condition evaluates to a garbage value</td><td class="Q">6</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_logic_error_branch_condition_evaluates_to_a_garbage_value');" checked/></center></td></tr>
+<tr><td class="SUMM_DESC">Result of operation is garbage or undefined</td><td class="Q">18</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_logic_error_result_of_operation_is_garbage_or_undefined');" checked/></center></td></tr>
+</table>
+<h2>Reports</h2>
+
+<table class="sortable" style="table-layout:automatic">
+<thead><tr>
+  <td>Bug Group</td>
+  <td class="sorttable_sorted">Bug Type<span id="sorttable_sortfwdind">&nbsp;&#x25BE;</span></td>
+  <td>File</td>
+  <td>Function/Method</td>
+  <td class="Q">Line</td>
+  <td class="Q">Path Length</td>
+  <td class="sorttable_nosort"></td>
+  <!-- REPORTBUGCOL -->
+</tr></thead>
+<tbody>
+<tr class="bt_api_argument_with_nonnull_attribute_passed_null"><td class="DESC">API</td><td class="DESC">Argument with 'nonnull' attribute passed null</td><td>pool.c</td><td class="DESC">latent_read</td><td class="Q">109</td><td class="Q">6</td><td><a href="report-5c4413.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-5c4413.html" -->
+</tr>
+<tr class="bt_api_argument_with_nonnull_attribute_passed_null"><td class="DESC">API</td><td class="DESC">Argument with 'nonnull' attribute passed null</td><td>pool.c</td><td class="DESC">mailin_maildir_one</td><td class="Q">187</td><td class="Q">11</td><td><a href="report-a6075e.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-a6075e.html" -->
+</tr>
+<tr class="bt_api_argument_with_nonnull_attribute_passed_null"><td class="DESC">API</td><td class="DESC">Argument with 'nonnull' attribute passed null</td><td>pool.c</td><td class="DESC">latent_read</td><td class="Q">109</td><td class="Q">6</td><td><a href="report-f83344.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-f83344.html" -->
+</tr>
+<tr class="bt_api_argument_with_nonnull_attribute_passed_null"><td class="DESC">API</td><td class="DESC">Argument with 'nonnull' attribute passed null</td><td>rem.c</td><td class="DESC">pool_packetexp</td><td class="Q">438</td><td class="Q">4</td><td><a href="report-1746f3.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-1746f3.html" -->
+</tr>
+<tr class="bt_api_argument_with_nonnull_attribute_passed_null"><td class="DESC">API</td><td class="DESC">Argument with 'nonnull' attribute passed null</td><td>pool.c</td><td class="DESC">mailin_maildir_one</td><td class="Q">187</td><td class="Q">11</td><td><a href="report-7c49b6.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-7c49b6.html" -->
+</tr>
+<tr class="bt_api_argument_with_nonnull_attribute_passed_null"><td class="DESC">API</td><td class="DESC">Argument with 'nonnull' attribute passed null</td><td>rem.c</td><td class="DESC">pool_packetexp</td><td class="Q">438</td><td class="Q">4</td><td><a href="report-2a650d.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-2a650d.html" -->
+</tr>
+<tr class="bt_api_argument_with_nonnull_attribute_passed_null"><td class="DESC">API</td><td class="DESC">Argument with 'nonnull' attribute passed null</td><td>pool.c</td><td class="DESC">infile_read</td><td class="Q">143</td><td class="Q">6</td><td><a href="report-42a321.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-42a321.html" -->
+</tr>
+<tr class="bt_api_argument_with_nonnull_attribute_passed_null"><td class="DESC">API</td><td class="DESC">Argument with 'nonnull' attribute passed null</td><td>pool.c</td><td class="DESC">infile_read</td><td class="Q">143</td><td class="Q">6</td><td><a href="report-6ab0bc.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-6ab0bc.html" -->
+</tr>
+<tr class="bt_logic_error_branch_condition_evaluates_to_a_garbage_value"><td class="DESC">Logic error</td><td class="DESC">Branch condition evaluates to a garbage value</td><td>chain.c</td><td class="DESC">chain_rand</td><td class="Q">321</td><td class="Q">22</td><td><a href="report-557c97.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-557c97.html" -->
+</tr>
+<tr class="bt_logic_error_branch_condition_evaluates_to_a_garbage_value"><td class="DESC">Logic error</td><td class="DESC">Branch condition evaluates to a garbage value</td><td>chain2.c</td><td class="DESC">mix2_rlist</td><td class="Q">249</td><td class="Q">27</td><td><a href="report-973fac.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-973fac.html" -->
+</tr>
+<tr class="bt_logic_error_branch_condition_evaluates_to_a_garbage_value"><td class="DESC">Logic error</td><td class="DESC">Branch condition evaluates to a garbage value</td><td>chain.c</td><td class="DESC">chain_randfinal</td><td class="Q">244</td><td class="Q">20</td><td><a href="report-06224f.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-06224f.html" -->
+</tr>
+<tr class="bt_logic_error_branch_condition_evaluates_to_a_garbage_value"><td class="DESC">Logic error</td><td class="DESC">Branch condition evaluates to a garbage value</td><td>chain.c</td><td class="DESC">chain_randfinal</td><td class="Q">244</td><td class="Q">20</td><td><a href="report-1eb1ca.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-1eb1ca.html" -->
+</tr>
+<tr class="bt_logic_error_branch_condition_evaluates_to_a_garbage_value"><td class="DESC">Logic error</td><td class="DESC">Branch condition evaluates to a garbage value</td><td>chain2.c</td><td class="DESC">mix2_rlist</td><td class="Q">249</td><td class="Q">27</td><td><a href="report-471b2e.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-471b2e.html" -->
+</tr>
+<tr class="bt_logic_error_branch_condition_evaluates_to_a_garbage_value"><td class="DESC">Logic error</td><td class="DESC">Branch condition evaluates to a garbage value</td><td>chain.c</td><td class="DESC">chain_rand</td><td class="Q">321</td><td class="Q">22</td><td><a href="report-610928.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-610928.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>mail.c</td><td class="DESC">sendmail</td><td class="Q">276</td><td class="Q">1</td><td><a href="report-390061.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-390061.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>rem.c</td><td class="DESC">idexp</td><td class="Q">691</td><td class="Q">1</td><td><a href="report-856b4f.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-856b4f.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>menusend.c</td><td class="DESC">send_message</td><td class="Q">478</td><td class="Q">1</td><td><a href="report-fe1c71.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-fe1c71.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>keymgt.c</td><td class="DESC">deleteoldkeys</td><td class="Q">518</td><td class="Q">1</td><td><a href="report-42fb88.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-42fb88.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>pgpcreat.c</td><td class="DESC">pgp_sign</td><td class="Q">713</td><td class="Q">1</td><td><a href="report-eb4967.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-eb4967.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>pgp.c</td><td class="DESC">pgp_dearmor</td><td class="Q">351</td><td class="Q">1</td><td><a href="report-bca908.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-bca908.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>pgp.c</td><td class="DESC">pgp_dearmor</td><td class="Q">353</td><td class="Q">1</td><td><a href="report-8ca7c0.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-8ca7c0.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>mail.c</td><td class="DESC">sendmail</td><td class="Q">276</td><td class="Q">1</td><td><a href="report-6a7a50.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-6a7a50.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>pgp.c</td><td class="DESC">pgp_dearmor</td><td class="Q">351</td><td class="Q">1</td><td><a href="report-dcc397.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-dcc397.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>pgp.c</td><td class="DESC">pgp_dearmor</td><td class="Q">356</td><td class="Q">1</td><td><a href="report-5bb6ad.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-5bb6ad.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>pgp.c</td><td class="DESC">pgp_dearmor</td><td class="Q">356</td><td class="Q">1</td><td><a href="report-d8a5ca.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-d8a5ca.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>keymgt.c</td><td class="DESC">deleteoldkeys</td><td class="Q">518</td><td class="Q">1</td><td><a href="report-56e84a.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-56e84a.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>mail.c</td><td class="DESC">sendmail</td><td class="Q">288</td><td class="Q">1</td><td><a href="report-c50809.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-c50809.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>pgp.c</td><td class="DESC">pgp_dearmor</td><td class="Q">353</td><td class="Q">1</td><td><a href="report-81d85d.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-81d85d.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>mail.c</td><td class="DESC">sendmail</td><td class="Q">288</td><td class="Q">1</td><td><a href="report-2a4623.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-2a4623.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>menu.c</td><td class="DESC">read_folder</td><td class="Q">253</td><td class="Q">1</td><td><a href="report-418b31.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-418b31.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>rem.c</td><td class="DESC">idexp</td><td class="Q">691</td><td class="Q">1</td><td><a href="report-8f6810.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-8f6810.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>pgpcreat.c</td><td class="DESC">pgp_sign</td><td class="Q">713</td><td class="Q">1</td><td><a href="report-bbe396.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-bbe396.html" -->
+</tr>
+<tr class="bt_dead_store_dead_increment"><td class="DESC">Dead store</td><td class="DESC">Dead increment</td><td>crypto.c</td><td class="DESC">read_seckey</td><td class="Q">181</td><td class="Q">1</td><td><a href="report-fc8d09.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-fc8d09.html" -->
+</tr>
+<tr class="bt_dead_store_dead_increment"><td class="DESC">Dead store</td><td class="DESC">Dead increment</td><td>crypto.c</td><td class="DESC">read_pubkey</td><td class="Q">218</td><td class="Q">1</td><td><a href="report-b3e9ae.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-b3e9ae.html" -->
+</tr>
+<tr class="bt_dead_store_dead_increment"><td class="DESC">Dead store</td><td class="DESC">Dead increment</td><td>crypto.c</td><td class="DESC">read_seckey</td><td class="Q">181</td><td class="Q">1</td><td><a href="report-08fea2.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-08fea2.html" -->
+</tr>
+<tr class="bt_dead_store_dead_increment"><td class="DESC">Dead store</td><td class="DESC">Dead increment</td><td>crypto.c</td><td class="DESC">read_pubkey</td><td class="Q">218</td><td class="Q">1</td><td><a href="report-de4201.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-de4201.html" -->
+</tr>
+<tr class="bt_dead_store_dead_initialization"><td class="DESC">Dead store</td><td class="DESC">Dead initialization</td><td>chain2.c</td><td class="DESC">mix2_rlist</td><td class="Q">263</td><td class="Q">1</td><td><a href="report-066c4a.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-066c4a.html" -->
+</tr>
+<tr class="bt_dead_store_dead_initialization"><td class="DESC">Dead store</td><td class="DESC">Dead initialization</td><td>chain2.c</td><td class="DESC">mix2_rlist</td><td class="Q">263</td><td class="Q">1</td><td><a href="report-345886.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-345886.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>buffers.c</td><td class="DESC">buf_getl</td><td class="Q">652</td><td class="Q">4</td><td><a href="report-f8f43a.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-f8f43a.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>buffers.c</td><td class="DESC">buf_getl_lo</td><td class="Q">665</td><td class="Q">3</td><td><a href="report-146aa7.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-146aa7.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>buffers.c</td><td class="DESC">buf_getl</td><td class="Q">651</td><td class="Q">4</td><td><a href="report-90a91b.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-90a91b.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>buffers.c</td><td class="DESC">buf_getl_lo</td><td class="Q">666</td><td class="Q">3</td><td><a href="report-d1e6f0.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-d1e6f0.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>pgpget.c</td><td class="DESC">pgp_getpacket</td><td class="Q">236</td><td class="Q">9</td><td><a href="report-1e37b1.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-1e37b1.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>buffers.c</td><td class="DESC">buf_geti</td><td class="Q">691</td><td class="Q">3</td><td><a href="report-43becd.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-43becd.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>buffers.c</td><td class="DESC">buf_getl</td><td class="Q">650</td><td class="Q">4</td><td><a href="report-5d9e2d.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-5d9e2d.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>buffers.c</td><td class="DESC">buf_getl</td><td class="Q">651</td><td class="Q">4</td><td><a href="report-d89079.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-d89079.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>buffers.c</td><td class="DESC">buf_getl</td><td class="Q">652</td><td class="Q">4</td><td><a href="report-aa9e31.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-aa9e31.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>pgpget.c</td><td class="DESC">pgp_getpacket</td><td class="Q">236</td><td class="Q">9</td><td><a href="report-869c2b.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-869c2b.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>buffers.c</td><td class="DESC">buf_getl</td><td class="Q">650</td><td class="Q">4</td><td><a href="report-b45507.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-b45507.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>buffers.c</td><td class="DESC">buf_geti_lo</td><td class="Q">703</td><td class="Q">3</td><td><a href="report-6c850b.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-6c850b.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>buffers.c</td><td class="DESC">buf_getl_lo</td><td class="Q">664</td><td class="Q">3</td><td><a href="report-893ee1.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-893ee1.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>buffers.c</td><td class="DESC">buf_getl_lo</td><td class="Q">666</td><td class="Q">3</td><td><a href="report-75bdab.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-75bdab.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>buffers.c</td><td class="DESC">buf_geti</td><td class="Q">691</td><td class="Q">3</td><td><a href="report-4c8dd0.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-4c8dd0.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>buffers.c</td><td class="DESC">buf_geti_lo</td><td class="Q">703</td><td class="Q">3</td><td><a href="report-a6734a.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-a6734a.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>buffers.c</td><td class="DESC">buf_getl_lo</td><td class="Q">665</td><td class="Q">3</td><td><a href="report-1bcbb1.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-1bcbb1.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>buffers.c</td><td class="DESC">buf_getl_lo</td><td class="Q">664</td><td class="Q">3</td><td><a href="report-56935b.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-56935b.html" -->
+</tr>
+</tbody>
+</table>
+
+</body></html>
