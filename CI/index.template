@@ -10,35 +10,53 @@
       <h1>Mixmaster anonymous remailer - Documentation</h1>
       <nav>
 	<ul>
+	  <li><a href="#status">Build Status</a></li>
 	  <li><a href="#static">Static code analyze results</a></li>
 	</ul>
       </nav>
     </header>
     <main>
+      <article id="status">
+	<h2>Build status</h2>
+	<table>
+	  <tr>
+	    <th>Travis CI build status</th>
+	  </tr>
+	  <tr>
+	    <td>master</td>
+	    <td>
+	      <img src="https://travis-ci.com/eurovibes/mixmaster.svg?branch=master"/>
+	    </td>
+	  </tr>
+	</table>
+      </article>
       <article id="static">
 	<h2>Static code analyze results</h2>
 	<section>
-	  <h3>clang</h3>
+	  <h3><a href="@STATIC_CLANG@">clang results</a></h3>
 	  <iframe
 	    src="@STATIC_CLANG@"
-	    width="90%" 
+	    height="200"
+	    width="50%"
 	    name="clang results">
-	    <p>Your browser is not capable to view embedded frames. You can
-	      visit the embedded frame here:
+	    <p>Your browser is not capable to view iframeded frames. You can
+	      visit the iframeded frame here:
 	      <a href="@STATIC_CLANG@">clang results</a>
 	    </p>
+	  </iframe>
 	</section>
 	<section>
-	  <h3>gcc</h3>
+	  <h3><a href="@STATIC_GCC@">gcc results</a></h3>
 	  <iframe
-	    src="@STATIC_GCC@"
-	    width="90%" 
+	    src="@STATIC_CLANG@"
+	    height="200"
+	    width="50%"
 	    name="gcc results">
-	    <p>Your browser is not capable to view embedded frames. You can
-	      visit the embedded frame here:
-	      <a href="@STATIC_GCC@">clang results</a>
+	    <p>Your browser is not capable to view iframeded frames. You can
+	      visit the iframeded frame here:
+	      <a href="@STATIC_GCC@">gcc results</a>
 	    </p>
-
+	  </iframe>
 	</section>
       </article>
     </main>
