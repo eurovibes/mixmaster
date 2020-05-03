@@ -11,36 +11,22 @@ addons:
 language: c
 compiler: clang
 
-jobs:
-  include:
-    - language: c
-      compiler: clang
-      script:
-        - CI/mk_makefile.sh
-        - cd Src && make
+script:
+  - ./autogen.sh
+  - ./configure HOMEMIXDIR='.Mix' GLOBALMIXCONF='/etc/mixmaster/client.conf'
+  - scan-build -o "report/gcc" make CC=gcc
+  - make clean
+  - scan-build -o "report/clang" make CC=clang
+  - CI/mk_index.sh
 
-    - language: c
-      compiler: clang
-      script:
-        - CI/mk_makefile.sh
-        - cd Src
-        - make
-        - make clean
-        - cp Makefile.debug Makefile
-        - scan-build -o "report/gcc" make CC=gcc
-        - make clean
-        - scan-build -o "report/clang" make CC=clang
-        - cd ..
-      after_success:
-        - CI/mk_index.sh
-      deploy:
-        provider: pages
-        cleanup: false
-        local_dir: Src/report/
-        token: $GITHUB_TOKEN
-        keep_history: false
-        strategy: git
-        verbose: true
-        on:
-          branch: master
-        edge: true
+deploy:
+  provider: pages
+  cleanup: false
+  local_dir: report/
+  token: $GITHUB_TOKEN
+  keep_history: false
+  strategy: git
+  verbose: true
+  on:
+    branch: master
+  edge: true
